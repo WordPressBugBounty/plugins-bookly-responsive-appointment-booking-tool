@@ -1436,6 +1436,12 @@ msgstr ""
 msgid "Processing..."
 msgstr ""
 
+msgid "No data available in table"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
 msgid "No result found"
 msgstr ""
 
@@ -3131,7 +3137,7 @@ msgid ""
 "access"
 msgstr ""
 
-msgid "No records."
+msgid "No matching records found"
 msgstr ""
 
 msgid "Add service"
@@ -3920,10 +3926,7 @@ msgstr ""
 msgid "Sender ID is reset to default."
 msgstr ""
 
-msgid "No matching records found"
-msgstr ""
-
-msgid "No data available in table"
+msgid "No records."
 msgstr ""
 
 msgid "enable"
@@ -5188,9 +5191,6 @@ msgid ""
 "Choose whether notification should be sent for specific services only or not."
 msgstr ""
 
-msgid "days"
-msgstr ""
-
 msgid "before"
 msgstr ""
 
@@ -5936,9 +5936,6 @@ msgid "Remember Me"
 msgstr ""
 
 msgid "Lost your password?"
-msgstr ""
-
-msgid "Loading..."
 msgstr ""
 
 msgid "Powered by"
