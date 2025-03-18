@@ -63,6 +63,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_cal_coloring_mode', self::parameter( 'bookly_cal_coloring_mode' ) );
                     update_option( 'bookly_cal_show_new_appointments_badge', self::parameter( 'bookly_cal_show_new_appointments_badge' ) );
                     update_option( 'bookly_cal_last_seen_appointment', self::parameter( 'bookly_cal_last_seen_appointment' ) );
+                    update_option( 'bookly_cal_scrollable_calendar', self::parameter( 'bookly_cal_scrollable_calendar' ) );
                     foreach ( self::parameter( 'status' ) as $status => $color ) {
                         if ( in_array( $status, array( CustomerAppointment::STATUS_PENDING, CustomerAppointment::STATUS_APPROVED, CustomerAppointment::STATUS_CANCELLED, CustomerAppointment::STATUS_REJECTED, 'mixed' ) ) ) {
                             update_option( sprintf( 'bookly_appointment_status_%s_color', $status ), $color );

@@ -4,6 +4,7 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Edit;
 use Bookly\Backend\Components\Schedule\BreakItem;
 use Bookly\Backend\Components\Schedule\Component as ScheduleComponent;
 use Bookly\Lib;
+use Bookly\Lib\Utils\Advertisement;
 
 class Ajax extends Lib\Base\Ajax
 {
@@ -55,7 +56,7 @@ class Ajax extends Lib\Base\Ajax
         );
         if ( self::$staff->getId() ) {
             $response['holidays'] = self::$staff->getHolidays();
-            $response['html']['advanced'] = Proxy\Pro::getAdvancedHtml( self::$staff, $data['tpl'], true );
+            $response['html']['advanced'] = Lib\Config::proActive() ? Proxy\Pro::getAdvancedHtml( self::$staff, $data['tpl'], true ) : Advertisement::render( 'staff-modal-advanced-tab', ! Lib\Config::proActive(), false );
             $response['html']['services'] = self::_getStaffServices( self::$staff->getId(), null );
             $response['html']['schedule'] = self::_getStaffSchedule( self::$staff->getId(), null );
             $response['html']['special_days'] = Proxy\SpecialDays::getStaffSpecialDaysHtml( '', self::$staff->getId(), null );

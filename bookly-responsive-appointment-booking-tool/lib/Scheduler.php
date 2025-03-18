@@ -11,6 +11,7 @@ class Scheduler
     const REPEAT_BIWEEKLY = 'biweekly';
     const REPEAT_MONTHLY = 'monthly';
     const REPEAT_YEARLY = 'yearly';//not implemented yet
+    const REPEAT_NONE = 'none';
 
     private $client_from;
 
@@ -117,7 +118,7 @@ class Scheduler
         $this->client_from = DatePoint::fromStr( $datetime )->toClientTz();
         $this->client_until = DatePoint::fromStrInClientTz( $until );
 
-        $this->time = ( isset( $params['full_day'] ) && $params['full_day'] ) ? '00:00:00' : $this->client_from->format( 'H:i:s' );
+        $this->time = ( $repeat === self::REPEAT_NONE || ( isset( $params['full_day'] ) && $params['full_day'] ) ) ? '00:00:00' : $this->client_from->format( 'H:i:s' );
         $this->repeat = $repeat;
         $this->params = $params;
     }
@@ -194,6 +195,12 @@ class Scheduler
         $ordinals = array( 'first', 'second', 'third', 'fourth', 'last' );
 
         switch ( $this->repeat ) {
+            case self::REPEAT_NONE:
+                while ( $client_dp->lte( $this->client_until ) ) {
+                    $this->_addSlot( $client_dp, false, $client_dp->modify( '+1 day' ) );
+                    $client_dp = $client_dp->modify( '+1 day' );
+                }
+                break;
             case self::REPEAT_DAILY:
                 if ( isset ( $this->params['every'] ) ) {
                     while ( $client_dp->lte( $this->client_until ) ) {
@@ -284,8 +291,9 @@ class Scheduler
      *
      * @param DatePoint $client_dp
      * @param boolean $skip_days_off
+     * @param null|DatePoint $client_end_dp
      */
-    private function _addSlot( DatePoint $client_dp, $skip_days_off = false )
+    private function _addSlot( DatePoint $client_dp, $skip_days_off = false, $client_end_dp = null )
     {
         $this->finder->client_start_dp = $client_dp;
         $until = $this->client_until->modify( '+1 day' );
@@ -303,7 +311,7 @@ class Scheduler
                 : null
         );
 
-        $slot = $this->findSlot( $client_dp );
+        $slot = $this->findSlot( $client_dp, $client_end_dp );
 
         if ( $slot === null && $this->finder->hasMoreSlots() ) {
             // If there are more slots then start new search for the next day.
@@ -312,7 +320,7 @@ class Scheduler
             $this->finder->start_dp = $this->finder->client_start_dp->toWpTz();
             $this->finder->load();
 
-            $slot = $this->findSlot( $client_dp );
+            $slot = $this->findSlot( $client_dp, $client_end_dp );
         }
 
         if ( $slot !== null ) {
@@ -331,11 +339,13 @@ class Scheduler
      * Find slot
      *
      * @param DatePoint $client_dp
+     * @param null|DatePoint $client_end_dp
      * @return array|null
      */
-    private function findSlot( DatePoint $client_dp )
+    private function findSlot( DatePoint $client_dp, $client_end_dp = null )
     {
         $client_req_dp = $client_dp->modify( $this->time );
+        $client_req_end_dp = $client_end_dp ? $client_end_dp->modify( $this->time ) : null;
         $client_res_dp = null;
         $options = array();
         $slots = array();
@@ -372,7 +382,7 @@ class Scheduler
                             }
                             $options[] = $option;
                         }
-                        if ( $client_res_dp === null && $slot->notFullyBooked() && $client_start_dp->gte( $client_req_dp ) ) {
+                        if ( $client_res_dp === null && $slot->notFullyBooked() && $client_start_dp->gte( $client_req_dp ) && ( ! $client_req_end_dp || $slot->end()->toClientTz()->lte( $client_req_end_dp ) ) ) {
                             $client_res_dp = $client_start_dp;
                             $slots = $data;
 

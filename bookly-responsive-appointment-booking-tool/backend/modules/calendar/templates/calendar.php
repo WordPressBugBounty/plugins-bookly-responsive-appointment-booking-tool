@@ -88,6 +88,9 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-auto mb-2 text-center">
+                        <button class="btn btn-default" id="bookly-calendar-fullscreen"><i class="fas fa-expand"></i></button>
+                    </div>
                 </div>
                 <div class="nav-scrollable nav-scrollable-pills justify-content-center justify-content-xl-start bookly-js-staff-pills <?php if ( count( $staff_members ) == 1 ) : ?>d-none<?php endif ?>">
                     <ul class="col-auto nav nav-pills flex-nowrap">

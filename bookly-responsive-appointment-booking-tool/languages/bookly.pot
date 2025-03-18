@@ -1346,9 +1346,6 @@ msgstr ""
 msgid "Disable price update"
 msgstr ""
 
-msgid "Hide create appointment button"
-msgstr ""
-
 msgid "Insert"
 msgstr ""
 
@@ -2821,6 +2818,15 @@ msgstr ""
 msgid "%s has reached the limit of bookings for this service"
 msgstr ""
 
+#, php-format
+msgid ""
+"To get access to more <a href=\"%s\" target=\"_blank\">features</a>, "
+"lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly."
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
 msgid "No."
 msgstr ""
 
@@ -3648,6 +3654,15 @@ msgid ""
 "appointments"
 msgstr ""
 
+msgid "Scrollable calendar"
+msgstr ""
+
+msgid ""
+"If enabled, the backend calendar will occupy part of the screen and remain "
+"scrollable. If disabled, it will take up more space and scroll along with "
+"the entire page."
+msgstr ""
+
 msgid "Month view style"
 msgstr ""
 
@@ -4212,9 +4227,6 @@ msgstr ""
 msgid "Import file"
 msgstr ""
 
-msgid "Skip first row"
-msgstr ""
-
 msgid "Service name"
 msgstr ""
 
@@ -4555,6 +4567,9 @@ msgstr ""
 msgid "More news"
 msgstr ""
 
+msgid "Appointment at any time"
+msgstr ""
+
 msgid "No payments for selected period and criteria."
 msgstr ""
 
@@ -4850,6 +4865,12 @@ msgstr ""
 
 msgid ""
 "See the number of appointments and total revenue for the selected period"
+msgstr ""
+
+msgid "Based on appointment date"
+msgstr ""
+
+msgid "Based on date of creation"
 msgstr ""
 
 msgid "End date of appointment"
@@ -5899,9 +5920,6 @@ msgid "Google Calendar integration"
 msgstr ""
 
 msgid "Advanced service and staff management"
-msgstr ""
-
-msgid "Upgrade"
 msgstr ""
 
 #, php-format
@@ -7435,6 +7453,9 @@ msgid "Slug"
 msgstr ""
 
 msgid "Main color"
+msgstr ""
+
+msgid "Hide form borders"
 msgstr ""
 
 msgid "Show 'Book more' button"

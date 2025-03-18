@@ -425,6 +425,7 @@ class Installer extends Base\Installer
             'bookly_cloud_stripe_timeout' => '0',
             'bookly_cloud_token' => '',
             'bookly_cloud_zapier_api_key' => '',
+            'bookly_advertisement' => array(),
             // Business hours.
             'bookly_bh_monday_start' => '08:00:00',
             'bookly_bh_monday_end' => '18:00:00',
@@ -471,7 +472,8 @@ class Installer extends Base\Installer
             // Appointments.
             'bookly_appointment_end_date_method' => 'default',
             'bookly_advanced_time_slot_length_minutes' => '',
-            'bookly_advanced_slot_date_format' => 'D, M d'
+            'bookly_advanced_slot_date_format' => 'D, M d',
+            'bookly_dashboard_based_on_appointment' => 'created_at',
         );
     }
 

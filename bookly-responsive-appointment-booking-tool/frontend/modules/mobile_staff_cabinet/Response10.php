@@ -282,22 +282,25 @@ class Response10
             unset( $ca['customer_id'] );
         }
 
-        $appointment = $appointment_id
-            ? Appointment::find( $appointment_id )
-            : null;
+        if ( $this->param( 'end_date' ) ) {
+            $end_date = $this->getDateFormattedParameter( 'end_date', 'Y-m-d H:i:s' );
+        } else {
+            $appointment = $appointment_id
+                ? Appointment::find( $appointment_id )
+                : null;
 
-        if ( $appointment ) {
-            if ( ( $appointment->getStartDate() == $start_date )
-                && ( $appointment->getServiceId() == $service_id ) )
-            {
-                $end_date = $appointment->getEndDate();
-            } else {
+            if ( $appointment ) {
+                if ( ( $appointment->getStartDate() == $start_date )
+                    && ( $appointment->getServiceId() == $service_id ) ) {
+                    $end_date = $appointment->getEndDate();
+                } else {
+                    $service = Service::find( $service_id );
+                    $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
+                }
+            } elseif ( $service_id ) {
                 $service = Service::find( $service_id );
                 $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
             }
-        } elseif ( $service_id ) {
-            $service = Service::find( $service_id );
-            $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
         }
 
         $result = UtilAppointment::checkTime( $appointment_id,
@@ -318,15 +321,19 @@ class Response10
     {
         $appointment_id = (int) $this->param( 'id', 0 );
         $service_id = (int) $this->param( 'service_id' );
+        $notification = $this->param( 'notification', false );
+        $custom_service_name = trim( $this->param( 'custom_service_name', '' ) );
+        $custom_service_price = trim( $this->param( 'custom_service_price', '' ) );
         $service = $service_id
             ? Service::find( $service_id )
             : null;
-        if ( ! $service ) {
+        if ( ! $service && ! $custom_service_name ) {
             throw new ParameterException( 'service_id', $this->param( 'service_id' ) );
         }
 
         $customer_appointments = $this->param( 'customer_appointments', array() );
         $start_date = $this->getDateFormattedParameter( 'start_date', 'Y-m-d H:i:s' );
+
         foreach ( $customer_appointments as &$ca ) {
             if ( isset( $ca['id'] ) ) {
                 $ca['ca_id'] = $ca['id'];
@@ -335,22 +342,27 @@ class Response10
             $ca['id'] = $ca['customer_id'];
             unset( $ca['customer_id'] );
         }
-        $appointment = $appointment_id
-            ? Appointment::find( $appointment_id )
-            : null;
 
-        if ( $appointment && $appointment->getStartDate() == $start_date && $service_id == $appointment->getServiceId() ) {
-            $end_date = $appointment->getEndDate();
+        if ( $this->param( 'end_date' ) ) {
+            $end_date = $this->getDateFormattedParameter( 'end_date', 'Y-m-d H:i:s' );
         } else {
-            $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
+            $appointment = $appointment_id
+                ? Appointment::find( $appointment_id )
+                : null;
+
+            if ( $appointment && $appointment->getStartDate() == $start_date && $service_id == $appointment->getServiceId() ) {
+                $end_date = $appointment->getEndDate();
+            } else {
+                $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
+            }
         }
 
         $response = UtilAppointment::save(
             $appointment_id,
             (int) $this->staff->getId(),
             $service_id,
-            '',
-            '',
+            $custom_service_name,
+            $custom_service_price,
             0,
             0,
             $start_date,
@@ -359,12 +371,12 @@ class Response10
             array(),
             'current',
             $customer_appointments,
-            false,
+            $notification,
             $this->param( 'internal_note' ),
             'mobile'
         );
         if ( $response['success'] ) {
-            unset( $response['data'], $response['queue'] );
+            unset( $response['data'] );
 
             $this->result = $response;
         } else {
@@ -423,6 +435,7 @@ class Response10
                 'service' => array(
                     'id' => (int) $appointment['service_id'],
                     'name' => $appointment['service_name'],
+                    'service_price' => (float) $appointment['service_price'],
                 ),
                 'color' => $appointment['service_color'],
                 'internal_note' => trim( $appointment['internal_note'] ),
@@ -473,19 +486,31 @@ class Response10
     {
         $service_id = $this->param( 'service_id' );
         $service = Service::find( $service_id );
-        if ( $service ) {
-            $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
-            $date = $this->getDateFormattedParameter( 'date', 'Y-m-d' );
-            if ( ! $appointments_time_delimiter && ( $ts_length = (int) $service->getSlotLength() ) ) {
-                $time_end = max( $service->getUnitsMax() * $service->getDuration() + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
-            } else {
-                $ts_length = $appointments_time_delimiter > 0 ? $appointments_time_delimiter : Lib\Config::getTimeSlotLength();
-                $time_end = max( ( $service->getUnitsMax() * $service->getDuration() ) + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
-            }
-            $this->result = $this->generateSlots( 0, $time_end, $ts_length, $date . ' ' );
+
+        $displayed_time_slots = get_option( 'bookly_appointments_displayed_time_slots' );
+        if ( $displayed_time_slots === 'appropriate' ) {
+            // As at backend in appointment form
+            $appointments_time_delimiter = 5 * MINUTE_IN_SECONDS;
         } else {
-            throw new ParameterException( 'service_id', $service_id );
+            $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
         }
+        if ( ! $service ) {
+            $service = new Service();
+            $service->setDuration( Lib\Config::getTimeSlotLength() );
+        }
+
+        $date = $this->getDateFormattedParameter( 'date', 'Y-m-d' );
+        if ( ! $appointments_time_delimiter && ( $ts_length = (int) $service->getSlotLength() ) ) {
+            $time_end = max( $service->getUnitsMax() * $service->getDuration() + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
+        } else {
+            $ts_length = $appointments_time_delimiter > 0 ? $appointments_time_delimiter : Lib\Config::getTimeSlotLength();
+            $time_end = max( ( $service->getUnitsMax() * $service->getDuration() ) + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
+        }
+
+        $this->result = array(
+            'start' => $this->generateSlots( 0, $time_end, $ts_length, $date, true ),
+            'end' => $this->generateSlots( 0, $time_end, $ts_length, $date, false ),
+        );
     }
 
     public function availableSlots()
@@ -608,6 +633,25 @@ class Response10
         $this->result = $services;
     }
 
+    public function sendNotifications()
+    {
+        Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( $this->param( 'notifications', array() ), $this->param( 'type', 'all' ), $this->param( 'token' ) );
+        $this->result = array( 'success' => true );
+    }
+
+    public function deleteNotificationsAttachmentFiles()
+    {
+        /** @var Lib\Entities\NotificationQueue $queue */
+        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $this->param( 'token' ) )->where( 'sent', 0 )->findOne();
+        if ( $queue ) {
+            $queue_data = json_decode( $queue->getData(), true );
+            Lib\Notifications\Routine::deleteNotificationAttachmentFiles( $queue_data );
+            $queue->setSent( 1 )->save();
+        }
+
+        $this->result = array( 'success' => true );
+    }
+
     public function setError( $code, $message = null, $http_status = null, $error_data = null )
     {
         $this->error_code = $code;
@@ -637,7 +681,22 @@ class Response10
         } else {
             $data = array( 'result' => $this->result );
         }
-        wp_send_json( $data, $this->http_status );
+
+        if ( ! headers_sent() ) {
+            header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
+            header( 'X-Bookly-V: ' . Lib\Plugin::getVersion() );
+            if ( null !== $this->http_status ) {
+                status_header( $this->http_status );
+            }
+        }
+
+        echo wp_json_encode( $data, 0 );
+
+        if ( wp_doing_ajax() ) {
+            wp_die( '', '', array( 'response' => null, ) );
+        } else {
+            die;
+        }
     }
 
     protected function param( $name, $default = null )
@@ -645,18 +704,26 @@ class Response10
         return array_key_exists( $name, $this->params ) ? stripslashes_deep( $this->params[ $name ] ) : $default;
     }
 
-    protected function generateSlots( $time_start, $time_end, $ts_length, $prefix = '' )
+    /**
+     * @param integer $time_start
+     * @param integer $time_end
+     * @param integer $ts_length
+     * @param string $date
+     * @param bool $first_day
+     * @return array
+     */
+    protected function generateSlots( $time_start, $time_end, $ts_length, $date, $first_day = true )
     {
-        $slots = array( 'start' => array() );
-        // Run the loop.
-        while ( $time_start <= $time_end ) {
-            $slot = array(
-                'value' => $prefix . DateTime::buildTimeString( $time_start ),
-            );
-            if ( $time_start < DAY_IN_SECONDS ) {
-                $slots['start'][] = $slot;
+        $slots = array();
+        $date_start = date_create( $date )->modify( '+' . $time_start . ' seconds' );
+        $date_end = date_create( $date )->modify( '+' . $time_end . ' seconds' );
+        while ( $date_start < $date_end ) {
+            if ( ! $first_day || $date == $date_start->format( 'Y-m-d' ) ) {
+                $slots[] = array(
+                    'value' => $date_start->format( 'Y-m-d H:i:s' ),
+                );
             }
-            $time_start += $ts_length;
+            $date_start->modify( '+' . $ts_length . ' seconds' );
         }
 
         return $slots;
