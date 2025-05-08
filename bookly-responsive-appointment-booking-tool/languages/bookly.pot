@@ -1885,6 +1885,9 @@ msgstr ""
 msgid "Employee"
 msgstr ""
 
+msgid "WordPress password"
+msgstr ""
+
 msgid "Profile"
 msgstr ""
 
@@ -5316,6 +5319,12 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
+msgid "Clone"
+msgstr ""
+
+msgid "Add break"
+msgstr ""
+
 msgid "Notification settings"
 msgstr ""
 
@@ -6834,6 +6843,9 @@ msgstr ""
 msgid "A custom block for displaying staff form"
 msgstr ""
 
+msgid "A custom block for displaying tags form"
+msgstr ""
+
 msgid "The calendar list is not available"
 msgstr ""
 
@@ -7407,6 +7419,14 @@ msgid ""
 "right service."
 msgstr ""
 
+msgid "Tags form"
+msgstr ""
+
+msgid ""
+"This form allows you to organize the structure and navigation based on tags "
+"assigned to services."
+msgstr ""
+
 msgid ""
 "Catalog view allows you to organize and display the services conveniently "
 "for your customers."
@@ -7489,6 +7509,9 @@ msgid "Hide categories step"
 msgstr ""
 
 msgid "Hide services step"
+msgstr ""
+
+msgid "Hide tags step"
 msgstr ""
 
 msgid "Staff list"
@@ -7582,6 +7605,27 @@ msgid "Show staff member rating before employee name"
 msgstr ""
 
 msgid "Skip step"
+msgstr ""
+
+msgid "Initial view"
+msgstr ""
+
+msgid "Form"
+msgstr ""
+
+msgid "Button title"
+msgstr ""
+
+msgid "Add subsection"
+msgstr ""
+
+msgid "Section title"
+msgstr ""
+
+msgid "Allow skip"
+msgstr ""
+
+msgid "Skip button title"
 msgstr ""
 
 msgid "Add new form"

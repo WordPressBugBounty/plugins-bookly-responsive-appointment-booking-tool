@@ -628,6 +628,7 @@ class Installer extends Base\Installer
                 `min_time_prior_booking`       INT DEFAULT NULL,
                 `min_time_prior_cancel`        INT DEFAULT NULL,
                 `gateways`                     VARCHAR(255) DEFAULT NULL,
+                `tags`                         TEXT DEFAULT NULL,
                 `visibility`                   ENUM("public","private","group") NOT NULL DEFAULT "public",
                 `position`                     INT NOT NULL DEFAULT 9999,
             CONSTRAINT
@@ -1118,6 +1119,7 @@ class Installer extends Base\Installer
             $notification = new Entities\Notification();
             $notification->setFields( $data )->save();
         }
+        do_action( 'wpml_register_single_string', 'bookly', 'currency_USD', '$' );
     }
 
     /**

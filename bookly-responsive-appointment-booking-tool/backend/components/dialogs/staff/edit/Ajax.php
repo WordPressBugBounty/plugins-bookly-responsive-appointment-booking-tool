@@ -268,7 +268,7 @@ class Ajax extends Lib\Base\Ajax
         $schedule_item_break
             ->setStartTime( $start_time )
             ->setEndTime( $end_time );
-        if ( $schedule_item_break->save() ) {
+        if ( $schedule_item_break->save() !== false ) {
             $break = new BreakItem( $schedule_item_break->getId(), $schedule_item_break->getStartTime(), $schedule_item_break->getEndTime() );
             wp_send_json_success( array(
                 'html' => $break->render( false ),
@@ -363,7 +363,7 @@ class Ajax extends Lib\Base\Ajax
         $staff = new Lib\Entities\Staff();
         $staff->load( $staff_id );
 
-        $schedule = new ScheduleComponent( 'start_time[{index}]', 'end_time[{index}]' );
+        $schedule = new ScheduleComponent( 'start_time[{index}]', 'end_time[{index}]', true, true );
 
         $ss_ids = array();
         foreach ( $staff->getScheduleItems( $location_id ) as $item ) {

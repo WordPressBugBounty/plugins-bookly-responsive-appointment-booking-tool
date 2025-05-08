@@ -1,4 +1,4 @@
-const booklyJsVersion="24.8";
+const booklyJsVersion="24.9";
 /*!*/
 var bookly = (function ($$V) {
 	'use strict';
@@ -5094,10 +5094,10 @@ var bookly = (function ($$V) {
 	var store$3 = sharedStore.exports = globalThis$g[SHARED] || defineGlobalProperty(SHARED, {});
 
 	(store$3.versions || (store$3.versions = [])).push({
-	  version: '3.40.0',
+	  version: '3.41.0',
 	  mode: 'pure' ,
 	  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-	  license: 'https://github.com/zloirock/core-js/blob/v3.40.0/LICENSE',
+	  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
 	  source: 'https://github.com/zloirock/core-js'
 	});
 
@@ -11110,7 +11110,7 @@ var bookly = (function ($$V) {
 	            $$invalidate(15, hover = 'bookly:hover:text-white hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'link':
-	            $$invalidate(6, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
+	            $$invalidate(6, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none bookly:focus:outline-none ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
 	            $$invalidate(15, hover = 'bookly:hover:text-gray-600');
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
@@ -13649,7 +13649,7 @@ var bookly = (function ($$V) {
 	      }, {
 	        selector: '.bookly-js-address-street_number',
 	        val: function () {
-	          return getFieldValueByType('street_number');
+	          return getFieldValueByType('street_number') || getFieldValueByType('premise');
 	        }
 	      }, {
 	        selector: '.bookly-js-address-additional_address',
@@ -14512,7 +14512,7 @@ var bookly = (function ($$V) {
 	    $$V.each(slots_data, function (group, group_slots) {
 	      var html = '<button class="bookly-day" value="' + group + '">' + group_slots.title + '</button>';
 	      $$V.each(group_slots.slots, function (id, slot) {
-	        html += '<button value="' + _JSON$stringify(slot.data).replace(/"/g, '&quot;') + '" data-group="' + group + '" class="bookly-hour' + (slot.special_hour ? ' bookly-slot-in-special-hour' : '') + (slot.status == 'waiting-list' ? ' bookly-slot-in-waiting-list' : slot.status == 'booked' ? ' booked' : '') + '"' + (slot.status == 'booked' ? ' disabled' : '') + '>' + '<span class="ladda-label bookly-time-main' + (slot.data[0][2] == selected_date ? ' bookly-bold' : '') + '">' + '<i class="bookly-hour-icon"><span></span></i>' + slot.time_text + '</span>' + '<span class="bookly-time-additional' + (slot.status == 'waiting-list' ? ' bookly-waiting-list' : '') + '"> ' + slot.additional_text + '</span>' + '</button>';
+	        html += '<button value="' + _JSON$stringify(slot.data).replace(/"/g, '&quot;') + '" data-group="' + group + '" class="bookly-hour' + (slot.special_hour ? ' bookly-slot-in-special-hour' : '') + (slot.status == 'waiting-list' ? ' bookly-slot-in-waiting-list' : slot.status == 'booked' ? ' booked' : '') + '"' + (slot.status == 'booked' ? ' disabled' : '') + '>' + '<span class="ladda-label bookly-time-main' + (slot.data[0][2] == selected_date ? ' bookly-bold' : '') + '">' + '<i class="bookly-hour-icon"><span></span></i>' + slot.time_text + '<span class="bookly-time-additional' + (slot.status == 'waiting-list' ? ' bookly-waiting-list' : '') + '"> ' + slot.additional_text + '</span></span>' + '</button>';
 	      });
 	      response[group] = html;
 	    });

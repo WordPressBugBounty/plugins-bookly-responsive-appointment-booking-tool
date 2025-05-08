@@ -91,6 +91,15 @@ class Scheduler
                 ->setTimeZoneOffset( $params['time_zone_offset'] )
                 ->applyTimeZone();
         }
+        if ( isset( $params['userData'] ) ) {
+            /** @var Lib\UserBookingData $userData */
+            $userData = $params['userData'];
+            foreach ( $userData->cart->getItems() as $item ) {
+                if ( $item->getSlots() ) {
+                    $this->userData->cart->add( $item );
+                }
+            }
+        }
 
         foreach ( $exclude as $slots ) {
             $this->userData

@@ -3,6 +3,15 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_24_9()
+    {
+        $this->alterTables( array(
+            'bookly_services' => array(
+                'ALTER TABLE `%s` ADD COLUMN `tags` TEXT DEFAULT NULL AFTER `gateways`',
+            ),
+        ) );
+    }
+
     function update_24_8()
     {
         add_option( 'bookly_advertisement', array() );

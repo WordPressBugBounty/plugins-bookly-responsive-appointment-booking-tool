@@ -97,6 +97,8 @@ class Page extends Lib\Base\Ajax
                             update_option( 'bookly_cloud_stripe_metadata', $metadata );
                         }
                     }
+                    $currencies = Lib\Utils\Price::getCurrencies();
+                    do_action( 'wpml_register_single_string', 'bookly', 'currency_' . self::parameter( 'bookly_pmt_currency' ), $currencies[ self::parameter( 'bookly_pmt_currency' ) ]['symbol'] );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
                 case 'business_hours':  // Business hours form.

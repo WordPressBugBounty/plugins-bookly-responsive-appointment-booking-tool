@@ -59,6 +59,7 @@ $service_id = $service['id'];
                 <?php endforeach ?>
             </select>
         </div>
+        <?php Proxy\Pro::renderTags( $service ) ?>
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_SIMPLE ) : ?>
         <div class="form-group">

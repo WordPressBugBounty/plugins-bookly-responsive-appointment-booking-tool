@@ -101,6 +101,7 @@ class Response10
 //            $slots = $this->generateSlots( 0, $time_end, $ts_length );
 //        }
 //        $bounding = Lib\Config::getBoundingDaysForPickadate();
+
         $this->result = array(
             'me' => array(
                 'email' => $this->staff->getEmail(),
@@ -110,9 +111,6 @@ class Response10
 //                'slots' => array(
 //                    'server_side' => ! $pre_generated,
 //                    'default' => $slots,
-//                ),
-//                'customer' => array(
-//                    'default_status' => (object) Lib\Proxy\CustomerGroups::prepareDefaultAppointmentStatuses( array( 0 => Lib\Config::getDefaultAppointmentStatus() ) ),
 //                ),
 //                'date' => array(
 //                    'min' => date_create( $bounding['date_min'][0] . '-' . ( $bounding['date_min'][1] + 1 ) . '-' . $bounding['date_min'][2] )->format( 'Y-m-d' ),
@@ -140,8 +138,7 @@ class Response10
 
     public function appointment()
     {
-        $response = array( 'data' => array( 'customer_appointments' => array() ) );
-
+        $response = array( 'data' => array() );
         $appointment = new Appointment();
         if ( $appointment->load( $this->param( 'id' ) ) ) {
             $query = Appointment::query( 'a' )
@@ -157,20 +154,20 @@ class Response10
                     a.location_id,
                     a.online_meeting_provider,
                     a.online_meeting_id' )
-                ->addSelect( sprintf( '%s AS min_capacity, %s AS max_capacity',
-                    Lib\Proxy\Shared::prepareStatement( 1, 'MIN(ss.capacity_min)', 'StaffService' ),
-                    Lib\Proxy\Shared::prepareStatement( 1, 'MAX(ss.capacity_max)', 'StaffService' )
-                ) )
+//                ->addSelect( sprintf( '%s AS min_capacity, %s AS max_capacity',
+//                    Lib\Proxy\Shared::prepareStatement( 1, 'MIN(ss.capacity_min)', 'StaffService' ),
+//                    Lib\Proxy\Shared::prepareStatement( 1, 'MAX(ss.capacity_max)', 'StaffService' )
+//                ) )
                 ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
-                ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id AND ss.location_id <=> a.location_id' )
+//                ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id AND ss.location_id <=> a.location_id' )
                 ->where( 'a.id', $appointment->getId() )
             ;
 
-            if ( ! Lib\Proxy\Locations::servicesPerLocationAllowed() ) {
-                $query
-                    ->addSelect( 'ss.location_id' )
-                    ->where( 'ss.location_id', null );
-            }
+//            if ( ! Lib\Proxy\Locations::servicesPerLocationAllowed() ) {
+//                $query
+//                    ->addSelect( 'ss.location_id' )
+//                    ->where( 'ss.location_id', null );
+//            }
 
             // Determine display time zone
             $display_tz = Common::getCurrentUserTimeZone();
@@ -186,8 +183,8 @@ class Response10
 
             $response['data']['id'] = (int) $appointment->getId();
             $response['data']['total_number_of_persons'] = (int) $info['total_number_of_persons'];
-            $response['data']['min_capacity'] = (int) $info['min_capacity'];
-            $response['data']['max_capacity'] = (int) $info['max_capacity'];
+//            $response['data']['min_capacity'] = (int) $info['min_capacity'];
+//            $response['data']['max_capacity'] = (int) $info['max_capacity'];
             $response['data']['start_date'] = $info['start_date'];
             $response['data']['end_date'] = $info['end_date'];
             $response['data']['service_id'] = (int) $info['service_id'];
@@ -219,7 +216,7 @@ class Response10
                     c.full_name,
                     c.email,
                     c.phone,
-                    c.group_id')
+                    c.group_id' )
                 ->leftJoin( 'Payment', 'p', 'p.id = ca.payment_id' )
                 ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
                 ->where( 'ca.appointment_id', $appointment->getId() )
@@ -241,8 +238,8 @@ class Response10
                 }
                 $custom_fields = (array) json_decode( $customer['custom_fields'], true );
                 $response['data']['customer_appointments'][] = array(
-                    'id' => (int) $customer['customer_id'],
-                    'ca_id' => (int) $customer['id'],
+                    'id' => (int) $customer['id'],
+                    'customer_id' => (int) $customer['customer_id'],
                     'series_id' => $customer['series_id'],
                     'package_id' => $customer['package_id'],
                     'collaborative_service' => $collaborative_service,
@@ -276,8 +273,8 @@ class Response10
         foreach ( $customer_appointments as &$ca ) {
             if ( isset( $ca['id'] ) ) {
                 $ca['ca_id'] = $ca['id'];
-                $ca = $this->extendCustomerAppointment( $ca );
             }
+            $ca = $this->extendCustomerAppointment( $ca );
             $ca['id'] = $ca['customer_id'];
             unset( $ca['customer_id'] );
         }
@@ -320,6 +317,7 @@ class Response10
     public function saveAppointment()
     {
         $appointment_id = (int) $this->param( 'id', 0 );
+        $location_id = (int) $this->param( 'location_id', 0 );
         $service_id = (int) $this->param( 'service_id' );
         $notification = $this->param( 'notification', false );
         $custom_service_name = trim( $this->param( 'custom_service_name', '' ) );
@@ -363,7 +361,7 @@ class Response10
             $service_id,
             $custom_service_name,
             $custom_service_price,
-            0,
+            $location_id,
             0,
             $start_date,
             $end_date,
@@ -415,19 +413,21 @@ class Response10
                     $appointment['end_date'] = DateTime::convertTimeZone( $appointment['end_date'], $wp_tz, $display_tz );
                 }
                 $appointments[ $appointment['id'] ] = $appointment;
+                $appointments[ $appointment['id'] ]['customer_appointments'] = array();
+            }
+
+            $customer_id = (int) $appointment['customer_id'];
+            if ( $customer_id !== 0 ) {
+                $appointments[ $appointment['id'] ]['customer_appointments'][] = array(
+                    'id' => (int) $appointment['ca_id'],
+                    'customer_id' => $customer_id,
+                    'full_name' => $appointment['client_name'],
+                    'status' => $appointment['status'],
+                );
             }
         }
 
         foreach ( $appointments as $appointment ) {
-            $customer_id = (int) $appointment['customer_id'];
-            $customer = $customer_id === 0
-                ? null
-                : array(
-                    'id' => (int) $appointment['ca_id'],
-                    'customer_id' => (int) $customer_id,
-                    'full_name' => $appointment['client_name'],
-                );
-
             $list[] = array(
                 'id' => (int) $appointment['id'],
                 'start_date' => $appointment['start_date'],
@@ -438,8 +438,8 @@ class Response10
                     'service_price' => (float) $appointment['service_price'],
                 ),
                 'color' => $appointment['service_color'],
-                'internal_note' => trim( $appointment['internal_note'] ),
-                'customer_appointments' => $customer ? array( $customer ) : array(),
+                'internal_note' => $appointment['internal_note'],
+                'customer_appointments' => $appointment['customer_appointments'],
             );
         }
 
@@ -467,6 +467,9 @@ class Response10
             $customer = Entities\Customer::find( $this->param( 'id' ) );
         } else {
             $customer = new Entities\Customer();
+        }
+        if ( Config::customerGroupsActive() ) {
+            $customer->setGroupId( $this->param( 'group_id' ) );
         }
         $customer
             ->setFullName( trim( rtrim( $this->param( 'first_name' ) ) . ' ' . ltrim( $this->param( 'last_name' ) ) ) )
@@ -600,12 +603,13 @@ class Response10
                             'name' => $service->getTitle(),
                             'name_d' => $service->getTitle() . ' (' . DateTime::secondsToInterval( $service->getDuration() ) . ')',
                             'duration' => (int) $service->getDuration(),
-//                            'locations' => (object) array(
-//                                ( $staff_service->getLocationId() ?: 0 ) => array(
-//                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-//                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
-//                                ),
-//                            ),
+                            'locations' => array(
+                                array(
+                                    'id' => (int) $staff_service->getLocationId() ?: 0,
+                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
+                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
+                                ),
+                            ),
                         );
 //                        $max_duration = max( $max_duration, $service->getUnitsMax() * $service->getDuration() );
 //                        // Prepare time slots if service has custom time slots length.
@@ -617,14 +621,15 @@ class Response10
 //                        }
                         $services[] = $service_data;
                     } else {
-//                        array_walk( $services, function ( &$item ) use ( $staff_service, $service ) {
-//                            if ( $item['id'] == $service->getId() ) {
-//                                $item['locations'][ $staff_service->getLocationId() ?: 0 ] = array(
-//                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-//                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
-//                                );
-//                            }
-//                        } );
+                        array_walk( $services, function ( &$item ) use ( $staff_service, $service ) {
+                            if ( $item['id'] == $service->getId() ) {
+                                $item['locations'][] = array(
+                                    'id' => (int) $staff_service->getLocationId() ?: 0,
+                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
+                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
+                                );
+                            }
+                        } );
                     }
                 }
             }
@@ -637,6 +642,61 @@ class Response10
     {
         Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( $this->param( 'notifications', array() ), $this->param( 'type', 'all' ), $this->param( 'token' ) );
         $this->result = array( 'success' => true );
+    }
+
+    public function settings()
+    {
+        $result = array();
+        $keys = array( 'addons', 'customer_appointment', 'customer_groups', 'locations' );
+        $request = $this->param( 'data', array() );
+        if ( ! is_array( $request ) || ! $request ) {
+            $request = $keys;
+        }
+
+        foreach ( $request as $key ) {
+            if ( $key === 'addons' ) {
+                $data = Lib\Proxy\Shared::prepareL10nGlobal( array(
+                    'addons' => array(),
+                ) );
+                $result[ $key ] = $data['addons'];
+                continue;
+            }
+
+            if ( $key === 'customer_appointment' ) {
+                $customer_gr_def_app_status = array();
+                foreach ( Lib\Proxy\CustomerGroups::prepareDefaultAppointmentStatuses( array( 0 => Lib\Config::getDefaultAppointmentStatus() ) ) as $group_id => $status ) {
+                    $customer_gr_def_app_status[] = array( 'group_id' => $group_id, 'status' => $status );
+                }
+                $result[ $key ] = array(
+                    'statuses' => Common::getAllStatuses(),
+                    'customer_gr_def_app_status' => $customer_gr_def_app_status,
+                );
+                continue;
+            }
+
+            if ( $key === 'customer_groups' ) {
+                $customer_groups = array();
+                foreach ( Lib\Proxy\CustomerGroups::getGroups() as $group_id => $title ) {
+                    $customer_groups[] = array( 'group_id' => $group_id, 'title' => $title );
+                }
+                $result[ $key ] = $customer_groups;
+                continue;
+            }
+
+            if ( $key === 'locations' ) {
+                $locations = array();
+                foreach ( Lib\Proxy\Locations::findByStaffId( $this->staff->getId() ) ?: array() as $location ) {
+                    $locations[] = array(
+                        'id' => (int) $location->getId(),
+                        'name' => $location->getName(),
+                    );
+                }
+                $result[ $key ] = $locations;
+                continue;
+            }
+        }
+
+        $this->result = $result;
     }
 
     public function deleteNotificationsAttachmentFiles()
@@ -732,10 +792,8 @@ class Response10
     protected function extendCustomerAppointment( array $ca )
     {
         $default = array(
-            'status' => Lib\Config::getDefaultAppointmentStatus(),
-            'number_of_persons' => 1,
-            'notes' => '',
             'created_from' => 'mobile',
+            'notes' => '',
             'payment_id' => null,
             'created_at' => current_time( 'mysql' ),
             'time_zone' => null,
@@ -744,7 +802,9 @@ class Response10
             'extras' => array(),
         );
         $ca = array_merge( $ca, $default );
-        $customer_appointment = CustomerAppointment::find( $ca['ca_id'] );
+        $customer_appointment = $ca['ca_id']
+            ? CustomerAppointment::find( $ca['ca_id'] )
+            : array();
         if ( $customer_appointment ) {
             $fields = $customer_appointment->getFields();
             foreach ( $default as $key => $value ) {
