@@ -25,7 +25,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $payment = new Lib\Entities\Payment();
         $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ) ) );
-        
+
         $payment = $payment->getId() ? $payment : false;
         if ( $payment && ! Lib\Utils\Common::isCurrentUserSupervisor() && ! Lib\Utils\Common::isCurrentUserStaff() ) {
             // Check if customer trying to get his own payment.
@@ -116,6 +116,9 @@ class Ajax extends Lib\Base\Ajax
         $details->setData(
             array( 'tax_paid' => $payment->getTax() )
         );
+
+        Lib\Payment\Proxy\Events::redeemReservedAttendees( $payment );
+        
         $payment
             ->setPaid( $payment->getTotal() )
             ->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )
@@ -144,7 +147,14 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        wp_send_json_success( array( 'payment_title' => $payment_title ) );
+        if ( Lib\Config::eventsActive() ) {
+            $order = Lib\DataHolders\Booking\Order::createFromOrderId( $payment->getOrderId() );
+            if ( $order ) {
+                Lib\Proxy\Events::sendNotifications( $order );
+            }
+        }
+
+        wp_send_json_success( array( 'payment_title' => $payment_title, 'status' => $payment->getStatus() ) );
     }
 
     /**

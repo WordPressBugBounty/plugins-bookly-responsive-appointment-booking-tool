@@ -1305,6 +1305,416 @@ msgid ""
 "searching available slots for all sub-services."
 msgstr ""
 
+msgid "Dear {client_name}"
+msgstr ""
+
+msgid "Notification to staff member about new event"
+msgstr ""
+
+msgid "Event {event_title} on {event_start_date} at {event_start_time}"
+msgstr ""
+
+msgid ""
+"Hello,\n"
+"Let's organize {event_title} on {event_start_date} at {event_start_time}."
+msgstr ""
+
+msgid ""
+"Notification to customer about pending payment for reserved event ticket(s)"
+msgstr ""
+
+msgid "Pending payment for your order #{order_id}"
+msgstr ""
+
+msgid ""
+"Thank you for booking with us! Your order #{order_id} has been successfully "
+"reserved. We're currently awaiting payment to confirm your tickets."
+msgstr ""
+
+msgid "Notification to customer about new event ticket(s)"
+msgstr ""
+
+msgid "Order confirmation"
+msgstr ""
+
+msgid ""
+"Thank you for your order!\n"
+"Order: #{order_id}\n"
+"Tickets: {attendees_count}\n"
+"Total: {total_price}\n"
+"\n"
+"Details:\n"
+"{#each attendees as attendee}\n"
+" {attendee.event_title} on {attendee.event_start_date} at {attendee."
+"event_start_time} Ticket: {attendee.ticket_name} (Code: {attendee."
+"attendee_code})\n"
+"{/each}"
+msgstr ""
+
+msgid ""
+"Your tickets: {#each attendees as attendee}\n"
+" {attendee.event_title} on {attendee.event_start_date} at {attendee."
+"event_start_time} Ticket: {attendee.ticket_name} (Code: {attendee."
+"attendee_code})\n"
+"{/each}"
+msgstr ""
+
+msgid "Notification to organizer about new event ticket(s)"
+msgstr ""
+
+msgid "Attendee"
+msgstr ""
+
+msgid ""
+"Hello,\n"
+"Order: #{order_id}\n"
+"Tickets: {attendees_count}\n"
+"{#each attendees as attendee}\n"
+"{attendee.event_title} - {attendee.attendee_full_name} {attendee."
+"attendee_phone} (Code: {attendee.attendee_code})\n"
+"{/each}\n"
+"\n"
+"Total: {total_price} {payment_type}"
+msgstr ""
+
+msgid "Notification to organizer about purchased new event tickets"
+msgstr ""
+
+msgid "Notification to customer about deleted ticket(s)"
+msgstr ""
+
+msgid "Your ticket {attendee_code} has been cancelled"
+msgstr ""
+
+msgid ""
+"We regret to inform you that your ticket {attendee_code} for {event_title} "
+"on {event_start_date} at {event_start_time} has been cancelled."
+msgstr ""
+
+msgid "Notification to organizer about deleted ticket(s)"
+msgstr ""
+
+msgid "Ticket {attendee_code} for {event_title} is deleted"
+msgstr ""
+
+msgid ""
+"Hello.\n"
+"Please note that attendee ticket {attendee_code} for {event_title} (Order "
+"#{order_id}) has been deleted."
+msgstr ""
+
+msgid "Notification about new event"
+msgstr ""
+
+msgid "Notification about new ticket"
+msgstr ""
+
+msgid "Notification about ticket deletion"
+msgstr ""
+
+msgid "Events"
+msgstr ""
+
+msgid "New event"
+msgstr ""
+
+msgid "No."
+msgstr ""
+
+msgid "No events for selected period and criteria."
+msgstr ""
+
+msgid "No data available in table"
+msgstr ""
+
+msgid "Processing..."
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Tickets"
+msgstr ""
+
+msgid "Attendees"
+msgstr ""
+
+msgid "No result found"
+msgstr ""
+
+msgid "Searching"
+msgstr ""
+
+msgid "Default ticket mask"
+msgstr ""
+
+msgid "Enter a mask containing asterisks \"*\" for variables."
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Sold"
+msgstr ""
+
+msgid "Reserved"
+msgstr ""
+
+msgid "On hold"
+msgstr ""
+
+msgid "Quantity"
+msgstr ""
+
+msgid "Events form"
+msgstr ""
+
+msgid "Present events and sell tickets with a fast and clear form."
+msgstr ""
+
+msgid "Title of event"
+msgstr ""
+
+msgid "Info of event"
+msgstr ""
+
+msgid "Start date of event"
+msgstr ""
+
+msgid "End date of event"
+msgstr ""
+
+msgid "Start time of event"
+msgstr ""
+
+msgid "End time of event"
+msgstr ""
+
+msgid "Image URL of event"
+msgstr ""
+
+msgid "Image of event"
+msgstr ""
+
+msgid "Ticket code of attendee"
+msgstr ""
+
+msgid "Email of attendee"
+msgstr ""
+
+msgid "Phone of attendee"
+msgstr ""
+
+msgid "First name of attendee"
+msgstr ""
+
+msgid "Last name of attendee"
+msgstr ""
+
+msgid "Full name of attendee"
+msgstr ""
+
+msgid "Name of ticket type"
+msgstr ""
+
+msgid "Price of ticket type"
+msgstr ""
+
+msgid "Quantity of ticket type"
+msgstr ""
+
+msgid "Reserved of ticket type"
+msgstr ""
+
+msgid "Location info"
+msgstr ""
+
+msgid "Location name"
+msgstr ""
+
+msgid "Number of attendees"
+msgstr ""
+
+msgid "Loop over attendees list"
+msgstr ""
+
+msgid "Loop over attendees list with delimiter"
+msgstr ""
+
+msgid "Clear field"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Edit event"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+#, php-format
+msgid "This text can be inserted into notifications with %s code"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Organizers"
+msgstr ""
+
+msgid "Plan and manage the event from start to finish"
+msgstr ""
+
+msgid "Published"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Support staff"
+msgstr ""
+
+msgid "Assist with setup, operations, and attendee support during the event"
+msgstr ""
+
+msgid "Ticket mask"
+msgstr ""
+
+msgid "Title"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Add ticket"
+msgstr ""
+
+msgid "No tickets added yet"
+msgstr ""
+
+#, php-format
+msgid "Click \"%s\" to create your first one"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "temporarily on hold by the payment system"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "Any orders"
+msgstr ""
+
+msgid "Any tickets"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+#, php-format
+msgid "This will permanently remove the ticket %s"
+msgstr ""
+
+msgid "This action cannot be undone."
+msgstr ""
+
+msgid "Tickets are not yet available"
+msgstr ""
+
+msgid "Set up pricing and inventory to enable sales"
+msgstr ""
+
+msgid "Not paid"
+msgstr ""
+
+msgid "Order"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Ticket"
+msgstr ""
+
+msgid "Use reserved tickets"
+msgstr ""
+
+msgid "Search for customer"
+msgstr ""
+
+msgid "No results found"
+msgstr ""
+
+msgid "New customer"
+msgstr ""
+
+msgid "Please select an event"
+msgstr ""
+
+msgid "Please select a ticket"
+msgstr ""
+
+msgid "left"
+msgstr ""
+
+msgid "Your ticket has been created."
+msgstr ""
+
+msgid "Select event"
+msgstr ""
+
+msgid "Event details"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Sold out"
+msgstr ""
+
+msgid "Add to calendar"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Header height"
+msgstr ""
+
+msgid "Events list"
+msgstr ""
+
+msgid "Any"
+msgstr ""
+
+msgid "Show remaining tickets"
+msgstr ""
+
+msgid "Remaining tickets text"
+msgstr ""
+
 msgid "Short Codes"
 msgstr ""
 
@@ -1412,9 +1822,6 @@ msgstr ""
 msgid "Created at any time"
 msgstr ""
 
-msgid "Customer"
-msgstr ""
-
 msgid "All statuses"
 msgstr ""
 
@@ -1428,21 +1835,6 @@ msgid "Any time"
 msgstr ""
 
 msgid "No appointments for selected period."
-msgstr ""
-
-msgid "Processing..."
-msgstr ""
-
-msgid "No data available in table"
-msgstr ""
-
-msgid "Loading..."
-msgstr ""
-
-msgid "No result found"
-msgstr ""
-
-msgid "Searching"
 msgstr ""
 
 msgid "Attachments"
@@ -1490,9 +1882,6 @@ msgstr ""
 msgid "Semicolon (;)"
 msgstr ""
 
-msgid "Select all"
-msgstr ""
-
 msgid "Booking Time"
 msgstr ""
 
@@ -1503,9 +1892,6 @@ msgid "Customer Phone"
 msgstr ""
 
 msgid "Customer Email"
-msgstr ""
-
-msgid "Status"
 msgstr ""
 
 msgid "Payment"
@@ -1522,9 +1908,6 @@ msgid "%s of %s"
 msgstr ""
 
 msgid "Full name"
-msgstr ""
-
-msgid "Info"
 msgstr ""
 
 msgid ""
@@ -1579,9 +1962,6 @@ msgid "API Login ID"
 msgstr ""
 
 msgid "API Transaction Key"
-msgstr ""
-
-msgid "Title"
 msgstr ""
 
 msgid "Rate"
@@ -1826,9 +2206,6 @@ msgid "Filters"
 msgstr ""
 
 msgid "Show timezone"
-msgstr ""
-
-msgid "Location"
 msgstr ""
 
 msgid "Category"
@@ -2099,9 +2476,6 @@ msgid "Sent"
 msgstr ""
 
 msgid "Delivered"
-msgstr ""
-
-msgid "Failed"
 msgstr ""
 
 msgid "Undelivered"
@@ -2384,9 +2758,6 @@ msgid ""
 "Click on a time slot to proceed with booking."
 msgstr ""
 
-msgid "Add to calendar"
-msgstr ""
-
 msgid "Confirm email"
 msgstr ""
 
@@ -2418,9 +2789,6 @@ msgid "You must accept our terms"
 msgstr ""
 
 msgid "Select category"
-msgstr ""
-
-msgid "Any"
 msgstr ""
 
 msgid "Select service"
@@ -2830,9 +3198,6 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-msgid "No."
-msgstr ""
-
 msgid "Appointment date"
 msgstr ""
 
@@ -2942,6 +3307,12 @@ msgid "Comment"
 msgstr ""
 
 msgid "Reference"
+msgstr ""
+
+msgid "Start date"
+msgstr ""
+
+msgid "End date"
 msgstr ""
 
 #, php-format
@@ -3346,9 +3717,6 @@ msgid "250 or more employees"
 msgstr ""
 
 msgid "Select company size"
-msgstr ""
-
-msgid "Image"
 msgstr ""
 
 msgid "Company name"
@@ -4233,9 +4601,6 @@ msgstr ""
 msgid "Service name"
 msgstr ""
 
-msgid "Start date"
-msgstr ""
-
 msgid "End date / Duration"
 msgstr ""
 
@@ -4785,9 +5150,6 @@ msgstr ""
 msgid "Quick search customers"
 msgstr ""
 
-msgid "New customer"
-msgstr ""
-
 msgid "Merge with"
 msgstr ""
 
@@ -4938,6 +5300,9 @@ msgid "Site address"
 msgstr ""
 
 msgid "Verification code"
+msgstr ""
+
+msgid "Order ID"
 msgstr ""
 
 msgid "Image of service category"
@@ -5242,9 +5607,6 @@ msgstr ""
 msgid "Please select an amount and recharge your account"
 msgstr ""
 
-msgid "Select"
-msgstr ""
-
 msgid "Pay using"
 msgstr ""
 
@@ -5286,9 +5648,6 @@ msgid "A custom block for displaying booking form"
 msgstr ""
 
 msgid "hide"
-msgstr ""
-
-msgid "Quantity"
 msgstr ""
 
 msgid "Select location"
@@ -5345,6 +5704,9 @@ msgstr ""
 msgid "Administrators"
 msgstr ""
 
+msgid "Organizer"
+msgstr ""
+
 msgid "You can enter multiple email addresses (one per line)"
 msgstr ""
 
@@ -5381,6 +5743,18 @@ msgstr ""
 
 msgid ""
 "Choose whether notification should be sent for specific services only or not."
+msgstr ""
+
+msgid "Associated payment status"
+msgstr ""
+
+msgid "Any status"
+msgstr ""
+
+msgid "No payment"
+msgstr ""
+
+msgid "Select the payment status required for this notification to be sent"
 msgstr ""
 
 msgid "before"
@@ -5433,13 +5807,6 @@ msgstr ""
 msgid ""
 "If you leave this field blank, this staff member will not be able to access "
 "personal calendar using WP backend."
-msgstr ""
-
-#, php-format
-msgid "This text can be inserted into notifications with %s code."
-msgstr ""
-
-msgid "Color"
 msgstr ""
 
 msgid "Archive"
@@ -5552,9 +5919,6 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-msgid "This text can be inserted into notifications with {internal_note} code"
-msgstr ""
-
 msgid "Please select a provider"
 msgstr ""
 
@@ -5571,10 +5935,6 @@ msgid "No timeslots available"
 msgstr ""
 
 msgid "Appointment notes"
-msgstr ""
-
-msgid ""
-"This text can be inserted into notifications with {appointment_notes} code"
 msgstr ""
 
 msgid ""
@@ -5616,9 +5976,6 @@ msgid "Paused"
 msgstr ""
 
 msgid "Limit exceeded"
-msgstr ""
-
-msgid "This text can be inserted into notifications with {client_note} code"
 msgstr ""
 
 #, php-format
@@ -5781,9 +6138,6 @@ msgid "Add category"
 msgstr ""
 
 msgid "Adjust the order of categories in your booking form"
-msgstr ""
-
-msgid "This text can be inserted into notifications with {category_info} code"
 msgstr ""
 
 msgid "Table settings"
@@ -6910,9 +7264,6 @@ msgstr ""
 msgid "All related gift cards will be deleted"
 msgstr ""
 
-msgid "Clear field"
-msgstr ""
-
 msgid "No limit"
 msgstr ""
 
@@ -7457,12 +7808,6 @@ msgstr ""
 msgid "Empty option"
 msgstr ""
 
-msgid "Width"
-msgstr ""
-
-msgid "Header height"
-msgstr ""
-
 msgid "Body height"
 msgstr ""
 
@@ -7718,13 +8063,13 @@ msgstr ""
 msgid "Slot already booked"
 msgstr ""
 
-msgid "No results found"
-msgstr ""
-
 msgid "Thank you!"
 msgstr ""
 
 msgid "Your booking is complete."
+msgstr ""
+
+msgid "Your order number"
 msgstr ""
 
 msgid "Your gift card has been created."
@@ -7874,6 +8219,9 @@ msgstr ""
 msgid "Add appointment cancellation confirmation"
 msgstr ""
 
+msgid "Add customer gift cards"
+msgstr ""
+
 #, php-format
 msgid ""
 "<a class=\"%s\" href=\"#\">Click here</a> to dissociate this purchase code "
@@ -7970,10 +8318,6 @@ msgid ""
 msgstr ""
 
 msgid "Create WordPress user"
-msgstr ""
-
-msgid ""
-"This text can be inserted into notifications with {staff_category_info} code"
 msgstr ""
 
 msgid "Create payment"
@@ -8089,9 +8433,6 @@ msgstr ""
 msgid ""
 "You can enter a mask containing asterisks \"*\" for variables here and click "
 "Generate."
-msgstr ""
-
-msgid "This text can be inserted into notifications with {gift_card_note} code"
 msgstr ""
 
 msgid "Select card type"
@@ -8336,6 +8677,12 @@ msgid ""
 "to verify your license by providing a valid purchase code."
 msgstr ""
 
+msgid "Gift cards"
+msgstr ""
+
+msgid "A custom block for displaying gift cards"
+msgstr ""
+
 msgid "A custom block for displaying frontend calendar"
 msgstr ""
 
@@ -8343,6 +8690,9 @@ msgid "Appointments list"
 msgstr ""
 
 msgid "A custom block for displaying appointments list"
+msgstr ""
+
+msgid "Copied to clipboard"
 msgstr ""
 
 msgid ""
@@ -8359,6 +8709,9 @@ msgid "This service is no longer provided."
 msgstr ""
 
 msgid "Gift card type was not found"
+msgstr ""
+
+msgid "Event was not found"
 msgstr ""
 
 msgid "Service was not found"
@@ -8546,9 +8899,6 @@ msgid "Edit coupon"
 msgstr ""
 
 msgid "Mask"
-msgstr ""
-
-msgid "Enter a mask containing asterisks \"*\" for variables."
 msgstr ""
 
 msgid "Once per customer"
@@ -8919,9 +9269,6 @@ msgstr ""
 msgid "After Time step (Extras duration settings will be ignored)"
 msgstr ""
 
-msgid "Summary"
-msgstr ""
-
 msgid "Service Extras"
 msgstr ""
 
@@ -9080,12 +9427,6 @@ msgstr ""
 msgid ""
 "Enable this setting to be able to set custom settings for staff members for "
 "different locations."
-msgstr ""
-
-msgid "Location info"
-msgstr ""
-
-msgid "Location name"
 msgstr ""
 
 msgid "New Location"

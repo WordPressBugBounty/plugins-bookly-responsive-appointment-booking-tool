@@ -101,6 +101,7 @@ class Ajax extends Lib\Base\Ajax
         $payment_ids = array_map( 'intval', self::parameter( 'data', array() ) );
         /** @var Lib\Entities\Payment $payment */
         foreach ( Lib\Entities\Payment::query()->whereIn( 'id', $payment_ids )->find() as $payment ) {
+            Lib\Payment\Proxy\Events::redeemReservedAttendees( $payment );
             $payment->delete();
         }
         wp_send_json_success();

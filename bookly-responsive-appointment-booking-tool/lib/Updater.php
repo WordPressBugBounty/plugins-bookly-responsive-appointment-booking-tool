@@ -3,6 +3,18 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_25_0()
+    {
+        $this->alterTables( array(
+            'bookly_notifications' => array(
+                'ALTER TABLE `%s` ADD COLUMN `to_organizer` TINYINT(1) NOT NULL DEFAULT 0 AFTER `custom_recipients`',
+            ),
+            'bookly_shop' => array(
+                'ALTER TABLE `%s` DROP COLUMN `type`',
+            ),
+        ) );
+    }
+
     function update_24_9()
     {
         $this->alterTables( array(

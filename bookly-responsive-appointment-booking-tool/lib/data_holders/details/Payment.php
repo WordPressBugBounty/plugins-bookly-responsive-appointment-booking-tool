@@ -55,6 +55,7 @@ class Payment extends Base
             case Lib\Entities\Payment::ITEM_APPOINTMENT:
             case Lib\Entities\Payment::ITEM_PACKAGE:
             case Lib\Entities\Payment::ITEM_GIFT_CARD:
+            case Lib\Entities\Payment::ITEM_EVENT_ATTENDEE:
                 $this->data['items'][] = $details->getData();
                 if ( ! isset( $this->data['subtotal']['price'] ) ) {
                     $this->data['subtotal']['deposit'] = 0;

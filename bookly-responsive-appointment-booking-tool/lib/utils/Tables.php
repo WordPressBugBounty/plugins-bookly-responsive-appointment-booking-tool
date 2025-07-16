@@ -15,6 +15,7 @@ abstract class Tables
     const DISCOUNTS = 'discounts';
     const EMAIL_LOGS = 'email_logs';
     const EMAIL_NOTIFICATIONS = 'email_notifications';
+    const EVENTS = 'events';
     const GIFT_CARDS = 'gift_cards';
     const GIFT_CARD_TYPES = 'gift_card_types';
     const LOCATIONS = 'locations';
@@ -264,6 +265,15 @@ abstract class Tables
                     'ref' => __( 'Reference', 'bookly' ),
                 );
                 break;
+            case self::EVENTS:
+                $columns = array(
+                    'id' => __( 'ID', 'bookly' ),
+                    'title' => __( 'Title', 'bookly' ),
+                    'start_date' => __( 'Start date', 'bookly' ),
+                    'end_date' => __( 'End date', 'bookly' ),
+                    'published' => __( 'Published', 'bookly' ),
+                );
+                break;
         }
 
         return Lib\Proxy\Shared::prepareTableColumns( $columns, $table );
@@ -448,6 +458,12 @@ abstract class Tables
                     'no' => false,
                     'internal_note' => false,
                     'service_price' => false
+                );
+                break;
+            case self::EVENTS:
+                $columns = array(
+                    'id' => false,
+                    'end_date' => false,
                 );
                 break;
             case self::EMAIL_LOGS:

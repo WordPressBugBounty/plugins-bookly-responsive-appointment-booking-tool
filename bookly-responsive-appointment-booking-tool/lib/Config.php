@@ -34,6 +34,7 @@ use Bookly\Lib\Utils\Price;
  * @method static bool multiplyAppointmentsActive()    Check whether Multiply Appointments add-on is active or not.
  * @method static bool outlookCalendarActive()         Check whether Outlook Calendar add-on is active or not.
  * @method static bool packagesActive()                Check whether Packages add-on is active or not.
+ * @method static bool eventsActive()                  Check whether Events add-on is active or not.
  * @method static bool paypalCheckoutActive()          Check whether PayPal checkout add-on is active or not.
  * @method static bool paypalPaymentsStandardActive()  Check whether PayPal payments standard add-on is active or not.
  * @method static bool paysonActive()                  Check whether Payson add-on is active or not.
@@ -115,7 +116,7 @@ abstract class Config
                 'recurrence_enabled' => (int) $row['recurrence_enabled'],
                 'recurrence_frequencies' => $row['recurrence_frequencies'],
                 'min_time_prior_booking' => array( (int) $min_time_prior_booking->format( 'Y' ), (int) $min_time_prior_booking->format( 'n' ) - 1, (int) $min_time_prior_booking->format( 'j' ), ),
-                'tags' => $row['tags'] ? json_decode( $row['tags'] ) : array(),
+                'tags' => isset( $row['tags'] ) ? json_decode( $row['tags'], true ) : array(),
             );
 
             $result = Proxy\Shared::prepareCategoryService( $result, $row );

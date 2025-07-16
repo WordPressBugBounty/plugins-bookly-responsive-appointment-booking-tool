@@ -33,6 +33,7 @@ class Payment extends Lib\Base\Entity
     const ITEM_PACKAGE = 'package';
     const ITEM_GIFT_CARD = 'gift_card';
     const ITEM_ADJUSTMENT = 'adjustment';
+    const ITEM_EVENT_ATTENDEE = 'event_attendee';
 
     /** @var int */
     protected $coupon_id;

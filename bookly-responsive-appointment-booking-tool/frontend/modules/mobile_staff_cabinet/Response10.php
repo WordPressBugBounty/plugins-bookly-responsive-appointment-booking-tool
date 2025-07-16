@@ -38,6 +38,8 @@ class Response10
     {
         $this->staff = $staff;
         $this->params = $params;
+
+        $this->staff && wp_set_current_user( $this->staff->getWpUserId() );
     }
 
     public function init()
@@ -448,7 +450,7 @@ class Response10
 
     public function customers()
     {
-        $list = Entities\Customer::query()->select( 'id, first_name, last_name, email, phone, notes, group_id' )
+        $list = Entities\Customer::query()->select( 'id, first_name, last_name, email, phone, notes, group_id, attachment_id' )
             ->sortBy( 'full_name' )
             ->fetchArray() ?: array();
 
@@ -456,6 +458,8 @@ class Response10
             $item['id'] = (int) $item['id'];
             $item['group_id'] = (int) $item['group_id'];
             $item['timezone'] = Lib\Proxy\Pro::getLastCustomerTimezone( $item['id'] );
+            $item['img'] = Lib\Utils\Common::getAttachmentUrl( $item['attachment_id'], 'full' );
+            unset( $item['attachment_id'] );
         } );
 
         $this->result = $list;
@@ -478,11 +482,16 @@ class Response10
             ->setNotes( $this->param( 'notes', '' ) )
             ->save();
 
-        $this->result = array(
-            'id' => (int) $customer->getId(),
-            'first_name' => $customer->getFirstName(),
-            'last_name' => $customer->getLastName(),
-        );
+        if ( $customer->isLoaded() ) {
+            $this->result = array(
+                'id' => (int) $customer->getId(),
+                'first_name' => $customer->getFirstName(),
+                'last_name' => $customer->getLastName(),
+            );
+        } else {
+            global $wpdb;
+            throw new BooklyException( $wpdb->last_error );
+        }
     }
 
     public function slots()
@@ -610,7 +619,19 @@ class Response10
                                     'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
                                 ),
                             ),
+                            'extras' => array(),
                         );
+                        foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service->getId() ) ?: array() as $extras ) {
+                            $service_data['extras'][] = array(
+                                'id' => (int) $extras->getId(),
+                                'name' => $extras->getTitle(),
+                                'price' => (float) $extras->getPrice(),
+                                'min_quantity' => (int) $extras->getMinQuantity(),
+                                'max_quantity' => (int) $extras->getMaxQuantity(),
+                                'img' => Lib\Utils\Common::getAttachmentUrl( $extras->getAttachmentId(), 'full' ),
+                            );
+                        }
+
 //                        $max_duration = max( $max_duration, $service->getUnitsMax() * $service->getDuration() );
 //                        // Prepare time slots if service has custom time slots length.
 //                        if ( ! $appointments_time_delimiter && $pre_generated && ( $ts_length = (int) $service->getSlotLength() ) ) {
@@ -801,18 +822,22 @@ class Response10
             'custom_fields' => array(),
             'extras' => array(),
         );
-        $ca = array_merge( $ca, $default );
+        $ca += $default;
         $customer_appointment = $ca['ca_id']
             ? CustomerAppointment::find( $ca['ca_id'] )
             : array();
         if ( $customer_appointment ) {
             $fields = $customer_appointment->getFields();
             foreach ( $default as $key => $value ) {
-                $ca[ $key ] = $fields[ $key ];
+                if ( ! array_key_exists( $key, $ca ) ) {
+                    $ca[ $key ] = $fields[ $key ];
+                }
             }
-            $json_values = array( 'custom_fields', 'extras', );
+            $json_values = array( 'custom_fields', 'extras' );
             foreach ( $json_values as $key ) {
-                $ca[ $key ] = json_decode( $ca[ $key ], true );
+                if ( ! is_array( $ca[ $key ] ) ) {
+                    $ca[ $key ] = json_decode( $ca[ $key ], true );
+                }
             }
         } else {
             unset( $ca['ca_id'] );

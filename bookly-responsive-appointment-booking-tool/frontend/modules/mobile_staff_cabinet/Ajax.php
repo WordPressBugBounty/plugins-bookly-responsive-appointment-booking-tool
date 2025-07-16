@@ -73,8 +73,10 @@ class Ajax extends Lib\Base\Ajax
                 }
             } catch ( ParameterException $e ) {
                 $response->setError( '400', 'INVALID_PARAMETER', 400, array( $e->getParameter() => $e->getValue() ) );
+            } catch ( BooklyException $e ) {
+                $response->setError( '400', $e->getMessage(), 400 );
             } catch ( \Exception $e ) {
-                $response->setError( '400', 'ERROR' );
+                $response->setError( '400', 'ERROR', 400 );
             }
         } else {
             $response->setError( '401', 'UNAUTHORIZED_REQUEST', 401 );
@@ -91,6 +93,11 @@ class Ajax extends Lib\Base\Ajax
         $access_key = self::parameter( 'access_key' );
         if ( $access_key ) {
             self::$staff = Lib\Entities\Staff::query()->where( 'cloud_msc_token', $access_key )->findOne();
+            if ( self::$staff === null ) {
+                $response = new Response10( self::$staff, array() );
+                $response->setError( '401', 'UNAUTHORIZED_REQUEST', 401 );
+                $response->render();
+            }
         }
 
         return true;

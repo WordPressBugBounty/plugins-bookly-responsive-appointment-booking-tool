@@ -92,6 +92,9 @@ class Page extends Lib\Base\Ajax
                     'active' => (int) Config::packagesActive(),
                     'title' => __( 'Package', 'bookly' ),
                 ),
+                'events' => array(
+                    'attendees' => __( 'Attendees', 'bookly' ),
+                )
             ) ) );
 
         $refresh_rate = get_user_meta( get_current_user_id(), 'bookly_calendar_refresh_rate', true );

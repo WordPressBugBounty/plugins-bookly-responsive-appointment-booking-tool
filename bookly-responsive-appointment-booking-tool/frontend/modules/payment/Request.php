@@ -189,6 +189,11 @@ class Request extends Lib\Base\Component
                                     ->setSlots( $slot )
                                     ->setFirstInSeries( $first_in_series );
                                 break;
+                            case CartItem::TYPE_EVENT:
+                                $cart_item
+                                    ->setTicketTypeId( $item['ticket_type'] )
+                                    ->setNumberOfPersons( $item['nop'] );
+                                break;
                             default:
                                 $cart_item->setCartTypeId( $item['gift_card_type'] );
                                 break;

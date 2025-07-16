@@ -181,15 +181,6 @@ class QueryBuilder
      */
     public static function getConstraintRules( $table, $column, $ref_table, $ref_column )
     {
-        /*
-           SELECT CONCAT( '\'', SUBSTR(kcu.TABLE_NAME,4), '.', kcu.COLUMN_NAME , '\' => array( \'', SUBSTR(kcu.REFERENCED_TABLE_NAME,4), '.', kcu.REFERENCED_COLUMN_NAME, '\' => array( \'UPDATE_RULE\' => \'', rc.UPDATE_RULE, '\', \'DELETE_RULE\' => \'', rc.DELETE_RULE, '\', ), ),' ) AS c
-             FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS AS rc
-        LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS kcu ON ( rc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME )
-            WHERE rc.UNIQUE_CONSTRAINT_SCHEMA = SCHEMA()
-              AND kcu.CONSTRAINT_NAME LIKE 'wp_bookly_%'
-         ORDER BY kcu.TABLE_NAME,kcu.REFERENCED_TABLE_NAME,kcu.REFERENCED_COLUMN_NAME
-         */
-
         $rules = array(
             'bookly_appointments.location_id' => array( 'bookly_locations.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_appointments.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
@@ -211,12 +202,20 @@ class QueryBuilder
             'bookly_customer_groups_services.group_id' => array( 'bookly_customer_groups.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_customer_groups_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_customers.group_id' => array( 'bookly_customer_groups.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
+            'bookly_event_attendees.customer_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_event_attendees.ticket_type_id' => array( 'bookly_event_ticket_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_event_attendees.order_id' => array( 'bookly_orders.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
+            'bookly_event_attendees.payment_id' => array( 'bookly_payments.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
+            'bookly_event_staff.event_id' => array( 'bookly_events.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_event_staff.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_event_ticket_types.event_id' => array( 'bookly_events.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_events.location_id' => array( 'bookly_locations.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_services.gift_card_type_id' => array( 'bookly_gift_card_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_staff.gift_card_type_id' => array( 'bookly_gift_card_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_staff.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
-            'bookly_gift_cards.owner_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_gift_cards.customer_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_gift_cards.owner_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_gift_cards.gift_card_type_id' => array( 'bookly_gift_card_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_cards.order_id' => array( 'bookly_orders.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_gift_cards.payment_id' => array( 'bookly_payments.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
@@ -257,8 +256,8 @@ class QueryBuilder
             'bookly_staff_special_days.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_staff_special_hours.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_staff_special_hours.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
-            'bookly_sub_services.sub_service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_sub_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_sub_services.sub_service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
         );
 
         /** @global \wpdb $wpdb */
@@ -382,16 +381,6 @@ class QueryBuilder
 
     private static function getColumns()
     {
-        /*
-            SELECT CONCAT ( '\'', CONCAT_WS( '.', SUBSTR(TABLE_NAME,4), COLUMN_NAME ), '\' => array( \'type\' => "', COLUMN_TYPE, '", \'is_nullabe\' => ', IF(IS_NULLABLE = 'NO', '0', '1' ), ', \'extra\' => "', EXTRA, '", \'default\' => ', CONCAT (
-                IF (COLUMN_DEFAULT is NULL, IF( IS_NULLABLE = 'NO', COALESCE(COLUMN_DEFAULT,'null'), 'null' ), CONCAT('"',COALESCE(COLUMN_DEFAULT,''), '"'))), ', \'key\' => "' , COLUMN_KEY ,'" ),'
-            ) AS l
-              FROM INFORMATION_SCHEMA.COLUMNS
-             WHERE TABLE_SCHEMA = SCHEMA()
-               AND TABLE_NAME LIKE 'wp_bookly_%'
-          ORDER BY TABLE_NAME, ORDINAL_POSITION
-        */
-
         return array(
             'bookly_appointments.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_appointments.location_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
@@ -529,6 +518,35 @@ class QueryBuilder
             'bookly_email_log.attach' => array( 'type' => "text", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_email_log.type' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "", 'key' => "" ),
             'bookly_email_log.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_event_attendees.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_event_attendees.customer_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_attendees.ticket_type_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_attendees.code' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "", 'key' => "" ),
+            'bookly_event_attendees.payment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_attendees.order_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_staff.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_event_staff.event_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_staff.staff_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_staff.is_staff' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_event_staff.is_organizer' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_event_ticket_types.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_event_ticket_types.event_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_event_ticket_types.title' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_event_ticket_types.quantity' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_event_ticket_types.reserved' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_event_ticket_types.reserved_ps' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_event_ticket_types.price' => array( 'type' => "decimal(10,2)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.00", 'key' => "" ),
+            'bookly_events.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_events.location_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_events.title' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.start_date' => array( 'type' => "datetime", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.end_date' => array( 'type' => "datetime", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.attachment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.info' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.ticket_mask' => array( 'type' => "varchar(32)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_events.color' => array( 'type' => "varchar(32)", 'is_nullabe' => 0, 'extra' => "", 'default' => "#FFFFFF", 'key' => "" ),
+            'bookly_events.published' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_events.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_files.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_files.name' => array( 'type' => "text", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_files.slug' => array( 'type' => "varchar(32)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -536,7 +554,7 @@ class QueryBuilder
             'bookly_files.custom_field_id' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_files.ci_id' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
-            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation','tags-form')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
+            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation','tags-form','events-form')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
             'bookly_forms.name' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.token' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.settings' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -632,6 +650,7 @@ class QueryBuilder
             'bookly_notifications.to_admin' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_notifications.to_custom' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_notifications.custom_recipients' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_notifications.to_organizer' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_notifications.attach_ics' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_notifications.attach_invoice' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_notifications.settings' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -764,7 +783,6 @@ class QueryBuilder
             'bookly_sessions.expire' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_shop.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_shop.plugin_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
-            'bookly_shop.type' => array( 'type' => "enum('plugin','bundle')", 'is_nullabe' => 0, 'extra' => "", 'default' => "plugin", 'key' => "" ),
             'bookly_shop.highlighted' => array( 'type' => "tinyint(1)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_shop.priority' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_shop.demo_url' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),

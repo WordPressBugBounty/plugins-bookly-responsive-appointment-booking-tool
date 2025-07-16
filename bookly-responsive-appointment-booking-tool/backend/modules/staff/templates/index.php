@@ -83,14 +83,13 @@ use Bookly\Lib;
                         <?php endif ?>
                     <?php endforeach ?>
                     <th width="85"></th>
-                    <th width="16"><?php Controls\Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
                 </tr>
                 </thead>
             </table>
 
             <div class="text-right mt-3">
                 <?php if ( Lib\Utils\Common::isCurrentUserAdmin() ): ?>
-                    <?php Controls\Buttons::renderDelete( 'bookly-delete', null, null, array( 'disabled' => 'disabled' ) ) ?>
+                <?php Controls\Buttons::renderDelete( 'bookly-staff-list-delete-button' ) ?>
                 <?php endif ?>
             </div>
         </div>

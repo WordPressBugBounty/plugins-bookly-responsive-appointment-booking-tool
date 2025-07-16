@@ -52,7 +52,7 @@ class Appointment
         $created_from
     )
     {
-        $response = array( 'success' => false, 'alert_errors' => array() );
+        $response = array( 'success' => false, 'alert_errors' => array(), 'appointments' => array() );
         if ( ! $service_id ) {
             // Custom service.
             $service_id = null;
@@ -240,6 +240,11 @@ class Appointment
                                         $queue = Lib\Proxy\WaitingList::handleFreePlace( $queue, $ca );
                                     }
                                 }
+                                $response['appointments'][] = array(
+                                    'id' => $appointment->getId(),
+                                    'start_date' => $appointment->getStartDate(),
+                                    'end_date' => $appointment->getEndDate(),
+                                );
                             }
                         }
                         if ( $customer['payment_action'] == 'create' && $customer['payment_for'] == 'series' ) {
@@ -401,6 +406,11 @@ class Appointment
                     }
 
                     self::_deleteSentReminders( $appointment, $modified );
+                    $response['appointments'][] = array(
+                        'id' => $appointment->getId(),
+                        'start_date' => $appointment->getStartDate(),
+                        'end_date' => $appointment->getEndDate(),
+                    );
                 } else {
                     $response['errors'] = array( 'db' => __( 'Could not save appointment in database.', 'bookly' ) );
                 }

@@ -734,6 +734,7 @@ class Installer extends Base\Installer
                 `to_admin`       TINYINT(1) NOT NULL DEFAULT 0,
                 `to_custom`      TINYINT(1) NOT NULL DEFAULT 0,
                 `custom_recipients` VARCHAR(255) DEFAULT NULL,
+                `to_organizer`   TINYINT(1) NOT NULL DEFAULT 0,
                 `attach_ics`     TINYINT(1) NOT NULL DEFAULT 0,
                 `attach_invoice` TINYINT(1) NOT NULL DEFAULT 0,
                 `settings`       TEXT NULL
@@ -978,7 +979,6 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\Shop::getTableName() . '` (
                 `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `plugin_id`   INT UNSIGNED NOT NULL,
-                `type`        ENUM("plugin","bundle") NOT NULL DEFAULT "plugin",
                 `highlighted` TINYINT(1) NOT NULL DEFAULT 0,
                 `priority`    INT UNSIGNED DEFAULT 0,
                 `demo_url`    VARCHAR(255) DEFAULT NULL,

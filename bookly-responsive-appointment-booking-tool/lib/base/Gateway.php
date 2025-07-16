@@ -208,6 +208,7 @@ abstract class Gateway
         if ( $required_sync ) {
             if ( $payment ) {
                 Payment\Proxy\Pro::completeGiftCard( $payment );
+                Payment\Proxy\Events::completeEventAttendee( $payment );
             }
             $order_id = $payment
                 ? $payment->getOrderId()
@@ -253,6 +254,7 @@ abstract class Gateway
             $path = explode( '\\', get_class( $this ) );
             if ( $payment->getStatus() === Entities\Payment::STATUS_COMPLETED ) {
                 BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
+
                 return;
             }
 
@@ -472,5 +474,13 @@ abstract class Gateway
         }
 
         return $codes;
+    }
+
+    /**
+     * @return BooklyLib\DataHolders\Booking\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 }
