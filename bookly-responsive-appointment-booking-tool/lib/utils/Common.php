@@ -297,17 +297,25 @@ abstract class Common extends Lib\Base\Cache
     public static function getCurrentUserTimeZone()
     {
         if ( ! self::isCurrentUserSupervisor() ) {
-            /** @var Lib\Entities\Staff $staff */
             $staff = Lib\Entities\Staff::query()->where( 'wp_user_id', get_current_user_id() )->findOne();
-            if ( $staff ) {
-                $staff_tz = $staff->getTimeZone();
-                if ( $staff_tz ) {
-                    return $staff_tz;
-                }
-            }
+
+            return self::getStaffTimeZone( $staff );
         }
 
         // Use WP time zone by default
+        return Lib\Config::getWPTimeZone();
+    }
+
+    /**
+     * @param  Lib\Base\Entity $staff
+     * @return string
+     */
+    public static function getStaffTimeZone( $staff )
+    {
+        if ( $staff && ( $staff_tz = $staff->getTimeZone() ) ) {
+            return $staff_tz;
+        }
+
         return Lib\Config::getWPTimeZone();
     }
 

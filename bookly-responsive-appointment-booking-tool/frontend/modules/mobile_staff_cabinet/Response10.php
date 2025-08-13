@@ -38,8 +38,6 @@ class Response10
     {
         $this->staff = $staff;
         $this->params = $params;
-
-        $this->staff && wp_set_current_user( $this->staff->getWpUserId() );
     }
 
     public function init()
@@ -172,7 +170,7 @@ class Response10
 //            }
 
             // Determine display time zone
-            $display_tz = Common::getCurrentUserTimeZone();
+            $display_tz = Common::getStaffTimeZone( $this->staff );
             $wp_tz = Lib\Config::getWPTimeZone();
 
             // Fetch appointment,
@@ -324,6 +322,7 @@ class Response10
         $notification = $this->param( 'notification', false );
         $custom_service_name = trim( $this->param( 'custom_service_name', '' ) );
         $custom_service_price = trim( $this->param( 'custom_service_price', '' ) );
+        $skip_date = 0;
         $service = $service_id
             ? Service::find( $service_id )
             : null;
@@ -357,6 +356,17 @@ class Response10
             }
         }
 
+        if ( ! $skip_date && $this->staff ) {
+            $display_tz = Common::getStaffTimeZone( $this->staff );
+            // Determine display time zone,
+            // and shift the dates to WP time zone if needed
+            $wp_tz = Lib\Config::getWPTimeZone();
+            if ( $display_tz !== $wp_tz ) {
+                $start_date = DateTime::convertTimeZone( $start_date, $display_tz, $wp_tz );
+                $end_date = DateTime::convertTimeZone( $end_date, $display_tz, $wp_tz );
+            }
+        }
+
         $response = UtilAppointment::save(
             $appointment_id,
             (int) $this->staff->getId(),
@@ -364,7 +374,7 @@ class Response10
             $custom_service_name,
             $custom_service_price,
             $location_id,
-            0,
+            $skip_date,
             $start_date,
             $end_date,
             array( 'enabled' => 0 ),
@@ -394,7 +404,7 @@ class Response10
         $location_ids = array();
 
         // Determine display time zone
-        $display_tz = Common::getCurrentUserTimeZone();
+        $display_tz = Common::getStaffTimeZone( $this->staff );
 
         // Due to possibly different time zones of staff members expand start and end dates
         // to provide 100% coverage of the requested date range
