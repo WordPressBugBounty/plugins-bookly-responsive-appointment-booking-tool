@@ -1,15 +1,15 @@
-=== WordPress Online Booking and Scheduling Plugin – Bookly ===
+=== Online Scheduling and Appointment Booking System – Bookly ===
 Contributors: Nota-Info
 Tags: appointment booking, booking, booking calendar, booking system, appointments
 Donate link: https://www.booking-wp-plugin.com/
 Requires at least: 3.7
 Tested up to: 6.8
 Requires PHP: 5.3.7
-Stable tag: 25.1
+Stable tag: 25.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Bookly is a booking plugin for WordPress for building an advanced automated online scheduling system.
+Appointment booking system for WordPress — schedule appointments, manage calendars, send reminders, take payments. Start booking today!
 
 == Description ==
 
