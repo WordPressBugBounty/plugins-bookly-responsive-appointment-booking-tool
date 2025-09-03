@@ -363,7 +363,9 @@ jQuery(function ($) {
                 $whatsapTemplates[0].appendChild(new Option());
                 for (var key in BooklyNotificationDialogL10n.templates) {
                     let tpl = BooklyNotificationDialogL10n.templates[key],
-                        status = BooklyNotificationDialogL10n.appointment_statuses.hasOwnProperty(tpl.status) ? BooklyNotificationDialogL10n.appointment_statuses[tpl.status] : (tpl.status.charAt(0) + tpl.status.substring(1).toLowerCase().replaceAll('_', ' '));
+                        status = BooklyNotificationDialogL10n.statuses.hasOwnProperty(tpl.status)
+                            ? BooklyNotificationDialogL10n.statuses[tpl.status]
+                            : (tpl.status.charAt(0) + tpl.status.substring(1).toLowerCase().replaceAll('_', ' '));
 
                     $whatsapTemplates[0].appendChild(new Option(tpl.name + ' (' + tpl.language + ') - ' + status, key));
                 }
