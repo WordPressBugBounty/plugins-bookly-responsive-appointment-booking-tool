@@ -188,12 +188,33 @@ abstract class Gateway
     {
         $payment = $this->getPayment();
 
+        $this->completePayment( $payment );
+    }
+
+    /**
+     * @param Entities\Payment|null $payment
+     * @return void
+     */
+    public function completePayment( $payment )
+    {
         $required_sync = false;
         if ( $payment ) {
             // Re-fetch a status from the database
             $status = Entities\Payment::query()->where( 'id', $payment->getId() )->fetchVar( 'status' );
             if ( $status !== Entities\Payment::STATUS_COMPLETED ) {
                 if ( $payment->getType() !== Entities\Payment::TYPE_LOCAL || $payment->getTotal() == 0 ) {
+                    if ( $payment->getParentId() ) {
+                        $parent_payment = Entities\Payment::find( $payment->getParentId() );
+                        $details = $parent_payment->getDetailsData();
+                        $details_data = $details->getData();
+                        $details_data['child_tax_paid'] = ( isset( $details_data['child_tax_paid'] ) ? $details_data['child_tax_paid'] : 0 ) + $payment->getTax();
+                        $details->setData( $details_data );
+                        $parent_payment->setChildPaid( $parent_payment->getChildPaid() + $payment->getPaid() )->save();
+                        if ( $parent_payment->getStatus() === Entities\Payment::STATUS_PENDING && $parent_payment->getTotal() === $parent_payment->getChildPaid() + $parent_payment->getPaid() ) {
+                            $this->completePayment( $parent_payment );
+                        }
+                        $parent_payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
+                    }
                     $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                 }
                 if ( $payment->getCouponId() ) {
@@ -388,7 +409,7 @@ abstract class Gateway
      */
     protected function createPayment()
     {
-        if ( $this->request->getGateway()->getType() !== null ) {
+        if ( ! $this->payment && $this->request->getGateway()->getType() !== null ) {
             $this->payment = new Entities\Payment();
 
             return $this->payment

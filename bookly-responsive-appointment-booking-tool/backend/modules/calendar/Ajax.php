@@ -54,8 +54,7 @@ class Ajax extends Page
             $query = self::getAppointmentsQueryForCalendar( $staff_members, $start_date, $end_date, $location_ids );
             $appointments = self::buildAppointmentsForCalendar( $query, $display_tz );
             $result = array_merge( $result, $appointments );
-            $events = Proxy\Events::buildEventsForCalendar( array(), $staff_members, $start_date, $end_date, $location_ids );
-            $result = array_merge( $result, $events );
+            $result = Proxy\Events::buildEventsForCalendar( $result, $staff_members, $start_date, $end_date, $location_ids );
             $schedule = self::buildStaffSchedule( $staff_members, $start_date, $end_date, $location_ids );
             $result = array_merge( $result, $schedule );
         }

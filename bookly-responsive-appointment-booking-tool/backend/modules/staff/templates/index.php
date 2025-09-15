@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls;
-use Bookly\Backend\Components\Support;
 use Bookly\Backend\Components\Dialogs;
+use Bookly\Backend\Components\Support;
 use Bookly\Lib;
 
 /** @var array $datatables */
@@ -34,7 +34,7 @@ use Bookly\Lib;
                     <div class="col-12 col-sm-auto">
                         <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Staff members order', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-staff-order-modal', 'disabled' => 'disabled' ), true ) ?>
                     </div>
-                    <?php Dialogs\Staff\Categories\Proxy\Pro::renderAdd() ?>
+                    <?php Dialogs\Staff\Proxy\Pro::renderAdd() ?>
                     <div class="col-auto">
                         <?php Controls\Buttons::renderAdd( 'bookly-js-new-staff', 'w-100 mb-3', __( 'Add staff', 'bookly' ) ) ?>
                     </div>
@@ -97,7 +97,8 @@ use Bookly\Lib;
 
     <?php Dialogs\Common\CascadeDelete::render() ?>
     <?php Dialogs\Common\UnsavedChanges::render() ?>
-    <?php Dialogs\Staff\Categories\Proxy\Pro::renderDialog() ?>
+    <?php Dialogs\Staff\Proxy\Pro::renderCategoriesDialog() ?>
+    <?php Dialogs\Staff\Proxy\Pro::renderDuplicateDialog() ?>
     <?php Dialogs\Staff\Edit\Dialog::render() ?>
     <?php Dialogs\Staff\Order\Dialog::render() ?>
     <?php Dialogs\Staff\Edit\Proxy\Packages::renderStaffServicesTip() ?>

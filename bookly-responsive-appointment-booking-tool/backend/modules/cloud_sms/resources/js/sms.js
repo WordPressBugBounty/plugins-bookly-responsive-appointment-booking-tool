@@ -740,7 +740,29 @@ jQuery(function ($) {
             });
         }
 
-        $request_sender_id.on('click', function () {
+        function validateSenderId(sender_id) {
+            var pattern = /^[a-zA-Z0-9\.\&\@\-\+\_\!\%\#\s\*]*$/;
+            return pattern.test(sender_id);
+        }
+
+        $sender_id.on('input', function() {
+            let value = $(this).val();
+            if (value !== '' && !validateSenderId(value)) {
+                $(this).addClass('is-invalid');
+                $request_sender_id.prop('disabled', true);
+            } else {
+                $(this).removeClass('is-invalid');
+                $request_sender_id.prop('disabled', false);
+            }
+        });
+
+        $request_sender_id.on('click', function() {
+            let sender_id_value = $sender_id.val();
+            if (!validateSenderId(sender_id_value)) {
+                booklyAlert({error: [BooklyL10n.acceptable_characters]});
+                return false;
+            }
+
             let ladda = Ladda.create(this);
             ladda.start();
             $.ajax({
@@ -748,10 +770,10 @@ jQuery(function ($) {
                 data: {
                     action: 'bookly_request_sender_id',
                     csrf_token: BooklyL10nGlobal.csrf_token,
-                    sender_id: $sender_id.val()
+                    sender_id: sender_id_value
                 },
                 dataType: 'json',
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         booklyAlert({success: [BooklyL10n.sender_id.sent]});
                         $request_sender_id.hide();
@@ -762,7 +784,7 @@ jQuery(function ($) {
                         booklyAlert({error: [response.data.message]});
                     }
                 }
-            }).always(function () {
+            }).always(function() {
                 ladda.stop();
             });
         });

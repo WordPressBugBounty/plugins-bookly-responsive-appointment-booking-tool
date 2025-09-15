@@ -8,11 +8,11 @@ msgstr ""
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 08:49+0000\n"
-"PO-Revision-Date: 2025-06-26 13:27+0000\n"
+"POT-Creation-Date: 2025-08-28 14:29+0000\n"
+"PO-Revision-Date: 2025-09-02 10:10+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Dutch\n"
-"X-Loco-Version: 2.3.1; wp-6.8"
+"X-Loco-Version: 2.3.1; wp-6.8.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Factuur #{invoice_number} voor uw afspraak"
@@ -218,6 +218,9 @@ msgstr "Totaal"
 
 msgid "Paid"
 msgstr "Betaald"
+
+msgid "Child payment"
+msgstr "Kinderbetaling"
 
 msgid "Due"
 msgstr "Verschuldigd"
@@ -1763,6 +1766,24 @@ msgstr "Melding over nieuw ticket"
 msgid "Notification about ticket deletion"
 msgstr "Melding over verwijderen ticket"
 
+msgid "ID"
+msgstr "ID"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "Start date"
+msgstr "Startdatum"
+
+msgid "End date"
+msgstr "Einddatum"
+
+msgid "Published"
+msgstr "Gepubliceerd"
+
+msgid "Tags"
+msgstr "Tags"
+
 msgid "Events"
 msgstr "Evenementen"
 
@@ -1925,8 +1946,8 @@ msgstr "Organisatoren"
 msgid "Plan and manage the event from start to finish"
 msgstr "Het evenement van begin tot eind plannen en beheren"
 
-msgid "Published"
-msgstr "Gepubliceerd"
+msgid "Ticket sales end at"
+msgstr "De kaartverkoop eindigt om"
 
 msgid "Status"
 msgstr "Status"
@@ -1941,9 +1962,6 @@ msgstr ""
 
 msgid "Ticket mask"
 msgstr "Ticketmasker"
-
-msgid "Title"
-msgstr "Titel"
 
 msgid "Select all"
 msgstr "Alle selecteren"
@@ -2031,8 +2049,9 @@ msgstr "Selecteer een evenement"
 msgid "Please select a ticket"
 msgstr "Selecteer een ticket"
 
+msgctxt "tickets left"
 msgid "left"
-msgstr "links"
+msgstr "over"
 
 msgid "Your ticket has been created."
 msgstr "Je ticket is gemaakt."
@@ -2051,6 +2070,27 @@ msgstr "Uitverkocht"
 
 msgid "Add to calendar"
 msgstr "Toevoegen aan agenda"
+
+msgid "Event date"
+msgstr "Datum van het evenement"
+
+msgid "Filter events"
+msgstr "Evenementen filteren"
+
+msgid "Today"
+msgstr "Vandaag"
+
+msgid "Tomorrow"
+msgstr "Morgen"
+
+msgid "Next 7 days"
+msgstr "Volgende 7 dagen"
+
+msgid "Next 30 days"
+msgstr "Volgende 30 dagen"
+
+msgid "All selected"
+msgstr "Alle geselecteerde"
 
 msgid "Width"
 msgstr "Breedte"
@@ -2180,9 +2220,6 @@ msgstr "Speciale uren"
 
 msgid "Fields"
 msgstr "Velden"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Created at any time"
 msgstr "Aangemaakt op elk moment"
@@ -3480,9 +3517,6 @@ msgstr ""
 msgid "Uncategorized"
 msgstr "Geen categorie"
 
-msgid "Today"
-msgstr "Vandaag"
-
 msgid "Week"
 msgstr "Week"
 
@@ -3728,9 +3762,6 @@ msgstr "Aan"
 msgid "Custom range"
 msgstr "Aangepast bereik"
 
-msgid "Tomorrow"
-msgstr "Morgen"
-
 msgid "Yesterday"
 msgstr "Gisteren"
 
@@ -3739,12 +3770,6 @@ msgstr "Afgelopen 7 dagen"
 
 msgid "Last 30 days"
 msgstr "Afgelopen 30 dagen"
-
-msgid "Next 7 days"
-msgstr "Volgende 7 dagen"
-
-msgid "Next 30 days"
-msgstr "Volgende 30 dagen"
 
 msgid "This month"
 msgstr "Deze maand"
@@ -3893,12 +3918,6 @@ msgstr "Opmerking"
 
 msgid "Reference"
 msgstr "Referentie"
-
-msgid "Start date"
-msgstr "Startdatum"
-
-msgid "End date"
-msgstr "Einddatum"
 
 #, php-format
 msgid ""
@@ -4134,6 +4153,9 @@ msgstr ""
 
 msgid "No matching records found"
 msgstr "Geen overeenkomende records gevonden"
+
+msgid "WordPress user"
+msgstr "WordPress-gebruiker"
 
 msgid "Add service"
 msgstr "Voeg dienst toe"
@@ -5050,6 +5072,9 @@ msgstr "Annuleer verzoek"
 
 msgid "Can only contain letters or digits (up to 11 characters)."
 msgstr "Kan alleen letters of cijfers bevatten (maximaal 11 tekens)."
+
+msgid "Acceptable characters are"
+msgstr "Toegestane tekens zijn"
 
 msgid "Quick search"
 msgstr "Snel zoeken"
@@ -6476,11 +6501,26 @@ msgstr "Uw betaling wordt verwerkt"
 msgid "Back to the list of amounts"
 msgstr "Terug naar de lijst van bedragen"
 
+msgid "Add Promo Code"
+msgstr "Promotiecode toevoegen"
+
+msgid "Remove Promo Code"
+msgstr "Promotiecode verwijderen"
+
 msgid "Please select a payment method"
 msgstr "Selecteer een betalingsmethode"
 
 msgid "Credit card"
 msgstr "Creditkaart"
+
+msgid "Enter promo code"
+msgstr "Voer de promotiecode in"
+
+msgid "This promo code is not valid"
+msgstr "Deze promotiecode is niet geldig"
+
+msgid "Promo code applied!"
+msgstr "Promotiecode toegepast!"
 
 msgid "Account recharge"
 msgstr "Account opnieuw opladen"
@@ -6536,6 +6576,10 @@ msgstr "Auto-herladen is vernieuwd"
 
 msgid "You don't have active auto-recharge"
 msgstr "U geeft geen actieve auto-herladen"
+
+#, php-format
+msgid "You'll receive a %s bonus on your top-up"
+msgstr "U ontvangt een bonus van %s bij uw opwaardering"
 
 msgid "Auto-Recharge has failed, please replenish your balance directly."
 msgstr "Auto-Opladen is mislukt, vult uw saldo direct aan."
@@ -6791,6 +6835,12 @@ msgstr "Bevestig betaling"
 msgid "Complete payment"
 msgstr "Volledige betaling"
 
+msgid "Additional payment"
+msgstr "Extra betaling"
+
+msgid "Copy checkout URL"
+msgstr "Kopieer afreken-URL"
+
 msgid "Manual adjustment"
 msgstr "Handmatige aanpassing"
 
@@ -6889,14 +6939,47 @@ msgstr ""
 "U gaat een afspraak/afspraken verwijderen. Meldingen zullen worden verstuurd "
 "volgens uw instellingen."
 
+msgid "Associate token with"
+msgstr "Token koppelen aan"
+
+msgid ""
+"By associating a token with a WordPress user, you can provide administrative "
+"access to Bookly from the mobile app. The level of access is determined by "
+"the user's role"
+msgstr ""
+"Door een token aan een WordPress-gebruiker te koppelen, kunt u "
+"administratieve toegang tot Bookly verlenen vanuit de mobiele app. Het "
+"toegangsniveau wordt bepaald door de rol van de gebruiker"
+
 msgid "Edit access token"
 msgstr "Toegangstoken bewerken"
+
+msgid "Create new access token"
+msgstr "Maak een nieuwe toegangstoken aan"
+
+msgid "Select WordPress user"
+msgstr "WordPress-gebruiker selecteren"
+
+msgid "Send notification with access data"
+msgstr "Stuur een melding met toegangsgegevens"
+
+msgid "With access to Bookly"
+msgstr "Met toegang tot Bookly"
+
+msgid "Without access to Bookly"
+msgstr "Zonder toegang tot Bookly"
 
 msgid "New access token"
 msgstr "Nieuw toegangstoken"
 
+msgid "WordPress user required"
+msgstr "WordPress-gebruiker vereist"
+
 msgid "Staff member required"
 msgstr "Personeelslid vereist"
+
+msgid "Invalid role"
+msgstr "Ongeldige rol"
 
 msgid "Header"
 msgstr "Koptekst"
@@ -7916,6 +7999,9 @@ msgstr "Aanmaakdatum"
 msgid "Expires"
 msgstr "Verloopt"
 
+msgid "Child Payment"
+msgstr "Kinderbetaling"
+
 msgid "Notification to customer about their WordPress user login details"
 msgstr "Melding aan klant over hun WordPress inloggegevens"
 
@@ -8303,9 +8389,6 @@ msgstr ""
 msgid "Customer birthday"
 msgstr "Verjaardag klant"
 
-msgid "Tags"
-msgstr "Tags"
-
 msgid "Balance"
 msgstr "Saldo"
 
@@ -8396,12 +8479,18 @@ msgstr "Services formulier"
 msgid "Staff form"
 msgstr "Personeelsformulier"
 
+msgid "Checkout form"
+msgstr "Afrekenformulier"
+
 msgid "A custom block for displaying cancellation confirmation"
 msgstr ""
 "Een aangepast blok voor het weergeven van de bevestiging van het annuleren"
 
 msgid "A custom block for displaying search form"
 msgstr "Een aangepast blok om het zoekformulier te tonen"
+
+msgid "A custom block for displaying checkout form"
+msgstr "Een aangepast blok voor het weergeven van het afrekenformulier"
 
 msgid "A custom block for displaying services form"
 msgstr "Een aangepast blok voor het tonen van een services formulier"
@@ -9130,6 +9219,13 @@ msgstr "Stap voor stap formulier"
 msgid "Classic booking form with the consequent scheduling process."
 msgstr "Klassiek boekingsformulier met de daaropvolgende planning."
 
+msgid ""
+"Lightweight form that allows your customers to pay for appointments, events, "
+"and more."
+msgstr ""
+"Eenvoudige vorm waarmee uw klanten kunnen betalen voor afspraken, "
+"evenementen en meer."
+
 msgid "Cancellation form"
 msgstr "Annuleringsformulier"
 
@@ -9317,6 +9413,14 @@ msgstr "Overslaan toestaan"
 msgid "Skip button title"
 msgstr "Titel knop overslaan"
 
+msgid "Page URL"
+msgstr "Pagina-URL"
+
+msgid "Enter the URL of the page where this forms shortcode is placed."
+msgstr ""
+"Voer de URL in van de pagina waar deze verkorte code van het formulier is "
+"geplaatst."
+
 msgid "Add new form"
 msgstr "Nieuw formulier toevoegen"
 
@@ -9339,6 +9443,9 @@ msgstr "Formulier verwijderen"
 msgid "Complete"
 msgstr "Voltooid"
 
+msgid "Checkout"
+msgstr "Afrekenen"
+
 msgid "Success appointment booking"
 msgstr "Afspraak boeken gelukt"
 
@@ -9356,6 +9463,14 @@ msgstr "Sla het uiterlijk op om de wijzigingen toe te passen."
 
 msgid "Changes saved."
 msgstr "Wijzigingen opgeslagen."
+
+#, php-format
+msgid ""
+"To learn more about this feature, please follow <a href=\"%s\" "
+"target=\"_blank\">this link</a>."
+msgstr ""
+"Voor meer informatie over deze functie kunt u <a href=\"%s\" "
+"target=\"_blank\">deze link</a> volgen."
 
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
@@ -9486,6 +9601,21 @@ msgstr "Deze afspraak bestaat niet."
 msgid "Cancellation of this appointment is not allowed."
 msgstr "Annulering van deze afspraak is niet toegestaan."
 
+msgid "Thank you for your payment."
+msgstr "Bedankt voor uw betaling."
+
+msgid "Payment successful."
+msgstr "Betaling gelukt."
+
+msgid "There is no payment required."
+msgstr "Er is geen betaling vereist."
+
+msgid "Payment not found."
+msgstr "Betaling niet gevonden."
+
+msgid "Something went wrong."
+msgstr "Er is iets misgegaan."
+
 msgid "Note"
 msgstr "Belangrijk"
 
@@ -9575,6 +9705,9 @@ msgstr "Bookly services formulier toevoegen"
 
 msgid "Add Bookly staff form"
 msgstr "Bookly personeelsformulier toevoegen"
+
+msgid "Add Bookly checkout form"
+msgstr "Bookly-afrekenformulier toevoegen"
 
 msgid "Add appointment cancellation confirmation"
 msgstr "Voeg afspraak annulering bevestiging toe"
@@ -9701,6 +9834,28 @@ msgstr ""
 
 msgid "Create WordPress user"
 msgstr "WordPress gebruiker aanmaken"
+
+msgid "Duplicate staff member"
+msgstr "Dupliceer medewerker"
+
+msgid "Staff member to duplicate"
+msgstr "Medewerker om te dupliceren"
+
+msgid ""
+"You're about to duplicate this staff member. All settings - except phone "
+"number, email, and calendar settings - will be copied. The new staff "
+"member's visibility will be set to 'Private' by default."
+msgstr ""
+"U staat op het punt om deze medewerker te dupliceren. Alle instellingen - "
+"behalve telefoonnummer, e-mailadres en agenda-instellingen - worden "
+"gekopieerd. De zichtbaarheid van de nieuwe medewerker wordt standaard "
+"ingesteld op ‘Privé’."
+
+msgid "Name of duplicated staff member"
+msgstr "Naam van de gedupliceerde medewerker"
+
+msgid "Copy of"
+msgstr "Kopie van"
 
 msgid "Create payment"
 msgstr "Betaling aanmaken"

@@ -24,6 +24,7 @@ class Payment extends Base
         'customer_group',
         'tax_in_price',
         'tax_paid',
+        'child_tax_paid',
         'extras_multiply_nop',
         'gateway_ref_id',
         'tips',

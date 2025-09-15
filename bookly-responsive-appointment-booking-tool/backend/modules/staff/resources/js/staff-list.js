@@ -186,4 +186,10 @@ jQuery(function ($) {
     filters.visibility.on('change', onChangeFilter);
     filters.archived.on('change', onChangeFilter);
     filters.category.on('change', onChangeFilter);
+
+    $('#bookly-duplicate-staff-dialog-show').on('click', function () {
+        BooklyDuplicateStaffDialog.showDialog(function(){
+            dt.ajax.reload();
+        });
+    });
 });

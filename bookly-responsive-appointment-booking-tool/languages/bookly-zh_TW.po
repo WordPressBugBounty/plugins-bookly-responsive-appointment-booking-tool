@@ -8,11 +8,11 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 08:51+0000\n"
-"PO-Revision-Date: 2025-06-25 04:20+0000\n"
-"Last-Translator: support@bookly.info\n"
+"POT-Creation-Date: 2025-08-28 14:30+0000\n"
+"PO-Revision-Date: 2025-08-29 09:32+0000\n"
+"Last-Translator: Wina H <chillhchill@gmail.com>\n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.3.1; wp-6.8"
+"X-Loco-Version: 2.3.1; wp-6.8.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "您預約的發票＃{invoice_number}"
@@ -206,6 +206,9 @@ msgstr "總計"
 
 msgid "Paid"
 msgstr "付費"
+
+msgid "Child payment"
+msgstr "子付款"
 
 msgid "Due"
 msgstr "應有"
@@ -1655,6 +1658,24 @@ msgstr "新門票通知"
 msgid "Notification about ticket deletion"
 msgstr "門票刪除通知"
 
+msgid "ID"
+msgstr "ID"
+
+msgid "Title"
+msgstr "標題"
+
+msgid "Start date"
+msgstr "開始日期"
+
+msgid "End date"
+msgstr "結束日期"
+
+msgid "Published"
+msgstr "已發佈"
+
+msgid "Tags"
+msgstr "標記"
+
 msgid "Events"
 msgstr "活動"
 
@@ -1815,8 +1836,8 @@ msgstr "主辦方"
 msgid "Plan and manage the event from start to finish"
 msgstr "全程規劃和管理活動"
 
-msgid "Published"
-msgstr "已發佈"
+msgid "Ticket sales end at"
+msgstr "門票銷售截止時間為"
 
 msgid "Status"
 msgstr "狀態"
@@ -1829,9 +1850,6 @@ msgstr "在活動期間協助設置、操作和服務參與人員"
 
 msgid "Ticket mask"
 msgstr "門票掩碼"
-
-msgid "Title"
-msgstr "標題"
 
 msgid "Select all"
 msgstr "選擇所有"
@@ -1919,6 +1937,7 @@ msgstr "請選擇一項活動"
 msgid "Please select a ticket"
 msgstr "請選擇一張門票"
 
+msgctxt "tickets left"
 msgid "left"
 msgstr "剩餘"
 
@@ -1939,6 +1958,27 @@ msgstr "售罄"
 
 msgid "Add to calendar"
 msgstr "新增至日曆"
+
+msgid "Event date"
+msgstr "活動日期"
+
+msgid "Filter events"
+msgstr "篩選活動"
+
+msgid "Today"
+msgstr "今天"
+
+msgid "Tomorrow"
+msgstr "明天"
+
+msgid "Next 7 days"
+msgstr "下一個7天"
+
+msgid "Next 30 days"
+msgstr "下一個30天"
+
+msgid "All selected"
+msgstr "全選"
 
 msgid "Width"
 msgstr "寬度"
@@ -2058,9 +2098,6 @@ msgstr "特別時間"
 
 msgid "Fields"
 msgstr "欄目"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Created at any time"
 msgstr "在任何時間建立"
@@ -3293,9 +3330,6 @@ msgstr "如果您的頁面沒有自動跳轉，請點擊此<a href=“%s”>鏈�
 msgid "Uncategorized"
 msgstr "未分類"
 
-msgid "Today"
-msgstr "今天"
-
 msgid "Week"
 msgstr "週"
 
@@ -3541,9 +3575,6 @@ msgstr "至"
 msgid "Custom range"
 msgstr "自定範圍"
 
-msgid "Tomorrow"
-msgstr "明天"
-
 msgid "Yesterday"
 msgstr "昨天"
 
@@ -3552,12 +3583,6 @@ msgstr "過去7天"
 
 msgid "Last 30 days"
 msgstr "過去30天"
-
-msgid "Next 7 days"
-msgstr "下一個7天"
-
-msgid "Next 30 days"
-msgstr "下一個30天"
 
 msgid "This month"
 msgstr "這個月"
@@ -3705,12 +3730,6 @@ msgstr "留言"
 
 msgid "Reference"
 msgstr "參考"
-
-msgid "Start date"
-msgstr "開始日期"
-
-msgid "End date"
-msgstr "結束日期"
 
 #, php-format
 msgid ""
@@ -3919,6 +3938,9 @@ msgstr "您將刪除訪問令牌。請注意，令牌將被自動撤銷，因此
 
 msgid "No matching records found"
 msgstr "沒有找到匹配記錄"
+
+msgid "WordPress user"
+msgstr "WordPress用戶"
 
 msgid "Add service"
 msgstr "添加服務"
@@ -4716,6 +4738,9 @@ msgstr "取消請求"
 msgid "Can only contain letters or digits (up to 11 characters)."
 msgstr "只能包含字母或數字（最多11個字符）。"
 
+msgid "Acceptable characters are"
+msgstr "可接受的字符包括"
+
 msgid "Quick search"
 msgstr "快速搜索"
 
@@ -4873,7 +4898,7 @@ msgid "The service will be created with the visibility of Private."
 msgstr "將在\"私人\"的可見性下創建該服務。"
 
 msgid "Duplicate"
-msgstr "重覆"
+msgstr "重複"
 
 #, php-format
 msgid "%d service"
@@ -6000,11 +6025,26 @@ msgstr "您的付款已被接受和正在處理。"
 msgid "Back to the list of amounts"
 msgstr "返回金額清單"
 
+msgid "Add Promo Code"
+msgstr "添加促銷碼"
+
+msgid "Remove Promo Code"
+msgstr "移除促銷碼"
+
 msgid "Please select a payment method"
 msgstr "選擇付款方式"
 
 msgid "Credit card"
 msgstr "信用卡"
+
+msgid "Enter promo code"
+msgstr "輸入促銷碼"
+
+msgid "This promo code is not valid"
+msgstr "此促銷碼無效"
+
+msgid "Promo code applied!"
+msgstr "促銷碼已應用！"
 
 msgid "Account recharge"
 msgstr "賬戶充值"
@@ -6057,6 +6097,10 @@ msgstr "自動充值已續期"
 
 msgid "You don't have active auto-recharge"
 msgstr "您沒有有效的自動充值"
+
+#, php-format
+msgid "You'll receive a %s bonus on your top-up"
+msgstr "您將在充值時獲得%s獎金"
 
 msgid "Auto-Recharge has failed, please replenish your balance directly."
 msgstr "自動充值失敗，請直接補充你的餘額。"
@@ -6290,6 +6334,12 @@ msgstr "綁定付款"
 msgid "Complete payment"
 msgstr "完成付款"
 
+msgid "Additional payment"
+msgstr "額外付款"
+
+msgid "Copy checkout URL"
+msgstr "複製結算URL"
+
 msgid "Manual adjustment"
 msgstr "手動調整"
 
@@ -6377,14 +6427,44 @@ msgid ""
 "accordance with your settings."
 msgstr "您將要刪除預約。通知將根據您的設置發送。"
 
+msgid "Associate token with"
+msgstr "關聯令牌到"
+
+msgid ""
+"By associating a token with a WordPress user, you can provide administrative "
+"access to Bookly from the mobile app. The level of access is determined by "
+"the user's role"
+msgstr "通過將令牌與WordPress用戶關聯，您可以在移動應用提供Bookly的管理訪問權限。訪問權限級別由用戶角色決定"
+
 msgid "Edit access token"
 msgstr "編輯訪問令牌"
+
+msgid "Create new access token"
+msgstr "創建新訪問令牌"
+
+msgid "Select WordPress user"
+msgstr "選擇WordPress用戶"
+
+msgid "Send notification with access data"
+msgstr "發送帶訪問資料的通知"
+
+msgid "With access to Bookly"
+msgstr "擁有Bookly訪問權限"
+
+msgid "Without access to Bookly"
+msgstr "不擁有Bookly訪問權限"
 
 msgid "New access token"
 msgstr "新訪問令牌"
 
+msgid "WordPress user required"
+msgstr "必須WordPress用戶"
+
 msgid "Staff member required"
 msgstr "需要員工"
+
+msgid "Invalid role"
+msgstr "無效角色"
 
 msgid "Header"
 msgstr "頁頭"
@@ -7327,6 +7407,9 @@ msgstr "建立日期"
 msgid "Expires"
 msgstr "過期"
 
+msgid "Child Payment"
+msgstr "子付款"
+
 msgid "Notification to customer about their WordPress user login details"
 msgstr "通知客戶關於他們的WordPress用戶登入信息"
 
@@ -7705,9 +7788,6 @@ msgstr "如果您在{days}內未驗證許可，您的預約將被禁用。"
 msgid "Customer birthday"
 msgstr "客戶生日日期"
 
-msgid "Tags"
-msgstr "標記"
-
 msgid "Balance"
 msgstr "餘額"
 
@@ -7783,11 +7863,17 @@ msgstr "服務表單"
 msgid "Staff form"
 msgstr "員工表單"
 
+msgid "Checkout form"
+msgstr "結算表單"
+
 msgid "A custom block for displaying cancellation confirmation"
 msgstr "用於顯示確認取消的自定義塊"
 
 msgid "A custom block for displaying search form"
 msgstr "顯示搜索表單的自定義區塊"
+
+msgid "A custom block for displaying checkout form"
+msgstr "用於顯示結算表單的自定義塊"
 
 msgid "A custom block for displaying services form"
 msgstr "用於顯示服務表單的自定義塊"
@@ -8402,6 +8488,11 @@ msgstr "分步表單"
 msgid "Classic booking form with the consequent scheduling process."
 msgstr "經典預定表單和相應時間安排流程。"
 
+msgid ""
+"Lightweight form that allows your customers to pay for appointments, events, "
+"and more."
+msgstr "輕量級表單允許您的客戶支付預約和活動等費用。"
+
 msgid "Cancellation form"
 msgstr "取消表格"
 
@@ -8582,6 +8673,12 @@ msgstr "允許跳過"
 msgid "Skip button title"
 msgstr "跳過按鍵名稱"
 
+msgid "Page URL"
+msgstr "頁面URL"
+
+msgid "Enter the URL of the page where this forms shortcode is placed."
+msgstr "輸入放置此表單短代碼的頁面的URL。"
+
 msgid "Add new form"
 msgstr "添加新表單"
 
@@ -8602,6 +8699,9 @@ msgstr "刪除表單"
 msgid "Complete"
 msgstr "完成"
 
+msgid "Checkout"
+msgstr "結算"
+
 msgid "Success appointment booking"
 msgstr "成功預約預定"
 
@@ -8619,6 +8719,12 @@ msgstr "保存外觀以應用更改。"
 
 msgid "Changes saved."
 msgstr "已保存更改。"
+
+#, php-format
+msgid ""
+"To learn more about this feature, please follow <a href=\"%s\" "
+"target=\"_blank\">this link</a>."
+msgstr "欲了解有關此功能的更多資訊，請點擊<a href=\"%s\" target=\"_blank\">此鏈接</a>。"
 
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
@@ -8743,6 +8849,21 @@ msgstr "此預約不存在。"
 msgid "Cancellation of this appointment is not allowed."
 msgstr "此預約不允許取消。"
 
+msgid "Thank you for your payment."
+msgstr "感謝您的付款。"
+
+msgid "Payment successful."
+msgstr "付款成功。"
+
+msgid "There is no payment required."
+msgstr "無需付款。"
+
+msgid "Payment not found."
+msgstr "未找到付款。"
+
+msgid "Something went wrong."
+msgstr "出現錯誤。"
+
 msgid "Note"
 msgstr "註解"
 
@@ -8825,6 +8946,9 @@ msgstr "添加Blookly服務表單"
 
 msgid "Add Bookly staff form"
 msgstr "添加Bookly員工表單"
+
+msgid "Add Bookly checkout form"
+msgstr "添加Bookly結算表單"
 
 msgid "Add appointment cancellation confirmation"
 msgstr "添加取消預約確認"
@@ -8932,6 +9056,24 @@ msgstr "請設置並啟用新員工的WordPress用戶登入詳情通知"
 
 msgid "Create WordPress user"
 msgstr "創建WordPress用戶"
+
+msgid "Duplicate staff member"
+msgstr "重複員工"
+
+msgid "Staff member to duplicate"
+msgstr "要重複的員工"
+
+msgid ""
+"You're about to duplicate this staff member. All settings - except phone "
+"number, email, and calendar settings - will be copied. The new staff "
+"member's visibility will be set to 'Private' by default."
+msgstr "您要重複此員工。所有設定（除電話號碼、電郵、日曆設定）將被複製。新員工的可見性將被默認設定為“私人”。"
+
+msgid "Name of duplicated staff member"
+msgstr "重複員工的姓名"
+
+msgid "Copy of"
+msgstr "副本"
 
 msgid "Create payment"
 msgstr "建立付款"

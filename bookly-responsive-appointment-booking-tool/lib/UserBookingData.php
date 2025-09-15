@@ -720,6 +720,13 @@ class UserBookingData
         return $this->address_iso;
     }
 
+    public function setCustomer( Entities\Customer $customer )
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
     /**
      * Get customer.
      *

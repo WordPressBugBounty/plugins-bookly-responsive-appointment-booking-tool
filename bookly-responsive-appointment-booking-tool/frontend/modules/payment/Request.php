@@ -96,6 +96,18 @@ class Request extends Lib\Base\Component
         return ! $this->get( 'modern_booking_form' ) || $this->get( 'bookly_fid' );
     }
 
+
+    /**
+     * @param Lib\UserBookingData $userData
+     * @return $this
+     */
+    public function setUserData( Lib\UserBookingData $userData )
+    {
+        $this->userData = $userData;
+
+        return $this;
+    }
+
     /**
      * @return Lib\UserBookingData
      */
@@ -325,7 +337,7 @@ class Request extends Lib\Base\Component
      * @param string $gateway
      * @return Lib\Base\Gateway
      */
-    protected function getGatewayByName( $gateway )
+    public function getGatewayByName( $gateway )
     {
         switch ( $gateway ) {
             case Entities\Payment::TYPE_CLOUD_STRIPE:

@@ -231,8 +231,7 @@ abstract class Tables
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
                     'full_name' => esc_html__( 'Name', 'bookly' ),
-                    'email' => esc_html__( 'Email', 'bookly' ),
-                    'cloud_msc_token' => esc_html__( 'Access token', 'bookly' ),
+                    'token' => esc_html__( 'Access token', 'bookly' ),
                 );
                 break;
             case self::CUSTOMER_CABINET_APPOINTMENTS:
@@ -263,15 +262,6 @@ abstract class Tables
                     'details' => __( 'Details', 'bookly' ),
                     'comment' => __( 'Comment', 'bookly' ),
                     'ref' => __( 'Reference', 'bookly' ),
-                );
-                break;
-            case self::EVENTS:
-                $columns = array(
-                    'id' => __( 'ID', 'bookly' ),
-                    'title' => __( 'Title', 'bookly' ),
-                    'start_date' => __( 'Start date', 'bookly' ),
-                    'end_date' => __( 'End date', 'bookly' ),
-                    'published' => __( 'Published', 'bookly' ),
                 );
                 break;
         }
@@ -458,12 +448,6 @@ abstract class Tables
                     'no' => false,
                     'internal_note' => false,
                     'service_price' => false
-                );
-                break;
-            case self::EVENTS:
-                $columns = array(
-                    'id' => false,
-                    'end_date' => false,
                 );
                 break;
             case self::EMAIL_LOGS:

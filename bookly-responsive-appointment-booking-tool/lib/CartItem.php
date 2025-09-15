@@ -7,6 +7,7 @@ class CartItem
     const TYPE_PACKAGE = 'package';
     const TYPE_GIFT_CARD = 'gift_card';
     const TYPE_EVENT = 'event';
+    const TYPE_CHILD_PAYMENT = 'child_payment';
 
     // Step service
     /** @var  string */
@@ -33,6 +34,8 @@ class CartItem
     protected $cart_type_id;
     /** @var  int */
     protected $ticket_type_id;
+    /** @var  int */
+    protected $payment_id;
 
     // Step extras
     /** @var  array */
@@ -737,6 +740,25 @@ class CartItem
     public function setTicketTypeId( $ticket_type_id )
     {
         $this->ticket_type_id = $ticket_type_id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentId()
+    {
+        return $this->payment_id;
+    }
+
+    /**
+     * @param int $payment_id
+     * @return CartItem
+     */
+    public function setPaymentId( $payment_id )
+    {
+        $this->payment_id = $payment_id;
 
         return $this;
     }

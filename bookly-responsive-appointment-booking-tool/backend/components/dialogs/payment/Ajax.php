@@ -99,7 +99,16 @@ class Ajax extends Lib\Base\Ajax
                 }
                 $item['appointment_date'] = isset( $item['appointment_date'] ) ? Lib\Utils\DateTime::applyStaffTimeZone( $item['appointment_date'] ) : '';
             }
+            $data = Proxy\Shared::preparePaymentDetails( $data, $payment );
 
+            $data['child_payments'] = Lib\Entities\Payment::query( 'p' )
+                ->select( 'p.type, p.created_at, p.paid, p.tax' )
+                ->where( 'p.parent_id', $payment->getId() )
+                ->where( 'p.status', Lib\Entities\Payment::STATUS_COMPLETED )
+                ->fetchArray();
+            foreach ( $data['child_payments'] as &$item ) {
+                $item['type_text'] = Lib\Entities\Payment::typeToString( $item['type'] );
+            }
             wp_send_json_success( $data );
         }
 
@@ -118,7 +127,7 @@ class Ajax extends Lib\Base\Ajax
         );
 
         Lib\Payment\Proxy\Events::redeemReservedAttendees( $payment );
-        
+
         $payment
             ->setPaid( $payment->getTotal() )
             ->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )
@@ -220,7 +229,7 @@ class Ajax extends Lib\Base\Ajax
             if ( ! $payment ) {
                 wp_send_json_error( array( 'message' => __( 'Payment is not found.', 'bookly' ) ) );
             }
-            $paid = $payment->getPaid();
+            $paid = $payment->getPaid() + $payment->getChildPaid();
             $total = $payment->getTotal();
             $type = $payment->getType();
             $status = $payment->getStatus();

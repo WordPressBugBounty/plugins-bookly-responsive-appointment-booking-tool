@@ -9,11 +9,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-25 05:46+0000\n"
-"PO-Revision-Date: 2025-06-27 11:23+0000\n"
+"POT-Creation-Date: 2025-08-28 14:29+0000\n"
+"PO-Revision-Date: 2025-08-29 09:02+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Russian\n"
-"X-Loco-Version: 2.3.1; wp-6.8"
+"X-Loco-Version: 2.3.1; wp-6.8.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Счёт №{invoice_number} за вашу запись"
@@ -217,6 +217,9 @@ msgstr "Всего"
 
 msgid "Paid"
 msgstr "Оплачено"
+
+msgid "Child payment"
+msgstr "Дочерний платёж"
 
 msgid "Due"
 msgstr "Долг"
@@ -1779,6 +1782,24 @@ msgstr "Уведомление о новом билете"
 msgid "Notification about ticket deletion"
 msgstr "Уведомление об удалении билета"
 
+msgid "ID"
+msgstr "ID"
+
+msgid "Title"
+msgstr "Название"
+
+msgid "Start date"
+msgstr "Дата начала"
+
+msgid "End date"
+msgstr "Дата окончания"
+
+msgid "Published"
+msgstr "Опубликовано"
+
+msgid "Tags"
+msgstr "Теги"
+
 msgid "Events"
 msgstr "События"
 
@@ -1939,8 +1960,8 @@ msgstr "Организаторы"
 msgid "Plan and manage the event from start to finish"
 msgstr "Планирует и управляет событием от начала до конца"
 
-msgid "Published"
-msgstr "Опубликовано"
+msgid "Ticket sales end at"
+msgstr "Продажа билетов заканчивается в"
 
 msgid "Status"
 msgstr "Статус"
@@ -1953,9 +1974,6 @@ msgstr "Помогает с организацией, проведением с�
 
 msgid "Ticket mask"
 msgstr "Маска билета"
-
-msgid "Title"
-msgstr "Название"
 
 msgid "Select all"
 msgstr "Выбрать все"
@@ -2043,8 +2061,9 @@ msgstr "Пожалуйста, выберите событие"
 msgid "Please select a ticket"
 msgstr "Пожалуйста, выберите билет"
 
+msgctxt "tickets left"
 msgid "left"
-msgstr "осталось"
+msgstr "доступно"
 
 msgid "Your ticket has been created."
 msgstr "Ваш билет создан."
@@ -2063,6 +2082,27 @@ msgstr "Продано"
 
 msgid "Add to calendar"
 msgstr "Добавить в календарь"
+
+msgid "Event date"
+msgstr "Дата события"
+
+msgid "Filter events"
+msgstr "Фильтр событий"
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "Tomorrow"
+msgstr "Завтра"
+
+msgid "Next 7 days"
+msgstr "Следующие 7 дней"
+
+msgid "Next 30 days"
+msgstr "Следующие 30 дней"
+
+msgid "All selected"
+msgstr "Выбраны все"
 
 msgid "Width"
 msgstr "Ширина"
@@ -2184,9 +2224,6 @@ msgstr "Особые часы работы"
 
 msgid "Fields"
 msgstr "Поля"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Created at any time"
 msgstr "Создана в любое время"
@@ -3489,9 +3526,6 @@ msgstr ""
 msgid "Uncategorized"
 msgstr "Без категории"
 
-msgid "Today"
-msgstr "Сегодня"
-
 msgid "Week"
 msgstr "Неделя"
 
@@ -3741,9 +3775,6 @@ msgstr "По"
 msgid "Custom range"
 msgstr "Произвольный диапазон"
 
-msgid "Tomorrow"
-msgstr "Завтра"
-
 msgid "Yesterday"
 msgstr "Вчера"
 
@@ -3752,12 +3783,6 @@ msgstr "Последние 7 дней"
 
 msgid "Last 30 days"
 msgstr "Последние 30 дней"
-
-msgid "Next 7 days"
-msgstr "Следующие 7 дней"
-
-msgid "Next 30 days"
-msgstr "Следующие 30 дней"
 
 msgid "This month"
 msgstr "Текущий месяц"
@@ -3906,12 +3931,6 @@ msgstr "Комментарий"
 
 msgid "Reference"
 msgstr "Комментарий"
-
-msgid "Start date"
-msgstr "Дата начала"
-
-msgid "End date"
-msgstr "Дата окончания"
 
 #, php-format
 msgid ""
@@ -4148,6 +4167,9 @@ msgstr ""
 
 msgid "No matching records found"
 msgstr "Соответствующих записей не найдено"
+
+msgid "WordPress user"
+msgstr "Пользователь WordPress"
 
 msgid "Add service"
 msgstr "Добавить сервис"
@@ -5065,6 +5087,9 @@ msgstr "Отменить запрос"
 
 msgid "Can only contain letters or digits (up to 11 characters)."
 msgstr "Разрешаются буквы и цифры (до 11 знаков включительно)."
+
+msgid "Acceptable characters are"
+msgstr "Допустимые символы"
 
 msgid "Quick search"
 msgstr "Быстрый поиск"
@@ -6491,11 +6516,26 @@ msgstr "Ваш платёж был принят на обработку"
 msgid "Back to the list of amounts"
 msgstr "Вернуться к списку сумм"
 
+msgid "Add Promo Code"
+msgstr "Добавить промокод"
+
+msgid "Remove Promo Code"
+msgstr "Удалить промокод"
+
 msgid "Please select a payment method"
 msgstr "Пожалуйста, выберите способ оплаты"
 
 msgid "Credit card"
 msgstr "Кредитная карта"
+
+msgid "Enter promo code"
+msgstr "Ввести промокод"
+
+msgid "This promo code is not valid"
+msgstr "Этот промокод недействителен"
+
+msgid "Promo code applied!"
+msgstr "Промокод применён!"
 
 msgid "Account recharge"
 msgstr "Пополнение счёта"
@@ -6550,6 +6590,10 @@ msgstr "Автопополнение возобновлено"
 
 msgid "You don't have active auto-recharge"
 msgstr "У вас нет активного автопополнения"
+
+#, php-format
+msgid "You'll receive a %s bonus on your top-up"
+msgstr "Вы получите бонус %s при пополнении"
 
 msgid "Auto-Recharge has failed, please replenish your balance directly."
 msgstr ""
@@ -6808,6 +6852,12 @@ msgstr "Привязать платёж"
 msgid "Complete payment"
 msgstr "Завершить платёж"
 
+msgid "Additional payment"
+msgstr "Дополнительный платеж"
+
+msgid "Copy checkout URL"
+msgstr "Скопировать URL для оплаты"
+
 msgid "Manual adjustment"
 msgstr "Ручная коррекция"
 
@@ -6902,14 +6952,47 @@ msgstr ""
 "Вы собираетесь удалить запись(и). Уведомления будут отправлены в "
 "соответствии с вашими настройками."
 
+msgid "Associate token with"
+msgstr "Связать токен с"
+
+msgid ""
+"By associating a token with a WordPress user, you can provide administrative "
+"access to Bookly from the mobile app. The level of access is determined by "
+"the user's role"
+msgstr ""
+"Связав токен с пользователем WordPress, вы можете предоставить "
+"административный доступ к Bookly из мобильного приложения. Уровень доступа "
+"определяется ролью пользователя"
+
 msgid "Edit access token"
 msgstr "Редактировать маркер доступа"
+
+msgid "Create new access token"
+msgstr "Создать новый токен доступа"
+
+msgid "Select WordPress user"
+msgstr "Выберите пользователя WordPress"
+
+msgid "Send notification with access data"
+msgstr "Отправить уведомление с данными для доступа"
+
+msgid "With access to Bookly"
+msgstr "С доступом к Bookly"
+
+msgid "Without access to Bookly"
+msgstr "Без доступа к Bookly"
 
 msgid "New access token"
 msgstr "Новый маркер доступа"
 
+msgid "WordPress user required"
+msgstr "Требуется пользователь WordPress"
+
 msgid "Staff member required"
 msgstr "Необходимо указать сотрудника"
+
+msgid "Invalid role"
+msgstr "Недопустимая роль"
 
 msgid "Header"
 msgstr "Заголовок"
@@ -7939,6 +8022,9 @@ msgstr "Дата создания"
 msgid "Expires"
 msgstr "Дата окончания"
 
+msgid "Child Payment"
+msgstr "Дочерний Платёж"
+
 msgid "Notification to customer about their WordPress user login details"
 msgstr "Уведомление для клиента о деталях его WordPress аккаунта"
 
@@ -8329,9 +8415,6 @@ msgstr ""
 msgid "Customer birthday"
 msgstr "День рождения клиента"
 
-msgid "Tags"
-msgstr "Теги"
-
 msgid "Balance"
 msgstr "Баланс"
 
@@ -8421,12 +8504,18 @@ msgstr "Форма услуг"
 msgid "Staff form"
 msgstr "Форма сотрудника"
 
+msgid "Checkout form"
+msgstr "Форма оплаты"
+
 msgid "A custom block for displaying cancellation confirmation"
 msgstr ""
 "Пользовательский блок для отображения подтверждения отмены бронирования"
 
 msgid "A custom block for displaying search form"
 msgstr "Пользовательский блок для отображения формы поиска"
+
+msgid "A custom block for displaying checkout form"
+msgstr "Пользовательский блок для отображения формы оплаты"
 
 msgid "A custom block for displaying services form"
 msgstr "Пользовательский блок для отображения формы услуг"
@@ -9153,6 +9242,13 @@ msgstr ""
 "Классическая форма бронирования с последовательным процессом осуществления "
 "записи."
 
+msgid ""
+"Lightweight form that allows your customers to pay for appointments, events, "
+"and more."
+msgstr ""
+"Лёгкая форма, которая позволяет вашим клиентам оплачивать встречи, события и "
+"многое другое."
+
 msgid "Cancellation form"
 msgstr "Форма отмены бронирования"
 
@@ -9339,6 +9435,12 @@ msgstr "Разрешить пропуск"
 msgid "Skip button title"
 msgstr "Название кнопки \"Пропустить\""
 
+msgid "Page URL"
+msgstr "URL страницы"
+
+msgid "Enter the URL of the page where this forms shortcode is placed."
+msgstr "Введите URL страницы, на которой размещён шорткод этой формы."
+
 msgid "Add new form"
 msgstr "Добавить новую форму"
 
@@ -9361,6 +9463,9 @@ msgstr "Удалить форму"
 msgid "Complete"
 msgstr "Завершить"
 
+msgid "Checkout"
+msgstr "Оплата"
+
 msgid "Success appointment booking"
 msgstr "Успешное бронирование"
 
@@ -9378,6 +9483,14 @@ msgstr "Сохраните внешний вид, чтобы применить 
 
 msgid "Changes saved."
 msgstr "Изменения сохранены."
+
+#, php-format
+msgid ""
+"To learn more about this feature, please follow <a href=\"%s\" "
+"target=\"_blank\">this link</a>."
+msgstr ""
+"Чтобы узнать больше об этой функции, перейдите по <a href=\"%s\" "
+"target=\"_blank\">этой ссылке</a>."
 
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
@@ -9506,6 +9619,21 @@ msgstr "Этой записи не существует."
 msgid "Cancellation of this appointment is not allowed."
 msgstr "Отмена данной записи недопустима."
 
+msgid "Thank you for your payment."
+msgstr "Спасибо за ваш платёж."
+
+msgid "Payment successful."
+msgstr "Платёж успешно выполнен."
+
+msgid "There is no payment required."
+msgstr "Оплата не требуется."
+
+msgid "Payment not found."
+msgstr "Платёж не найден."
+
+msgid "Something went wrong."
+msgstr "Что-то пошло не так."
+
 msgid "Note"
 msgstr "Заметка"
 
@@ -9595,6 +9723,9 @@ msgstr "Добавить форму услуг Bookly"
 
 msgid "Add Bookly staff form"
 msgstr "Добавить форму сотрудника Bookly"
+
+msgid "Add Bookly checkout form"
+msgstr "Добавить форму для оплаты Bookly"
 
 msgid "Add appointment cancellation confirmation"
 msgstr "Добавить подтверждение отмены записи"
@@ -9722,6 +9853,27 @@ msgstr ""
 
 msgid "Create WordPress user"
 msgstr "Создать пользователя WordPress"
+
+msgid "Duplicate staff member"
+msgstr "Дублировать сотрудника"
+
+msgid "Staff member to duplicate"
+msgstr "Сотрудник для дублирования"
+
+msgid ""
+"You're about to duplicate this staff member. All settings - except phone "
+"number, email, and calendar settings - will be copied. The new staff "
+"member's visibility will be set to 'Private' by default."
+msgstr ""
+"Вы собираетесь дублировать этого сотрудника. Все настройки, кроме номера "
+"телефона, email и настроек календаря, будут скопированы. Видимость нового "
+"сотрудника по умолчанию будет установлена на «Приватно»."
+
+msgid "Name of duplicated staff member"
+msgstr "Имя дублированного сотрудника"
+
+msgid "Copy of"
+msgstr "Копия"
 
 msgid "Create payment"
 msgstr "Создать платёж"

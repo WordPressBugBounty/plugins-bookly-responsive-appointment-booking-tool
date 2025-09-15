@@ -236,14 +236,16 @@ abstract class Common extends Lib\Base\Cache
     /**
      * Get string translated with WPML.
      *
-     * @param             $name
+     * @param string $name
      * @param string $original_value
      * @param null|string $language_code Return the translation in this language
      * @return string
      */
     public static function getTranslatedString( $name, $original_value = '', $language_code = null )
     {
-        return apply_filters( 'wpml_translate_single_string', $original_value, 'bookly', $name, $language_code );
+        $result = apply_filters( 'wpml_translate_single_string', $original_value, 'bookly', $name, $language_code );
+
+        return $result === null ? '' : $result;
     }
 
     /**

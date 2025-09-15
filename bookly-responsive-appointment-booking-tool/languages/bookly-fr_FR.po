@@ -8,11 +8,11 @@ msgstr ""
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 08:49+0000\n"
-"PO-Revision-Date: 2025-06-27 11:17+0000\n"
+"POT-Creation-Date: 2025-08-28 14:29+0000\n"
+"PO-Revision-Date: 2025-09-02 10:05+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: French (France)\n"
-"X-Loco-Version: 2.3.1; wp-6.8"
+"X-Loco-Version: 2.3.1; wp-6.8.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Facture n° {invoice_number} de votre rendez-vous"
@@ -221,6 +221,9 @@ msgstr "Total"
 
 msgid "Paid"
 msgstr "Payé"
+
+msgid "Child payment"
+msgstr "Paiement enfant"
 
 msgid "Due"
 msgstr "A payer"
@@ -1778,6 +1781,24 @@ msgstr "Notification concernant un nouveau ticket"
 msgid "Notification about ticket deletion"
 msgstr "Notification concernant la suppression d'un ticket"
 
+msgid "ID"
+msgstr "ID"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Start date"
+msgstr "Date de début"
+
+msgid "End date"
+msgstr "Date de fin"
+
+msgid "Published"
+msgstr "Publié"
+
+msgid "Tags"
+msgstr "Balises"
+
 msgid "Events"
 msgstr "Événements"
 
@@ -1942,8 +1963,8 @@ msgstr "Organisateurs"
 msgid "Plan and manage the event from start to finish"
 msgstr "Planifier et gérer l'événement du début à la fin"
 
-msgid "Published"
-msgstr "Publié"
+msgid "Ticket sales end at"
+msgstr "La vente des tickets se termine à"
 
 msgid "Status"
 msgstr "Statut"
@@ -1958,9 +1979,6 @@ msgstr ""
 
 msgid "Ticket mask"
 msgstr "Masque de ticket"
-
-msgid "Title"
-msgstr "Titre"
 
 msgid "Select all"
 msgstr "Tout sélectionner"
@@ -2048,8 +2066,9 @@ msgstr "Veuillez sélectionner un événement"
 msgid "Please select a ticket"
 msgstr "Veuillez sélectionner un ticket"
 
+msgctxt "tickets left"
 msgid "left"
-msgstr "gauche"
+msgstr "restants"
 
 msgid "Your ticket has been created."
 msgstr "Votre ticket a été créé."
@@ -2068,6 +2087,27 @@ msgstr "Complet"
 
 msgid "Add to calendar"
 msgstr "Ajouter au calendrier"
+
+msgid "Event date"
+msgstr "Date de l'événement"
+
+msgid "Filter events"
+msgstr "Filtrer les événements"
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "Tomorrow"
+msgstr "Demain"
+
+msgid "Next 7 days"
+msgstr "Les 7 prochains jours"
+
+msgid "Next 30 days"
+msgstr "Les 30 prochains jours"
+
+msgid "All selected"
+msgstr "Tout sélectionné"
 
 msgid "Width"
 msgstr "Largeur"
@@ -2190,9 +2230,6 @@ msgstr "Heures spéciales"
 
 msgid "Fields"
 msgstr "Champs"
-
-msgid "ID"
-msgstr "ID"
 
 msgid "Created at any time"
 msgstr "Créé pour toutes dates"
@@ -3499,9 +3536,6 @@ msgstr ""
 msgid "Uncategorized"
 msgstr "Pas de catégorie"
 
-msgid "Today"
-msgstr "Aujourd'hui"
-
 msgid "Week"
 msgstr "Semaine"
 
@@ -3748,9 +3782,6 @@ msgstr "A"
 msgid "Custom range"
 msgstr "Définir période"
 
-msgid "Tomorrow"
-msgstr "Demain"
-
 msgid "Yesterday"
 msgstr "Hier"
 
@@ -3759,12 +3790,6 @@ msgstr "7 derniers jours"
 
 msgid "Last 30 days"
 msgstr "30 derniers jours"
-
-msgid "Next 7 days"
-msgstr "Les 7 prochains jours"
-
-msgid "Next 30 days"
-msgstr "Les 30 prochains jours"
 
 msgid "This month"
 msgstr "Mois en cours"
@@ -3913,12 +3938,6 @@ msgstr "Commentaire"
 
 msgid "Reference"
 msgstr "Référennce"
-
-msgid "Start date"
-msgstr "Date de début"
-
-msgid "End date"
-msgstr "Date de fin"
 
 #, php-format
 msgid ""
@@ -4158,6 +4177,9 @@ msgstr ""
 msgid "No matching records found"
 msgstr "Aucun enregistrement correspondant n'a été trouvé"
 
+msgid "WordPress user"
+msgstr "Utilisateur WordPress"
+
 msgid "Add service"
 msgstr "Ajouter service"
 
@@ -4273,7 +4295,7 @@ msgstr ""
 "puissants ici</a>."
 
 msgid "Sign up today and enjoy a welcome bonus! "
-msgstr "Inscrivez-vous dès aujourd'hui et profitez d'un bonus de bienvenue ! "
+msgstr "Inscrivez-vous dès aujourd'hui et profitez d'un bonus de bienvenue! "
 
 msgid "Create an account"
 msgstr "Créer un compte"
@@ -5090,6 +5112,9 @@ msgstr "Annuler requête"
 
 msgid "Can only contain letters or digits (up to 11 characters)."
 msgstr "Ne peut contenir que des lettres ou chiffres (jusqu'à 11 caract.)"
+
+msgid "Acceptable characters are"
+msgstr "Les caractères acceptables sont"
 
 msgid "Quick search"
 msgstr "Recherche rapide"
@@ -6530,11 +6555,26 @@ msgstr "Votre paiement a été accepté"
 msgid "Back to the list of amounts"
 msgstr "Retour à la liste des montants"
 
+msgid "Add Promo Code"
+msgstr "Ajouter un code promo"
+
+msgid "Remove Promo Code"
+msgstr "Retirer le code promo"
+
 msgid "Please select a payment method"
 msgstr "Merci de bien vouloir sélectionner une méthode de paiement "
 
 msgid "Credit card"
 msgstr "Carte de crédit"
+
+msgid "Enter promo code"
+msgstr "Saisir un code promo"
+
+msgid "This promo code is not valid"
+msgstr "Ce code promo n'est pas valide"
+
+msgid "Promo code applied!"
+msgstr "Code promo appliqué !"
 
 msgid "Account recharge"
 msgstr "Rechargement du compte"
@@ -6590,6 +6630,10 @@ msgstr "La recharge automatique a été renouvelée"
 
 msgid "You don't have active auto-recharge"
 msgstr "Vous n'avez pas de recharge automatique active"
+
+#, php-format
+msgid "You'll receive a %s bonus on your top-up"
+msgstr "Vous recevrez un bonus de %s sur votre recharge"
 
 msgid "Auto-Recharge has failed, please replenish your balance directly."
 msgstr ""
@@ -6853,6 +6897,12 @@ msgstr "Lier le paiement"
 msgid "Complete payment"
 msgstr "Paiement complet"
 
+msgid "Additional payment"
+msgstr "Paiement supplémentaire"
+
+msgid "Copy checkout URL"
+msgstr "Copier l'URL de paiement"
+
 msgid "Manual adjustment"
 msgstr "Ajustement manuel"
 
@@ -6952,14 +7002,47 @@ msgstr ""
 "Vous allez supprimer un/des rendez-vous. Les notifications seront envoyées "
 "en fonction de vos paramètres."
 
+msgid "Associate token with"
+msgstr "Associer le jeton à"
+
+msgid ""
+"By associating a token with a WordPress user, you can provide administrative "
+"access to Bookly from the mobile app. The level of access is determined by "
+"the user's role"
+msgstr ""
+"En associant un jeton à un utilisateur WordPress, vous pouvez fournir un "
+"accès administratif à Bookly depuis l'application mobile. Le niveau d'accès "
+"est déterminé par le rôle de l'utilisateur"
+
 msgid "Edit access token"
 msgstr "Modifier le jeton d'accès"
+
+msgid "Create new access token"
+msgstr "Créer un nouveau jeton d'accès"
+
+msgid "Select WordPress user"
+msgstr "Sélectionnez l'utilisateur WordPress"
+
+msgid "Send notification with access data"
+msgstr "Envoyer une notification avec les données d'accès"
+
+msgid "With access to Bookly"
+msgstr "Avec un accès à Bookly"
+
+msgid "Without access to Bookly"
+msgstr "Sans accès à Bookly"
 
 msgid "New access token"
 msgstr "Nouveau jeton d'accès"
 
+msgid "WordPress user required"
+msgstr "Utilisateur WordPress requis"
+
 msgid "Staff member required"
 msgstr "Membre du personnel requis"
+
+msgid "Invalid role"
+msgstr "Rôle invalide"
 
 msgid "Header"
 msgstr "En-tête"
@@ -7985,6 +8068,9 @@ msgstr "Date création"
 msgid "Expires"
 msgstr "Expire"
 
+msgid "Child Payment"
+msgstr "Paiement enfant"
+
 msgid "Notification to customer about their WordPress user login details"
 msgstr "Notification au client pour ses détails de connexion WordPress"
 
@@ -8372,9 +8458,6 @@ msgstr ""
 msgid "Customer birthday"
 msgstr "Anniversaire du client"
 
-msgid "Tags"
-msgstr "Balises"
-
 msgid "Balance"
 msgstr "Solde"
 
@@ -8467,11 +8550,17 @@ msgstr "Formulaire de services"
 msgid "Staff form"
 msgstr "Formulaire du personnel"
 
+msgid "Checkout form"
+msgstr "Formulaire de paiement"
+
 msgid "A custom block for displaying cancellation confirmation"
 msgstr "Bloc personnalisé pour l'affichage de la confirmation de l'annulation"
 
 msgid "A custom block for displaying search form"
 msgstr "Un bloc personnalisé pour afficher le formulaire de recherche"
+
+msgid "A custom block for displaying checkout form"
+msgstr "Un bloc personnalisé pour afficher le formulaire de paiement"
 
 msgid "A custom block for displaying services form"
 msgstr "Un bloc personnalisé pour afficher le formulaire des services"
@@ -9211,6 +9300,13 @@ msgstr ""
 "Formulaire de réservation classique avec le processus de planification qui "
 "en découle."
 
+msgid ""
+"Lightweight form that allows your customers to pay for appointments, events, "
+"and more."
+msgstr ""
+"Formulaire léger qui permet à vos clients de payer leurs rendez-vous, leurs "
+"événements et plus encore."
+
 msgid "Cancellation form"
 msgstr "Formulaire l'annulation"
 
@@ -9398,6 +9494,12 @@ msgstr "Autoriser le saut"
 msgid "Skip button title"
 msgstr "Sauter le titre du bouton"
 
+msgid "Page URL"
+msgstr "URL de la page"
+
+msgid "Enter the URL of the page where this forms shortcode is placed."
+msgstr "Entrez l'URL de la page où ce shortcode de formulaire est placé."
+
 msgid "Add new form"
 msgstr "Ajouter un nouveau formulaire"
 
@@ -9420,6 +9522,9 @@ msgstr "Supprimer le formulaire"
 msgid "Complete"
 msgstr "Completer"
 
+msgid "Checkout"
+msgstr "Paiement"
+
 msgid "Success appointment booking"
 msgstr "Succès de la prise de rendez-vous"
 
@@ -9437,6 +9542,14 @@ msgstr "Sauvegardez l'apparence pour appliquer les changements."
 
 msgid "Changes saved."
 msgstr "Les modifications sont enregistrées."
+
+#, php-format
+msgid ""
+"To learn more about this feature, please follow <a href=\"%s\" "
+"target=\"_blank\">this link</a>."
+msgstr ""
+"Pour en savoir plus sur cette fonctionnalité, veuillez suivre <a href=\"%s\" "
+"target=\"_blank\">ce lien</a>."
 
 msgid ""
 "Select the form you want to publish, click on the menu button, and select "
@@ -9566,6 +9679,21 @@ msgstr "Ce rendez-vous n'existe pas."
 msgid "Cancellation of this appointment is not allowed."
 msgstr "Vous n'êtes pas autorisé à annuler ce rendez-vous."
 
+msgid "Thank you for your payment."
+msgstr "Merci pour votre paiement."
+
+msgid "Payment successful."
+msgstr "Paiement réussi."
+
+msgid "There is no payment required."
+msgstr "Aucun paiement requis."
+
+msgid "Payment not found."
+msgstr "Paiement introuvable."
+
+msgid "Something went wrong."
+msgstr "Une erreur s'est produite."
+
 msgid "Note"
 msgstr "Note"
 
@@ -9655,6 +9783,9 @@ msgstr "Ajouter le formulaire de services Bookly"
 
 msgid "Add Bookly staff form"
 msgstr "Ajouter le formulaire du personnel Bookly"
+
+msgid "Add Bookly checkout form"
+msgstr "Ajouter le formulaire de paiement Bookly"
 
 msgid "Add appointment cancellation confirmation"
 msgstr "Ajouter une confirmation d'annulation de rendez-vous"
@@ -9783,6 +9914,28 @@ msgstr ""
 
 msgid "Create WordPress user"
 msgstr "Créer un utilisateur WordPress"
+
+msgid "Duplicate staff member"
+msgstr "Duppliqué le membre du personnel"
+
+msgid "Staff member to duplicate"
+msgstr "Membre du personnel à dupliquer"
+
+msgid ""
+"You're about to duplicate this staff member. All settings - except phone "
+"number, email, and calendar settings - will be copied. The new staff "
+"member's visibility will be set to 'Private' by default."
+msgstr ""
+"Vous êtes sur le point de dupliquer ce membre du personnel. Tous les "
+"paramètres, à l'exception du numéro de téléphone, de l'adresse e-mail et des "
+"paramètres du calendrier, seront copiés. La visibilité du nouveau membre du "
+"personnel sera définie par défaut sur 'Privé'."
+
+msgid "Name of duplicated staff member"
+msgstr "Nom du membre du personnel dupliqué"
+
+msgid "Copy of"
+msgstr "Copie de"
 
 msgid "Create payment"
 msgstr "Créer paiement"

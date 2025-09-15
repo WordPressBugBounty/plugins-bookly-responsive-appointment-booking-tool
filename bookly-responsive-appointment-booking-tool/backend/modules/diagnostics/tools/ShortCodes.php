@@ -21,6 +21,7 @@ class ShortCodes extends Tool
             array( 'name' => 'Customer Cabinet', 'code' => '[bookly-customer-cabinet' ),
             array( 'name' => 'Customer Gift Cards', 'code' => '[bookly-customer-gift-cards]' ),
             array( 'name' => 'Events form', 'code' => '[bookly-events-form' ),
+            array( 'name' => 'Checkout form', 'code' => '[bookly-checkout-form' ),
             array( 'name' => 'Packages list', 'code' => '[bookly-packages-list' ),
             array( 'name' => 'Search form', 'code' => '[bookly-search-form' ),
             array( 'name' => 'Services form', 'code' => '[bookly-services-form' ),

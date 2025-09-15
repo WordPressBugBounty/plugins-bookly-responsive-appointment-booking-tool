@@ -179,11 +179,7 @@ abstract class Config
         foreach ( $query->fetchArray() as $row ) {
             $staff_name = Utils\Common::getTranslatedString( 'staff_' . $row['id'], $row['full_name'] );
             $staff_info = $row['info'] == '' ? '' : Utils\Common::getTranslatedString( 'staff_' . $row['id'] . '_info', $row['info'] );
-            if ( $row['attachment_id'] != '' && $img = wp_get_attachment_image_src( $row['attachment_id'], 'full' ) ) {
-                $staff_image_url = $img[0];
-            } else {
-                $staff_image_url = '';
-            }
+            $staff_image_url = Common::getAttachmentUrl( $row['attachment_id'], 'full' );
             $staff_codes = array(
                 'staff_name' => $staff_name,
                 'staff_info' => $staff_info,

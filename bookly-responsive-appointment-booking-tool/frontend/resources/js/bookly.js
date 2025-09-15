@@ -1,4 +1,4 @@
-const booklyJsVersion="25.0";
+const booklyJsVersion="25.4";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -52,6 +52,7 @@ var bookly = (function ($) {
 
 		var FunctionPrototype = Function.prototype;
 		var call = FunctionPrototype.call;
+		// eslint-disable-next-line es/no-function-prototype-bind -- safe
 		var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
 		functionUncurryThis$1 = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
@@ -76,28 +77,28 @@ var bookly = (function ($) {
 
 	var es_array_includes$1 = {};
 
-	var global$1;
-	var hasRequiredGlobal;
+	var globalThis_1$1;
+	var hasRequiredGlobalThis$7;
 
-	function requireGlobal () {
-		if (hasRequiredGlobal) return global$1;
-		hasRequiredGlobal = 1;
+	function requireGlobalThis$7 () {
+		if (hasRequiredGlobalThis$7) return globalThis_1$1;
+		hasRequiredGlobalThis$7 = 1;
 		var check = function (it) {
 		  return it && it.Math === Math && it;
 		};
 
 		// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-		global$1 =
+		globalThis_1$1 =
 		  // eslint-disable-next-line es/no-global-this -- safe
 		  check(typeof globalThis == 'object' && globalThis) ||
 		  check(typeof window == 'object' && window) ||
 		  // eslint-disable-next-line no-restricted-globals -- safe
 		  check(typeof self == 'object' && self) ||
 		  check(typeof commonjsGlobal == 'object' && commonjsGlobal) ||
-		  check(typeof global$1 == 'object' && global$1) ||
+		  check(typeof globalThis_1$1 == 'object' && globalThis_1$1) ||
 		  // eslint-disable-next-line no-new-func -- fallback
 		  (function () { return this; })() || Function('return this')();
-		return global$1;
+		return globalThis_1$1;
 	}
 
 	var functionApply$1;
@@ -112,7 +113,7 @@ var bookly = (function ($) {
 		var apply = FunctionPrototype.apply;
 		var call = FunctionPrototype.call;
 
-		// eslint-disable-next-line es/no-reflect -- safe
+		// eslint-disable-next-line es/no-function-prototype-bind, es/no-reflect -- safe
 		functionApply$1 = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
 		  return call.apply(apply, arguments);
 		});
@@ -201,7 +202,7 @@ var bookly = (function ($) {
 		var NATIVE_BIND = /*@__PURE__*/ requireFunctionBindNative$1();
 
 		var call = Function.prototype.call;
-
+		// eslint-disable-next-line es/no-function-prototype-bind -- safe
 		functionCall$1 = NATIVE_BIND ? call.bind(call) : function () {
 		  return call.apply(call, arguments);
 		};
@@ -352,7 +353,7 @@ var bookly = (function ($) {
 		if (hasRequiredGetBuiltIn$1) return getBuiltIn$1;
 		hasRequiredGetBuiltIn$1 = 1;
 		var path = /*@__PURE__*/ requirePath$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
 
 		var aFunction = function (variable) {
@@ -360,33 +361,38 @@ var bookly = (function ($) {
 		};
 
 		getBuiltIn$1 = function (namespace, method) {
-		  return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(global[namespace])
-		    : path[namespace] && path[namespace][method] || global[namespace] && global[namespace][method];
+		  return arguments.length < 2 ? aFunction(path[namespace]) || aFunction(globalThis[namespace])
+		    : path[namespace] && path[namespace][method] || globalThis[namespace] && globalThis[namespace][method];
 		};
 		return getBuiltIn$1;
 	}
 
-	var engineUserAgent;
-	var hasRequiredEngineUserAgent;
+	var environmentUserAgent$1;
+	var hasRequiredEnvironmentUserAgent$1;
 
-	function requireEngineUserAgent () {
-		if (hasRequiredEngineUserAgent) return engineUserAgent;
-		hasRequiredEngineUserAgent = 1;
-		engineUserAgent = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
-		return engineUserAgent;
+	function requireEnvironmentUserAgent$1 () {
+		if (hasRequiredEnvironmentUserAgent$1) return environmentUserAgent$1;
+		hasRequiredEnvironmentUserAgent$1 = 1;
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
+
+		var navigator = globalThis.navigator;
+		var userAgent = navigator && navigator.userAgent;
+
+		environmentUserAgent$1 = userAgent ? String(userAgent) : '';
+		return environmentUserAgent$1;
 	}
 
-	var engineV8Version;
-	var hasRequiredEngineV8Version;
+	var environmentV8Version$1;
+	var hasRequiredEnvironmentV8Version$1;
 
-	function requireEngineV8Version () {
-		if (hasRequiredEngineV8Version) return engineV8Version;
-		hasRequiredEngineV8Version = 1;
-		var global = /*@__PURE__*/ requireGlobal();
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentV8Version$1 () {
+		if (hasRequiredEnvironmentV8Version$1) return environmentV8Version$1;
+		hasRequiredEnvironmentV8Version$1 = 1;
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
-		var process = global.process;
-		var Deno = global.Deno;
+		var process = globalThis.process;
+		var Deno = globalThis.Deno;
 		var versions = process && process.versions || Deno && Deno.version;
 		var v8 = versions && versions.v8;
 		var match, version;
@@ -408,8 +414,8 @@ var bookly = (function ($) {
 		  }
 		}
 
-		engineV8Version = version;
-		return engineV8Version;
+		environmentV8Version$1 = version;
+		return environmentV8Version$1;
 	}
 
 	var symbolConstructorDetection$1;
@@ -419,11 +425,11 @@ var bookly = (function ($) {
 		if (hasRequiredSymbolConstructorDetection$1) return symbolConstructorDetection$1;
 		hasRequiredSymbolConstructorDetection$1 = 1;
 		/* eslint-disable es/no-symbol -- required for testing */
-		var V8_VERSION = /*@__PURE__*/ requireEngineV8Version();
+		var V8_VERSION = /*@__PURE__*/ requireEnvironmentV8Version$1();
 		var fails = /*@__PURE__*/ requireFails$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 
-		var $String = global.String;
+		var $String = globalThis.String;
 
 		// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 		symbolConstructorDetection$1 = !!Object.getOwnPropertySymbols && !fails(function () {
@@ -448,9 +454,9 @@ var bookly = (function ($) {
 		/* eslint-disable es/no-symbol -- required for testing */
 		var NATIVE_SYMBOL = /*@__PURE__*/ requireSymbolConstructorDetection$1();
 
-		useSymbolAsUid$1 = NATIVE_SYMBOL
-		  && !Symbol.sham
-		  && typeof Symbol.iterator == 'symbol';
+		useSymbolAsUid$1 = NATIVE_SYMBOL &&
+		  !Symbol.sham &&
+		  typeof Symbol.iterator == 'symbol';
 		return useSymbolAsUid$1;
 	}
 
@@ -555,7 +561,7 @@ var bookly = (function ($) {
 		return ordinaryToPrimitive$1;
 	}
 
-	var shared$1 = {exports: {}};
+	var sharedStore$1 = {exports: {}};
 
 	var isPure$1;
 	var hasRequiredIsPure$1;
@@ -573,55 +579,55 @@ var bookly = (function ($) {
 	function requireDefineGlobalProperty$1 () {
 		if (hasRequiredDefineGlobalProperty$1) return defineGlobalProperty$1;
 		hasRequiredDefineGlobalProperty$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 
 		// eslint-disable-next-line es/no-object-defineproperty -- safe
 		var defineProperty = Object.defineProperty;
 
 		defineGlobalProperty$1 = function (key, value) {
 		  try {
-		    defineProperty(global, key, { value: value, configurable: true, writable: true });
+		    defineProperty(globalThis, key, { value: value, configurable: true, writable: true });
 		  } catch (error) {
-		    global[key] = value;
+		    globalThis[key] = value;
 		  } return value;
 		};
 		return defineGlobalProperty$1;
 	}
 
-	var sharedStore$1;
 	var hasRequiredSharedStore$1;
 
 	function requireSharedStore$1 () {
-		if (hasRequiredSharedStore$1) return sharedStore$1;
+		if (hasRequiredSharedStore$1) return sharedStore$1.exports;
 		hasRequiredSharedStore$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var IS_PURE = /*@__PURE__*/ requireIsPure$1();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var defineGlobalProperty = /*@__PURE__*/ requireDefineGlobalProperty$1();
 
 		var SHARED = '__core-js_shared__';
-		var store = global[SHARED] || defineGlobalProperty(SHARED, {});
+		var store = sharedStore$1.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
-		sharedStore$1 = store;
-		return sharedStore$1;
+		(store.versions || (store.versions = [])).push({
+		  version: '3.44.0',
+		  mode: IS_PURE ? 'pure' : 'global',
+		  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
+		  license: 'https://github.com/zloirock/core-js/blob/v3.44.0/LICENSE',
+		  source: 'https://github.com/zloirock/core-js'
+		});
+		return sharedStore$1.exports;
 	}
 
+	var shared$1;
 	var hasRequiredShared$1;
 
 	function requireShared$1 () {
-		if (hasRequiredShared$1) return shared$1.exports;
+		if (hasRequiredShared$1) return shared$1;
 		hasRequiredShared$1 = 1;
-		var IS_PURE = /*@__PURE__*/ requireIsPure$1();
 		var store = /*@__PURE__*/ requireSharedStore$1();
 
-		(shared$1.exports = function (key, value) {
-		  return store[key] || (store[key] = value !== undefined ? value : {});
-		})('versions', []).push({
-		  version: '3.35.0',
-		  mode: IS_PURE ? 'pure' : 'global',
-		  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-		  license: 'https://github.com/zloirock/core-js/blob/v3.35.0/LICENSE',
-		  source: 'https://github.com/zloirock/core-js'
-		});
-		return shared$1.exports;
+		shared$1 = function (key, value) {
+		  return store[key] || (store[key] = value || {});
+		};
+		return shared$1;
 	}
 
 	var toObject$1;
@@ -672,7 +678,7 @@ var bookly = (function ($) {
 
 		var id = 0;
 		var postfix = Math.random();
-		var toString = uncurryThis(1.0.toString);
+		var toString = uncurryThis(1.1.toString);
 
 		uid$1 = function (key) {
 		  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -686,14 +692,14 @@ var bookly = (function ($) {
 	function requireWellKnownSymbol$1 () {
 		if (hasRequiredWellKnownSymbol$1) return wellKnownSymbol$1;
 		hasRequiredWellKnownSymbol$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var shared = /*@__PURE__*/ requireShared$1();
 		var hasOwn = /*@__PURE__*/ requireHasOwnProperty$1();
 		var uid = /*@__PURE__*/ requireUid$1();
 		var NATIVE_SYMBOL = /*@__PURE__*/ requireSymbolConstructorDetection$1();
 		var USE_SYMBOL_AS_UID = /*@__PURE__*/ requireUseSymbolAsUid$1();
 
-		var Symbol = global.Symbol;
+		var Symbol = globalThis.Symbol;
 		var WellKnownSymbolsStore = shared('wks');
 		var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
@@ -765,10 +771,10 @@ var bookly = (function ($) {
 	function requireDocumentCreateElement$1 () {
 		if (hasRequiredDocumentCreateElement$1) return documentCreateElement$1;
 		hasRequiredDocumentCreateElement$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var isObject = /*@__PURE__*/ requireIsObject$1();
 
-		var document = global.document;
+		var document = globalThis.document;
 		// typeof document.createElement is 'object' in old IE
 		var EXISTS = isObject(document) && isObject(document.createElement);
 
@@ -999,7 +1005,7 @@ var bookly = (function ($) {
 	function require_export$1 () {
 		if (hasRequired_export$1) return _export$1;
 		hasRequired_export$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var apply = /*@__PURE__*/ requireFunctionApply$1();
 		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThisClause$1();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
@@ -1045,7 +1051,7 @@ var bookly = (function ($) {
 		  var STATIC = options.stat;
 		  var PROTO = options.proto;
 
-		  var nativeSource = GLOBAL ? global : STATIC ? global[TARGET] : (global[TARGET] || {}).prototype;
+		  var nativeSource = GLOBAL ? globalThis : STATIC ? globalThis[TARGET] : globalThis[TARGET] && globalThis[TARGET].prototype;
 
 		  var target = GLOBAL ? path : path[TARGET] || createNonEnumerableProperty(path, TARGET, {})[TARGET];
 		  var targetPrototype = target.prototype;
@@ -1068,10 +1074,10 @@ var bookly = (function ($) {
 		    // export native or implementation
 		    sourceProperty = (USE_NATIVE && nativeProperty) ? nativeProperty : source[key];
 
-		    if (USE_NATIVE && typeof targetProperty == typeof sourceProperty) continue;
+		    if (!FORCED && !PROTO && typeof targetProperty == typeof sourceProperty) continue;
 
 		    // bind methods to global for calling from export context
-		    if (options.bind && USE_NATIVE) resultProperty = bind(sourceProperty, global);
+		    if (options.bind && USE_NATIVE) resultProperty = bind(sourceProperty, globalThis);
 		    // wrap global constructors for prevent changes in this version
 		    else if (options.wrap && USE_NATIVE) resultProperty = wrapConstructor(sourceProperty);
 		    // make static versions for prototype methods
@@ -1174,7 +1180,8 @@ var bookly = (function ($) {
 		// `ToLength` abstract operation
 		// https://tc39.es/ecma262/#sec-tolength
 		toLength$1 = function (argument) {
-		  return argument > 0 ? min(toIntegerOrInfinity(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
+		  var len = toIntegerOrInfinity(argument);
+		  return len > 0 ? min(len, 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 		};
 		return toLength$1;
 	}
@@ -1210,6 +1217,7 @@ var bookly = (function ($) {
 		  return function ($this, el, fromIndex) {
 		    var O = toIndexedObject($this);
 		    var length = lengthOfArrayLike(O);
+		    if (length === 0) return !IS_INCLUDES && -1;
 		    var index = toAbsoluteIndex(fromIndex, length);
 		    var value;
 		    // Array#includes uses SameValueZero equality algorithm
@@ -1281,14 +1289,14 @@ var bookly = (function ($) {
 	function requireGetBuiltInPrototypeMethod$1 () {
 		if (hasRequiredGetBuiltInPrototypeMethod$1) return getBuiltInPrototypeMethod$1;
 		hasRequiredGetBuiltInPrototypeMethod$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var path = /*@__PURE__*/ requirePath$1();
 
 		getBuiltInPrototypeMethod$1 = function (CONSTRUCTOR, METHOD) {
 		  var Namespace = path[CONSTRUCTOR + 'Prototype'];
 		  var pureMethod = Namespace && Namespace[METHOD];
 		  if (pureMethod) return pureMethod;
-		  var NativeConstructor = global[CONSTRUCTOR];
+		  var NativeConstructor = globalThis[CONSTRUCTOR];
 		  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
 		  return NativePrototype && NativePrototype[METHOD];
 		};
@@ -1660,7 +1668,8 @@ var bookly = (function ($) {
 		hasRequiredObjectSetPrototypeOf$1 = 1;
 		/* eslint-disable no-proto -- safe */
 		var uncurryThisAccessor = /*@__PURE__*/ requireFunctionUncurryThisAccessor$1();
-		var anObject = /*@__PURE__*/ requireAnObject$1();
+		var isObject = /*@__PURE__*/ requireIsObject$1();
+		var requireObjectCoercible = /*@__PURE__*/ requireRequireObjectCoercible$1();
 		var aPossiblePrototype = /*@__PURE__*/ requireAPossiblePrototype$1();
 
 		// `Object.setPrototypeOf` method
@@ -1677,8 +1686,9 @@ var bookly = (function ($) {
 		    CORRECT_SETTER = test instanceof Array;
 		  } catch (error) { /* empty */ }
 		  return function setPrototypeOf(O, proto) {
-		    anObject(O);
+		    requireObjectCoercible(O);
 		    aPossiblePrototype(proto);
+		    if (!isObject(O)) return O;
 		    if (CORRECT_SETTER) setter(O, proto);
 		    else O.__proto__ = proto;
 		    return O;
@@ -1918,7 +1928,8 @@ var bookly = (function ($) {
 		  activeXDocument.write(scriptTag(''));
 		  activeXDocument.close();
 		  var temp = activeXDocument.parentWindow.Object;
-		  activeXDocument = null; // avoid memory leak
+		  // eslint-disable-next-line no-useless-assignment -- avoid memory leak
+		  activeXDocument = null;
 		  return temp;
 		};
 
@@ -1988,7 +1999,7 @@ var bookly = (function ($) {
 		var createNonEnumerableProperty = /*@__PURE__*/ requireCreateNonEnumerableProperty$1();
 
 		// `InstallErrorCause` abstract operation
-		// https://tc39.es/proposal-error-cause/#sec-errorobjects-install-error-cause
+		// https://tc39.es/ecma262/#sec-installerrorcause
 		installErrorCause = function (O, options) {
 		  if (isObject(options) && 'cause' in options) {
 		    createNonEnumerableProperty(O, 'cause', options.cause);
@@ -2009,7 +2020,7 @@ var bookly = (function ($) {
 		var replace = uncurryThis(''.replace);
 
 		var TEST = (function (arg) { return String(new $Error(arg).stack); })('zxcasd');
-		// eslint-disable-next-line redos/no-vulnerable -- safe
+		// eslint-disable-next-line redos/no-vulnerable, sonarjs/slow-regex -- safe
 		var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 		var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -2051,6 +2062,7 @@ var bookly = (function ($) {
 		var ERROR_STACK_INSTALLABLE = /*@__PURE__*/ requireErrorStackInstallable();
 
 		// non-standard V8
+		// eslint-disable-next-line es/no-nonstandard-error-properties -- safe
 		var captureStackTrace = Error.captureStackTrace;
 
 		errorStackInstall = function (error, C, stack, dropEntries) {
@@ -2203,7 +2215,7 @@ var bookly = (function ($) {
 		  var iterator, iterFn, index, length, result, next, step;
 
 		  var stop = function (condition) {
-		    if (iterator) iteratorClose(iterator, 'normal', condition);
+		    if (iterator) iteratorClose(iterator, 'normal');
 		    return new Result(true, condition);
 		  };
 
@@ -2332,10 +2344,10 @@ var bookly = (function ($) {
 	function requireWeakMapBasicDetection$1 () {
 		if (hasRequiredWeakMapBasicDetection$1) return weakMapBasicDetection$1;
 		hasRequiredWeakMapBasicDetection$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
 
-		var WeakMap = global.WeakMap;
+		var WeakMap = globalThis.WeakMap;
 
 		weakMapBasicDetection$1 = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 		return weakMapBasicDetection$1;
@@ -2348,7 +2360,7 @@ var bookly = (function ($) {
 		if (hasRequiredInternalState$1) return internalState$1;
 		hasRequiredInternalState$1 = 1;
 		var NATIVE_WEAK_MAP = /*@__PURE__*/ requireWeakMapBasicDetection$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var isObject = /*@__PURE__*/ requireIsObject$1();
 		var createNonEnumerableProperty = /*@__PURE__*/ requireCreateNonEnumerableProperty$1();
 		var hasOwn = /*@__PURE__*/ requireHasOwnProperty$1();
@@ -2357,8 +2369,8 @@ var bookly = (function ($) {
 		var hiddenKeys = /*@__PURE__*/ requireHiddenKeys$1();
 
 		var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
-		var TypeError = global.TypeError;
-		var WeakMap = global.WeakMap;
+		var TypeError = globalThis.TypeError;
+		var WeakMap = globalThis.WeakMap;
 		var set, get, has;
 
 		var enforce = function (it) {
@@ -2757,7 +2769,7 @@ var bookly = (function ($) {
 		  var target = state.target;
 		  var index = state.index++;
 		  if (!target || index >= target.length) {
-		    state.target = undefined;
+		    state.target = null;
 		    return createIterResultObject(undefined, true);
 		  }
 		  switch (state.kind) {
@@ -2787,17 +2799,45 @@ var bookly = (function ($) {
 
 	var es_promise_constructor = {};
 
-	var engineIsNode;
-	var hasRequiredEngineIsNode;
+	var environment;
+	var hasRequiredEnvironment;
 
-	function requireEngineIsNode () {
-		if (hasRequiredEngineIsNode) return engineIsNode;
-		hasRequiredEngineIsNode = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+	function requireEnvironment () {
+		if (hasRequiredEnvironment) return environment;
+		hasRequiredEnvironment = 1;
+		/* global Bun, Deno -- detection */
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 		var classof = /*@__PURE__*/ requireClassofRaw$1();
 
-		engineIsNode = classof(global.process) === 'process';
-		return engineIsNode;
+		var userAgentStartsWith = function (string) {
+		  return userAgent.slice(0, string.length) === string;
+		};
+
+		environment = (function () {
+		  if (userAgentStartsWith('Bun/')) return 'BUN';
+		  if (userAgentStartsWith('Cloudflare-Workers')) return 'CLOUDFLARE';
+		  if (userAgentStartsWith('Deno/')) return 'DENO';
+		  if (userAgentStartsWith('Node.js/')) return 'NODE';
+		  if (globalThis.Bun && typeof Bun.version == 'string') return 'BUN';
+		  if (globalThis.Deno && typeof Deno.version == 'object') return 'DENO';
+		  if (classof(globalThis.process) === 'process') return 'NODE';
+		  if (globalThis.window && globalThis.document) return 'BROWSER';
+		  return 'REST';
+		})();
+		return environment;
+	}
+
+	var environmentIsNode;
+	var hasRequiredEnvironmentIsNode;
+
+	function requireEnvironmentIsNode () {
+		if (hasRequiredEnvironmentIsNode) return environmentIsNode;
+		hasRequiredEnvironmentIsNode = 1;
+		var ENVIRONMENT = /*@__PURE__*/ requireEnvironment();
+
+		environmentIsNode = ENVIRONMENT === 'NODE';
+		return environmentIsNode;
 	}
 
 	var defineBuiltInAccessor$1;
@@ -2894,7 +2934,6 @@ var bookly = (function ($) {
 		var inspectSource = /*@__PURE__*/ requireInspectSource$1();
 
 		var noop = function () { /* empty */ };
-		var empty = [];
 		var construct = getBuiltIn('Reflect', 'construct');
 		var constructorRegExp = /^\s*(?:class|function)\b/;
 		var exec = uncurryThis(constructorRegExp.exec);
@@ -2903,7 +2942,7 @@ var bookly = (function ($) {
 		var isConstructorModern = function isConstructor(argument) {
 		  if (!isCallable(argument)) return false;
 		  try {
-		    construct(noop, empty, argument);
+		    construct(noop, [], argument);
 		    return true;
 		  } catch (error) {
 		    return false;
@@ -3010,17 +3049,17 @@ var bookly = (function ($) {
 		return validateArgumentsLength;
 	}
 
-	var engineIsIos;
-	var hasRequiredEngineIsIos;
+	var environmentIsIos;
+	var hasRequiredEnvironmentIsIos;
 
-	function requireEngineIsIos () {
-		if (hasRequiredEngineIsIos) return engineIsIos;
-		hasRequiredEngineIsIos = 1;
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentIsIos () {
+		if (hasRequiredEnvironmentIsIos) return environmentIsIos;
+		hasRequiredEnvironmentIsIos = 1;
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
 		// eslint-disable-next-line redos/no-vulnerable -- safe
-		engineIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
-		return engineIsIos;
+		environmentIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
+		return environmentIsIos;
 	}
 
 	var task;
@@ -3029,7 +3068,7 @@ var bookly = (function ($) {
 	function requireTask () {
 		if (hasRequiredTask) return task;
 		hasRequiredTask = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var apply = /*@__PURE__*/ requireFunctionApply$1();
 		var bind = /*@__PURE__*/ requireFunctionBindContext$1();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
@@ -3039,16 +3078,16 @@ var bookly = (function ($) {
 		var arraySlice = /*@__PURE__*/ requireArraySlice$1();
 		var createElement = /*@__PURE__*/ requireDocumentCreateElement$1();
 		var validateArgumentsLength = /*@__PURE__*/ requireValidateArgumentsLength();
-		var IS_IOS = /*@__PURE__*/ requireEngineIsIos();
-		var IS_NODE = /*@__PURE__*/ requireEngineIsNode();
+		var IS_IOS = /*@__PURE__*/ requireEnvironmentIsIos();
+		var IS_NODE = /*@__PURE__*/ requireEnvironmentIsNode();
 
-		var set = global.setImmediate;
-		var clear = global.clearImmediate;
-		var process = global.process;
-		var Dispatch = global.Dispatch;
-		var Function = global.Function;
-		var MessageChannel = global.MessageChannel;
-		var String = global.String;
+		var set = globalThis.setImmediate;
+		var clear = globalThis.clearImmediate;
+		var process = globalThis.process;
+		var Dispatch = globalThis.Dispatch;
+		var Function = globalThis.Function;
+		var MessageChannel = globalThis.MessageChannel;
+		var String = globalThis.String;
 		var counter = 0;
 		var queue = {};
 		var ONREADYSTATECHANGE = 'onreadystatechange';
@@ -3056,7 +3095,7 @@ var bookly = (function ($) {
 
 		fails(function () {
 		  // Deno throws a ReferenceError on `location` access without `--location` flag
-		  $location = global.location;
+		  $location = globalThis.location;
 		});
 
 		var run = function (id) {
@@ -3079,7 +3118,7 @@ var bookly = (function ($) {
 
 		var globalPostMessageDefer = function (id) {
 		  // old engines have not location.origin
-		  global.postMessage(String(id), $location.protocol + '//' + $location.host);
+		  globalThis.postMessage(String(id), $location.protocol + '//' + $location.host);
 		};
 
 		// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
@@ -3117,14 +3156,14 @@ var bookly = (function ($) {
 		  // Browsers with postMessage, skip WebWorkers
 		  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
 		  } else if (
-		    global.addEventListener &&
-		    isCallable(global.postMessage) &&
-		    !global.importScripts &&
+		    globalThis.addEventListener &&
+		    isCallable(globalThis.postMessage) &&
+		    !globalThis.importScripts &&
 		    $location && $location.protocol !== 'file:' &&
 		    !fails(globalPostMessageDefer)
 		  ) {
 		    defer = globalPostMessageDefer;
-		    global.addEventListener('message', eventListener, false);
+		    globalThis.addEventListener('message', eventListener, false);
 		  // IE8-
 		  } else if (ONREADYSTATECHANGE in createElement('script')) {
 		    defer = function (id) {
@@ -3154,7 +3193,7 @@ var bookly = (function ($) {
 	function requireSafeGetBuiltIn () {
 		if (hasRequiredSafeGetBuiltIn) return safeGetBuiltIn;
 		hasRequiredSafeGetBuiltIn = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var DESCRIPTORS = /*@__PURE__*/ requireDescriptors$1();
 
 		// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
@@ -3162,8 +3201,8 @@ var bookly = (function ($) {
 
 		// Avoid NodeJS experimental warning
 		safeGetBuiltIn = function (name) {
-		  if (!DESCRIPTORS) return global[name];
-		  var descriptor = getOwnPropertyDescriptor(global, name);
+		  if (!DESCRIPTORS) return globalThis[name];
+		  var descriptor = getOwnPropertyDescriptor(globalThis, name);
 		  return descriptor && descriptor.value;
 		};
 		return safeGetBuiltIn;
@@ -3202,28 +3241,28 @@ var bookly = (function ($) {
 		return queue;
 	}
 
-	var engineIsIosPebble;
-	var hasRequiredEngineIsIosPebble;
+	var environmentIsIosPebble;
+	var hasRequiredEnvironmentIsIosPebble;
 
-	function requireEngineIsIosPebble () {
-		if (hasRequiredEngineIsIosPebble) return engineIsIosPebble;
-		hasRequiredEngineIsIosPebble = 1;
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentIsIosPebble () {
+		if (hasRequiredEnvironmentIsIosPebble) return environmentIsIosPebble;
+		hasRequiredEnvironmentIsIosPebble = 1;
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
-		engineIsIosPebble = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';
-		return engineIsIosPebble;
+		environmentIsIosPebble = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';
+		return environmentIsIosPebble;
 	}
 
-	var engineIsWebosWebkit;
-	var hasRequiredEngineIsWebosWebkit;
+	var environmentIsWebosWebkit;
+	var hasRequiredEnvironmentIsWebosWebkit;
 
-	function requireEngineIsWebosWebkit () {
-		if (hasRequiredEngineIsWebosWebkit) return engineIsWebosWebkit;
-		hasRequiredEngineIsWebosWebkit = 1;
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentIsWebosWebkit () {
+		if (hasRequiredEnvironmentIsWebosWebkit) return environmentIsWebosWebkit;
+		hasRequiredEnvironmentIsWebosWebkit = 1;
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
-		engineIsWebosWebkit = /web0s(?!.*chrome)/i.test(userAgent);
-		return engineIsWebosWebkit;
+		environmentIsWebosWebkit = /web0s(?!.*chrome)/i.test(userAgent);
+		return environmentIsWebosWebkit;
 	}
 
 	var microtask_1;
@@ -3232,20 +3271,20 @@ var bookly = (function ($) {
 	function requireMicrotask () {
 		if (hasRequiredMicrotask) return microtask_1;
 		hasRequiredMicrotask = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var safeGetBuiltIn = /*@__PURE__*/ requireSafeGetBuiltIn();
 		var bind = /*@__PURE__*/ requireFunctionBindContext$1();
 		var macrotask = /*@__PURE__*/ requireTask().set;
 		var Queue = /*@__PURE__*/ requireQueue();
-		var IS_IOS = /*@__PURE__*/ requireEngineIsIos();
-		var IS_IOS_PEBBLE = /*@__PURE__*/ requireEngineIsIosPebble();
-		var IS_WEBOS_WEBKIT = /*@__PURE__*/ requireEngineIsWebosWebkit();
-		var IS_NODE = /*@__PURE__*/ requireEngineIsNode();
+		var IS_IOS = /*@__PURE__*/ requireEnvironmentIsIos();
+		var IS_IOS_PEBBLE = /*@__PURE__*/ requireEnvironmentIsIosPebble();
+		var IS_WEBOS_WEBKIT = /*@__PURE__*/ requireEnvironmentIsWebosWebkit();
+		var IS_NODE = /*@__PURE__*/ requireEnvironmentIsNode();
 
-		var MutationObserver = global.MutationObserver || global.WebKitMutationObserver;
-		var document = global.document;
-		var process = global.process;
-		var Promise = global.Promise;
+		var MutationObserver = globalThis.MutationObserver || globalThis.WebKitMutationObserver;
+		var document = globalThis.document;
+		var process = globalThis.process;
+		var Promise = globalThis.Promise;
 		var microtask = safeGetBuiltIn('queueMicrotask');
 		var notify, toggle, node, promise, then;
 
@@ -3297,7 +3336,7 @@ var bookly = (function ($) {
 		  // - setTimeout
 		  } else {
 		    // `webpack` dev server bug on IE global methods - use bind(fn, global)
-		    macrotask = bind(macrotask, global);
+		    macrotask = bind(macrotask, globalThis);
 		    notify = function () {
 		      macrotask(flush);
 		    };
@@ -3350,36 +3389,10 @@ var bookly = (function ($) {
 	function requirePromiseNativeConstructor () {
 		if (hasRequiredPromiseNativeConstructor) return promiseNativeConstructor;
 		hasRequiredPromiseNativeConstructor = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 
-		promiseNativeConstructor = global.Promise;
+		promiseNativeConstructor = globalThis.Promise;
 		return promiseNativeConstructor;
-	}
-
-	var engineIsDeno;
-	var hasRequiredEngineIsDeno;
-
-	function requireEngineIsDeno () {
-		if (hasRequiredEngineIsDeno) return engineIsDeno;
-		hasRequiredEngineIsDeno = 1;
-		/* global Deno -- Deno case */
-		engineIsDeno = typeof Deno == 'object' && Deno && typeof Deno.version == 'object';
-		return engineIsDeno;
-	}
-
-	var engineIsBrowser;
-	var hasRequiredEngineIsBrowser;
-
-	function requireEngineIsBrowser () {
-		if (hasRequiredEngineIsBrowser) return engineIsBrowser;
-		hasRequiredEngineIsBrowser = 1;
-		var IS_DENO = /*@__PURE__*/ requireEngineIsDeno();
-		var IS_NODE = /*@__PURE__*/ requireEngineIsNode();
-
-		engineIsBrowser = !IS_DENO && !IS_NODE
-		  && typeof window == 'object'
-		  && typeof document == 'object';
-		return engineIsBrowser;
 	}
 
 	var promiseConstructorDetection;
@@ -3388,21 +3401,20 @@ var bookly = (function ($) {
 	function requirePromiseConstructorDetection () {
 		if (hasRequiredPromiseConstructorDetection) return promiseConstructorDetection;
 		hasRequiredPromiseConstructorDetection = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var NativePromiseConstructor = /*@__PURE__*/ requirePromiseNativeConstructor();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
 		var isForced = /*@__PURE__*/ requireIsForced$1();
 		var inspectSource = /*@__PURE__*/ requireInspectSource$1();
 		var wellKnownSymbol = /*@__PURE__*/ requireWellKnownSymbol$1();
-		var IS_BROWSER = /*@__PURE__*/ requireEngineIsBrowser();
-		var IS_DENO = /*@__PURE__*/ requireEngineIsDeno();
+		var ENVIRONMENT = /*@__PURE__*/ requireEnvironment();
 		var IS_PURE = /*@__PURE__*/ requireIsPure$1();
-		var V8_VERSION = /*@__PURE__*/ requireEngineV8Version();
+		var V8_VERSION = /*@__PURE__*/ requireEnvironmentV8Version$1();
 
 		var NativePromisePrototype = NativePromiseConstructor && NativePromiseConstructor.prototype;
 		var SPECIES = wellKnownSymbol('species');
 		var SUBCLASSING = false;
-		var NATIVE_PROMISE_REJECTION_EVENT = isCallable(global.PromiseRejectionEvent);
+		var NATIVE_PROMISE_REJECTION_EVENT = isCallable(globalThis.PromiseRejectionEvent);
 
 		var FORCED_PROMISE_CONSTRUCTOR = isForced('Promise', function () {
 		  var PROMISE_CONSTRUCTOR_SOURCE = inspectSource(NativePromiseConstructor);
@@ -3427,7 +3439,7 @@ var bookly = (function ($) {
 		    SUBCLASSING = promise.then(function () { /* empty */ }) instanceof FakePromise;
 		    if (!SUBCLASSING) return true;
 		  // Unhandled rejections tracking support, NodeJS Promise without it fails @@species test
-		  } return !GLOBAL_CORE_JS_PROMISE && (IS_BROWSER || IS_DENO) && !NATIVE_PROMISE_REJECTION_EVENT;
+		  } return !GLOBAL_CORE_JS_PROMISE && (ENVIRONMENT === 'BROWSER' || ENVIRONMENT === 'DENO') && !NATIVE_PROMISE_REJECTION_EVENT;
 		});
 
 		promiseConstructorDetection = {
@@ -3475,8 +3487,9 @@ var bookly = (function ($) {
 		hasRequiredEs_promise_constructor = 1;
 		var $ = /*@__PURE__*/ require_export$1();
 		var IS_PURE = /*@__PURE__*/ requireIsPure$1();
-		var IS_NODE = /*@__PURE__*/ requireEngineIsNode();
-		var global = /*@__PURE__*/ requireGlobal();
+		var IS_NODE = /*@__PURE__*/ requireEnvironmentIsNode();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
+		var path = /*@__PURE__*/ requirePath$1();
 		var call = /*@__PURE__*/ requireFunctionCall$1();
 		var defineBuiltIn = /*@__PURE__*/ requireDefineBuiltIn$1();
 		var setPrototypeOf = /*@__PURE__*/ requireObjectSetPrototypeOf$1();
@@ -3506,13 +3519,13 @@ var bookly = (function ($) {
 		var NativePromisePrototype = NativePromiseConstructor && NativePromiseConstructor.prototype;
 		var PromiseConstructor = NativePromiseConstructor;
 		var PromisePrototype = NativePromisePrototype;
-		var TypeError = global.TypeError;
-		var document = global.document;
-		var process = global.process;
+		var TypeError = globalThis.TypeError;
+		var document = globalThis.document;
+		var process = globalThis.process;
 		var newPromiseCapability = newPromiseCapabilityModule.f;
 		var newGenericPromiseCapability = newPromiseCapability;
 
-		var DISPATCH_EVENT = !!(document && document.createEvent && global.dispatchEvent);
+		var DISPATCH_EVENT = !!(document && document.createEvent && globalThis.dispatchEvent);
 		var UNHANDLED_REJECTION = 'unhandledrejection';
 		var REJECTION_HANDLED = 'rejectionhandled';
 		var PENDING = 0;
@@ -3585,14 +3598,14 @@ var bookly = (function ($) {
 		    event.promise = promise;
 		    event.reason = reason;
 		    event.initEvent(name, false, true);
-		    global.dispatchEvent(event);
+		    globalThis.dispatchEvent(event);
 		  } else event = { promise: promise, reason: reason };
-		  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = global['on' + name])) handler(event);
+		  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = globalThis['on' + name])) handler(event);
 		  else if (name === UNHANDLED_REJECTION) hostReportErrors('Unhandled promise rejection', reason);
 		};
 
 		var onUnhandled = function (state) {
-		  call(task, global, function () {
+		  call(task, globalThis, function () {
 		    var promise = state.facade;
 		    var value = state.value;
 		    var IS_UNHANDLED = isUnhandled(state);
@@ -3615,7 +3628,7 @@ var bookly = (function ($) {
 		};
 
 		var onHandleUnhandled = function (state) {
-		  call(task, global, function () {
+		  call(task, globalThis, function () {
 		    var promise = state.facade;
 		    if (IS_NODE) {
 		      process.emit('rejectionHandled', promise);
@@ -3694,7 +3707,7 @@ var bookly = (function ($) {
 		      reactions: new Queue(),
 		      rejection: false,
 		      state: PENDING,
-		      value: undefined
+		      value: null
 		    });
 		  };
 
@@ -3754,9 +3767,13 @@ var bookly = (function ($) {
 		  }
 		}
 
+		// `Promise` constructor
+		// https://tc39.es/ecma262/#sec-promise-executor
 		$({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
 		  Promise: PromiseConstructor
 		});
+
+		PromiseWrapper = path.Promise;
 
 		setToStringTag(PromiseConstructor, PROMISE, false, true);
 		setSpecies(PROMISE);
@@ -4143,6 +4160,48 @@ var bookly = (function ($) {
 		return es_promise_any;
 	}
 
+	var es_promise_try = {};
+
+	var hasRequiredEs_promise_try;
+
+	function requireEs_promise_try () {
+		if (hasRequiredEs_promise_try) return es_promise_try;
+		hasRequiredEs_promise_try = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
+		var apply = /*@__PURE__*/ requireFunctionApply$1();
+		var slice = /*@__PURE__*/ requireArraySlice$1();
+		var newPromiseCapabilityModule = /*@__PURE__*/ requireNewPromiseCapability();
+		var aCallable = /*@__PURE__*/ requireACallable$1();
+		var perform = /*@__PURE__*/ requirePerform();
+
+		var Promise = globalThis.Promise;
+
+		var ACCEPT_ARGUMENTS = false;
+		// Avoiding the use of polyfills of the previous iteration of this proposal
+		// that does not accept arguments of the callback
+		var FORCED = !Promise || !Promise['try'] || perform(function () {
+		  Promise['try'](function (argument) {
+		    ACCEPT_ARGUMENTS = argument === 8;
+		  }, 8);
+		}).error || !ACCEPT_ARGUMENTS;
+
+		// `Promise.try` method
+		// https://tc39.es/ecma262/#sec-promise.try
+		$({ target: 'Promise', stat: true, forced: FORCED }, {
+		  'try': function (callbackfn /* , ...args */) {
+		    var args = arguments.length > 1 ? slice(arguments, 1) : [];
+		    var promiseCapability = newPromiseCapabilityModule.f(this);
+		    var result = perform(function () {
+		      return apply(aCallable(callbackfn), undefined, args);
+		    });
+		    (result.error ? promiseCapability.reject : promiseCapability.resolve)(result.value);
+		    return promiseCapability.promise;
+		  }
+		});
+		return es_promise_try;
+	}
+
 	var es_promise_withResolvers = {};
 
 	var hasRequiredEs_promise_withResolvers;
@@ -4154,7 +4213,7 @@ var bookly = (function ($) {
 		var newPromiseCapabilityModule = /*@__PURE__*/ requireNewPromiseCapability();
 
 		// `Promise.withResolvers` method
-		// https://github.com/tc39/proposal-promise-with-resolvers
+		// https://tc39.es/ecma262/#sec-promise.withResolvers
 		$({ target: 'Promise', stat: true }, {
 		  withResolvers: function withResolvers() {
 		    var promiseCapability = newPromiseCapabilityModule.f(this);
@@ -4316,6 +4375,7 @@ var bookly = (function ($) {
 		requireEs_promise();
 		requireEs_promise_allSettled();
 		requireEs_promise_any();
+		requireEs_promise_try();
 		requireEs_promise_withResolvers();
 		requireEs_promise_finally();
 		requireEs_string_iterator$1();
@@ -4378,12 +4438,12 @@ var bookly = (function ($) {
 		hasRequiredWeb_domCollections_iterator$1 = 1;
 		requireEs_array_iterator$1();
 		var DOMIterables = /*@__PURE__*/ requireDomIterables$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var setToStringTag = /*@__PURE__*/ requireSetToStringTag$1();
 		var Iterators = /*@__PURE__*/ requireIterators$1();
 
 		for (var COLLECTION_NAME in DOMIterables) {
-		  setToStringTag(global[COLLECTION_NAME], COLLECTION_NAME);
+		  setToStringTag(globalThis[COLLECTION_NAME], COLLECTION_NAME);
 		  Iterators[COLLECTION_NAME] = Iterators.Array;
 		}
 		return web_domCollections_iterator$1;
@@ -4474,7 +4534,7 @@ var bookly = (function ($) {
 	function requireNumberParseFloat () {
 		if (hasRequiredNumberParseFloat) return numberParseFloat;
 		hasRequiredNumberParseFloat = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var fails = /*@__PURE__*/ requireFails$1();
 		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThis$1();
 		var toString = /*@__PURE__*/ requireToString$1();
@@ -4482,8 +4542,8 @@ var bookly = (function ($) {
 		var whitespaces = /*@__PURE__*/ requireWhitespaces$1();
 
 		var charAt = uncurryThis(''.charAt);
-		var $parseFloat = global.parseFloat;
-		var Symbol = global.Symbol;
+		var $parseFloat = globalThis.parseFloat;
+		var Symbol = globalThis.Symbol;
 		var ITERATOR = Symbol && Symbol.iterator;
 		var FORCED = 1 / $parseFloat(whitespaces + '-0') !== -Infinity
 		  // MS Edge 18- broken with boxed symbols
@@ -4561,15 +4621,15 @@ var bookly = (function ($) {
 	function requireNumberParseInt$1 () {
 		if (hasRequiredNumberParseInt$1) return numberParseInt$1;
 		hasRequiredNumberParseInt$1 = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var fails = /*@__PURE__*/ requireFails$1();
 		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThis$1();
 		var toString = /*@__PURE__*/ requireToString$1();
 		var trim = /*@__PURE__*/ requireStringTrim$1().trim;
 		var whitespaces = /*@__PURE__*/ requireWhitespaces$1();
 
-		var $parseInt = global.parseInt;
-		var Symbol = global.Symbol;
+		var $parseInt = globalThis.parseInt;
+		var Symbol = globalThis.Symbol;
 		var ITERATOR = Symbol && Symbol.iterator;
 		var hex = /^[+-]?0x/i;
 		var exec = uncurryThis(hex.exec);
@@ -4665,14 +4725,13 @@ var bookly = (function ($) {
 	function requireCreateProperty$1 () {
 		if (hasRequiredCreateProperty$1) return createProperty$1;
 		hasRequiredCreateProperty$1 = 1;
-		var toPropertyKey = /*@__PURE__*/ requireToPropertyKey$1();
+		var DESCRIPTORS = /*@__PURE__*/ requireDescriptors$1();
 		var definePropertyModule = /*@__PURE__*/ requireObjectDefineProperty$1();
 		var createPropertyDescriptor = /*@__PURE__*/ requireCreatePropertyDescriptor$1();
 
 		createProperty$1 = function (object, key, value) {
-		  var propertyKey = toPropertyKey(key);
-		  if (propertyKey in object) definePropertyModule.f(object, propertyKey, createPropertyDescriptor(0, value));
-		  else object[propertyKey] = value;
+		  if (DESCRIPTORS) definePropertyModule.f(object, key, createPropertyDescriptor(0, value));
+		  else object[key] = value;
 		};
 		return createProperty$1;
 	}
@@ -4685,7 +4744,7 @@ var bookly = (function ($) {
 		hasRequiredArrayMethodHasSpeciesSupport$1 = 1;
 		var fails = /*@__PURE__*/ requireFails$1();
 		var wellKnownSymbol = /*@__PURE__*/ requireWellKnownSymbol$1();
-		var V8_VERSION = /*@__PURE__*/ requireEngineV8Version();
+		var V8_VERSION = /*@__PURE__*/ requireEnvironmentV8Version$1();
 
 		var SPECIES = wellKnownSymbol('species');
 
@@ -4821,35 +4880,24 @@ var bookly = (function ($) {
 
 	var web_setInterval = {};
 
-	var engineIsBun;
-	var hasRequiredEngineIsBun;
-
-	function requireEngineIsBun () {
-		if (hasRequiredEngineIsBun) return engineIsBun;
-		hasRequiredEngineIsBun = 1;
-		/* global Bun -- Bun case */
-		engineIsBun = typeof Bun == 'function' && Bun && typeof Bun.version == 'string';
-		return engineIsBun;
-	}
-
 	var schedulersFix;
 	var hasRequiredSchedulersFix;
 
 	function requireSchedulersFix () {
 		if (hasRequiredSchedulersFix) return schedulersFix;
 		hasRequiredSchedulersFix = 1;
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var apply = /*@__PURE__*/ requireFunctionApply$1();
 		var isCallable = /*@__PURE__*/ requireIsCallable$1();
-		var ENGINE_IS_BUN = /*@__PURE__*/ requireEngineIsBun();
-		var USER_AGENT = /*@__PURE__*/ requireEngineUserAgent();
+		var ENVIRONMENT = /*@__PURE__*/ requireEnvironment();
+		var USER_AGENT = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 		var arraySlice = /*@__PURE__*/ requireArraySlice$1();
 		var validateArgumentsLength = /*@__PURE__*/ requireValidateArgumentsLength();
 
-		var Function = global.Function;
+		var Function = globalThis.Function;
 		// dirty IE9- and Bun 0.3.0- checks
-		var WRAP = /MSIE .\./.test(USER_AGENT) || ENGINE_IS_BUN && (function () {
-		  var version = global.Bun.version.split('.');
+		var WRAP = /MSIE .\./.test(USER_AGENT) || ENVIRONMENT === 'BUN' && (function () {
+		  var version = globalThis.Bun.version.split('.');
 		  return version.length < 3 || version[0] === '0' && (version[1] < 3 || version[1] === '3' && version[2] === '0');
 		})();
 
@@ -4877,14 +4925,14 @@ var bookly = (function ($) {
 		if (hasRequiredWeb_setInterval) return web_setInterval;
 		hasRequiredWeb_setInterval = 1;
 		var $ = /*@__PURE__*/ require_export$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var schedulersFix = /*@__PURE__*/ requireSchedulersFix();
 
-		var setInterval = schedulersFix(global.setInterval, true);
+		var setInterval = schedulersFix(globalThis.setInterval, true);
 
 		// Bun / IE9- setInterval additional parameters fix
 		// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-		$({ global: true, bind: true, forced: global.setInterval !== setInterval }, {
+		$({ global: true, bind: true, forced: globalThis.setInterval !== setInterval }, {
 		  setInterval: setInterval
 		});
 		return web_setInterval;
@@ -4898,14 +4946,14 @@ var bookly = (function ($) {
 		if (hasRequiredWeb_setTimeout) return web_setTimeout;
 		hasRequiredWeb_setTimeout = 1;
 		var $ = /*@__PURE__*/ require_export$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var schedulersFix = /*@__PURE__*/ requireSchedulersFix();
 
-		var setTimeout = schedulersFix(global.setTimeout, true);
+		var setTimeout = schedulersFix(globalThis.setTimeout, true);
 
 		// Bun / IE9- setTimeout additional parameters fix
 		// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-		$({ global: true, bind: true, forced: global.setTimeout !== setTimeout }, {
+		$({ global: true, bind: true, forced: globalThis.setTimeout !== setTimeout }, {
 		  setTimeout: setTimeout
 		});
 		return web_setTimeout;
@@ -5097,7 +5145,6 @@ var bookly = (function ($) {
 	function requireStringPad () {
 		if (hasRequiredStringPad) return stringPad;
 		hasRequiredStringPad = 1;
-		// https://github.com/tc39/proposal-string-pad-start-end
 		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThis$1();
 		var toLength = /*@__PURE__*/ requireToLength$1();
 		var toString = /*@__PURE__*/ requireToString$1();
@@ -5142,7 +5189,7 @@ var bookly = (function ($) {
 		if (hasRequiredStringPadWebkitBug) return stringPadWebkitBug;
 		hasRequiredStringPadWebkitBug = 1;
 		// https://github.com/zloirock/core-js/issues/280
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
 		stringPadWebkitBug = /Version\/10(?:\.\d+){1,2}(?: [\w./]+)?(?: Mobile\/\w+)? Safari\//.test(userAgent);
 		return stringPadWebkitBug;
@@ -5440,6 +5487,89 @@ var bookly = (function ($) {
 	var findExports = requireFind();
 	var _findInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(findExports);
 
+	var es_date_toJson = {};
+
+	var dateToIsoString;
+	var hasRequiredDateToIsoString;
+
+	function requireDateToIsoString () {
+		if (hasRequiredDateToIsoString) return dateToIsoString;
+		hasRequiredDateToIsoString = 1;
+		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThis$1();
+		var fails = /*@__PURE__*/ requireFails$1();
+		var padStart = /*@__PURE__*/ requireStringPad().start;
+
+		var $RangeError = RangeError;
+		var $isFinite = isFinite;
+		var abs = Math.abs;
+		var DatePrototype = Date.prototype;
+		var nativeDateToISOString = DatePrototype.toISOString;
+		var thisTimeValue = uncurryThis(DatePrototype.getTime);
+		var getUTCDate = uncurryThis(DatePrototype.getUTCDate);
+		var getUTCFullYear = uncurryThis(DatePrototype.getUTCFullYear);
+		var getUTCHours = uncurryThis(DatePrototype.getUTCHours);
+		var getUTCMilliseconds = uncurryThis(DatePrototype.getUTCMilliseconds);
+		var getUTCMinutes = uncurryThis(DatePrototype.getUTCMinutes);
+		var getUTCMonth = uncurryThis(DatePrototype.getUTCMonth);
+		var getUTCSeconds = uncurryThis(DatePrototype.getUTCSeconds);
+
+		// `Date.prototype.toISOString` method implementation
+		// https://tc39.es/ecma262/#sec-date.prototype.toisostring
+		// PhantomJS / old WebKit fails here:
+		dateToIsoString = (fails(function () {
+		  return nativeDateToISOString.call(new Date(-5e13 - 1)) !== '0385-07-25T07:06:39.999Z';
+		}) || !fails(function () {
+		  nativeDateToISOString.call(new Date(NaN));
+		})) ? function toISOString() {
+		  if (!$isFinite(thisTimeValue(this))) throw new $RangeError('Invalid time value');
+		  var date = this;
+		  var year = getUTCFullYear(date);
+		  var milliseconds = getUTCMilliseconds(date);
+		  var sign = year < 0 ? '-' : year > 9999 ? '+' : '';
+		  return sign + padStart(abs(year), sign ? 6 : 4, 0) +
+		    '-' + padStart(getUTCMonth(date) + 1, 2, 0) +
+		    '-' + padStart(getUTCDate(date), 2, 0) +
+		    'T' + padStart(getUTCHours(date), 2, 0) +
+		    ':' + padStart(getUTCMinutes(date), 2, 0) +
+		    ':' + padStart(getUTCSeconds(date), 2, 0) +
+		    '.' + padStart(milliseconds, 3, 0) +
+		    'Z';
+		} : nativeDateToISOString;
+		return dateToIsoString;
+	}
+
+	var hasRequiredEs_date_toJson;
+
+	function requireEs_date_toJson () {
+		if (hasRequiredEs_date_toJson) return es_date_toJson;
+		hasRequiredEs_date_toJson = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var call = /*@__PURE__*/ requireFunctionCall$1();
+		var toObject = /*@__PURE__*/ requireToObject$1();
+		var toPrimitive = /*@__PURE__*/ requireToPrimitive$1();
+		var toISOString = /*@__PURE__*/ requireDateToIsoString();
+		var classof = /*@__PURE__*/ requireClassofRaw$1();
+		var fails = /*@__PURE__*/ requireFails$1();
+
+		var FORCED = fails(function () {
+		  return new Date(NaN).toJSON() !== null
+		    || call(Date.prototype.toJSON, { toISOString: function () { return 1; } }) !== 1;
+		});
+
+		// `Date.prototype.toJSON` method
+		// https://tc39.es/ecma262/#sec-date.prototype.tojson
+		$({ target: 'Date', proto: true, forced: FORCED }, {
+		  // eslint-disable-next-line no-unused-vars -- required for `.length`
+		  toJSON: function toJSON(key) {
+		    var O = toObject(this);
+		    var pv = toPrimitive(O, 'number');
+		    return typeof pv == 'number' && !isFinite(pv) ? null :
+		      (!('toISOString' in O) && classof(O) === 'Date') ? call(toISOString, O) : O.toISOString();
+		  }
+		});
+		return es_date_toJson;
+	}
+
 	var es_json_stringify = {};
 
 	var getJsonReplacerFunction;
@@ -5503,7 +5633,7 @@ var bookly = (function ($) {
 		var charAt = uncurryThis(''.charAt);
 		var charCodeAt = uncurryThis(''.charCodeAt);
 		var replace = uncurryThis(''.replace);
-		var numberToString = uncurryThis(1.0.toString);
+		var numberToString = uncurryThis(1.1.toString);
 
 		var tester = /[\uD800-\uDFFF]/g;
 		var low = /^[\uD800-\uDBFF]$/;
@@ -5566,6 +5696,7 @@ var bookly = (function ($) {
 	function requireStringify$2 () {
 		if (hasRequiredStringify$2) return stringify$2;
 		hasRequiredStringify$2 = 1;
+		requireEs_date_toJson();
 		requireEs_json_stringify();
 		var path = /*@__PURE__*/ requirePath$1();
 		var apply = /*@__PURE__*/ requireFunctionApply$1();
@@ -6097,7 +6228,7 @@ var bookly = (function ($) {
 		var arraySpeciesCreate = /*@__PURE__*/ requireArraySpeciesCreate$1();
 		var arrayMethodHasSpeciesSupport = /*@__PURE__*/ requireArrayMethodHasSpeciesSupport$1();
 		var wellKnownSymbol = /*@__PURE__*/ requireWellKnownSymbol$1();
-		var V8_VERSION = /*@__PURE__*/ requireEngineV8Version();
+		var V8_VERSION = /*@__PURE__*/ requireEnvironmentV8Version$1();
 
 		var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
 
@@ -7629,10 +7760,10 @@ var bookly = (function ($) {
 		var store = sharedStore.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 		(store.versions || (store.versions = [])).push({
-		  version: '3.41.0',
+		  version: '3.44.0',
 		  mode: IS_PURE ? 'pure' : 'global',
 		  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-		  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
+		  license: 'https://github.com/zloirock/core-js/blob/v3.44.0/LICENSE',
 		  source: 'https://github.com/zloirock/core-js'
 		});
 		return sharedStore.exports;
@@ -7700,7 +7831,7 @@ var bookly = (function ($) {
 
 		var id = 0;
 		var postfix = Math.random();
-		var toString = uncurryThis(1.0.toString);
+		var toString = uncurryThis(1.1.toString);
 
 		uid = function (key) {
 		  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -10358,7 +10489,7 @@ var bookly = (function ($) {
 		  var iterator, iterFn, index, length, result, next, step;
 
 		  var stop = function (condition) {
-		    if (iterator) iteratorClose(iterator, 'normal', condition);
+		    if (iterator) iteratorClose(iterator, 'normal');
 		    return new Result(true, condition);
 		  };
 
@@ -10798,24 +10929,24 @@ var bookly = (function ($) {
 		return es_set$1;
 	}
 
-	var es_set_difference_v2 = {};
+	var es_set_difference_v2$1 = {};
 
-	var aSet;
-	var hasRequiredASet;
+	var aSet$1;
+	var hasRequiredASet$1;
 
-	function requireASet () {
-		if (hasRequiredASet) return aSet;
-		hasRequiredASet = 1;
+	function requireASet$1 () {
+		if (hasRequiredASet$1) return aSet$1;
+		hasRequiredASet$1 = 1;
 		var tryToString = /*@__PURE__*/ requireTryToString();
 
 		var $TypeError = TypeError;
 
 		// Perform ? RequireInternalSlot(M, [[SetData]])
-		aSet = function (it) {
+		aSet$1 = function (it) {
 		  if (typeof it == 'object' && 'size' in it && 'has' in it && 'add' in it && 'delete' in it && 'keys' in it) return it;
 		  throw new $TypeError(tryToString(it) + ' is not a set');
 		};
-		return aSet;
+		return aSet$1;
 	}
 
 	var caller$1;
@@ -10834,37 +10965,37 @@ var bookly = (function ($) {
 		return caller$1;
 	}
 
-	var setHelpers;
-	var hasRequiredSetHelpers;
+	var setHelpers$1;
+	var hasRequiredSetHelpers$1;
 
-	function requireSetHelpers () {
-		if (hasRequiredSetHelpers) return setHelpers;
-		hasRequiredSetHelpers = 1;
+	function requireSetHelpers$1 () {
+		if (hasRequiredSetHelpers$1) return setHelpers$1;
+		hasRequiredSetHelpers$1 = 1;
 		var getBuiltIn = /*@__PURE__*/ requireGetBuiltIn();
 		var caller = /*@__PURE__*/ requireCaller$1();
 
 		var Set = getBuiltIn('Set');
 		var SetPrototype = Set.prototype;
 
-		setHelpers = {
+		setHelpers$1 = {
 		  Set: Set,
 		  add: caller('add', 1),
 		  has: caller('has', 1),
 		  remove: caller('delete', 1),
 		  proto: SetPrototype
 		};
-		return setHelpers;
+		return setHelpers$1;
 	}
 
-	var iterateSimple;
-	var hasRequiredIterateSimple;
+	var iterateSimple$1;
+	var hasRequiredIterateSimple$1;
 
-	function requireIterateSimple () {
-		if (hasRequiredIterateSimple) return iterateSimple;
-		hasRequiredIterateSimple = 1;
+	function requireIterateSimple$1 () {
+		if (hasRequiredIterateSimple$1) return iterateSimple$1;
+		hasRequiredIterateSimple$1 = 1;
 		var call = /*@__PURE__*/ requireFunctionCall();
 
-		iterateSimple = function (record, fn, ITERATOR_INSTEAD_OF_RECORD) {
+		iterateSimple$1 = function (record, fn, ITERATOR_INSTEAD_OF_RECORD) {
 		  var iterator = ITERATOR_INSTEAD_OF_RECORD ? record : record.iterator;
 		  var next = record.next;
 		  var step, result;
@@ -10873,86 +11004,86 @@ var bookly = (function ($) {
 		    if (result !== undefined) return result;
 		  }
 		};
-		return iterateSimple;
+		return iterateSimple$1;
 	}
 
-	var setIterate;
-	var hasRequiredSetIterate;
+	var setIterate$1;
+	var hasRequiredSetIterate$1;
 
-	function requireSetIterate () {
-		if (hasRequiredSetIterate) return setIterate;
-		hasRequiredSetIterate = 1;
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetIterate$1 () {
+		if (hasRequiredSetIterate$1) return setIterate$1;
+		hasRequiredSetIterate$1 = 1;
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 
-		setIterate = function (set, fn, interruptible) {
+		setIterate$1 = function (set, fn, interruptible) {
 		  return interruptible ? iterateSimple(set.keys(), fn, true) : set.forEach(fn);
 		};
-		return setIterate;
+		return setIterate$1;
 	}
 
-	var setClone;
-	var hasRequiredSetClone;
+	var setClone$1;
+	var hasRequiredSetClone$1;
 
-	function requireSetClone () {
-		if (hasRequiredSetClone) return setClone;
-		hasRequiredSetClone = 1;
-		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
-		var iterate = /*@__PURE__*/ requireSetIterate();
+	function requireSetClone$1 () {
+		if (hasRequiredSetClone$1) return setClone$1;
+		hasRequiredSetClone$1 = 1;
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers$1();
+		var iterate = /*@__PURE__*/ requireSetIterate$1();
 
 		var Set = SetHelpers.Set;
 		var add = SetHelpers.add;
 
-		setClone = function (set) {
+		setClone$1 = function (set) {
 		  var result = new Set();
 		  iterate(set, function (it) {
 		    add(result, it);
 		  });
 		  return result;
 		};
-		return setClone;
+		return setClone$1;
 	}
 
-	var setSize;
-	var hasRequiredSetSize;
+	var setSize$1;
+	var hasRequiredSetSize$1;
 
-	function requireSetSize () {
-		if (hasRequiredSetSize) return setSize;
-		hasRequiredSetSize = 1;
-		setSize = function (set) {
+	function requireSetSize$1 () {
+		if (hasRequiredSetSize$1) return setSize$1;
+		hasRequiredSetSize$1 = 1;
+		setSize$1 = function (set) {
 		  return set.size;
 		};
-		return setSize;
+		return setSize$1;
 	}
 
-	var getIteratorDirect;
-	var hasRequiredGetIteratorDirect;
+	var getIteratorDirect$1;
+	var hasRequiredGetIteratorDirect$1;
 
-	function requireGetIteratorDirect () {
-		if (hasRequiredGetIteratorDirect) return getIteratorDirect;
-		hasRequiredGetIteratorDirect = 1;
+	function requireGetIteratorDirect$1 () {
+		if (hasRequiredGetIteratorDirect$1) return getIteratorDirect$1;
+		hasRequiredGetIteratorDirect$1 = 1;
 		// `GetIteratorDirect(obj)` abstract operation
-		// https://tc39.es/proposal-iterator-helpers/#sec-getiteratordirect
-		getIteratorDirect = function (obj) {
+		// https://tc39.es/ecma262/#sec-getiteratordirect
+		getIteratorDirect$1 = function (obj) {
 		  return {
 		    iterator: obj,
 		    next: obj.next,
 		    done: false
 		  };
 		};
-		return getIteratorDirect;
+		return getIteratorDirect$1;
 	}
 
-	var getSetRecord;
-	var hasRequiredGetSetRecord;
+	var getSetRecord$1;
+	var hasRequiredGetSetRecord$1;
 
-	function requireGetSetRecord () {
-		if (hasRequiredGetSetRecord) return getSetRecord;
-		hasRequiredGetSetRecord = 1;
+	function requireGetSetRecord$1 () {
+		if (hasRequiredGetSetRecord$1) return getSetRecord$1;
+		hasRequiredGetSetRecord$1 = 1;
 		var aCallable = /*@__PURE__*/ requireACallable();
 		var anObject = /*@__PURE__*/ requireAnObject();
 		var call = /*@__PURE__*/ requireFunctionCall();
 		var toIntegerOrInfinity = /*@__PURE__*/ requireToIntegerOrInfinity();
-		var getIteratorDirect = /*@__PURE__*/ requireGetIteratorDirect();
+		var getIteratorDirect = /*@__PURE__*/ requireGetIteratorDirect$1();
 
 		var INVALID_SIZE = 'Invalid size';
 		var $RangeError = RangeError;
@@ -10977,7 +11108,7 @@ var bookly = (function ($) {
 
 		// `GetSetRecord` abstract operation
 		// https://tc39.es/proposal-set-methods/#sec-getsetrecord
-		getSetRecord = function (obj) {
+		getSetRecord$1 = function (obj) {
 		  anObject(obj);
 		  var numSize = +obj.size;
 		  // NOTE: If size is undefined, then numSize will be NaN
@@ -10987,29 +11118,29 @@ var bookly = (function ($) {
 		  if (intSize < 0) throw new $RangeError(INVALID_SIZE);
 		  return new SetRecord(obj, intSize);
 		};
-		return getSetRecord;
+		return getSetRecord$1;
 	}
 
-	var setDifference;
-	var hasRequiredSetDifference;
+	var setDifference$1;
+	var hasRequiredSetDifference$1;
 
-	function requireSetDifference () {
-		if (hasRequiredSetDifference) return setDifference;
-		hasRequiredSetDifference = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
-		var clone = /*@__PURE__*/ requireSetClone();
-		var size = /*@__PURE__*/ requireSetSize();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSet = /*@__PURE__*/ requireSetIterate();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetDifference$1 () {
+		if (hasRequiredSetDifference$1) return setDifference$1;
+		hasRequiredSetDifference$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers$1();
+		var clone = /*@__PURE__*/ requireSetClone$1();
+		var size = /*@__PURE__*/ requireSetSize$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSet = /*@__PURE__*/ requireSetIterate$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 
 		var has = SetHelpers.has;
 		var remove = SetHelpers.remove;
 
 		// `Set.prototype.difference` method
-		// https://github.com/tc39/proposal-set-methods
-		setDifference = function difference(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.difference
+		setDifference$1 = function difference(other) {
 		  var O = aSet(this);
 		  var otherRec = getSetRecord(other);
 		  var result = clone(O);
@@ -11017,68 +11148,91 @@ var bookly = (function ($) {
 		    if (otherRec.includes(e)) remove(result, e);
 		  });
 		  else iterateSimple(otherRec.getIterator(), function (e) {
-		    if (has(O, e)) remove(result, e);
+		    if (has(result, e)) remove(result, e);
 		  });
 		  return result;
 		};
-		return setDifference;
+		return setDifference$1;
 	}
 
-	var setMethodAcceptSetLike;
-	var hasRequiredSetMethodAcceptSetLike;
+	var setMethodAcceptSetLike$1;
+	var hasRequiredSetMethodAcceptSetLike$1;
 
-	function requireSetMethodAcceptSetLike () {
-		if (hasRequiredSetMethodAcceptSetLike) return setMethodAcceptSetLike;
-		hasRequiredSetMethodAcceptSetLike = 1;
-		setMethodAcceptSetLike = function () {
+	function requireSetMethodAcceptSetLike$1 () {
+		if (hasRequiredSetMethodAcceptSetLike$1) return setMethodAcceptSetLike$1;
+		hasRequiredSetMethodAcceptSetLike$1 = 1;
+		setMethodAcceptSetLike$1 = function () {
 		  return false;
 		};
-		return setMethodAcceptSetLike;
+		return setMethodAcceptSetLike$1;
 	}
 
-	var hasRequiredEs_set_difference_v2;
+	var hasRequiredEs_set_difference_v2$1;
 
-	function requireEs_set_difference_v2 () {
-		if (hasRequiredEs_set_difference_v2) return es_set_difference_v2;
-		hasRequiredEs_set_difference_v2 = 1;
+	function requireEs_set_difference_v2$1 () {
+		if (hasRequiredEs_set_difference_v2$1) return es_set_difference_v2$1;
+		hasRequiredEs_set_difference_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var difference = /*@__PURE__*/ requireSetDifference();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var difference = /*@__PURE__*/ requireSetDifference$1();
+		var fails = /*@__PURE__*/ requireFails();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
 
-		var INCORRECT = !setMethodAcceptSetLike('difference', function (result) {
+		var SET_LIKE_INCORRECT_BEHAVIOR = !setMethodAcceptSetLike('difference', function (result) {
 		  return result.size === 0;
+		});
+
+		var FORCED = SET_LIKE_INCORRECT_BEHAVIOR || fails(function () {
+		  // https://bugs.webkit.org/show_bug.cgi?id=288595
+		  var setLike = {
+		    size: 1,
+		    has: function () { return true; },
+		    keys: function () {
+		      var index = 0;
+		      return {
+		        next: function () {
+		          var done = index++ > 1;
+		          if (baseSet.has(1)) baseSet.clear();
+		          return { done: done, value: 2 };
+		        }
+		      };
+		    }
+		  };
+		  // eslint-disable-next-line es/no-set -- testing
+		  var baseSet = new Set([1, 2, 3, 4]);
+		  // eslint-disable-next-line es/no-set-prototype-difference -- testing
+		  return baseSet.difference(setLike).size !== 3;
 		});
 
 		// `Set.prototype.difference` method
 		// https://tc39.es/ecma262/#sec-set.prototype.difference
-		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
 		  difference: difference
 		});
-		return es_set_difference_v2;
+		return es_set_difference_v2$1;
 	}
 
-	var es_set_intersection_v2 = {};
+	var es_set_intersection_v2$1 = {};
 
-	var setIntersection;
-	var hasRequiredSetIntersection;
+	var setIntersection$1;
+	var hasRequiredSetIntersection$1;
 
-	function requireSetIntersection () {
-		if (hasRequiredSetIntersection) return setIntersection;
-		hasRequiredSetIntersection = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
-		var size = /*@__PURE__*/ requireSetSize();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSet = /*@__PURE__*/ requireSetIterate();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetIntersection$1 () {
+		if (hasRequiredSetIntersection$1) return setIntersection$1;
+		hasRequiredSetIntersection$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers$1();
+		var size = /*@__PURE__*/ requireSetSize$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSet = /*@__PURE__*/ requireSetIterate$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 
 		var Set = SetHelpers.Set;
 		var add = SetHelpers.add;
 		var has = SetHelpers.has;
 
 		// `Set.prototype.intersection` method
-		// https://github.com/tc39/proposal-set-methods
-		setIntersection = function intersection(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.intersection
+		setIntersection$1 = function intersection(other) {
 		  var O = aSet(this);
 		  var otherRec = getSetRecord(other);
 		  var result = new Set();
@@ -11095,18 +11249,18 @@ var bookly = (function ($) {
 
 		  return result;
 		};
-		return setIntersection;
+		return setIntersection$1;
 	}
 
-	var hasRequiredEs_set_intersection_v2;
+	var hasRequiredEs_set_intersection_v2$1;
 
-	function requireEs_set_intersection_v2 () {
-		if (hasRequiredEs_set_intersection_v2) return es_set_intersection_v2;
-		hasRequiredEs_set_intersection_v2 = 1;
+	function requireEs_set_intersection_v2$1 () {
+		if (hasRequiredEs_set_intersection_v2$1) return es_set_intersection_v2$1;
+		hasRequiredEs_set_intersection_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
 		var fails = /*@__PURE__*/ requireFails();
-		var intersection = /*@__PURE__*/ requireSetIntersection();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var intersection = /*@__PURE__*/ requireSetIntersection$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
 
 		var INCORRECT = !setMethodAcceptSetLike('intersection', function (result) {
 		  return result.size === 2 && result.has(1) && result.has(2);
@@ -11120,28 +11274,28 @@ var bookly = (function ($) {
 		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
 		  intersection: intersection
 		});
-		return es_set_intersection_v2;
+		return es_set_intersection_v2$1;
 	}
 
-	var es_set_isDisjointFrom_v2 = {};
+	var es_set_isDisjointFrom_v2$1 = {};
 
-	var setIsDisjointFrom;
-	var hasRequiredSetIsDisjointFrom;
+	var setIsDisjointFrom$1;
+	var hasRequiredSetIsDisjointFrom$1;
 
-	function requireSetIsDisjointFrom () {
-		if (hasRequiredSetIsDisjointFrom) return setIsDisjointFrom;
-		hasRequiredSetIsDisjointFrom = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var has = /*@__PURE__*/ requireSetHelpers().has;
-		var size = /*@__PURE__*/ requireSetSize();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSet = /*@__PURE__*/ requireSetIterate();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetIsDisjointFrom$1 () {
+		if (hasRequiredSetIsDisjointFrom$1) return setIsDisjointFrom$1;
+		hasRequiredSetIsDisjointFrom$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var has = /*@__PURE__*/ requireSetHelpers$1().has;
+		var size = /*@__PURE__*/ requireSetSize$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSet = /*@__PURE__*/ requireSetIterate$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 		var iteratorClose = /*@__PURE__*/ requireIteratorClose();
 
 		// `Set.prototype.isDisjointFrom` method
-		// https://tc39.github.io/proposal-set-methods/#Set.prototype.isDisjointFrom
-		setIsDisjointFrom = function isDisjointFrom(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
+		setIsDisjointFrom$1 = function isDisjointFrom(other) {
 		  var O = aSet(this);
 		  var otherRec = getSetRecord(other);
 		  if (size(O) <= otherRec.size) return iterateSet(O, function (e) {
@@ -11152,17 +11306,17 @@ var bookly = (function ($) {
 		    if (has(O, e)) return iteratorClose(iterator, 'normal', false);
 		  }) !== false;
 		};
-		return setIsDisjointFrom;
+		return setIsDisjointFrom$1;
 	}
 
-	var hasRequiredEs_set_isDisjointFrom_v2;
+	var hasRequiredEs_set_isDisjointFrom_v2$1;
 
-	function requireEs_set_isDisjointFrom_v2 () {
-		if (hasRequiredEs_set_isDisjointFrom_v2) return es_set_isDisjointFrom_v2;
-		hasRequiredEs_set_isDisjointFrom_v2 = 1;
+	function requireEs_set_isDisjointFrom_v2$1 () {
+		if (hasRequiredEs_set_isDisjointFrom_v2$1) return es_set_isDisjointFrom_v2$1;
+		hasRequiredEs_set_isDisjointFrom_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var isDisjointFrom = /*@__PURE__*/ requireSetIsDisjointFrom();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var isDisjointFrom = /*@__PURE__*/ requireSetIsDisjointFrom$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
 
 		var INCORRECT = !setMethodAcceptSetLike('isDisjointFrom', function (result) {
 		  return !result;
@@ -11173,25 +11327,25 @@ var bookly = (function ($) {
 		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
 		  isDisjointFrom: isDisjointFrom
 		});
-		return es_set_isDisjointFrom_v2;
+		return es_set_isDisjointFrom_v2$1;
 	}
 
-	var es_set_isSubsetOf_v2 = {};
+	var es_set_isSubsetOf_v2$1 = {};
 
-	var setIsSubsetOf;
-	var hasRequiredSetIsSubsetOf;
+	var setIsSubsetOf$1;
+	var hasRequiredSetIsSubsetOf$1;
 
-	function requireSetIsSubsetOf () {
-		if (hasRequiredSetIsSubsetOf) return setIsSubsetOf;
-		hasRequiredSetIsSubsetOf = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var size = /*@__PURE__*/ requireSetSize();
-		var iterate = /*@__PURE__*/ requireSetIterate();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+	function requireSetIsSubsetOf$1 () {
+		if (hasRequiredSetIsSubsetOf$1) return setIsSubsetOf$1;
+		hasRequiredSetIsSubsetOf$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var size = /*@__PURE__*/ requireSetSize$1();
+		var iterate = /*@__PURE__*/ requireSetIterate$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
 
 		// `Set.prototype.isSubsetOf` method
-		// https://tc39.github.io/proposal-set-methods/#Set.prototype.isSubsetOf
-		setIsSubsetOf = function isSubsetOf(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.issubsetof
+		setIsSubsetOf$1 = function isSubsetOf(other) {
 		  var O = aSet(this);
 		  var otherRec = getSetRecord(other);
 		  if (size(O) > otherRec.size) return false;
@@ -11199,17 +11353,17 @@ var bookly = (function ($) {
 		    if (!otherRec.includes(e)) return false;
 		  }, true) !== false;
 		};
-		return setIsSubsetOf;
+		return setIsSubsetOf$1;
 	}
 
-	var hasRequiredEs_set_isSubsetOf_v2;
+	var hasRequiredEs_set_isSubsetOf_v2$1;
 
-	function requireEs_set_isSubsetOf_v2 () {
-		if (hasRequiredEs_set_isSubsetOf_v2) return es_set_isSubsetOf_v2;
-		hasRequiredEs_set_isSubsetOf_v2 = 1;
+	function requireEs_set_isSubsetOf_v2$1 () {
+		if (hasRequiredEs_set_isSubsetOf_v2$1) return es_set_isSubsetOf_v2$1;
+		hasRequiredEs_set_isSubsetOf_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var isSubsetOf = /*@__PURE__*/ requireSetIsSubsetOf();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var isSubsetOf = /*@__PURE__*/ requireSetIsSubsetOf$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
 
 		var INCORRECT = !setMethodAcceptSetLike('isSubsetOf', function (result) {
 		  return result;
@@ -11220,27 +11374,27 @@ var bookly = (function ($) {
 		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
 		  isSubsetOf: isSubsetOf
 		});
-		return es_set_isSubsetOf_v2;
+		return es_set_isSubsetOf_v2$1;
 	}
 
-	var es_set_isSupersetOf_v2 = {};
+	var es_set_isSupersetOf_v2$1 = {};
 
-	var setIsSupersetOf;
-	var hasRequiredSetIsSupersetOf;
+	var setIsSupersetOf$1;
+	var hasRequiredSetIsSupersetOf$1;
 
-	function requireSetIsSupersetOf () {
-		if (hasRequiredSetIsSupersetOf) return setIsSupersetOf;
-		hasRequiredSetIsSupersetOf = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var has = /*@__PURE__*/ requireSetHelpers().has;
-		var size = /*@__PURE__*/ requireSetSize();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetIsSupersetOf$1 () {
+		if (hasRequiredSetIsSupersetOf$1) return setIsSupersetOf$1;
+		hasRequiredSetIsSupersetOf$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var has = /*@__PURE__*/ requireSetHelpers$1().has;
+		var size = /*@__PURE__*/ requireSetSize$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 		var iteratorClose = /*@__PURE__*/ requireIteratorClose();
 
 		// `Set.prototype.isSupersetOf` method
-		// https://tc39.github.io/proposal-set-methods/#Set.prototype.isSupersetOf
-		setIsSupersetOf = function isSupersetOf(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.issupersetof
+		setIsSupersetOf$1 = function isSupersetOf(other) {
 		  var O = aSet(this);
 		  var otherRec = getSetRecord(other);
 		  if (size(O) < otherRec.size) return false;
@@ -11249,17 +11403,17 @@ var bookly = (function ($) {
 		    if (!has(O, e)) return iteratorClose(iterator, 'normal', false);
 		  }) !== false;
 		};
-		return setIsSupersetOf;
+		return setIsSupersetOf$1;
 	}
 
-	var hasRequiredEs_set_isSupersetOf_v2;
+	var hasRequiredEs_set_isSupersetOf_v2$1;
 
-	function requireEs_set_isSupersetOf_v2 () {
-		if (hasRequiredEs_set_isSupersetOf_v2) return es_set_isSupersetOf_v2;
-		hasRequiredEs_set_isSupersetOf_v2 = 1;
+	function requireEs_set_isSupersetOf_v2$1 () {
+		if (hasRequiredEs_set_isSupersetOf_v2$1) return es_set_isSupersetOf_v2$1;
+		hasRequiredEs_set_isSupersetOf_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var isSupersetOf = /*@__PURE__*/ requireSetIsSupersetOf();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var isSupersetOf = /*@__PURE__*/ requireSetIsSupersetOf$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
 
 		var INCORRECT = !setMethodAcceptSetLike('isSupersetOf', function (result) {
 		  return !result;
@@ -11270,30 +11424,30 @@ var bookly = (function ($) {
 		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
 		  isSupersetOf: isSupersetOf
 		});
-		return es_set_isSupersetOf_v2;
+		return es_set_isSupersetOf_v2$1;
 	}
 
-	var es_set_symmetricDifference_v2 = {};
+	var es_set_symmetricDifference_v2$1 = {};
 
-	var setSymmetricDifference;
-	var hasRequiredSetSymmetricDifference;
+	var setSymmetricDifference$1;
+	var hasRequiredSetSymmetricDifference$1;
 
-	function requireSetSymmetricDifference () {
-		if (hasRequiredSetSymmetricDifference) return setSymmetricDifference;
-		hasRequiredSetSymmetricDifference = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
-		var clone = /*@__PURE__*/ requireSetClone();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetSymmetricDifference$1 () {
+		if (hasRequiredSetSymmetricDifference$1) return setSymmetricDifference$1;
+		hasRequiredSetSymmetricDifference$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers$1();
+		var clone = /*@__PURE__*/ requireSetClone$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 
 		var add = SetHelpers.add;
 		var has = SetHelpers.has;
 		var remove = SetHelpers.remove;
 
 		// `Set.prototype.symmetricDifference` method
-		// https://github.com/tc39/proposal-set-methods
-		setSymmetricDifference = function symmetricDifference(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
+		setSymmetricDifference$1 = function symmetricDifference(other) {
 		  var O = aSet(this);
 		  var keysIter = getSetRecord(other).getIterator();
 		  var result = clone(O);
@@ -11303,43 +11457,84 @@ var bookly = (function ($) {
 		  });
 		  return result;
 		};
-		return setSymmetricDifference;
+		return setSymmetricDifference$1;
 	}
 
-	var hasRequiredEs_set_symmetricDifference_v2;
+	var setMethodGetKeysBeforeCloningDetection$1;
+	var hasRequiredSetMethodGetKeysBeforeCloningDetection$1;
 
-	function requireEs_set_symmetricDifference_v2 () {
-		if (hasRequiredEs_set_symmetricDifference_v2) return es_set_symmetricDifference_v2;
-		hasRequiredEs_set_symmetricDifference_v2 = 1;
+	function requireSetMethodGetKeysBeforeCloningDetection$1 () {
+		if (hasRequiredSetMethodGetKeysBeforeCloningDetection$1) return setMethodGetKeysBeforeCloningDetection$1;
+		hasRequiredSetMethodGetKeysBeforeCloningDetection$1 = 1;
+		// Should get iterator record of a set-like object before cloning this
+		// https://bugs.webkit.org/show_bug.cgi?id=289430
+		setMethodGetKeysBeforeCloningDetection$1 = function (METHOD_NAME) {
+		  try {
+		    // eslint-disable-next-line es/no-set -- needed for test
+		    var baseSet = new Set();
+		    var setLike = {
+		      size: 0,
+		      has: function () { return true; },
+		      keys: function () {
+		        // eslint-disable-next-line es/no-object-defineproperty -- needed for test
+		        return Object.defineProperty({}, 'next', {
+		          get: function () {
+		            baseSet.clear();
+		            baseSet.add(4);
+		            return function () {
+		              return { done: true };
+		            };
+		          }
+		        });
+		      }
+		    };
+		    var result = baseSet[METHOD_NAME](setLike);
+
+		    return result.size === 1 && result.values().next().value === 4;
+		  } catch (error) {
+		    return false;
+		  }
+		};
+		return setMethodGetKeysBeforeCloningDetection$1;
+	}
+
+	var hasRequiredEs_set_symmetricDifference_v2$1;
+
+	function requireEs_set_symmetricDifference_v2$1 () {
+		if (hasRequiredEs_set_symmetricDifference_v2$1) return es_set_symmetricDifference_v2$1;
+		hasRequiredEs_set_symmetricDifference_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var symmetricDifference = /*@__PURE__*/ requireSetSymmetricDifference();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var symmetricDifference = /*@__PURE__*/ requireSetSymmetricDifference$1();
+		var setMethodGetKeysBeforeCloning = /*@__PURE__*/ requireSetMethodGetKeysBeforeCloningDetection$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
+
+		var FORCED = !setMethodAcceptSetLike('symmetricDifference') || !setMethodGetKeysBeforeCloning('symmetricDifference');
 
 		// `Set.prototype.symmetricDifference` method
 		// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
-		$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('symmetricDifference') }, {
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
 		  symmetricDifference: symmetricDifference
 		});
-		return es_set_symmetricDifference_v2;
+		return es_set_symmetricDifference_v2$1;
 	}
 
-	var es_set_union_v2 = {};
+	var es_set_union_v2$1 = {};
 
-	var setUnion;
-	var hasRequiredSetUnion;
+	var setUnion$1;
+	var hasRequiredSetUnion$1;
 
-	function requireSetUnion () {
-		if (hasRequiredSetUnion) return setUnion;
-		hasRequiredSetUnion = 1;
-		var aSet = /*@__PURE__*/ requireASet();
-		var add = /*@__PURE__*/ requireSetHelpers().add;
-		var clone = /*@__PURE__*/ requireSetClone();
-		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
-		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+	function requireSetUnion$1 () {
+		if (hasRequiredSetUnion$1) return setUnion$1;
+		hasRequiredSetUnion$1 = 1;
+		var aSet = /*@__PURE__*/ requireASet$1();
+		var add = /*@__PURE__*/ requireSetHelpers$1().add;
+		var clone = /*@__PURE__*/ requireSetClone$1();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord$1();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple$1();
 
 		// `Set.prototype.union` method
-		// https://github.com/tc39/proposal-set-methods
-		setUnion = function union(other) {
+		// https://tc39.es/ecma262/#sec-set.prototype.union
+		setUnion$1 = function union(other) {
 		  var O = aSet(this);
 		  var keysIter = getSetRecord(other).getIterator();
 		  var result = clone(O);
@@ -11348,24 +11543,27 @@ var bookly = (function ($) {
 		  });
 		  return result;
 		};
-		return setUnion;
+		return setUnion$1;
 	}
 
-	var hasRequiredEs_set_union_v2;
+	var hasRequiredEs_set_union_v2$1;
 
-	function requireEs_set_union_v2 () {
-		if (hasRequiredEs_set_union_v2) return es_set_union_v2;
-		hasRequiredEs_set_union_v2 = 1;
+	function requireEs_set_union_v2$1 () {
+		if (hasRequiredEs_set_union_v2$1) return es_set_union_v2$1;
+		hasRequiredEs_set_union_v2$1 = 1;
 		var $ = /*@__PURE__*/ require_export();
-		var union = /*@__PURE__*/ requireSetUnion();
-		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+		var union = /*@__PURE__*/ requireSetUnion$1();
+		var setMethodGetKeysBeforeCloning = /*@__PURE__*/ requireSetMethodGetKeysBeforeCloningDetection$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike$1();
+
+		var FORCED = !setMethodAcceptSetLike('union') || !setMethodGetKeysBeforeCloning('union');
 
 		// `Set.prototype.union` method
 		// https://tc39.es/ecma262/#sec-set.prototype.union
-		$({ target: 'Set', proto: true, real: true, forced: !setMethodAcceptSetLike('union') }, {
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
 		  union: union
 		});
-		return es_set_union_v2;
+		return es_set_union_v2$1;
 	}
 
 	var es_string_iterator = {};
@@ -11461,13 +11659,13 @@ var bookly = (function ($) {
 		hasRequiredSet$5 = 1;
 		requireEs_array_iterator();
 		requireEs_set$1();
-		requireEs_set_difference_v2();
-		requireEs_set_intersection_v2();
-		requireEs_set_isDisjointFrom_v2();
-		requireEs_set_isSubsetOf_v2();
-		requireEs_set_isSupersetOf_v2();
-		requireEs_set_symmetricDifference_v2();
-		requireEs_set_union_v2();
+		requireEs_set_difference_v2$1();
+		requireEs_set_intersection_v2$1();
+		requireEs_set_isDisjointFrom_v2$1();
+		requireEs_set_isSubsetOf_v2$1();
+		requireEs_set_isSupersetOf_v2$1();
+		requireEs_set_symmetricDifference_v2$1();
+		requireEs_set_union_v2$1();
 		requireEs_string_iterator();
 		var path = /*@__PURE__*/ requirePath();
 
@@ -11829,7 +12027,7 @@ var bookly = (function ($) {
 		if (hasRequiredCollection) return collection;
 		hasRequiredCollection = 1;
 		var $ = /*@__PURE__*/ require_export$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var InternalMetadataModule = /*@__PURE__*/ requireInternalMetadata();
 		var fails = /*@__PURE__*/ requireFails$1();
 		var createNonEnumerableProperty = /*@__PURE__*/ requireCreateNonEnumerableProperty$1();
@@ -11851,7 +12049,7 @@ var bookly = (function ($) {
 		  var IS_MAP = CONSTRUCTOR_NAME.indexOf('Map') !== -1;
 		  var IS_WEAK = CONSTRUCTOR_NAME.indexOf('Weak') !== -1;
 		  var ADDER = IS_MAP ? 'set' : 'add';
-		  var NativeConstructor = global[CONSTRUCTOR_NAME];
+		  var NativeConstructor = globalThis[CONSTRUCTOR_NAME];
 		  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
 		  var exported = {};
 		  var Constructor;
@@ -11954,8 +12152,8 @@ var bookly = (function ($) {
 		      setInternalState(that, {
 		        type: CONSTRUCTOR_NAME,
 		        index: create(null),
-		        first: undefined,
-		        last: undefined,
+		        first: null,
+		        last: null,
 		        size: 0
 		      });
 		      if (!DESCRIPTORS) that.size = 0;
@@ -11980,7 +12178,7 @@ var bookly = (function ($) {
 		          key: key,
 		          value: value,
 		          previous: previous = state.last,
-		          next: undefined,
+		          next: null,
 		          removed: false
 		        };
 		        if (!state.first) state.first = entry;
@@ -12014,10 +12212,10 @@ var bookly = (function ($) {
 		        var entry = state.first;
 		        while (entry) {
 		          entry.removed = true;
-		          if (entry.previous) entry.previous = entry.previous.next = undefined;
+		          if (entry.previous) entry.previous = entry.previous.next = null;
 		          entry = entry.next;
 		        }
-		        state.first = state.last = undefined;
+		        state.first = state.last = null;
 		        state.index = create(null);
 		        if (DESCRIPTORS) state.size = 0;
 		        else that.size = 0;
@@ -12109,7 +12307,7 @@ var bookly = (function ($) {
 		        target: iterated,
 		        state: getInternalCollectionState(iterated),
 		        kind: kind,
-		        last: undefined
+		        last: null
 		      });
 		    }, function () {
 		      var state = getInternalIteratorState(this);
@@ -12120,7 +12318,7 @@ var bookly = (function ($) {
 		      // get next entry
 		      if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
 		        // or finish the iteration
-		        state.target = undefined;
+		        state.target = null;
 		        return createIterResultObject(undefined, true);
 		      }
 		      // return step by kind
@@ -12164,6 +12362,643 @@ var bookly = (function ($) {
 		return es_set;
 	}
 
+	var es_set_difference_v2 = {};
+
+	var aSet;
+	var hasRequiredASet;
+
+	function requireASet () {
+		if (hasRequiredASet) return aSet;
+		hasRequiredASet = 1;
+		var tryToString = /*@__PURE__*/ requireTryToString$1();
+
+		var $TypeError = TypeError;
+
+		// Perform ? RequireInternalSlot(M, [[SetData]])
+		aSet = function (it) {
+		  if (typeof it == 'object' && 'size' in it && 'has' in it && 'add' in it && 'delete' in it && 'keys' in it) return it;
+		  throw new $TypeError(tryToString(it) + ' is not a set');
+		};
+		return aSet;
+	}
+
+	var caller;
+	var hasRequiredCaller;
+
+	function requireCaller () {
+		if (hasRequiredCaller) return caller;
+		hasRequiredCaller = 1;
+		caller = function (methodName, numArgs) {
+		  return numArgs === 1 ? function (object, arg) {
+		    return object[methodName](arg);
+		  } : function (object, arg1, arg2) {
+		    return object[methodName](arg1, arg2);
+		  };
+		};
+		return caller;
+	}
+
+	var setHelpers;
+	var hasRequiredSetHelpers;
+
+	function requireSetHelpers () {
+		if (hasRequiredSetHelpers) return setHelpers;
+		hasRequiredSetHelpers = 1;
+		var getBuiltIn = /*@__PURE__*/ requireGetBuiltIn$1();
+		var caller = /*@__PURE__*/ requireCaller();
+
+		var Set = getBuiltIn('Set');
+		var SetPrototype = Set.prototype;
+
+		setHelpers = {
+		  Set: Set,
+		  add: caller('add', 1),
+		  has: caller('has', 1),
+		  remove: caller('delete', 1),
+		  proto: SetPrototype
+		};
+		return setHelpers;
+	}
+
+	var iterateSimple;
+	var hasRequiredIterateSimple;
+
+	function requireIterateSimple () {
+		if (hasRequiredIterateSimple) return iterateSimple;
+		hasRequiredIterateSimple = 1;
+		var call = /*@__PURE__*/ requireFunctionCall$1();
+
+		iterateSimple = function (record, fn, ITERATOR_INSTEAD_OF_RECORD) {
+		  var iterator = ITERATOR_INSTEAD_OF_RECORD ? record : record.iterator;
+		  var next = record.next;
+		  var step, result;
+		  while (!(step = call(next, iterator)).done) {
+		    result = fn(step.value);
+		    if (result !== undefined) return result;
+		  }
+		};
+		return iterateSimple;
+	}
+
+	var setIterate;
+	var hasRequiredSetIterate;
+
+	function requireSetIterate () {
+		if (hasRequiredSetIterate) return setIterate;
+		hasRequiredSetIterate = 1;
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+
+		setIterate = function (set, fn, interruptible) {
+		  return interruptible ? iterateSimple(set.keys(), fn, true) : set.forEach(fn);
+		};
+		return setIterate;
+	}
+
+	var setClone;
+	var hasRequiredSetClone;
+
+	function requireSetClone () {
+		if (hasRequiredSetClone) return setClone;
+		hasRequiredSetClone = 1;
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
+		var iterate = /*@__PURE__*/ requireSetIterate();
+
+		var Set = SetHelpers.Set;
+		var add = SetHelpers.add;
+
+		setClone = function (set) {
+		  var result = new Set();
+		  iterate(set, function (it) {
+		    add(result, it);
+		  });
+		  return result;
+		};
+		return setClone;
+	}
+
+	var setSize;
+	var hasRequiredSetSize;
+
+	function requireSetSize () {
+		if (hasRequiredSetSize) return setSize;
+		hasRequiredSetSize = 1;
+		setSize = function (set) {
+		  return set.size;
+		};
+		return setSize;
+	}
+
+	var getIteratorDirect;
+	var hasRequiredGetIteratorDirect;
+
+	function requireGetIteratorDirect () {
+		if (hasRequiredGetIteratorDirect) return getIteratorDirect;
+		hasRequiredGetIteratorDirect = 1;
+		// `GetIteratorDirect(obj)` abstract operation
+		// https://tc39.es/ecma262/#sec-getiteratordirect
+		getIteratorDirect = function (obj) {
+		  return {
+		    iterator: obj,
+		    next: obj.next,
+		    done: false
+		  };
+		};
+		return getIteratorDirect;
+	}
+
+	var getSetRecord;
+	var hasRequiredGetSetRecord;
+
+	function requireGetSetRecord () {
+		if (hasRequiredGetSetRecord) return getSetRecord;
+		hasRequiredGetSetRecord = 1;
+		var aCallable = /*@__PURE__*/ requireACallable$1();
+		var anObject = /*@__PURE__*/ requireAnObject$1();
+		var call = /*@__PURE__*/ requireFunctionCall$1();
+		var toIntegerOrInfinity = /*@__PURE__*/ requireToIntegerOrInfinity$1();
+		var getIteratorDirect = /*@__PURE__*/ requireGetIteratorDirect();
+
+		var INVALID_SIZE = 'Invalid size';
+		var $RangeError = RangeError;
+		var $TypeError = TypeError;
+		var max = Math.max;
+
+		var SetRecord = function (set, intSize) {
+		  this.set = set;
+		  this.size = max(intSize, 0);
+		  this.has = aCallable(set.has);
+		  this.keys = aCallable(set.keys);
+		};
+
+		SetRecord.prototype = {
+		  getIterator: function () {
+		    return getIteratorDirect(anObject(call(this.keys, this.set)));
+		  },
+		  includes: function (it) {
+		    return call(this.has, this.set, it);
+		  }
+		};
+
+		// `GetSetRecord` abstract operation
+		// https://tc39.es/proposal-set-methods/#sec-getsetrecord
+		getSetRecord = function (obj) {
+		  anObject(obj);
+		  var numSize = +obj.size;
+		  // NOTE: If size is undefined, then numSize will be NaN
+		  // eslint-disable-next-line no-self-compare -- NaN check
+		  if (numSize !== numSize) throw new $TypeError(INVALID_SIZE);
+		  var intSize = toIntegerOrInfinity(numSize);
+		  if (intSize < 0) throw new $RangeError(INVALID_SIZE);
+		  return new SetRecord(obj, intSize);
+		};
+		return getSetRecord;
+	}
+
+	var setDifference;
+	var hasRequiredSetDifference;
+
+	function requireSetDifference () {
+		if (hasRequiredSetDifference) return setDifference;
+		hasRequiredSetDifference = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
+		var clone = /*@__PURE__*/ requireSetClone();
+		var size = /*@__PURE__*/ requireSetSize();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSet = /*@__PURE__*/ requireSetIterate();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+
+		var has = SetHelpers.has;
+		var remove = SetHelpers.remove;
+
+		// `Set.prototype.difference` method
+		// https://tc39.es/ecma262/#sec-set.prototype.difference
+		setDifference = function difference(other) {
+		  var O = aSet(this);
+		  var otherRec = getSetRecord(other);
+		  var result = clone(O);
+		  if (size(O) <= otherRec.size) iterateSet(O, function (e) {
+		    if (otherRec.includes(e)) remove(result, e);
+		  });
+		  else iterateSimple(otherRec.getIterator(), function (e) {
+		    if (has(result, e)) remove(result, e);
+		  });
+		  return result;
+		};
+		return setDifference;
+	}
+
+	var setMethodAcceptSetLike;
+	var hasRequiredSetMethodAcceptSetLike;
+
+	function requireSetMethodAcceptSetLike () {
+		if (hasRequiredSetMethodAcceptSetLike) return setMethodAcceptSetLike;
+		hasRequiredSetMethodAcceptSetLike = 1;
+		setMethodAcceptSetLike = function () {
+		  return false;
+		};
+		return setMethodAcceptSetLike;
+	}
+
+	var hasRequiredEs_set_difference_v2;
+
+	function requireEs_set_difference_v2 () {
+		if (hasRequiredEs_set_difference_v2) return es_set_difference_v2;
+		hasRequiredEs_set_difference_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var difference = /*@__PURE__*/ requireSetDifference();
+		var fails = /*@__PURE__*/ requireFails$1();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var SET_LIKE_INCORRECT_BEHAVIOR = !setMethodAcceptSetLike('difference', function (result) {
+		  return result.size === 0;
+		});
+
+		var FORCED = SET_LIKE_INCORRECT_BEHAVIOR || fails(function () {
+		  // https://bugs.webkit.org/show_bug.cgi?id=288595
+		  var setLike = {
+		    size: 1,
+		    has: function () { return true; },
+		    keys: function () {
+		      var index = 0;
+		      return {
+		        next: function () {
+		          var done = index++ > 1;
+		          if (baseSet.has(1)) baseSet.clear();
+		          return { done: done, value: 2 };
+		        }
+		      };
+		    }
+		  };
+		  // eslint-disable-next-line es/no-set -- testing
+		  var baseSet = new Set([1, 2, 3, 4]);
+		  // eslint-disable-next-line es/no-set-prototype-difference -- testing
+		  return baseSet.difference(setLike).size !== 3;
+		});
+
+		// `Set.prototype.difference` method
+		// https://tc39.es/ecma262/#sec-set.prototype.difference
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
+		  difference: difference
+		});
+		return es_set_difference_v2;
+	}
+
+	var es_set_intersection_v2 = {};
+
+	var setIntersection;
+	var hasRequiredSetIntersection;
+
+	function requireSetIntersection () {
+		if (hasRequiredSetIntersection) return setIntersection;
+		hasRequiredSetIntersection = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
+		var size = /*@__PURE__*/ requireSetSize();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSet = /*@__PURE__*/ requireSetIterate();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+
+		var Set = SetHelpers.Set;
+		var add = SetHelpers.add;
+		var has = SetHelpers.has;
+
+		// `Set.prototype.intersection` method
+		// https://tc39.es/ecma262/#sec-set.prototype.intersection
+		setIntersection = function intersection(other) {
+		  var O = aSet(this);
+		  var otherRec = getSetRecord(other);
+		  var result = new Set();
+
+		  if (size(O) > otherRec.size) {
+		    iterateSimple(otherRec.getIterator(), function (e) {
+		      if (has(O, e)) add(result, e);
+		    });
+		  } else {
+		    iterateSet(O, function (e) {
+		      if (otherRec.includes(e)) add(result, e);
+		    });
+		  }
+
+		  return result;
+		};
+		return setIntersection;
+	}
+
+	var hasRequiredEs_set_intersection_v2;
+
+	function requireEs_set_intersection_v2 () {
+		if (hasRequiredEs_set_intersection_v2) return es_set_intersection_v2;
+		hasRequiredEs_set_intersection_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var fails = /*@__PURE__*/ requireFails$1();
+		var intersection = /*@__PURE__*/ requireSetIntersection();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var INCORRECT = !setMethodAcceptSetLike('intersection', function (result) {
+		  return result.size === 2 && result.has(1) && result.has(2);
+		}) || fails(function () {
+		  // eslint-disable-next-line es/no-array-from, es/no-set, es/no-set-prototype-intersection -- testing
+		  return String(Array.from(new Set([1, 2, 3]).intersection(new Set([3, 2])))) !== '3,2';
+		});
+
+		// `Set.prototype.intersection` method
+		// https://tc39.es/ecma262/#sec-set.prototype.intersection
+		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+		  intersection: intersection
+		});
+		return es_set_intersection_v2;
+	}
+
+	var es_set_isDisjointFrom_v2 = {};
+
+	var setIsDisjointFrom;
+	var hasRequiredSetIsDisjointFrom;
+
+	function requireSetIsDisjointFrom () {
+		if (hasRequiredSetIsDisjointFrom) return setIsDisjointFrom;
+		hasRequiredSetIsDisjointFrom = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var has = /*@__PURE__*/ requireSetHelpers().has;
+		var size = /*@__PURE__*/ requireSetSize();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSet = /*@__PURE__*/ requireSetIterate();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+		var iteratorClose = /*@__PURE__*/ requireIteratorClose$1();
+
+		// `Set.prototype.isDisjointFrom` method
+		// https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
+		setIsDisjointFrom = function isDisjointFrom(other) {
+		  var O = aSet(this);
+		  var otherRec = getSetRecord(other);
+		  if (size(O) <= otherRec.size) return iterateSet(O, function (e) {
+		    if (otherRec.includes(e)) return false;
+		  }, true) !== false;
+		  var iterator = otherRec.getIterator();
+		  return iterateSimple(iterator, function (e) {
+		    if (has(O, e)) return iteratorClose(iterator, 'normal', false);
+		  }) !== false;
+		};
+		return setIsDisjointFrom;
+	}
+
+	var hasRequiredEs_set_isDisjointFrom_v2;
+
+	function requireEs_set_isDisjointFrom_v2 () {
+		if (hasRequiredEs_set_isDisjointFrom_v2) return es_set_isDisjointFrom_v2;
+		hasRequiredEs_set_isDisjointFrom_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var isDisjointFrom = /*@__PURE__*/ requireSetIsDisjointFrom();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var INCORRECT = !setMethodAcceptSetLike('isDisjointFrom', function (result) {
+		  return !result;
+		});
+
+		// `Set.prototype.isDisjointFrom` method
+		// https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
+		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+		  isDisjointFrom: isDisjointFrom
+		});
+		return es_set_isDisjointFrom_v2;
+	}
+
+	var es_set_isSubsetOf_v2 = {};
+
+	var setIsSubsetOf;
+	var hasRequiredSetIsSubsetOf;
+
+	function requireSetIsSubsetOf () {
+		if (hasRequiredSetIsSubsetOf) return setIsSubsetOf;
+		hasRequiredSetIsSubsetOf = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var size = /*@__PURE__*/ requireSetSize();
+		var iterate = /*@__PURE__*/ requireSetIterate();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+
+		// `Set.prototype.isSubsetOf` method
+		// https://tc39.es/ecma262/#sec-set.prototype.issubsetof
+		setIsSubsetOf = function isSubsetOf(other) {
+		  var O = aSet(this);
+		  var otherRec = getSetRecord(other);
+		  if (size(O) > otherRec.size) return false;
+		  return iterate(O, function (e) {
+		    if (!otherRec.includes(e)) return false;
+		  }, true) !== false;
+		};
+		return setIsSubsetOf;
+	}
+
+	var hasRequiredEs_set_isSubsetOf_v2;
+
+	function requireEs_set_isSubsetOf_v2 () {
+		if (hasRequiredEs_set_isSubsetOf_v2) return es_set_isSubsetOf_v2;
+		hasRequiredEs_set_isSubsetOf_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var isSubsetOf = /*@__PURE__*/ requireSetIsSubsetOf();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var INCORRECT = !setMethodAcceptSetLike('isSubsetOf', function (result) {
+		  return result;
+		});
+
+		// `Set.prototype.isSubsetOf` method
+		// https://tc39.es/ecma262/#sec-set.prototype.issubsetof
+		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+		  isSubsetOf: isSubsetOf
+		});
+		return es_set_isSubsetOf_v2;
+	}
+
+	var es_set_isSupersetOf_v2 = {};
+
+	var setIsSupersetOf;
+	var hasRequiredSetIsSupersetOf;
+
+	function requireSetIsSupersetOf () {
+		if (hasRequiredSetIsSupersetOf) return setIsSupersetOf;
+		hasRequiredSetIsSupersetOf = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var has = /*@__PURE__*/ requireSetHelpers().has;
+		var size = /*@__PURE__*/ requireSetSize();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+		var iteratorClose = /*@__PURE__*/ requireIteratorClose$1();
+
+		// `Set.prototype.isSupersetOf` method
+		// https://tc39.es/ecma262/#sec-set.prototype.issupersetof
+		setIsSupersetOf = function isSupersetOf(other) {
+		  var O = aSet(this);
+		  var otherRec = getSetRecord(other);
+		  if (size(O) < otherRec.size) return false;
+		  var iterator = otherRec.getIterator();
+		  return iterateSimple(iterator, function (e) {
+		    if (!has(O, e)) return iteratorClose(iterator, 'normal', false);
+		  }) !== false;
+		};
+		return setIsSupersetOf;
+	}
+
+	var hasRequiredEs_set_isSupersetOf_v2;
+
+	function requireEs_set_isSupersetOf_v2 () {
+		if (hasRequiredEs_set_isSupersetOf_v2) return es_set_isSupersetOf_v2;
+		hasRequiredEs_set_isSupersetOf_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var isSupersetOf = /*@__PURE__*/ requireSetIsSupersetOf();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var INCORRECT = !setMethodAcceptSetLike('isSupersetOf', function (result) {
+		  return !result;
+		});
+
+		// `Set.prototype.isSupersetOf` method
+		// https://tc39.es/ecma262/#sec-set.prototype.issupersetof
+		$({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+		  isSupersetOf: isSupersetOf
+		});
+		return es_set_isSupersetOf_v2;
+	}
+
+	var es_set_symmetricDifference_v2 = {};
+
+	var setSymmetricDifference;
+	var hasRequiredSetSymmetricDifference;
+
+	function requireSetSymmetricDifference () {
+		if (hasRequiredSetSymmetricDifference) return setSymmetricDifference;
+		hasRequiredSetSymmetricDifference = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var SetHelpers = /*@__PURE__*/ requireSetHelpers();
+		var clone = /*@__PURE__*/ requireSetClone();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+
+		var add = SetHelpers.add;
+		var has = SetHelpers.has;
+		var remove = SetHelpers.remove;
+
+		// `Set.prototype.symmetricDifference` method
+		// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
+		setSymmetricDifference = function symmetricDifference(other) {
+		  var O = aSet(this);
+		  var keysIter = getSetRecord(other).getIterator();
+		  var result = clone(O);
+		  iterateSimple(keysIter, function (e) {
+		    if (has(O, e)) remove(result, e);
+		    else add(result, e);
+		  });
+		  return result;
+		};
+		return setSymmetricDifference;
+	}
+
+	var setMethodGetKeysBeforeCloningDetection;
+	var hasRequiredSetMethodGetKeysBeforeCloningDetection;
+
+	function requireSetMethodGetKeysBeforeCloningDetection () {
+		if (hasRequiredSetMethodGetKeysBeforeCloningDetection) return setMethodGetKeysBeforeCloningDetection;
+		hasRequiredSetMethodGetKeysBeforeCloningDetection = 1;
+		// Should get iterator record of a set-like object before cloning this
+		// https://bugs.webkit.org/show_bug.cgi?id=289430
+		setMethodGetKeysBeforeCloningDetection = function (METHOD_NAME) {
+		  try {
+		    // eslint-disable-next-line es/no-set -- needed for test
+		    var baseSet = new Set();
+		    var setLike = {
+		      size: 0,
+		      has: function () { return true; },
+		      keys: function () {
+		        // eslint-disable-next-line es/no-object-defineproperty -- needed for test
+		        return Object.defineProperty({}, 'next', {
+		          get: function () {
+		            baseSet.clear();
+		            baseSet.add(4);
+		            return function () {
+		              return { done: true };
+		            };
+		          }
+		        });
+		      }
+		    };
+		    var result = baseSet[METHOD_NAME](setLike);
+
+		    return result.size === 1 && result.values().next().value === 4;
+		  } catch (error) {
+		    return false;
+		  }
+		};
+		return setMethodGetKeysBeforeCloningDetection;
+	}
+
+	var hasRequiredEs_set_symmetricDifference_v2;
+
+	function requireEs_set_symmetricDifference_v2 () {
+		if (hasRequiredEs_set_symmetricDifference_v2) return es_set_symmetricDifference_v2;
+		hasRequiredEs_set_symmetricDifference_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var symmetricDifference = /*@__PURE__*/ requireSetSymmetricDifference();
+		var setMethodGetKeysBeforeCloning = /*@__PURE__*/ requireSetMethodGetKeysBeforeCloningDetection();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var FORCED = !setMethodAcceptSetLike('symmetricDifference') || !setMethodGetKeysBeforeCloning('symmetricDifference');
+
+		// `Set.prototype.symmetricDifference` method
+		// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
+		  symmetricDifference: symmetricDifference
+		});
+		return es_set_symmetricDifference_v2;
+	}
+
+	var es_set_union_v2 = {};
+
+	var setUnion;
+	var hasRequiredSetUnion;
+
+	function requireSetUnion () {
+		if (hasRequiredSetUnion) return setUnion;
+		hasRequiredSetUnion = 1;
+		var aSet = /*@__PURE__*/ requireASet();
+		var add = /*@__PURE__*/ requireSetHelpers().add;
+		var clone = /*@__PURE__*/ requireSetClone();
+		var getSetRecord = /*@__PURE__*/ requireGetSetRecord();
+		var iterateSimple = /*@__PURE__*/ requireIterateSimple();
+
+		// `Set.prototype.union` method
+		// https://tc39.es/ecma262/#sec-set.prototype.union
+		setUnion = function union(other) {
+		  var O = aSet(this);
+		  var keysIter = getSetRecord(other).getIterator();
+		  var result = clone(O);
+		  iterateSimple(keysIter, function (it) {
+		    add(result, it);
+		  });
+		  return result;
+		};
+		return setUnion;
+	}
+
+	var hasRequiredEs_set_union_v2;
+
+	function requireEs_set_union_v2 () {
+		if (hasRequiredEs_set_union_v2) return es_set_union_v2;
+		hasRequiredEs_set_union_v2 = 1;
+		var $ = /*@__PURE__*/ require_export$1();
+		var union = /*@__PURE__*/ requireSetUnion();
+		var setMethodGetKeysBeforeCloning = /*@__PURE__*/ requireSetMethodGetKeysBeforeCloningDetection();
+		var setMethodAcceptSetLike = /*@__PURE__*/ requireSetMethodAcceptSetLike();
+
+		var FORCED = !setMethodAcceptSetLike('union') || !setMethodGetKeysBeforeCloning('union');
+
+		// `Set.prototype.union` method
+		// https://tc39.es/ecma262/#sec-set.prototype.union
+		$({ target: 'Set', proto: true, real: true, forced: FORCED }, {
+		  union: union
+		});
+		return es_set_union_v2;
+	}
+
 	var set$2;
 	var hasRequiredSet$2;
 
@@ -12172,6 +13007,13 @@ var bookly = (function ($) {
 		hasRequiredSet$2 = 1;
 		requireEs_array_iterator$1();
 		requireEs_set();
+		requireEs_set_difference_v2();
+		requireEs_set_intersection_v2();
+		requireEs_set_isDisjointFrom_v2();
+		requireEs_set_isSubsetOf_v2();
+		requireEs_set_isSupersetOf_v2();
+		requireEs_set_symmetricDifference_v2();
+		requireEs_set_union_v2();
 		requireEs_string_iterator$1();
 		var path = /*@__PURE__*/ requirePath$1();
 
@@ -12428,22 +13270,6 @@ var bookly = (function ($) {
 
 	var es_map_groupBy = {};
 
-	var caller;
-	var hasRequiredCaller;
-
-	function requireCaller () {
-		if (hasRequiredCaller) return caller;
-		hasRequiredCaller = 1;
-		caller = function (methodName, numArgs) {
-		  return numArgs === 1 ? function (object, arg) {
-		    return object[methodName](arg);
-		  } : function (object, arg1, arg2) {
-		    return object[methodName](arg1, arg2);
-		  };
-		};
-		return caller;
-	}
-
 	var mapHelpers;
 	var hasRequiredMapHelpers;
 
@@ -12478,6 +13304,7 @@ var bookly = (function ($) {
 		var iterate = /*@__PURE__*/ requireIterate$1();
 		var MapHelpers = /*@__PURE__*/ requireMapHelpers();
 		var IS_PURE = /*@__PURE__*/ requireIsPure$1();
+		var fails = /*@__PURE__*/ requireFails$1();
 
 		var Map = MapHelpers.Map;
 		var has = MapHelpers.has;
@@ -12485,9 +13312,16 @@ var bookly = (function ($) {
 		var set = MapHelpers.set;
 		var push = uncurryThis([].push);
 
+		// https://bugs.webkit.org/show_bug.cgi?id=271524
+		var DOES_NOT_WORK_WITH_PRIMITIVES = IS_PURE || fails(function () {
+		  return Map.groupBy('ab', function (it) {
+		    return it;
+		  }).get('a').length !== 1;
+		});
+
 		// `Map.groupBy` method
-		// https://github.com/tc39/proposal-array-grouping
-		$({ target: 'Map', stat: true, forced: IS_PURE }, {
+		// https://tc39.es/ecma262/#sec-map.groupby
+		$({ target: 'Map', stat: true, forced: IS_PURE || DOES_NOT_WORK_WITH_PRIMITIVES }, {
 		  groupBy: function groupBy(items, callbackfn) {
 		    requireObjectCoercible(items);
 		    aCallable(callbackfn);
@@ -12598,44 +13432,44 @@ var bookly = (function ($) {
 		return arraySort;
 	}
 
-	var engineFfVersion;
-	var hasRequiredEngineFfVersion;
+	var environmentFfVersion;
+	var hasRequiredEnvironmentFfVersion;
 
-	function requireEngineFfVersion () {
-		if (hasRequiredEngineFfVersion) return engineFfVersion;
-		hasRequiredEngineFfVersion = 1;
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentFfVersion () {
+		if (hasRequiredEnvironmentFfVersion) return environmentFfVersion;
+		hasRequiredEnvironmentFfVersion = 1;
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
 		var firefox = userAgent.match(/firefox\/(\d+)/i);
 
-		engineFfVersion = !!firefox && +firefox[1];
-		return engineFfVersion;
+		environmentFfVersion = !!firefox && +firefox[1];
+		return environmentFfVersion;
 	}
 
-	var engineIsIeOrEdge;
-	var hasRequiredEngineIsIeOrEdge;
+	var environmentIsIeOrEdge;
+	var hasRequiredEnvironmentIsIeOrEdge;
 
-	function requireEngineIsIeOrEdge () {
-		if (hasRequiredEngineIsIeOrEdge) return engineIsIeOrEdge;
-		hasRequiredEngineIsIeOrEdge = 1;
-		var UA = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentIsIeOrEdge () {
+		if (hasRequiredEnvironmentIsIeOrEdge) return environmentIsIeOrEdge;
+		hasRequiredEnvironmentIsIeOrEdge = 1;
+		var UA = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
-		engineIsIeOrEdge = /MSIE|Trident/.test(UA);
-		return engineIsIeOrEdge;
+		environmentIsIeOrEdge = /MSIE|Trident/.test(UA);
+		return environmentIsIeOrEdge;
 	}
 
-	var engineWebkitVersion;
-	var hasRequiredEngineWebkitVersion;
+	var environmentWebkitVersion;
+	var hasRequiredEnvironmentWebkitVersion;
 
-	function requireEngineWebkitVersion () {
-		if (hasRequiredEngineWebkitVersion) return engineWebkitVersion;
-		hasRequiredEngineWebkitVersion = 1;
-		var userAgent = /*@__PURE__*/ requireEngineUserAgent();
+	function requireEnvironmentWebkitVersion () {
+		if (hasRequiredEnvironmentWebkitVersion) return environmentWebkitVersion;
+		hasRequiredEnvironmentWebkitVersion = 1;
+		var userAgent = /*@__PURE__*/ requireEnvironmentUserAgent$1();
 
 		var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
 
-		engineWebkitVersion = !!webkit && +webkit[1];
-		return engineWebkitVersion;
+		environmentWebkitVersion = !!webkit && +webkit[1];
+		return environmentWebkitVersion;
 	}
 
 	var hasRequiredEs_array_sort;
@@ -12653,10 +13487,10 @@ var bookly = (function ($) {
 		var fails = /*@__PURE__*/ requireFails$1();
 		var internalSort = /*@__PURE__*/ requireArraySort();
 		var arrayMethodIsStrict = /*@__PURE__*/ requireArrayMethodIsStrict();
-		var FF = /*@__PURE__*/ requireEngineFfVersion();
-		var IE_OR_EDGE = /*@__PURE__*/ requireEngineIsIeOrEdge();
-		var V8 = /*@__PURE__*/ requireEngineV8Version();
-		var WEBKIT = /*@__PURE__*/ requireEngineWebkitVersion();
+		var FF = /*@__PURE__*/ requireEnvironmentFfVersion();
+		var IE_OR_EDGE = /*@__PURE__*/ requireEnvironmentIsIeOrEdge();
+		var V8 = /*@__PURE__*/ requireEnvironmentV8Version$1();
+		var WEBKIT = /*@__PURE__*/ requireEnvironmentWebkitVersion();
 
 		var test = [];
 		var nativeSort = uncurryThis(test.sort);
@@ -12862,9 +13696,9 @@ var bookly = (function ($) {
 		  var length, result, step, iterator, next, value;
 		  // if the target is not iterable or it's an array with the default iterator - use a simple case
 		  if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
+		    result = IS_CONSTRUCTOR ? new this() : [];
 		    iterator = getIterator(O, iteratorMethod);
 		    next = iterator.next;
-		    result = IS_CONSTRUCTOR ? new this() : [];
 		    for (;!(step = call(next, iterator)).done; index++) {
 		      value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
 		      createProperty(result, index, value);
@@ -13017,7 +13851,7 @@ var bookly = (function ($) {
 		      setInternalState(that, {
 		        type: CONSTRUCTOR_NAME,
 		        id: id++,
-		        frozen: undefined
+		        frozen: null
 		      });
 		      if (!isNullOrUndefined(iterable)) iterate(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
 		    });
@@ -13065,7 +13899,7 @@ var bookly = (function ($) {
 		        if (isObject(key)) {
 		          var data = getWeakData(key);
 		          if (data === true) return uncaughtFrozenStore(state).get(key);
-		          return data ? data[state.id] : undefined;
+		          if (data) return data[state.id];
 		        }
 		      },
 		      // `WeakMap.prototype.set(key, value)` method
@@ -13093,7 +13927,7 @@ var bookly = (function ($) {
 		if (hasRequiredEs_weakMap_constructor) return es_weakMap_constructor;
 		hasRequiredEs_weakMap_constructor = 1;
 		var FREEZING = /*@__PURE__*/ requireFreezing();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 		var uncurryThis = /*@__PURE__*/ requireFunctionUncurryThis$1();
 		var defineBuiltIns = /*@__PURE__*/ requireDefineBuiltIns();
 		var InternalMetadataModule = /*@__PURE__*/ requireInternalMetadata();
@@ -13118,7 +13952,7 @@ var bookly = (function ($) {
 		// eslint-disable-next-line es/no-object-seal -- safe
 		var seal = $Object.seal;
 
-		var IS_IE11 = !global.ActiveXObject && 'ActiveXObject' in global;
+		var IS_IE11 = !globalThis.ActiveXObject && 'ActiveXObject' in globalThis;
 		var InternalWeakMap;
 
 		var wrapper = function (init) {
@@ -13260,12 +14094,12 @@ var bookly = (function ($) {
 		if (hasRequiredEs_globalThis) return es_globalThis;
 		hasRequiredEs_globalThis = 1;
 		var $ = /*@__PURE__*/ require_export$1();
-		var global = /*@__PURE__*/ requireGlobal();
+		var globalThis = /*@__PURE__*/ requireGlobalThis$7();
 
 		// `globalThis` object
 		// https://tc39.es/ecma262/#sec-globalthis
-		$({ global: true, forced: global.globalThis !== global }, {
-		  globalThis: global
+		$({ global: true, forced: globalThis.globalThis !== globalThis }, {
+		  globalThis: globalThis
 		});
 		return es_globalThis;
 	}
@@ -13288,7 +14122,7 @@ var bookly = (function ($) {
 		hasRequiredGlobalThis$5 = 1;
 		requireEs_globalThis();
 
-		globalThis$6 = /*@__PURE__*/ requireGlobal();
+		globalThis$6 = /*@__PURE__*/ requireGlobalThis$7();
 		return globalThis$6;
 	}
 
@@ -14768,7 +15602,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	/* ../../../../../../../assets/js/frontend/components/Spinner.svelte generated by Svelte v4.2.19 */
+	/* ../../../../../../../assets/js/frontend/components/Spinner.svelte generated by Svelte v4.2.20 */
 	function create_fragment$5(ctx) {
 	  let div;
 	  let svg;
@@ -14841,7 +15675,7 @@ var bookly = (function ($) {
 	  }
 	};
 
-	/* ../../../../../../../assets/js/frontend/components/Button.svelte generated by Svelte v4.2.19 */
+	/* ../../../../../../../assets/js/frontend/components/Button.svelte generated by Svelte v4.2.20 */
 	function create_else_block_1(ctx) {
 	  let button;
 	  let t;
@@ -17839,8 +18673,7 @@ var bookly = (function ($) {
 	              }
 	            }).then(response => {
 	              stepComplete({
-	                form_id: params.form_id,
-	                error: 'group_skip_payment'
+	                form_id: params.form_id
 	              });
 	            });
 	          } else {
