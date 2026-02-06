@@ -117,6 +117,7 @@ abstract class Routines
                 ->set( 'status', Payment::STATUS_REJECTED )
                 ->whereIn( 'id', $payment_ids )
                 ->execute();
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Payments', null, json_encode( $payment_ids ), null, 'Handle outdated unpaid payments (set REJECTED status)' );
             CustomerAppointment::query()
                 ->update()
                 ->set( 'status', CustomerAppointment::STATUS_REJECTED )
@@ -148,9 +149,11 @@ abstract class Routines
             }
 
             /** @var Appointment $appointment */
-            foreach ( array_unique( $affected_appointments ) as $appointment_id ) {
+            $affected_appointments = array_unique( $affected_appointments );
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Appointments', null, json_encode( $affected_appointments ), null, 'Handle outdated unpaid payments (affected appointments)' );
+            foreach ( $affected_appointments as $appointment_id ) {
                 $appointment = Appointment::find( $appointment_id );
-                Proxy\Shared::syncOnlineMeeting( array(), $appointment, Entities\Service::find( $appointment->getServiceId() ) );
+                Proxy\Shared::syncOnlineMeeting( array(), $appointment );
                 Utils\Common::syncWithCalendars( $appointment );
             }
         }
@@ -172,29 +175,32 @@ abstract class Routines
                 $seen = Entities\Shop::query()->count() ? 0 : 1;
                 foreach ( $data['plugins'] as $plugin ) {
                     $shop = new Entities\Shop();
-                    if ( $plugin['id'] && $plugin['envatoPrice'] ) {
+                    if ( $plugin['id'] ) {
                         $shop->loadBy( array( 'plugin_id' => $plugin['id'] ) );
                         $shop
                             ->setPluginId( $plugin['id'] )
                             ->setHighlighted( $plugin['highlighted'] ?: 0 )
                             ->setPriority( $plugin['priority'] ?: 0 )
-                            ->setDemoUrl( $plugin['demoUrl'] )
+                            ->setDemoUrl( $plugin['demo_url'] )
                             ->setTitle( $plugin['title'] )
                             ->setSlug( $plugin['slug'] )
-                            ->setDescription( $plugin['envatoDescription'] )
-                            ->setUrl( $plugin['envatoUrl'] )
-                            ->setIcon( $plugin['envatoIcon'] )
-                            ->setImage( $plugin['envatoImage'] )
-                            ->setPrice( $plugin['envatoPrice'] )
-                            ->setSales( $plugin['envatoSales'] )
-                            ->setRating( $plugin['envatoRating'] )
-                            ->setReviews( $plugin['envatoReviews'] )
-                            ->setPublished( isset ( $plugin['envatoPublishedAt']['date'] )
-                                ? date_create( $plugin['envatoPublishedAt']['date'] )->format( 'Y-m-d H:i:s' )
+                            ->setDescription( $plugin['description'] )
+                            ->setUrl( $plugin['sale_url'] )
+                            ->setIcon( $plugin['icon'] )
+                            ->setImage( $plugin['image'] ?: '' )
+                            ->setLifeTimePrice( $plugin['lt_price'] )
+                            ->setSubscriptionPrice( $plugin['sub_price'] ?: '' )
+                            ->setSales( $plugin['sales'] ?: 0 )
+                            ->setRating( $plugin['rating'] ?: 5 )
+                            ->setReviews( $plugin['reviews'] )
+                            ->setPublished( isset ( $plugin['published_at']['date'] )
+                                ? date_create( $plugin['published_at']['date'] )->format( 'Y-m-d H:i:s' )
                                 : current_time( 'mysql' )
                             )
                             ->setCreatedAt( current_time( 'mysql' ) )
                             ->setSeen( $shop->isLoaded() ? $shop->getSeen() : $seen )
+                            ->setBundlePlugins( $plugin['bundle_plugins'] ? json_encode( $plugin['bundle_plugins'] ) : null )
+                            ->setVisible( $plugin['visible'] )
                             ->save();
                     }
                 }
@@ -249,8 +255,13 @@ abstract class Routines
         global $wpdb;
 
         $ca_count = get_option( 'bookly_сa_count' );
-        $log10 = (int) log10( Entities\CustomerAppointment::query()->count() );
-        $current = $log10 > 0 ? pow( 10, $log10 ) : 0;
+        $quantity = Entities\CustomerAppointment::query()->count();
+        if ( $quantity ) {
+            $log10 = (int) log10( $quantity );
+            $current = $log10 > 0 ? pow( 10, $log10 ) : 0;
+        } else {
+            $current = 0;
+        }
 
         if ( $ca_count != $current ) {
             // New goal by number of customer appointments achieved,

@@ -74,7 +74,7 @@ class Database extends Tool
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t change column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
                                 } else {
-                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), JSON_PRETTY_PRINT ), 'change column ' . $table_name . '.' . $column );
+                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), 128 ), 'change column ' . $table_name . '.' . $column );
                                 }
                             }
                         } else {
@@ -210,11 +210,7 @@ class Database extends Tool
                         unset ( $actual['collation'] );
                     }
                     unset( $expect['key'], $actual['key'] );
-                    $diff = array_diff_assoc( $actual, $expect );
-                    if ( isset( $diff['collation'] ) && ! isset( $diff['character_set'] ) ) {
-                        // don't show collation without character_set
-                        unset( $diff['collation'] );
-                    }
+                    $diff = $this->diff( $actual, $expect );
                     if ( $expect && $diff ) {
                         $this->fixable = true;
                         $troubles['fields']['diff'][] = array( 'title' => $field, 'data' => array( 'diff' => array_keys( $diff ) ) );
@@ -354,6 +350,20 @@ class Database extends Tool
         } else {
             wp_send_json_error( array( 'message' => $success ) );
         }
+    }
+
+    protected function diff( array $actual, array $expect )
+    {
+        $diff = array_diff_assoc( $actual, $expect );
+        if ( isset( $diff['type'] ) && stripos( $diff['type'], 'tinyint' ) === 0 ) {
+            unset( $diff['type'] );
+        }
+        if ( isset( $diff['collation'] ) && ! isset( $diff['character_set'] ) ) {
+            // don't show collation without character_set
+            unset( $diff['collation'] );
+        }
+
+        return $diff;
     }
 
     private function dropColumn( $table, $column )

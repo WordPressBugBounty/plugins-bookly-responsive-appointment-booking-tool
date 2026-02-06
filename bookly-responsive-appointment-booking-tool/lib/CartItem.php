@@ -138,40 +138,45 @@ class CartItem
         static $service_prices_cache = array();
 
         $service = $this->getService();
-        if ( $service->withSubServices() ) {
+        if ( $service->withSubServices() && ( get_option( 'bookly_combined_price_method' ) !== 'nested' || $this->slots === null ) ) {
             $service_price = $service->getPrice();
         } else {
-            $date_time = null;
-            if ( $this->slots === null ) {
-                $service_id = $this->service_id;
-                $staff_id = current( $this->staff_ids );
-                $location_id = $this->location_id;
-            } else {
-                list ( $service_id, $staff_id, $date_time, $location_id ) = $this->slots[0];
-            }
+            $service_price = 0;
+            $_slots = $service->withSubServices() ? $this->slots : array( $this->slots[0] );
+            foreach ( $_slots as $slot ) {
+                $date_time = null;
+                if ( $this->slots === null ) {
+                    $service_id = $this->service_id;
+                    $staff_id = current( $this->staff_ids );
+                    $location_id = $this->location_id;
+                } else {
+                    list ( $service_id, $staff_id, $date_time, $location_id ) = $slot;
+                }
 
-            if ( Config::specialHoursActive() ) {
-                $service_start = $this->slots === null || $date_time === null
-                    ? 'unused'
-                    : date( 'H:i:s', strtotime( $date_time ) );
-            } else {
-                $service_start = 'unused'; //the price is the same for all services in day
-            }
-            if ( isset ( $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] ) ) {
-                $service_price = $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ];
-            } else {
-                $staff_service = new Entities\StaffService();
-                $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null;
-                $staff_service->loadBy( compact( 'staff_id', 'service_id', 'location_id' ) );
-                if ( ! $staff_service->isLoaded() ) {
-                    $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
+                if ( Config::specialHoursActive() ) {
+                    $service_start = $this->slots === null || $date_time === null
+                        ? 'unused'
+                        : date( 'H:i:s', strtotime( $date_time ) );
+                } else {
+                    $service_start = 'unused'; //the price is the same for all services in day
                 }
-                $service_price = $staff_service->getPrice();
-                if ( $this->slots && $date_time ) {
-                    $service_price = Proxy\SpecialHours::adjustPrice( $service_price, $staff_id, $service_id, $location_id, $service_start, date( 'w', strtotime( $date_time ) ) + 1 );
+                if ( isset ( $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] ) ) {
+                    $service_price += $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ];
+                } else {
+                    $staff_service = new Entities\StaffService();
+                    $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null;
+                    $staff_service->loadBy( compact( 'staff_id', 'service_id', 'location_id' ) );
+                    if ( ! $staff_service->isLoaded() ) {
+                        $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
+                    }
+                    $_service_price = $staff_service->getPrice();
+                    if ( $this->slots && $date_time ) {
+                        $_service_price = Proxy\SpecialHours::adjustPrice( $_service_price, $staff_id, $service_id, $location_id, $service_start, date( 'w', strtotime( $date_time ) ) + 1 );
+                    }
+                    $_service_price *= $this->getUnits();
+                    $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] = $_service_price;
+                    $service_price += $_service_price;
                 }
-                $service_price *= $this->getUnits();
-                $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] = $service_price;
             }
         }
 

@@ -13,11 +13,11 @@ use Bookly\Lib\Utils\Codes;
 abstract class Gateway
 {
     const STATUS_PROCESSING = 'processing';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_FAILED = 'failed';
+    const STATUS_COMPLETED  = 'completed';
+    const STATUS_FAILED     = 'failed';
 
     const EVENT_RETRIEVE = 'retrieve';
-    const EVENT_CANCEL = 'cancel';
+    const EVENT_CANCEL   = 'cancel';
 
     /** @var string */
     protected $type;
@@ -203,6 +203,7 @@ abstract class Gateway
             $status = Entities\Payment::query()->where( 'id', $payment->getId() )->fetchVar( 'status' );
             if ( $status !== Entities\Payment::STATUS_COMPLETED ) {
                 if ( $payment->getType() !== Entities\Payment::TYPE_LOCAL || $payment->getTotal() == 0 ) {
+                    $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                     if ( $payment->getParentId() ) {
                         $parent_payment = Entities\Payment::find( $payment->getParentId() );
                         $details = $parent_payment->getDetailsData();
@@ -215,7 +216,6 @@ abstract class Gateway
                         }
                         $parent_payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                     }
-                    $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                 }
                 if ( $payment->getCouponId() ) {
                     Booking\Proxy\Coupons::claim( $payment->getCouponId() );
@@ -238,6 +238,7 @@ abstract class Gateway
 
             if ( $order ) {
                 list( $sync, $gc, $oc ) = Config::syncCalendars();
+                $order->completePayment();
                 foreach ( $order->getItems() as $item ) {
                     if ( $item->getCA() ) {
                         $item->getCA()->setJustCreated( true );
@@ -274,14 +275,14 @@ abstract class Gateway
         if ( $payment ) {
             $path = explode( '\\', get_class( $this ) );
             if ( $payment->getStatus() === Entities\Payment::STATUS_COMPLETED ) {
-                BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
+                BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, 128 ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
 
                 return;
             }
 
             Payment\Proxy\Shared::rollbackPayment( $payment );
 
-            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail' );
+            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, 128 ), $_SERVER['REMOTE_ADDR'], 'call fail' );
             $this->removeCascade( $payment );
         }
 

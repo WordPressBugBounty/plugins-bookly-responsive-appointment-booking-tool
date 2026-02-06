@@ -84,7 +84,7 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function redirect( $url )
     {
-        wp_redirect( $url );
+        header( 'Location: ' . $url, true, 302 );
         printf( '<!doctype html>
                 <html>
                 <head>

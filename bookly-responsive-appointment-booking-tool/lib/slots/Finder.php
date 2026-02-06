@@ -107,10 +107,10 @@ class Finder
      *
      * @return $this
      */
-    public function prepare()
+    public function prepare( $end_date = null )
     {
-        $this->_prepareDates();
-        $this->_prepareStaffData();
+        $this->_prepareDates( $end_date );
+        $this->_prepareStaffData( $end_date );
 
         return $this;
     }
@@ -398,7 +398,7 @@ class Finder
     /**
      * Find start and end dates.
      */
-    private function _prepareDates()
+    private function _prepareDates( $end_date = null )
     {
         // Initial constraints in WP time zone.
         $now = DatePoint::now();
@@ -410,7 +410,7 @@ class Finder
         }
 
         $min_start = $now->modify( $min_time_prior_booking );
-        $max_end = $now->modify( Lib\Config::getMaximumAvailableDaysForBooking() . ' days midnight' );
+        $max_end = $end_date === null ? $now->modify( Lib\Config::getMaximumAvailableDaysForBooking() . ' days midnight' ) : $end_date;
 
         // Find start date.
         if ( Lib\Config::showSingleTimeSlot() ) {
@@ -455,7 +455,7 @@ class Finder
     /**
      * Prepare data for staff.
      */
-    private function _prepareStaffData()
+    private function _prepareStaffData( $end_date = null )
     {
         // Reset staff data
         $this->staff = array();
@@ -641,6 +641,8 @@ class Finder
             $statuses[] = Lib\Entities\CustomerAppointment::STATUS_WAITLISTED;
         }
 
+        $last_date = $end_date ? $end_date->format( 'Y-m-d' ) : date_create()->modify( ( Lib\Config::getMaximumAvailableDaysForBooking() + 7 ) . ' days' )->format( 'Y-m-d' );
+
         // Bookings.
         $bookings = Lib\Entities\Appointment::query( 'a' )
             ->select( sprintf(
@@ -670,7 +672,7 @@ class Finder
                     $padding_left,
                     $this->start_dp->modify( sprintf( '-%d days', $staff_preference_period_before ) )->format( 'Y-m-d' ),
                 ) )
-            ->whereLt( 'a.start_date', date_create()->modify( ( Lib\Config::getMaximumAvailableDaysForBooking() + 7 ) . ' days' )->format( 'Y-m-d' ) )
+            ->whereLt( 'a.start_date', $last_date )
             ->groupBy( 'a.id' )
             ->fetchArray();
         foreach ( $bookings as $booking ) {

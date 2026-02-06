@@ -717,9 +717,27 @@ class Ajax extends Lib\Base\Ajax
                 if ( array_key_exists( 'cart', $parameters ) ) {
                     $first = current( $parameters['cart'] );
                     if ( array_key_exists( 'custom_fields', $first ) ) {
+                        $cf_data = Lib\Proxy\CustomFields::getWhichHaveData();
                         foreach ( $parameters['cart'] as &$value ) {
                             foreach ( $value['custom_fields'] as &$field ) {
                                 $field['id'] = (int) $field['id'];
+                                // Check if custom field options have encoded symbolic values like &amp.
+                                foreach ( $cf_data as $cf ) {
+                                    if ( $cf->id === $field['id']
+                                        && property_exists( $cf, 'items' )
+                                        && isset( $field['value'] )
+                                    ) {
+                                        if ( is_array( $field['value'] ) ) {
+                                            foreach ( $field['value'] as &$f_value ) {
+                                                if ( ! in_array( $f_value, $cf->items ) && in_array( html_entity_decode( $f_value ), $cf->items ) ) {
+                                                    $f_value = html_entity_decode( $f_value );
+                                                }
+                                            }
+                                        } elseif ( ! in_array( $field['value'], $cf->items ) && in_array( html_entity_decode( $field['value'] ), $cf->items ) ) {
+                                            $field['value'] = html_entity_decode( $field['value'] );
+                                        }
+                                    }
+                                }
                             }
                             $value['custom_fields'] = json_encode( $value['custom_fields'] );
                         }
@@ -1062,14 +1080,13 @@ class Ajax extends Lib\Base\Ajax
                     if ( $list[0]['type'] === 'event' ) {
                         list( $start, $end, $title, $location, $description ) = Proxy\Events::getCalendarData( $list[0] );
                     } else {
-                        $staff = Lib\Entities\Staff::find( $list[0]['item']->getAppointment()->getStaffId() );
                         $location_id = $list[0]['item']->getAppointment()->getLocationId();
                         $location = $location_id
                             ? Lib\Proxy\Locations::findById( $location_id )
                             : null;
                         $start = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getStartDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
                         $end = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getEndDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
-                        $description = urlencode( sprintf( "%s<br>%s", $list[0]['title'], $staff ? $staff->getTranslatedName() : '' ) );
+                        $description = urlencode( Lib\Utils\Codes::replace( Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_ics_customer_template' ), Lib\Utils\Codes::getAppointmentCodes( $list[0]['item']->getAppointment() ), false ) );
                         $title = urlencode( $list[0]['title'] );
                     }
                     $redirect_url = sprintf(

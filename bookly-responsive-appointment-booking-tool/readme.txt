@@ -3,9 +3,9 @@ Contributors: Nota-Info
 Tags: appointment booking, booking, booking calendar, booking system, appointments
 Donate link: https://www.booking-wp-plugin.com/
 Requires at least: 3.7
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.3.7
-Stable tag: 25.6
+Stable tag: 26.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 

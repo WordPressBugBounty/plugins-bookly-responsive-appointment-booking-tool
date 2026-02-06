@@ -3,6 +3,73 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_26_4()
+    {
+        add_option( 'bookly_successful_payment_appointment_status', 'disabled' );
+    }
+
+    function update_26_0()
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $this->alterTables( array(
+            'bookly_shop' => array(
+                'ALTER TABLE `%s` CHANGE `bundle_plugins` `bundle_plugins` TEXT DEFAULT NULL',
+                'DELETE FROM `%s` WHERE `slug` = \'bookly-bundle-ultimate\''
+            ),
+        ) );
+
+        if ( $business_license = $wpdb->get_var( 'SELECT `license` FROM `' . $this->getTableName( 'bookly_shop' ) . '` WHERE `slug` = \'bookly-bundle-business\'' ) ) {
+            update_option( 'bookly_bundle_business_purchase_code', $business_license );
+        }
+    }
+
+    function update_25_9()
+    {
+        $disposable_options = array();
+
+        global $wpdb;
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-copy', function( $self ) use ( $wpdb ) {
+            $records = $wpdb->get_results( 'SELECT option_name, option_value FROM `' . $wpdb->options . '` WHERE `option_name` LIKE \'bookly\_%\_envato\_purchase\_code\'', ARRAY_A );
+            foreach ( $records as $record ) {
+                if ( $record['option_value'] ) {
+                    $plugin_slug = str_replace( array( 'bookly', '_envato_purchase_code', '_' ), array( 'bookly-addon', '', '-' ), $record['option_name'] );
+                    $wpdb->update(
+                        $self->getTableName( 'bookly_shop' ),
+                        array( 'license' => $record['option_value'] ),
+                        array( 'slug' => $plugin_slug )
+                    );
+                }
+                add_option( str_replace( '_envato', '', $record['option_name'] ), $record['option_value'] );
+            }
+        } );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
+    function update_25_8()
+    {
+        $disposable_options = array();
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-update-schema', function( $self ) {
+            add_option( 'bookly_temporary_logs_mobile_staff_cabinet', '0' );
+            $self->alterTables( array(
+                'bookly_shop' => array(
+                    'ALTER TABLE `%s` ADD COLUMN `bundle_plugins` VARCHAR(256) DEFAULT NULL AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `license` VARCHAR(32) DEFAULT NULL AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `visible` TINYINT DEFAULT 1 AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `sub_price` VARCHAR(64) AFTER `price`',
+                ),
+            ) );
+        } );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
     function update_25_4()
     {
         $disposable_options = array();
@@ -221,7 +288,7 @@ class Updater extends Base\Updater
                 'type' => 'mobile_sc_grant_access_token',
                 'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
                 'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
-                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'
@@ -230,7 +297,7 @@ class Updater extends Base\Updater
                 'gateway' => 'sms',
                 'type' => 'mobile_sc_grant_access_token',
                 'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'

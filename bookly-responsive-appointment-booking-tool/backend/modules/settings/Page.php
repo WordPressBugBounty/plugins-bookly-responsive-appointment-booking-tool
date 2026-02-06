@@ -161,6 +161,7 @@ class Page extends Lib\Base\Ajax
                     do_action( 'wpml_register_single_string', 'bookly', 'bookly_l10n_ics_customer_template', self::parameter( 'bookly_l10n_ics_customer_template' ) );
                     update_option( 'bookly_ics_staff_template', self::parameter( 'bookly_ics_staff_template' ) );
                     update_option( 'bookly_appointment_default_status', self::parameter( 'bookly_appointment_default_status' ) );
+                    update_option( 'bookly_successful_payment_appointment_status', self::parameter( 'bookly_successful_payment_appointment_status' ) );
                     update_option( 'bookly_appointment_end_date_method', self::parameter( 'bookly_appointment_end_date_method' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
@@ -201,7 +202,7 @@ class Page extends Lib\Base\Ajax
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-            'processing' => __( 'Processing...', 'bookly' ),
+            'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
         ) );

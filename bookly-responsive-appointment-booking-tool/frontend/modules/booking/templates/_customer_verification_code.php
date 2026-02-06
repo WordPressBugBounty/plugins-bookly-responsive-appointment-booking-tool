@@ -1,7 +1,4 @@
-<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
-use Bookly\Lib\Utils\Common;
-
-?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-modal bookly-fade bookly-js-modal bookly-js-verification-code">
     <div class="bookly-modal-dialog">
         <div class="bookly-modal-content bookly-js-modal-content">
@@ -15,7 +12,8 @@ use Bookly\Lib\Utils\Common;
                 <div class="bookly-js-verification-code-error bookly-label-error"></div>
             </div>
             <div class="bookly-modal-footer">
-                <button class="bookly-btn-submit" type="submit"><?php esc_html_e( 'Verify', 'bookly' ) ?></button>
+                <button class="bookly-btn-submit bookly-js-resend-button" type="submit" disabled><?php esc_html_e( 'Resend', 'bookly' ) ?><span class="bookly-js-resend-timer bookly-font-mono"></span></button>
+                <button class="bookly-btn-submit bookly-js-verify-button" type="submit"><?php esc_html_e( 'Verify', 'bookly' ) ?></button>
             </div>
         </div>
     </div>

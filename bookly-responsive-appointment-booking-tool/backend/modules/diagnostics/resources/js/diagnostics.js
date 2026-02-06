@@ -579,6 +579,11 @@ jQuery(function ($) {
             });
     });
 
+    $('.bookly-js-reload-log').on('click', function (e) {
+        e.preventDefault();
+        dt_logs.ajax.reload(null,false);
+    });
+
     let $restoreButton = $('#bookly-logs-restore');
 
     function toggleRestoreButton() {

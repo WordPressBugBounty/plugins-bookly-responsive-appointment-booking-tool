@@ -42,6 +42,11 @@ namespace Bookly\Backend\Components\Dialogs\Staff\Categories\Proxy
     abstract class Pro extends \Bookly\Lib\Base\Proxy{}
 }
 
+namespace Bookly\Backend\Components\Settings\Proxy
+{
+    abstract class Pro extends \Bookly\Lib\Base\Proxy{}
+}
+
 namespace Bookly\Backend\Modules\Appointments\Proxy
 {
     abstract class GroupBooking extends \Bookly\Lib\Base\Proxy{}

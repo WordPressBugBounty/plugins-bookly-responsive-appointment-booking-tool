@@ -888,7 +888,7 @@ class UserBookingData
                 $time_zone = $customer_data['time_zone'];
 
                 $this->setTimeZone( $time_zone );
-                
+
                 if ( preg_match( '/^UTC[+-]/', $time_zone ) ) {
                     $offset = preg_replace( '/UTC\+?/', '', $time_zone );
                     $time_zone = null;
@@ -1819,6 +1819,17 @@ class UserBookingData
     public function getVerificationCode()
     {
         return $this->verification_code;
+    }
+
+    /**
+     * @param bool|string $value
+     * @return $this
+     */
+    public function setVerificationCode( $value )
+    {
+        $this->verification_code = $value;
+
+        return $this;
     }
 
     /**

@@ -225,7 +225,9 @@ class Installer extends Base\Installer
             'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
             'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
             'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
-            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'message' => __( 'Hello', 'bookly' ) . ",\n\n"
+                . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n"
+                . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
             'active' => 1,
             'to_staff' => 1,
             'settings' => '[]',
@@ -234,7 +236,9 @@ class Installer extends Base\Installer
             'gateway' => 'sms',
             'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
             'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'message' => __( 'Hello', 'bookly' ) . ",\n\n"
+                . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n"
+                . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
             'active' => 1,
             'to_staff' => 1,
             'settings' => '[]',
@@ -459,6 +463,7 @@ class Installer extends Base\Installer
             'bookly_appointment_status_rejected_color' => '#dd3333',
             'bookly_appointment_status_mixed_color' => '#8224e3',
             'bookly_appointment_default_status' => Entities\CustomerAppointment::STATUS_APPROVED,
+            'bookly_successful_payment_appointment_status' => 'disabled',
             'bookly_appointment_cancel_action' => 'cancel',
             // Notices
             'bookly_show_wpml_resave_required_notice' => '0',
@@ -474,6 +479,7 @@ class Installer extends Base\Installer
             'bookly_advanced_time_slot_length_minutes' => '',
             'bookly_advanced_slot_date_format' => 'D, M d',
             'bookly_dashboard_based_on_appointment' => 'created_at',
+            'bookly_temporary_logs_mobile_staff_cabinet' => '0',
         );
     }
 
@@ -1001,11 +1007,15 @@ class Installer extends Base\Installer
                 `icon`        VARCHAR(255) NOT NULL,
                 `image`       VARCHAR(255) NOT NULL,
                 `price`       DECIMAL(10,2) NOT NULL,
+                `sub_price`   VARCHAR(64),
                 `sales`       INT UNSIGNED NOT NULL,
                 `rating`      DECIMAL(10,2) NOT NULL,
                 `reviews`     INT UNSIGNED NOT NULL,
                 `published`   DATETIME NOT NULL,
                 `seen`        TINYINT(1) NOT NULL DEFAULT 0,
+                `license`     VARCHAR(32) DEFAULT NULL,
+                `bundle_plugins` TEXT DEFAULT NULL,
+                `visible`     TINYINT DEFAULT 1,
                 `created_at`  DATETIME NOT NULL
             ) ENGINE = INNODB
             ' . $charset_collate

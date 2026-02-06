@@ -182,8 +182,8 @@ class Page extends Lib\Base\Ajax
     {
         $one_participant = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_one_participant' ) ) . '</div>' );
         $many_participants = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_many_participants' ) ) . '</div>' );
-        $tooltip = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{appointment_time} - {appointment_end_time}</span>' );
-        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{description}</span>' );
+        $tooltip = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
+        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
         $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
         $coloring_mode = get_option( 'bookly_cal_coloring_mode' );
         $default_codes = array(
@@ -368,7 +368,7 @@ class Page extends Lib\Base\Ajax
             $codes = Proxy\Shared::prepareAppointmentCodesData( $codes, $appointment, $participants );
 
             switch ( $coloring_mode ) {
-                case 'status';
+                case 'status':
                     $color = isset( $colors[ $event_status ] ) ? $colors[ $event_status ] : $colors['mixed'];
                     break;
                 case 'staff':
