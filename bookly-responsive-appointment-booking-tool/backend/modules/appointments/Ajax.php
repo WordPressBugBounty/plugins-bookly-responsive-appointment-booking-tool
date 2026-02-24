@@ -112,9 +112,10 @@ class Ajax extends Lib\Base\Ajax
      * @param array $columns
      * @param array $order
      * @param bool $export
+     * @param string|null $display_tz
      * @return array
      */
-    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false )
+    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false, $display_tz = null )
     {
         $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
         $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
@@ -254,13 +255,18 @@ class Ajax extends Lib\Base\Ajax
 
         $locations_active = Lib\Config::locationsActive();
 
+        if ( $display_tz === null ) {
+            $convert_tz = false;
+        } else {
+            $wp_tz = Lib\Config::getWPTimeZone();
+            $convert_tz = $display_tz != $wp_tz;
+        }
+
         $data = array();
         foreach ( $query->fetchArray() as $row ) {
-            // Service duration.
             $service_duration = $export
                 ? (int) ( $row['service_duration'] / MINUTE_IN_SECONDS )
                 : Lib\Utils\DateTime::secondsToInterval( $row['service_duration'] );
-            // Payment title.
             $payment_title = '';
             $payment_raw_title = '';
             if ( $row['payment'] !== null && $row['status'] !== Lib\Entities\CustomerAppointment::STATUS_WAITLISTED ) {
@@ -285,9 +291,9 @@ class Ajax extends Lib\Base\Ajax
             }
             // Appointment status.
             $row['status'] = Lib\Entities\CustomerAppointment::statusToString( $row['status'] );
-            // Custom fields
             $customer_appointment = new Lib\Entities\CustomerAppointment();
             $customer_appointment->load( $row['ca_id'] );
+            // Custom fields
             foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( $customer_appointment ) ?: array() as $custom_field ) {
                 $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
             }
@@ -310,6 +316,11 @@ class Ajax extends Lib\Base\Ajax
                 $online_meeting_start_url = Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $appointment );
             } else {
                 $online_meeting_start_url = $row['online_meeting_id'];
+            }
+
+            if ( $convert_tz ) {
+                $row['start_date'] = $row['start_date'] ? Lib\Utils\DateTime::convertTimeZone( $row['start_date'], $wp_tz, $display_tz ) : null;
+                $row['created_date'] = Lib\Utils\DateTime::convertTimeZone( $row['created_date'], $wp_tz, $display_tz );
             }
 
             $data[] = array(

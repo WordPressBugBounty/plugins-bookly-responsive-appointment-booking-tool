@@ -3,10 +3,10 @@ namespace Bookly\Lib;
 
 class CartItem
 {
-    const TYPE_APPOINTMENT = 'appointment';
-    const TYPE_PACKAGE = 'package';
-    const TYPE_GIFT_CARD = 'gift_card';
-    const TYPE_EVENT = 'event';
+    const TYPE_APPOINTMENT   = 'appointment';
+    const TYPE_PACKAGE       = 'package';
+    const TYPE_GIFT_CARD     = 'gift_card';
+    const TYPE_EVENT         = 'event';
     const TYPE_CHILD_PAYMENT = 'child_payment';
 
     // Step service
@@ -15,7 +15,7 @@ class CartItem
     /** @var  int */
     protected $location_id;
     /** @var  int */
-    protected $service_id;
+    protected $service_id = 0;
     /** @var  array */
     protected $staff_ids;
     /** @var  int */
@@ -106,7 +106,7 @@ class CartItem
     /**
      * Get service.
      *
-     * @return Entities\Service
+     * @return Entities\Service|false
      */
     public function getService()
     {
@@ -142,7 +142,7 @@ class CartItem
             $service_price = $service->getPrice();
         } else {
             $service_price = 0;
-            $_slots = $service->withSubServices() ? $this->slots : array( $this->slots[0] );
+            $_slots = $service->withSubServices() ? $this->slots : array( $this->slots === null ? null : $this->slots[0] );
             foreach ( $_slots as $slot ) {
                 $date_time = null;
                 if ( $this->slots === null ) {
@@ -164,7 +164,7 @@ class CartItem
                     $service_price += $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ];
                 } else {
                     $staff_service = new Entities\StaffService();
-                    $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null;
+                    $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: 0;
                     $staff_service->loadBy( compact( 'staff_id', 'service_id', 'location_id' ) );
                     if ( ! $staff_service->isLoaded() ) {
                         $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );

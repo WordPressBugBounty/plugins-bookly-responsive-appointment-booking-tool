@@ -1384,16 +1384,6 @@
 .bookly-css-root .bookly\:focus\:bg-gray-100:focus {
   background-color: var(--bookly-color-gray-100) !important;
 }
-.bookly-css-root .bookly\:focus\:outline-hidden:focus {
-  --tw-outline-style: none !important;
-  outline-style: none !important;
-}
-@media (forced-colors: active) {
-  .bookly-css-root .bookly\:focus\:outline-hidden:focus {
-    outline: 2px solid transparent !important;
-    outline-offset: 2px !important;
-  }
-}
 .bookly-css-root .bookly\:focus\:outline-sky-200:focus {
   outline-color: var(--bookly-color-sky-200) !important;
 }
@@ -2087,6 +2077,10 @@
   margin: 8px;
   border-radius: 4px;
   color: white;
+}
+.bookly-css-root button:focus-visible, .bookly-css-root div:focus-visible {
+  outline: 2px solid !important;
+  outline-offset: 1px !important;
 }
 
 .bookly\:inline-block {

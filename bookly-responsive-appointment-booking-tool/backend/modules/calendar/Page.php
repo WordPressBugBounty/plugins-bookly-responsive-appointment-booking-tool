@@ -16,8 +16,10 @@ class Page extends Lib\Base\Ajax
      */
     public static function render()
     {
+        $calendar_version = get_option( 'bookly_legacy_calendar' ) ? 'legacy' : 'latest';
+
         self::enqueueStyles( array(
-            'module' => array( 'css/event-calendar.min.css' => array( 'bookly-backend-globals' ) ),
+            'module' => array( 'css/' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.css' : 'event-calendar.min.css' ) => array( 'bookly-backend-globals' ) ),
         ) );
 
         $id = Lib\Entities\Appointment::query()->fetchVar( 'MAX(id)' );
@@ -57,8 +59,8 @@ class Page extends Lib\Base\Ajax
             $staff_members ?
                 array(
                     'module' => array(
-                        'js/event-calendar.min.js' => array( 'bookly-backend-globals' ),
-                        'js/calendar-common.js' => array( 'bookly-event-calendar.min.js' ),
+                        'js/' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.js' : 'event-calendar.min.js' ) => array( 'bookly-backend-globals' ),
+                        'js/calendar-common.js' => array( 'bookly-' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.js' : 'event-calendar.min.js' ) ),
                         'js/calendar.js' => array( 'bookly-calendar-common.js', 'bookly-dropdown.js' ),
                     ),
                     'backend' => array(
@@ -76,6 +78,7 @@ class Page extends Lib\Base\Ajax
         wp_localize_script( 'bookly-calendar.js', 'BooklyL10n', array_merge(
             Lib\Utils\Common::getCalendarSettings(),
             array(
+                'calendar_version' => $calendar_version,
                 'delete' => __( 'Delete', 'bookly' ),
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),

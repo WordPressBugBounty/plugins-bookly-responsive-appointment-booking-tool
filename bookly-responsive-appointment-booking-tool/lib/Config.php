@@ -343,7 +343,7 @@ abstract class Config
     {
         $result = array();
 
-        $min_time = Proxy\Pro::getMinimumTimePriorBooking( null );
+        $min_time = Proxy\Pro::getMinimumTimePriorBooking( 0 );
         if ( $chain !== null ) {
             foreach ( $chain->getItems() as $item ) {
                 $min_time = min( $min_time, Proxy\Pro::getMinimumTimePriorBooking( $item->getService()->getId() ) );

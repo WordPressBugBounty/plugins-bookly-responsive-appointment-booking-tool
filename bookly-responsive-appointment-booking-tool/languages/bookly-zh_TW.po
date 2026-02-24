@@ -9,10 +9,10 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:30+0000\n"
-"PO-Revision-Date: 2026-01-07 03:34+0000\n"
+"PO-Revision-Date: 2026-02-06 14:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.4.11"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.11"
 
 #, php-format
 msgid " and %d more item"
@@ -265,6 +265,9 @@ msgstr "訪問您的訂單已被禁用。"
 
 msgid "Access token"
 msgstr "訪問令牌"
+
+msgid "Access token link for quick authorization in the mobile app"
+msgstr "移動應用中的快速授權訪問令牌鏈接"
 
 msgid "Access tokens"
 msgstr "訪問令牌"
@@ -897,9 +900,6 @@ msgstr "關聯付款狀態"
 
 msgid "Associated staff member"
 msgstr "關聯員工"
-
-msgid "at"
-msgstr "在"
 
 msgid "At the top of your screen press on App ID to copy it."
 msgstr "在熒幕頂部按App ID來複製。"
@@ -3390,12 +3390,6 @@ msgid ""
 msgstr "如果要將服務能力內的預訂次數限制為一次，請啟用此選項。"
 
 msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr "啟用這個選項，Bookly在完成PHP會話後會自動關閉會話。這樣可以防止會話鎖定，否則可能導致其他各種進程超時或失敗"
-
-msgid ""
 "Enable this option to make slot length equal to service duration at the Time "
 "step of booking form."
 msgstr "啟用此選項可使時間長度等於預約表格的時間步驟中的服務持續時間。"
@@ -4903,6 +4897,11 @@ msgid ""
 msgstr "如啟用，則後端日曆將佔用熒幕的一部分並保持可滾動狀態。如禁用，則後端日曆將佔用更多空間並隨整個頁面滾動。"
 
 msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
+msgstr "若啟用，日曆將使用兼容模式，這將提高與舊瀏覽器的兼容性。"
+
+msgid ""
 "If enabled, the card will be automatically associated with the customer who "
 "purchases it via the frontend booking form"
 msgstr "如啟用，卡片將自動關聯通過前端預訂表單購買該卡的客戶"
@@ -5107,7 +5106,7 @@ msgid ""
 "You can also send notifications as if all customers were added as new by "
 "selecting \"Send as for new\"."
 msgstr ""
-"如果您在此約會添加了新客戶，或更改了現有客戶的約會狀態，並且希望將相應的記錄以電子郵件或SMS發送給收件人，請在點擊發送之前選擇\"新的或狀態更改下發送\"選項。您還可以通過選擇\"以新的形式發送\"來發送通知，就好像所有客戶也是新添加客戶一樣。"
+"如果您在此約會添加了新客戶，或更改了現有客戶的約會狀態，並且希望將相應的記錄以電子郵件或SMS發送給收件人，請在點擊發送之前選擇\"如果有新狀態或狀態更改則發送\"選項。您還可以通過選擇\"按新增发送\"來發送通知，就好像所有客戶也是新添加客戶一樣。"
 
 #, php-format
 msgid ""
@@ -5585,6 +5584,9 @@ msgstr "給我們留言"
 
 msgid "Leave your comment"
 msgstr "留下意見"
+
+msgid "Legacy mode"
+msgstr "兼容模式"
 
 msgid "Legal services"
 msgstr "法律服務"
@@ -6526,8 +6528,9 @@ msgstr "好，您值得擁有"
 msgid "Old password"
 msgstr "舊密碼"
 
+msgctxt "on date"
 msgid "On"
-msgstr "在"
+msgstr "于"
 
 msgctxt "on date"
 msgid "on"
@@ -6912,9 +6915,6 @@ msgstr "員工照片"
 msgid "Photographers"
 msgstr "攝影師"
 
-msgid "PHP Sessions"
-msgstr "PHP會話"
-
 msgid "Physiologists"
 msgstr "生理學家"
 
@@ -7222,11 +7222,11 @@ msgstr "以快速且清晰的形式呈現活動和售票情況。"
 msgid "Prevent caching of pages with booking form"
 msgstr "防止緩存預約表格頁面"
 
-msgid "Prevent PHP session locking"
-msgstr "防止PHP會話鎖定"
-
 msgid "Preview"
 msgstr "預視"
+
+msgid "Previous"
+msgstr "之前"
 
 msgid "Price"
 msgstr "售價"
@@ -7530,6 +7530,9 @@ msgstr "移除促銷碼"
 
 msgid "Renew"
 msgstr "更新"
+
+msgid "Reorder"
+msgstr "再訂購"
 
 msgid "Repeat"
 msgstr "重覆"
@@ -7911,9 +7914,6 @@ msgid ""
 "by SMS or email."
 msgstr "選擇何時通過SMS短訊或電子郵件向客戶發送帶驗證碼的通知。"
 
-msgid "Select where to store session data"
-msgstr "選擇存儲會話數據的位置"
-
 msgid "Select who can administrate Bookly"
 msgstr "選擇可管理Bookly的人"
 
@@ -7953,7 +7953,7 @@ msgid "Send"
 msgstr "發送"
 
 msgid "Send as for new"
-msgstr "如新發送"
+msgstr "按新增发送"
 
 msgid "Send email notification to administrators at low balance"
 msgstr "餘額過低時發電郵通知管理員"
@@ -8081,9 +8081,6 @@ msgstr "服務將與工作人員相關聯，而客戶將與其預約相關聯。
 
 msgid "Session error."
 msgstr "訪問時段錯誤。"
-
-msgid "Session storage mode"
-msgstr "會話存儲模式"
 
 msgid ""
 "Set 0 to disable waiting list for this service or set the required value."
@@ -9352,13 +9349,6 @@ msgstr "該設置指定發票的到期天數(從1到365天)"
 
 msgid "This test checks for critical errors in Bookly."
 msgstr "該測試檢查Bookly中的關鍵性誤差。"
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr "該測試檢查PHP會話是否啟用。Bookly需要PHP會話才能正常工作。有關PHP會話的更多資訊，請查看PHP官方文檔%s。"
 
 msgid ""
 "This test checks the ability to establish a connection with the Bookly Cloud "

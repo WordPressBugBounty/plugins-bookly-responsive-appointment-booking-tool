@@ -9,8 +9,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:30+0000\n"
-"PO-Revision-Date: 2026-01-13 09:26+0000\n"
-"Last-Translator: support@bookly.info\n"
+"PO-Revision-Date: 2026-02-09 14:02+0000\n"
+"Last-Translator: Isabel Andrade\n"
 "Language-Team: Portuguese (Portugal)\n"
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.4.11"
 
@@ -294,6 +294,9 @@ msgstr "O acesso às suas reservas foi desativado."
 
 msgid "Access token"
 msgstr "Aceder token"
+
+msgid "Access token link for quick authorization in the mobile app"
+msgstr "Link do token de acesso para autorização rápida na app móvel"
 
 msgid "Access tokens"
 msgstr "Tokens de acesso"
@@ -966,9 +969,6 @@ msgstr "Status do pagamento associado"
 
 msgid "Associated staff member"
 msgstr "Membro associado do staff"
-
-msgid "at"
-msgstr "às"
 
 msgid "At the top of your screen press on App ID to copy it."
 msgstr "No topo do seu ecrã, prima na App ID para o copiar."
@@ -3573,15 +3573,6 @@ msgstr ""
 "capacidade do serviço uma só vez. "
 
 msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr ""
-"Desabilite esta opção para que o Bookly feche a sessão PHP assim que tiver "
-"terminado. Isto evita que a sessão bloqueie, o que poderia causar vários "
-"problemas como a sessão expirar ou falhas."
-
-msgid ""
 "Enable this option to make slot length equal to service duration at the Time "
 "step of booking form."
 msgstr ""
@@ -5229,6 +5220,13 @@ msgstr ""
 "juntamente com toda a página."
 
 msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
+msgstr ""
+"Se ativado, o calendário utilizará o modo Legacy, que melhora a "
+"compatibilidade com navegadores mais antigos."
+
+msgid ""
 "If enabled, the card will be automatically associated with the customer who "
 "purchases it via the frontend booking form"
 msgstr ""
@@ -6074,6 +6072,9 @@ msgstr "Deixe uma mensagem"
 
 msgid "Leave your comment"
 msgstr "Deixe seu comentário"
+
+msgid "Legacy mode"
+msgstr "Modo Legacy"
 
 msgid "Legal services"
 msgstr "Serviços legais"
@@ -7091,6 +7092,7 @@ msgstr "OK, merece"
 msgid "Old password"
 msgstr "Palavra-passe antiga"
 
+msgctxt "on date"
 msgid "On"
 msgstr "Em"
 
@@ -7514,9 +7516,6 @@ msgstr "Fotografia do funcionário"
 msgid "Photographers"
 msgstr "Fotografos   "
 
-msgid "PHP Sessions"
-msgstr "Sessões PHP "
-
 msgid "Physiologists"
 msgstr "Fisiologistas"
 
@@ -7902,11 +7901,11 @@ msgstr "Apresente eventos e venda notas de forma rápida e clara."
 msgid "Prevent caching of pages with booking form"
 msgstr "Evitar o cache de páginas com formulário de reserva"
 
-msgid "Prevent PHP session locking"
-msgstr "Evite que a sessão PHP bloqueie"
-
 msgid "Preview"
 msgstr "Pré-visualizar"
+
+msgid "Previous"
+msgstr "Anterior"
 
 msgid "Price"
 msgstr "Preço"
@@ -8225,6 +8224,9 @@ msgstr "Remover Código Promocional"
 
 msgid "Renew"
 msgstr "Renovar"
+
+msgid "Reorder"
+msgstr "Reordenar"
 
 msgid "Repeat"
 msgstr "Repetir"
@@ -8666,9 +8668,6 @@ msgstr ""
 "Selecionar quando enviar a notificação com o código de verificação para o "
 "cliente via SMS ou email."
 
-msgid "Select where to store session data"
-msgstr "Selecione onde guardar os dados da sessão"
-
 msgid "Select who can administrate Bookly"
 msgstr "Selecione quem pode administrar o Bookly"
 
@@ -8847,9 +8846,6 @@ msgstr ""
 
 msgid "Session error."
 msgstr "Erro de sessão."
-
-msgid "Session storage mode"
-msgstr "Modo de armazenamento da sessão"
 
 msgid ""
 "Set 0 to disable waiting list for this service or set the required value."
@@ -10352,17 +10348,6 @@ msgstr ""
 msgid "This test checks for critical errors in Bookly."
 msgstr ""
 "Este teste verifica se há erros críticos na Bookly.\n"
-"\n"
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr ""
-"Este teste verifica se as sessões PHP estão ativadas. Bookly precisa de "
-"sessões php para funcionar corretamente. Para mais informações sobre as "
-"sessões php, verifique a documentação oficial do PHP %s.\n"
 "\n"
 
 msgid ""

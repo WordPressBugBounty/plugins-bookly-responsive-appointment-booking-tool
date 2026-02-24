@@ -11,6 +11,7 @@ use Bookly\Lib\DataHolders\Booking as DataHolders;
 use Bookly\Backend\Components\Dialogs\Appointment\Edit\Proxy;
 use Bookly\Backend\Components\Dialogs\Queue\NotificationList;
 use Bookly\Backend\Modules\Calendar;
+use Bookly\Lib\Slots\DatePoint;
 
 class Appointment
 {
@@ -713,6 +714,86 @@ class Appointment
                 }
                 $result['customers_appointments_limit'] = array_unique( $result['customers_appointments_limit'] );
             }
+        }
+
+        return $result;
+    }
+
+    public static function getDaySchedule(
+        $staff_ids,
+        $service_id,
+        $date,
+        $appointment_id,
+        $location_id,
+        $extras,
+        $nop
+    )
+    {
+        $service = Service::find( $service_id );
+        // Get array of extras with max duration
+        $extras = Proxy\Extras::getMaxDurationExtras( $extras );
+
+        $chain_item = new Lib\ChainItem();
+        $chain_item
+            ->setStaffIds( $staff_ids )
+            ->setServiceId( $service_id )
+            ->setLocationId( $location_id )
+            ->setNumberOfPersons( $nop )
+            ->setQuantity( 1 )
+            ->setLocationId( $location_id )
+            ->setUnits( 1 )
+            ->setExtras( $extras );
+
+        $chain = new Lib\Chain();
+        $chain->add( $chain_item );
+
+        $custom_slot = array();
+        $ignore_appointments = array();
+        if ( $appointment_id ) {
+            $appointment = Lib\Entities\Appointment::find( $appointment_id );
+            if ( date_create( $appointment->getStartDate() )->format( 'Y-m-d' ) === date_create( $date )->format( 'Y-m-d' ) ) {
+                $custom_slot = array(
+                    'title' => DatePoint::fromStr( $appointment->getStartDate() )->formatI18n( get_option( 'time_format' ) ),
+                    'value' => date_create( $appointment->getStartDate() )->format( 'H:i' ),
+                );
+            }
+            $ignore_appointments[] = $appointment_id;
+        }
+
+        $scheduler = new Lib\Scheduler( $chain, date_create( $date )->format( 'Y-m-d 00:00' ), date_create( $date )->format( 'Y-m-d' ), 'daily', array( 'every' => 1 ), array(), false, $ignore_appointments );
+        $schedule = $scheduler->scheduleForFrontend( 1 );
+        $result = array();
+        $time_format = get_option( 'time_format' );
+        if ( isset( $schedule[0]['options'] ) ) {
+            foreach ( $schedule[0]['options'] as $slot ) {
+                $value = json_decode( $slot['value'], true );
+                $date = date_create( $value[0][2] );
+                $value = $date->format( 'H:i' );
+                if ( ! empty( $custom_slot ) && $value === $custom_slot['value'] ) {
+                    $custom_slot = array();
+                }
+                if ( ! empty( $custom_slot ) && strcmp( $value, $custom_slot['value'] ) > 0 ) {
+                    $result[] = $custom_slot;
+                    $custom_slot = array();
+                }
+                $end_date = clone $date;
+                $end_date = $end_date->modify( $service->getDuration() . ' seconds' );
+                $result['start'][] = array(
+                    'title' => $slot['title'],
+                    'value' => $value,
+                    'disabled' => $slot['disabled'],
+                );
+
+                $result['end'][] = array(
+                    'title_time' => date_i18n( $time_format, $end_date->getTimestamp() ),
+                    'value' => $end_date->getTimestamp() - $date->modify( 'midnight' )->getTimestamp() >= DAY_IN_SECONDS ? ( (int) $end_date->format( 'H' ) + 24 ) . ':' . $end_date->format( 'i' ) : $end_date->format( 'H:i' ),
+                    'disabled' => $slot['disabled'],
+                );
+            }
+        }
+
+        if ( ! empty( $custom_slot ) ) {
+            $result[] = $custom_slot;
         }
 
         return $result;

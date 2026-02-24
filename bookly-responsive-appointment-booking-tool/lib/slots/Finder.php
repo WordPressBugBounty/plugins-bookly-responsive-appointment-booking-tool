@@ -129,7 +129,7 @@ class Finder
         foreach ( array_reverse( $this->userData->chain->getItems() ) as $chain_item ) {
             $parent_service_id = $chain_item->getService()->withSubServices()
                 ? $chain_item->getService()->getId()
-                : null;
+                : 0;
             $is_collaborative = $chain_item->getService()->isCollaborative();
             $sub_services = $chain_item->getSubServicesWithSpareTime();
             $extras = $chain_item->distributeExtrasAcrossSubServices();
@@ -470,7 +470,7 @@ class Finder
             }
             $parent_service_id = $chain_item->getService()->withSubServices()
                 ? $chain_item->getService()->getId()
-                : null;
+                : 0;
             $sub_services = $chain_item->getSubServices();
             foreach ( $sub_services as $sub_service ) {
                 $_staff_ids = $chain_item->getStaffIdsForSubService( $sub_service );

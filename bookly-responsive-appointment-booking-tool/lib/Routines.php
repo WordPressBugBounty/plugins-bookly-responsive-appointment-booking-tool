@@ -334,7 +334,7 @@ abstract class Routines
 
     public static function clearSessions()
     {
-        Entities\Session::query()->delete()->whereLt( 'expire', current_time( 'mysql' ) )->execute();
+        FormSession::clearExpiredSessions();
     }
 
     public static function clearLogs()

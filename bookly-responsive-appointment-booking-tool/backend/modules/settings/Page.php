@@ -64,6 +64,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_cal_show_new_appointments_badge', self::parameter( 'bookly_cal_show_new_appointments_badge' ) );
                     update_option( 'bookly_cal_last_seen_appointment', self::parameter( 'bookly_cal_last_seen_appointment' ) );
                     update_option( 'bookly_cal_scrollable_calendar', self::parameter( 'bookly_cal_scrollable_calendar' ) );
+                    update_option( 'bookly_legacy_calendar', self::parameter( 'bookly_legacy_calendar' ) );
                     foreach ( self::parameter( 'status' ) as $status => $color ) {
                         if ( in_array( $status, array( CustomerAppointment::STATUS_PENDING, CustomerAppointment::STATUS_APPROVED, CustomerAppointment::STATUS_CANCELLED, CustomerAppointment::STATUS_REJECTED, 'mixed' ) ) ) {
                             update_option( sprintf( 'bookly_appointment_status_%s_color', $status ), $color );
@@ -121,9 +122,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_gen_collect_stats', self::parameter( 'bookly_gen_collect_stats' ) );
                     update_option( 'bookly_gen_show_powered_by', self::parameter( 'bookly_gen_show_powered_by' ) );
                     update_option( 'bookly_gen_prevent_caching', (int) self::parameter( 'bookly_gen_prevent_caching' ) );
-                    update_option( 'bookly_gen_prevent_session_locking', (int) self::parameter( 'bookly_gen_prevent_session_locking' ) );
                     update_option( 'bookly_gen_badge_consider_news', (int) self::parameter( 'bookly_gen_badge_consider_news' ) );
-                    update_option( 'bookly_gen_session_type', self::parameter( 'bookly_gen_session_type' ) );
                     update_option( 'bookly_email_gateway', self::parameter( 'bookly_email_gateway' ) );
                     update_option( 'bookly_smtp_host', self::parameter( 'bookly_smtp_host' ) );
                     update_option( 'bookly_smtp_port', self::parameter( 'bookly_smtp_port' ) );

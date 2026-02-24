@@ -348,6 +348,7 @@ class Installer extends Base\Installer
             'bookly_cal_month_view_style' => 'classic',
             'bookly_cal_show_new_appointments_badge' => '0',
             'bookly_cal_last_seen_appointment' => '0',
+            'bookly_legacy_calendar' => '0',
             // Company.
             'bookly_co_logo_attachment_id' => '',
             'bookly_co_name' => '',
@@ -386,9 +387,7 @@ class Installer extends Base\Installer
             'bookly_gen_link_assets_method' => 'enqueue',
             'bookly_gen_collect_stats' => '0',
             'bookly_gen_show_powered_by' => '0',
-            'bookly_gen_session_type' => 'php',
             'bookly_gen_prevent_caching' => '1',
-            'bookly_gen_prevent_session_locking' => '0',
             'bookly_gen_badge_consider_news' => '1',
             // URL.
             'bookly_url_approve_page_url' => home_url(),
@@ -1087,6 +1086,18 @@ class Installer extends Base\Installer
                 `sent` TINYINT(1) DEFAULT 0,
                 `campaign_id` INT NOT NULL DEFAULT 0,
                 `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\FormSession::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );

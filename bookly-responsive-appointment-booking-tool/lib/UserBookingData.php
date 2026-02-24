@@ -105,6 +105,9 @@ class UserBookingData
     /** @var string */
     private $form_id;
 
+    /** @var array */
+    private $session = array();
+
     // Frontend expect variables
     private $properties = array(
         'first_rendered_step',
@@ -279,7 +282,7 @@ class UserBookingData
         // Set up default parameters.
         $this
             ->setDateFrom( Slots\DatePoint::now()
-                ->modify( Proxy\Pro::getMinimumTimePriorBooking( null ) )
+                ->modify( Proxy\Pro::getMinimumTimePriorBooking( 0 ) )
                 ->toClientTz()
                 ->format( 'Y-m-d' )
             )
@@ -292,20 +295,20 @@ class UserBookingData
     }
 
     /**
-     * Save data to session.
+     * Save data to a session.
      */
     public function sessionSave()
     {
-        Session::setFormVar( $this->form_id, 'data', $this->getData() );
-        Session::setFormVar( $this->form_id, 'cart', $this->cart->getItemsData() );
-        Session::setFormVar( $this->form_id, 'chain', $this->chain->getItemsData() );
-        Session::setFormVar( $this->form_id, 'payment_id', $this->payment_id );
-        Session::setFormVar( $this->form_id, 'payment_type', $this->payment_type );
-        Session::setFormVar( $this->form_id, 'last_touched', time() );
-        Session::setFormVar( $this->form_id, 'verification_code', $this->verification_code ?: mt_rand( 100000, 999999 ) );
-        Session::setFormVar( $this->form_id, 'verification_code_sent', $this->verification_code_sent );
-        Session::setFormVar( $this->form_id, 'order_id', $this->order_id );
-        Session::save();
+        $this->session['data'] = $this->getData();
+        $this->session['cart'] = $this->cart->getItemsData();
+        $this->session['chain'] = $this->chain->getItemsData();
+        $this->session['payment_id'] = $this->payment_id;
+        $this->session['payment_type'] = $this->payment_type;
+        $this->session['verification_code'] = $this->verification_code ?: mt_rand( 100000, 999999 );
+        $this->session['verification_code_sent'] = $this->verification_code_sent;
+        $this->session['order_id'] = $this->order_id;
+
+        FormSession::saveSession( $this->form_id, $this->session );
     }
 
     /**
@@ -328,20 +331,23 @@ class UserBookingData
      */
     public function load()
     {
-        $data = Session::getFormVar( $this->form_id, 'data' );
-        if ( $data !== null ) {
-            // Restore data.
-            $this->fillData( $data );
-            $this->chain->setItemsData( Session::getFormVar( $this->form_id, 'chain' ) );
-            $this->cart->setItemsData( Session::getFormVar( $this->form_id, 'cart' ) );
-            $this->payment_id = Session::getFormVar( $this->form_id, 'payment_id' );
-            $this->payment_type = Session::getFormVar( $this->form_id, 'payment_type' );
-            $this->verification_code = Session::getFormVar( $this->form_id, 'verification_code' );
-            $this->verification_code_sent = Session::getFormVar( $this->form_id, 'verification_code_sent' );
-            $this->order_id = Session::getFormVar( $this->form_id, 'order_id' );
-            $this->applyTimeZone();
+        $this->session = FormSession::loadSession( $this->form_id );
+        if ( $this->session ) {
+            $data = isset( $this->session['data'] ) ? $this->session['data'] : null;
+            if ( $data !== null ) {
+                // Restore data.
+                $this->fillData( $data );
+                $this->chain->setItemsData( isset( $this->session['chain'] ) ? $this->session['chain'] : null );
+                $this->cart->setItemsData( isset( $this->session['cart'] ) ? $this->session['cart'] : null );
+                $this->payment_id = isset( $this->session['payment_id'] ) ? $this->session['payment_id'] : null;
+                $this->payment_type = isset( $this->session['payment_type'] ) ? $this->session['payment_type'] : null;
+                $this->verification_code = isset( $this->session['verification_code'] ) ? $this->session['verification_code'] : null;
+                $this->verification_code_sent = isset( $this->session['verification_code_sent'] ) ? $this->session['verification_code_sent'] : null;
+                $this->order_id = isset( $this->session['order_id'] ) ? $this->session['order_id'] : null;
+                $this->applyTimeZone();
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -486,7 +492,7 @@ class UserBookingData
                 $slots = $cart_item->getSlots();
                 foreach ( $slots as $slot ) {
                     if ( $slot[2] < $first_visit_time ) {
-                        $first_visit_time = $slots[2];
+                        $first_visit_time = $slot[2];
                         $first_visit_repeat = $repeat_id;
                     }
                 }
@@ -967,7 +973,7 @@ class UserBookingData
      */
     public function setPaymentStatus( $status )
     {
-        Session::setFormVar( $this->form_id, 'payment', compact( 'status' ) );
+        $this->session['payment'] = compact( 'status' );
 
         return $this;
     }
@@ -979,10 +985,10 @@ class UserBookingData
      */
     public function extractPaymentStatus()
     {
-        $status = Session::getFormVar( $this->form_id, 'payment' );
+        $status = isset( $this->session['payment'] ) ? $this->session['payment'] : null;
 
         if ( isset( $status['status'] ) ) {
-            Session::destroyFormVar( $this->form_id, 'payment' );
+            unset( $this->session['payment'] );
 
             return $status;
         }

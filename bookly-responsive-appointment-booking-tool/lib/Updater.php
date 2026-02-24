@@ -3,6 +3,26 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_26_8()
+    {
+        $this->createTables( array(
+            'bookly_form_sessions' =>
+                'CREATE TABLE IF NOT EXISTS `%s` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
+            ) ENGINE = INNODB',
+        ) );
+
+        add_option( 'bookly_legacy_calendar', '0' );
+
+        delete_option( 'bookly_gen_prevent_session_locking' );
+        delete_option( 'bookly_gen_session_type' );
+    }
+
     function update_26_4()
     {
         add_option( 'bookly_successful_payment_appointment_status', 'disabled' );

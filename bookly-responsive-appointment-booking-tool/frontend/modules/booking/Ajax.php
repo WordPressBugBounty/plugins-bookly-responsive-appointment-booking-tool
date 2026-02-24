@@ -17,6 +17,38 @@ class Ajax extends Lib\Base\Ajax
         return array( '_default' => 'anonymous' );
     }
 
+    public static function getFormId()
+    {
+        $status = array( 'booking' => 'new' );
+        $form_processed = false;
+        if ( self::hasParameter( 'form_id' ) ) {
+            $form_id = self::parameter( 'form_id' );
+            $data = Lib\FormSession::loadSession( $form_id );
+            if ( $data && isset( $data['payment'] ) && ! isset ( $data['payment']['processed'] ) ) {
+                switch ( $data['payment']['status'] ) {
+                    case Lib\Base\Gateway::STATUS_COMPLETED:
+                    case Lib\Base\Gateway::STATUS_PROCESSING:
+                        $status = array( 'booking' => 'finished' );
+                        break;
+                    case Lib\Base\Gateway::STATUS_FAILED:
+                        end( $data['cart'] );
+                        $status = array( 'booking' => 'cancelled', 'cart_key' => key( $data['cart'] ) );
+                        break;
+                }
+                // Mark this form as processed for cases when there are more than 1 booking form on the page.
+                $data['payment']['processed'] = true;
+                Lib\FormSession::saveSession( $form_id, $data );
+                $form_processed = true;
+            }
+        }
+        if ( ! $form_processed ) {
+            $form_id = Lib\FormSession::createSession();
+            Lib\FormSession::saveSession( $form_id, self::parameter( 'form_data' ) );
+        }
+
+        wp_send_json( array( 'success' => true, 'form_id' => $form_id, 'status' => $status ) );
+    }
+
     /**
      * 1. Step service.
      * response JSON
@@ -1221,13 +1253,14 @@ class Ajax extends Lib\Base\Ajax
                 }
             }
             $form_id = self::parameter( 'form_id' );
-            $stepper_add_step = ! Lib\Session::getFormVar( $form_id, 'skip_service_step', 0 )
-                && ( Lib\Session::getFormVar( $form_id, 'hide_service_part1', 0 ) + Lib\Session::getFormVar( $form_id, 'hide_service_part2', 0 ) ) === 0;
+            $session = Lib\FormSession::loadSession( $form_id );
+            $stepper_add_step = ( ! isset( $session['skip_service_step'] ) || ! $session['skip_service_step'] )
+                && ( $session['hide_service_part1'] + $session['hide_service_part2'] === 0 );
 
             $result = self::renderTemplate( '_progress_tracker', array(
                 'step' => $step,
                 'skip_steps' => array(
-                    'service' => Lib\Session::hasFormVar( $form_id, 'skip_service_step' ),
+                    'service' => isset( $session['skip_service_step'] ) && $session['skip_service_step'],
                     'extras' => ! ( Lib\Config::serviceExtrasActive() && get_option( 'bookly_service_extras_enabled' ) ),
                     'time' => $skip_time_step,
                     'repeat' => $skip_time_step || ! Lib\Config::recurringAppointmentsActive() || ! get_option( 'bookly_recurring_appointments_enabled' ) || Lib\Config::showSingleTimeSlot(),
@@ -1261,8 +1294,9 @@ class Ajax extends Lib\Base\Ajax
      */
     private static function _setDataForSkippedServiceStep( Lib\UserBookingData $userData )
     {
+        $session_data = Lib\FormSession::loadSession( self::parameter( 'form_id' ) );
         // Staff ids.
-        $defaults = Lib\Session::getFormVar( self::parameter( 'form_id' ), 'defaults' );
+        $defaults = $session_data['defaults'];
         if ( $defaults !== null ) {
             $service_id = $defaults['service_id'];
             $service = Lib\Entities\Service::find( $defaults['service_id'] );

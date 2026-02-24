@@ -1345,6 +1345,9 @@ msgstr ""
 msgid "Click \"%s\" to create your first one"
 msgstr ""
 
+msgid "Reorder"
+msgstr ""
+
 msgid "Events form"
 msgstr ""
 
@@ -4508,6 +4511,9 @@ msgstr ""
 msgid "Show past appointments"
 msgstr ""
 
+msgid "Previous"
+msgstr ""
+
 #, php-format
 msgid ""
 "Sorry, the time slot %date_time% for %service% has been already occupied."
@@ -5021,6 +5027,7 @@ msgstr ""
 msgid "Number of days to shift appointments"
 msgstr ""
 
+msgctxt "on date"
 msgid "On"
 msgstr ""
 
@@ -5459,9 +5466,6 @@ msgstr ""
 msgid ""
 "Notification to staff member about placing on waiting list for recurring "
 "appointment"
-msgstr ""
-
-msgid "at"
 msgstr ""
 
 msgid "New recurring booking notification"
@@ -8127,16 +8131,6 @@ msgid ""
 "website if there is no valid SSL certificate installed on your web server."
 msgstr ""
 
-msgid "PHP Sessions"
-msgstr ""
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr ""
-
 msgid "Time settings"
 msgstr ""
 
@@ -8218,6 +8212,9 @@ msgid "Customer new username"
 msgstr ""
 
 msgid "Site address"
+msgstr ""
+
+msgid "Access token link for quick authorization in the mobile app"
 msgstr ""
 
 msgid "Order ID"
@@ -8385,6 +8382,14 @@ msgstr ""
 msgid ""
 "If enabled, you will see an indicator near 'Calendar' for newly created "
 "appointments"
+msgstr ""
+
+msgid "Legacy mode"
+msgstr ""
+
+msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
 msgstr ""
 
 msgid "Scrollable calendar"
@@ -8617,21 +8622,6 @@ msgid ""
 "Select \"Enabled\" if you want Bookly to prevent caching by third-party "
 "caching plugins by adding a DONOTCACHEPAGE constant on pages with booking "
 "form"
-msgstr ""
-
-msgid "Session storage mode"
-msgstr ""
-
-msgid "Select where to store session data"
-msgstr ""
-
-msgid "Prevent PHP session locking"
-msgstr ""
-
-msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
 msgstr ""
 
 msgid "Show news notifications"

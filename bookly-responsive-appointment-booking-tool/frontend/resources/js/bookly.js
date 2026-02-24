@@ -1,4 +1,4 @@
-const booklyJsVersion="26.4";
+const booklyJsVersion="26.8";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -6860,12 +6860,13 @@ var bookly = (function ($) {
 	          betas: ['payment_intent_beta_3']
 	        });
 	        var elements = stripe.elements();
+	        let id = $container.attr('id');
 	        var stripe_card = elements.create('cardNumber');
-	        stripe_card.mount("#bookly-form-" + params.form_id + " #bookly-stripe-card-field");
+	        stripe_card.mount("#" + id + " #bookly-stripe-card-field");
 	        var stripe_expiry = elements.create('cardExpiry');
-	        stripe_expiry.mount("#bookly-form-" + params.form_id + " #bookly-stripe-card-expiry-field");
+	        stripe_expiry.mount("#" + id + " #bookly-stripe-card-expiry-field");
 	        var stripe_cvc = elements.create('cardCvc');
-	        stripe_cvc.mount("#bookly-form-" + params.form_id + " #bookly-stripe-card-cvc-field");
+	        stripe_cvc.mount("#" + id + " #bookly-stripe-card-cvc-field");
 	      } else {
 	        $('.pay-card .bookly-js-next-step', $container).prop('disabled', true);
 	        let $details = $stripe_card_field.closest('.bookly-js-details');
@@ -15833,8 +15834,8 @@ var bookly = (function ($) {
 	  let mounted;
 	  let dispose;
 	  let if_block = /*loading*/ctx[3] && create_if_block_4$2();
-	  const default_slot_template = /*#slots*/ctx[17].default;
-	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[16], null);
+	  const default_slot_template = /*#slots*/ctx[18].default;
+	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[17], null);
 	  return {
 	    c() {
 	      button = element("button");
@@ -15845,9 +15846,10 @@ var bookly = (function ($) {
 	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(button, "type", "button");
 	      attr(button, "title", /*title*/ctx[2]);
-	      attr(button, "class", button_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border"));
+	      attr(button, "class", button_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border"));
 	      attr(button, "style", /*styles*/ctx[4]);
 	      button.disabled = button_disabled_value = /*disabled*/ctx[0] || /*loading*/ctx[3];
+	      attr(button, "aria-label", /*ariaLabel*/ctx[5]);
 	      toggle_class(button, "bookly:cursor-pointer", ! /*disabled*/ctx[0]);
 	      toggle_class(button, "bookly:pointer-events-none", /*disabled*/ctx[0]);
 	      toggle_class(button, "bookly:opacity-50", /*disabled*/ctx[0]);
@@ -15862,7 +15864,7 @@ var bookly = (function ($) {
 	      }
 	      current = true;
 	      if (!mounted) {
-	        dispose = listen(button, "click", stop_propagation(/*click_handler_1*/ctx[20]));
+	        dispose = listen(button, "click", stop_propagation(/*click_handler_1*/ctx[21]));
 	        mounted = true;
 	      }
 	    },
@@ -15886,8 +15888,8 @@ var bookly = (function ($) {
 	        check_outros();
 	      }
 	      if (default_slot) {
-	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	        if (default_slot.p && (!current || dirty & /*$$scope*/131072)) {
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[17], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[17]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[17], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
@@ -15896,7 +15898,7 @@ var bookly = (function ($) {
 	      if (!current || dirty & /*title*/4) {
 	        attr(button, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && button_class_value !== (button_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/192 && button_class_value !== (button_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border"))) {
 	        attr(button, "class", button_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
@@ -15905,13 +15907,16 @@ var bookly = (function ($) {
 	      if (!current || dirty & /*disabled, loading*/9 && button_disabled_value !== (button_disabled_value = /*disabled*/ctx[0] || /*loading*/ctx[3])) {
 	        button.disabled = button_disabled_value;
 	      }
-	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
+	      if (!current || dirty & /*ariaLabel*/32) {
+	        attr(button, "aria-label", /*ariaLabel*/ctx[5]);
+	      }
+	      if (!current || dirty & /*classes, buttonClasses, disabled*/193) {
 	        toggle_class(button, "bookly:cursor-pointer", ! /*disabled*/ctx[0]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
+	      if (!current || dirty & /*classes, buttonClasses, disabled*/193) {
 	        toggle_class(button, "bookly:pointer-events-none", /*disabled*/ctx[0]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
+	      if (!current || dirty & /*classes, buttonClasses, disabled*/193) {
 	        toggle_class(button, "bookly:opacity-50", /*disabled*/ctx[0]);
 	      }
 	    },
@@ -15938,7 +15943,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (158:0) {#if container === 'div'}
+	// (159:0) {#if container === 'div'}
 	function create_if_block$4(ctx) {
 	  let current_block_type_index;
 	  let if_block;
@@ -16002,7 +16007,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (208:8) {#if loading}
+	// (212:8) {#if loading}
 	function create_if_block_4$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16041,7 +16046,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (179:4) {:else}
+	// (182:4) {:else}
 	function create_else_block$1(ctx) {
 	  let div;
 	  let t;
@@ -16049,8 +16054,8 @@ var bookly = (function ($) {
 	  let div_class_value;
 	  let current;
 	  let if_block = /*loading*/ctx[3] && create_if_block_3$2();
-	  const default_slot_template = /*#slots*/ctx[17].default;
-	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[16], null);
+	  const default_slot_template = /*#slots*/ctx[18].default;
+	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[17], null);
 	  return {
 	    c() {
 	      div = element("div");
@@ -16060,7 +16065,7 @@ var bookly = (function ($) {
 	      if (default_slot) default_slot.c();
 	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(div, "title", /*title*/ctx[2]);
-	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"));
+	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"));
 	      attr(div, "style", /*styles*/ctx[4]);
 	      attr(div, "disabled", /*disabled*/ctx[0]);
 	    },
@@ -16094,8 +16099,8 @@ var bookly = (function ($) {
 	        check_outros();
 	      }
 	      if (default_slot) {
-	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	        if (default_slot.p && (!current || dirty & /*$$scope*/131072)) {
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[17], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[17]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[17], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
@@ -16104,7 +16109,7 @@ var bookly = (function ($) {
 	      if (!current || dirty & /*title*/4) {
 	        attr(div, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/192 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"))) {
 	        attr(div, "class", div_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
@@ -16135,7 +16140,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (159:4) {#if !disabled}
+	// (160:4) {#if !disabled}
 	function create_if_block_1$3(ctx) {
 	  let div;
 	  let t;
@@ -16145,8 +16150,8 @@ var bookly = (function ($) {
 	  let mounted;
 	  let dispose;
 	  let if_block = /*loading*/ctx[3] && create_if_block_2$3();
-	  const default_slot_template = /*#slots*/ctx[17].default;
-	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[16], null);
+	  const default_slot_template = /*#slots*/ctx[18].default;
+	  const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ctx[17], null);
 	  return {
 	    c() {
 	      div = element("div");
@@ -16156,11 +16161,13 @@ var bookly = (function ($) {
 	      if (default_slot) default_slot.c();
 	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(div, "title", /*title*/ctx[2]);
-	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:focus:outline-hidden bookly:cursor-pointer"));
+	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:cursor-pointer"));
 	      attr(div, "style", /*styles*/ctx[4]);
 	      attr(div, "disabled", /*disabled*/ctx[0]);
 	      attr(div, "role", "button");
 	      attr(div, "tabindex", "0");
+	      attr(div, "aria-pressed", "false");
+	      attr(div, "aria-label", /*ariaLabel*/ctx[5]);
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -16172,7 +16179,7 @@ var bookly = (function ($) {
 	      }
 	      current = true;
 	      if (!mounted) {
-	        dispose = [listen(div, "click", stop_propagation(/*click_handler*/ctx[18])), listen(div, "keypress", stop_propagation(/*keypress_handler*/ctx[19]))];
+	        dispose = [listen(div, "click", stop_propagation(/*click_handler*/ctx[19])), listen(div, "keypress", stop_propagation(/*keypress_handler*/ctx[20]))];
 	        mounted = true;
 	      }
 	    },
@@ -16196,8 +16203,8 @@ var bookly = (function ($) {
 	        check_outros();
 	      }
 	      if (default_slot) {
-	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	        if (default_slot.p && (!current || dirty & /*$$scope*/131072)) {
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[17], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[17]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[17], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
@@ -16206,7 +16213,7 @@ var bookly = (function ($) {
 	      if (!current || dirty & /*title*/4) {
 	        attr(div, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:focus:outline-hidden bookly:cursor-pointer"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/192 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[6] + " " + /*buttonClasses*/ctx[7] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:cursor-pointer"))) {
 	        attr(div, "class", div_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
@@ -16214,6 +16221,9 @@ var bookly = (function ($) {
 	      }
 	      if (!current || dirty & /*disabled*/1) {
 	        attr(div, "disabled", /*disabled*/ctx[0]);
+	      }
+	      if (!current || dirty & /*ariaLabel*/32) {
+	        attr(div, "aria-label", /*ariaLabel*/ctx[5]);
 	      }
 	    },
 	    i(local) {
@@ -16239,7 +16249,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (186:12) {#if loading}
+	// (189:12) {#if loading}
 	function create_if_block_3$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16278,7 +16288,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (170:12) {#if loading}
+	// (173:12) {#if loading}
 	function create_if_block_2$3(ctx) {
 	  let span;
 	  let spinner;
@@ -16424,6 +16434,9 @@ var bookly = (function ($) {
 	    styles = ''
 	  } = $$props;
 	  let {
+	    ariaLabel = null
+	  } = $$props;
+	  let {
 	    class: classes = ''
 	  } = $$props;
 	  let hover;
@@ -16439,231 +16452,233 @@ var bookly = (function ($) {
 	  }
 	  $$self.$$set = $$props => {
 	    if ('disabled' in $$props) $$invalidate(0, disabled = $$props.disabled);
-	    if ('type' in $$props) $$invalidate(13, type = $$props.type);
+	    if ('type' in $$props) $$invalidate(14, type = $$props.type);
 	    if ('container' in $$props) $$invalidate(1, container = $$props.container);
 	    if ('title' in $$props) $$invalidate(2, title = $$props.title);
-	    if ('rounded' in $$props) $$invalidate(7, rounded = $$props.rounded);
-	    if ('bordered' in $$props) $$invalidate(8, bordered = $$props.bordered);
-	    if ('paddings' in $$props) $$invalidate(9, paddings = $$props.paddings);
-	    if ('margins' in $$props) $$invalidate(10, margins = $$props.margins);
-	    if ('shadows' in $$props) $$invalidate(11, shadows = $$props.shadows);
+	    if ('rounded' in $$props) $$invalidate(8, rounded = $$props.rounded);
+	    if ('bordered' in $$props) $$invalidate(9, bordered = $$props.bordered);
+	    if ('paddings' in $$props) $$invalidate(10, paddings = $$props.paddings);
+	    if ('margins' in $$props) $$invalidate(11, margins = $$props.margins);
+	    if ('shadows' in $$props) $$invalidate(12, shadows = $$props.shadows);
 	    if ('loading' in $$props) $$invalidate(3, loading = $$props.loading);
-	    if ('color' in $$props) $$invalidate(14, color = $$props.color);
-	    if ('size' in $$props) $$invalidate(12, size = $$props.size);
+	    if ('color' in $$props) $$invalidate(15, color = $$props.color);
+	    if ('size' in $$props) $$invalidate(13, size = $$props.size);
 	    if ('styles' in $$props) $$invalidate(4, styles = $$props.styles);
-	    if ('class' in $$props) $$invalidate(5, classes = $$props.class);
-	    if ('$$scope' in $$props) $$invalidate(16, $$scope = $$props.$$scope);
+	    if ('ariaLabel' in $$props) $$invalidate(5, ariaLabel = $$props.ariaLabel);
+	    if ('class' in $$props) $$invalidate(6, classes = $$props.class);
+	    if ('$$scope' in $$props) $$invalidate(17, $$scope = $$props.$$scope);
 	  };
 	  $$self.$$.update = () => {
-	    if ($$self.$$.dirty & /*type, color, disabled, shadows, buttonClasses, loading, hover, rounded, bordered, paddings, size, margins*/65481) {
+	    if ($$self.$$.dirty & /*type, color, disabled, shadows, buttonClasses, loading, hover, rounded, bordered, paddings, size, margins*/130953) {
 	      {
 	        switch (type) {
 	          case 'secondary':
-	            $$invalidate(6, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
+	            $$invalidate(7, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
 	            break;
 	          case 'secondary-group':
-	            $$invalidate(6, buttonClasses = 'bookly:text-slate-400 bookly:bg-white bookly:border-slate-400');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
+	            $$invalidate(7, buttonClasses = 'bookly:text-slate-400 bookly:bg-white bookly:border-slate-400');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
 	            break;
 	          case 'secondary-active':
-	            $$invalidate(6, buttonClasses = 'bookly:text-white bookly:bg-slate-400 bookly:border-slate-400');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
+	            $$invalidate(7, buttonClasses = 'bookly:text-white bookly:bg-slate-400 bookly:border-slate-400');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
 	            break;
 	          case 'white':
-	            $$invalidate(6, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
+	            $$invalidate(7, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
 	            break;
 	          case 'transparent':
-	            $$invalidate(6, buttonClasses = (color ? color : 'bookly:text-slate-600') + ' bookly:bg-transparent bookly:border-slate-600');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
+	            $$invalidate(7, buttonClasses = (color ? color : 'bookly:text-slate-600') + ' bookly:bg-transparent bookly:border-slate-600');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
 	            break;
 	          case 'bookly':
-	            $$invalidate(6, buttonClasses = 'text-bookly bookly:not-hover:bg-white border-bookly');
-	            $$invalidate(15, hover = 'bookly:hover:text-white hover:bg-bookly bookly:hover:opacity-80 hover:border-bookly');
+	            $$invalidate(7, buttonClasses = 'text-bookly bookly:not-hover:bg-white border-bookly');
+	            $$invalidate(16, hover = 'bookly:hover:text-white hover:bg-bookly bookly:hover:opacity-80 hover:border-bookly');
 	            break;
 	          case 'bookly-active':
-	            $$invalidate(6, buttonClasses = 'bg-bookly bookly:text-white border-bookly');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-100 hover:bg-bookly hover:border-bookly');
+	            $$invalidate(7, buttonClasses = 'bg-bookly bookly:text-white border-bookly');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-100 hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'bookly-gray':
-	            $$invalidate(6, buttonClasses = 'text-bookly bookly:not-hover:bg-gray-200 border-bookly');
-	            $$invalidate(15, hover = 'bookly:hover:text-white hover:bg-bookly hover:border-bookly');
+	            $$invalidate(7, buttonClasses = 'text-bookly bookly:not-hover:bg-gray-200 border-bookly');
+	            $$invalidate(16, hover = 'bookly:hover:text-white hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'link':
-	            $$invalidate(6, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none bookly:focus:outline-none ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
-	            $$invalidate(15, hover = 'bookly:hover:text-gray-600');
-	            $$invalidate(7, rounded = false);
-	            $$invalidate(8, bordered = false);
-	            $$invalidate(9, paddings = false);
-	            $$invalidate(10, margins = false);
-	            $$invalidate(11, shadows = false);
-	            $$invalidate(12, size = 'link');
+	            $$invalidate(7, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
+	            $$invalidate(16, hover = 'bookly:hover:text-gray-600');
+	            $$invalidate(8, rounded = false);
+	            $$invalidate(9, bordered = false);
+	            $$invalidate(10, paddings = false);
+	            $$invalidate(11, margins = false);
+	            $$invalidate(12, shadows = false);
+	            $$invalidate(13, size = 'link');
 	            break;
 	          case 'calendar':
-	            $$invalidate(6, buttonClasses = '');
-	            $$invalidate(15, hover = 'bookly:hover:opacity-80');
-	            $$invalidate(7, rounded = false);
-	            $$invalidate(8, bordered = false);
-	            $$invalidate(9, paddings = false);
-	            $$invalidate(10, margins = false);
-	            $$invalidate(11, shadows = false);
+	            $$invalidate(7, buttonClasses = '');
+	            $$invalidate(16, hover = 'bookly:hover:opacity-80');
+	            $$invalidate(8, rounded = false);
+	            $$invalidate(9, bordered = false);
+	            $$invalidate(10, paddings = false);
+	            $$invalidate(11, margins = false);
+	            $$invalidate(12, shadows = false);
 	            break;
 	          case 'calendar-normal':
-	            $$invalidate(6, buttonClasses = 'text-bookly border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50 hover:text-bookly' : 'bookly:bg-white'));
-	            $$invalidate(15, hover = 'hover:bg-bookly hover:border-bookly ' + (disabled ? 'hover:text-bookly' : 'bookly:hover:text-white'));
-	            $$invalidate(7, rounded = false);
-	            $$invalidate(8, bordered = false);
-	            $$invalidate(9, paddings = false);
-	            $$invalidate(10, margins = false);
-	            $$invalidate(11, shadows = false);
+	            $$invalidate(7, buttonClasses = 'text-bookly border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50 hover:text-bookly' : 'bookly:bg-white'));
+	            $$invalidate(16, hover = 'hover:bg-bookly hover:border-bookly ' + (disabled ? 'hover:text-bookly' : 'bookly:hover:text-white'));
+	            $$invalidate(8, rounded = false);
+	            $$invalidate(9, bordered = false);
+	            $$invalidate(10, paddings = false);
+	            $$invalidate(11, margins = false);
+	            $$invalidate(12, shadows = false);
 	            break;
 	          case 'calendar-active':
-	            $$invalidate(6, buttonClasses = 'bg-bookly bookly:text-white border-bookly bookly:rounded-none bookly:m-0');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-200');
-	            $$invalidate(7, rounded = false);
-	            $$invalidate(8, bordered = false);
-	            $$invalidate(9, paddings = false);
-	            $$invalidate(10, margins = false);
-	            $$invalidate(11, shadows = false);
+	            $$invalidate(7, buttonClasses = 'bg-bookly bookly:text-white border-bookly bookly:rounded-none bookly:m-0');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-200');
+	            $$invalidate(8, rounded = false);
+	            $$invalidate(9, bordered = false);
+	            $$invalidate(10, paddings = false);
+	            $$invalidate(11, margins = false);
+	            $$invalidate(12, shadows = false);
 	            break;
 	          case 'calendar-inactive':
-	            $$invalidate(6, buttonClasses = 'bookly:text-gray-400 border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50' : 'bookly:bg-white'));
-	            $$invalidate(15, hover = 'bookly:hover:text-white bookly:hover:bg-gray-400 hover:border-bookly');
-	            $$invalidate(7, rounded = false);
-	            $$invalidate(8, bordered = false);
-	            $$invalidate(9, paddings = false);
-	            $$invalidate(10, margins = false);
-	            $$invalidate(11, shadows = false);
+	            $$invalidate(7, buttonClasses = 'bookly:text-gray-400 border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50' : 'bookly:bg-white'));
+	            $$invalidate(16, hover = 'bookly:hover:text-white bookly:hover:bg-gray-400 hover:border-bookly');
+	            $$invalidate(8, rounded = false);
+	            $$invalidate(9, bordered = false);
+	            $$invalidate(10, paddings = false);
+	            $$invalidate(11, margins = false);
+	            $$invalidate(12, shadows = false);
 	            break;
 	          default:
-	            $$invalidate(6, buttonClasses = 'bookly:text-black bookly:bg-gray-100 bookly:border-default-border');
-	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400');
+	            $$invalidate(7, buttonClasses = 'bookly:text-black bookly:bg-gray-100 bookly:border-default-border');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400');
 	            break;
 	        }
 	        if (!shadows) {
-	          $$invalidate(6, buttonClasses += ' bookly:shadow-none');
+	          $$invalidate(7, buttonClasses += ' bookly:shadow-none');
 	        }
 	        if (!disabled && !loading && shadows) {
-	          $$invalidate(6, buttonClasses += ' bookly:active:shadow-md');
+	          $$invalidate(7, buttonClasses += ' bookly:active:shadow-md');
 	        }
 	        if (!disabled && !loading) {
-	          $$invalidate(6, buttonClasses += ' ' + hover);
+	          $$invalidate(7, buttonClasses += ' ' + hover);
 	        }
 	        if (rounded) {
-	          $$invalidate(6, buttonClasses += ' bookly:rounded');
+	          $$invalidate(7, buttonClasses += ' bookly:rounded');
 	        }
 	        if (bordered) {
-	          $$invalidate(6, buttonClasses += ' bookly:border bookly:border-solid');
+	          $$invalidate(7, buttonClasses += ' bookly:border bookly:border-solid');
 	        }
 	        if (paddings) {
 	          switch (size) {
 	            case 'sm':
-	              $$invalidate(6, buttonClasses += ' bookly:px-2 bookly:py-1');
+	              $$invalidate(7, buttonClasses += ' bookly:px-2 bookly:py-1');
 	              break;
 	            case 'lg':
-	              $$invalidate(6, buttonClasses += ' bookly:px-5 bookly:py-0');
+	              $$invalidate(7, buttonClasses += ' bookly:px-5 bookly:py-0');
 	              break;
 	            default:
-	              $$invalidate(6, buttonClasses += ' bookly:px-4 bookly:py-0');
+	              $$invalidate(7, buttonClasses += ' bookly:px-4 bookly:py-0');
 	              break;
 	          }
 	        }
 	        if (margins) {
-	          $$invalidate(6, buttonClasses += ' bookly:ms-2 bookly:my-0 bookly:me-0');
+	          $$invalidate(7, buttonClasses += ' bookly:ms-2 bookly:my-0 bookly:me-0');
 	        }
 	        switch (size) {
 	          case 'link':
 	          case 'custom':
 	            break;
 	          case 'sm':
-	            $$invalidate(6, buttonClasses += ' bookly:text-sm bookly:h-8');
+	            $$invalidate(7, buttonClasses += ' bookly:text-sm bookly:h-8');
 	            break;
 	          case 'lg':
-	            $$invalidate(6, buttonClasses += ' bookly:text-xl bookly:h-14');
+	            $$invalidate(7, buttonClasses += ' bookly:text-xl bookly:h-14');
 	            break;
 	          default:
-	            $$invalidate(6, buttonClasses += ' bookly:text-lg bookly:h-10');
+	            $$invalidate(7, buttonClasses += ' bookly:text-lg bookly:h-10');
 	            break;
 	        }
 	        if (margins) {
-	          $$invalidate(6, buttonClasses += ' bookly:relative');
+	          $$invalidate(7, buttonClasses += ' bookly:relative');
 	        }
 	      }
 	    }
 	  };
-	  return [disabled, container, title, loading, styles, classes, buttonClasses, rounded, bordered, paddings, margins, shadows, size, type, color, hover, $$scope, slots, click_handler, keypress_handler, click_handler_1];
+	  return [disabled, container, title, loading, styles, ariaLabel, classes, buttonClasses, rounded, bordered, paddings, margins, shadows, size, type, color, hover, $$scope, slots, click_handler, keypress_handler, click_handler_1];
 	}
 	class Button extends SvelteComponent {
 	  constructor(options) {
 	    super();
 	    init(this, options, instance$4, create_fragment$4, safe_not_equal, {
 	      disabled: 0,
-	      type: 13,
+	      type: 14,
 	      container: 1,
 	      title: 2,
-	      rounded: 7,
-	      bordered: 8,
-	      paddings: 9,
-	      margins: 10,
-	      shadows: 11,
+	      rounded: 8,
+	      bordered: 9,
+	      paddings: 10,
+	      margins: 11,
+	      shadows: 12,
 	      loading: 3,
-	      color: 14,
-	      size: 12,
+	      color: 15,
+	      size: 13,
 	      styles: 4,
-	      class: 5
+	      ariaLabel: 5,
+	      class: 6
 	    });
 	  }
 	}
 
 	function get_each_context_4(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[48] = list[i];
-	  child_ctx[62] = i;
-	  const constants_0 = /*year*/child_ctx[1] + /*_year*/child_ctx[62] - 4;
-	  child_ctx[60] = constants_0;
-	  const constants_1 = new Date(/*__year*/child_ctx[60], 12, 0);
-	  child_ctx[56] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[56].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[56].getFullYear());
-	  child_ctx[52] = constants_2;
+	  child_ctx[49] = list[i];
+	  child_ctx[63] = i;
+	  const constants_0 = /*year*/child_ctx[1] + /*_year*/child_ctx[63] - 4;
+	  child_ctx[61] = constants_0;
+	  const constants_1 = new Date(/*__year*/child_ctx[61], 12, 0);
+	  child_ctx[57] = constants_1;
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[57].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[57].getFullYear());
+	  child_ctx[53] = constants_2;
 	  return child_ctx;
 	}
 	function get_each_context_3(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[48] = list[i];
-	  child_ctx[59] = i;
-	  const constants_0 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[59] + 1, 0);
-	  child_ctx[56] = constants_0;
-	  const constants_1 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[59], 1);
-	  child_ctx[57] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[56] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[57]);
-	  child_ctx[52] = constants_2;
+	  child_ctx[49] = list[i];
+	  child_ctx[60] = i;
+	  const constants_0 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[60] + 1, 0);
+	  child_ctx[57] = constants_0;
+	  const constants_1 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[60], 1);
+	  child_ctx[58] = constants_1;
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[57] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[58]);
+	  child_ctx[53] = constants_2;
 	  return child_ctx;
 	}
 	function get_each_context$2(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[48] = list[i];
-	  child_ctx[50] = i;
+	  child_ctx[49] = list[i];
+	  child_ctx[51] = i;
 	  return child_ctx;
 	}
 	function get_each_context_1(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[48] = list[i];
-	  child_ctx[54] = i;
-	  const constants_0 = /*days*/child_ctx[11][/*i*/child_ctx[50] * 7 + /*j*/child_ctx[54]];
-	  child_ctx[51] = constants_0;
-	  const constants_1 = /*_day*/child_ctx[51].disabled;
-	  child_ctx[52] = constants_1;
+	  child_ctx[49] = list[i];
+	  child_ctx[55] = i;
+	  const constants_0 = /*days*/child_ctx[12][/*i*/child_ctx[51] * 7 + /*j*/child_ctx[55]];
+	  child_ctx[52] = constants_0;
+	  const constants_1 = /*_day*/child_ctx[52].disabled;
+	  child_ctx[53] = constants_1;
 	  return child_ctx;
 	}
 	function get_each_context_2(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[48] = list[i];
-	  child_ctx[50] = i;
+	  child_ctx[49] = list[i];
+	  child_ctx[51] = i;
 	  return child_ctx;
 	}
 
-	// (279:0) {#if show}
+	// (280:0) {#if show}
 	function create_if_block$3(ctx) {
 	  let div1;
 	  let t0;
@@ -16679,8 +16694,8 @@ var bookly = (function ($) {
 	  const if_block_creators = [create_if_block_1$2, create_if_block_7$1, create_else_block_1];
 	  const if_blocks = [];
 	  function select_block_type(ctx, dirty) {
-	    if (/*view*/ctx[10] === 'calendar') return 0;
-	    if (/*view*/ctx[10] === 'month') return 1;
+	    if (/*view*/ctx[11] === 'calendar') return 0;
+	    if (/*view*/ctx[11] === 'month') return 1;
 	    return 2;
 	  }
 	  current_block_type_index = select_block_type(ctx);
@@ -16695,7 +16710,7 @@ var bookly = (function ($) {
 	      div0 = element("div");
 	      if_block2.c();
 	      attr(div0, "class", "bookly:w-full");
-	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[14] + " " + /*borderColor*/ctx[16] + " bookly:rounded " + (/*border*/ctx[8] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9");
+	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[15] + " " + /*borderColor*/ctx[17] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div1, anchor);
@@ -16706,7 +16721,7 @@ var bookly = (function ($) {
 	      append(div1, div0);
 	      if_blocks[current_block_type_index].m(div0, null);
 	      /*div1_binding*/
-	      ctx[45](div1);
+	      ctx[46](div1);
 	      current = true;
 	    },
 	    p(ctx, dirty) {
@@ -16759,7 +16774,7 @@ var bookly = (function ($) {
 	        transition_in(if_block2, 1);
 	        if_block2.m(div0, null);
 	      }
-	      if (!current || dirty[0] & /*bgColor, borderColor, border*/82176 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[14] + " " + /*borderColor*/ctx[16] + " bookly:rounded " + (/*border*/ctx[8] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9")) {
+	      if (!current || dirty[0] & /*bgColor, borderColor, border*/164352 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[15] + " " + /*borderColor*/ctx[17] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9")) {
 	        attr(div1, "class", div1_class_value);
 	      }
 	    },
@@ -16792,12 +16807,12 @@ var bookly = (function ($) {
 	      if (if_block1) if_block1.d();
 	      if_blocks[current_block_type_index].d();
 	      /*div1_binding*/
-	      ctx[45](null);
+	      ctx[46](null);
 	    }
 	  };
 	}
 
-	// (281:8) {#if loading || disabled}
+	// (282:8) {#if loading || disabled}
 	function create_if_block_9$1(ctx) {
 	  let div;
 	  return {
@@ -16817,7 +16832,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (285:8) {#if mode !== 'horizontal'}
+	// (286:8) {#if mode !== 'horizontal'}
 	function create_if_block_8$1(ctx) {
 	  let div1;
 	  let div0;
@@ -16830,13 +16845,14 @@ var bookly = (function ($) {
 	  let current;
 	  button0 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
 	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear(),
 	      container: "div",
+	      ariaLabel: /*l10n*/ctx[7].prev,
 	      $$slots: {
 	        default: [create_default_slot_7]
 	      },
@@ -16845,11 +16861,11 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button0.$on("click", /*onClickLeft*/ctx[25]);
-	  button0.$on("keypress", /*onClickLeft*/ctx[25]);
+	  button0.$on("click", /*onClickLeft*/ctx[26]);
+	  button0.$on("keypress", /*onClickLeft*/ctx[26]);
 	  button1 = new Button({
 	    props: {
-	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21],
+	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16863,17 +16879,18 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button1.$on("click", /*changeView*/ctx[24]);
-	  button1.$on("keypress", /*changeView*/ctx[24]);
+	  button1.$on("click", /*changeView*/ctx[25]);
+	  button1.$on("keypress", /*changeView*/ctx[25]);
 	  button2 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
 	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear(),
 	      container: "div",
+	      ariaLabel: /*l10n*/ctx[7].next,
 	      $$slots: {
 	        default: [create_default_slot_5]
 	      },
@@ -16882,8 +16899,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button2.$on("click", /*onClickRight*/ctx[26]);
-	  button2.$on("keypress", /*onClickRight*/ctx[26]);
+	  button2.$on("click", /*onClickRight*/ctx[27]);
+	  button2.$on("keypress", /*onClickRight*/ctx[27]);
 	  return {
 	    c() {
 	      div1 = element("div");
@@ -16895,7 +16912,7 @@ var bookly = (function ($) {
 	      create_component(button2.$$.fragment);
 	      attr(div0, "class", "bookly:flex bookly:text-gray-400 bookly:max-w-96 bookly:m-auto");
 	      attr(div0, "role", "group");
-	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[16] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9");
+	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div1, anchor);
@@ -16909,9 +16926,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button0_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/2097152) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21];
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button0_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear();
-	      if (dirty[0] & /*rtl*/8192 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*l10n*/128) button0_changes.ariaLabel = /*l10n*/ctx[7].prev;
+	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
 	        button0_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -16919,8 +16937,8 @@ var bookly = (function ($) {
 	      }
 	      button0.$set(button0_changes);
 	      const button1_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/2097152) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21];
-	      if (dirty[0] & /*title*/4194304 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*title*/8388608 | dirty[2] & /*$$scope*/4) {
 	        button1_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -16928,16 +16946,17 @@ var bookly = (function ($) {
 	      }
 	      button1.$set(button1_changes);
 	      const button2_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/2097152) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21];
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button2_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
-	      if (dirty[0] & /*rtl*/8192 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*l10n*/128) button2_changes.ariaLabel = /*l10n*/ctx[7].next;
+	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
 	        button2_changes.$$scope = {
 	          dirty,
 	          ctx
 	        };
 	      }
 	      button2.$set(button2_changes);
-	      if (!current || dirty[0] & /*borderColor*/65536 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[16] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9")) {
+	      if (!current || dirty[0] & /*borderColor*/131072 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9")) {
 	        attr(div1, "class", div1_class_value);
 	      }
 	    },
@@ -16965,25 +16984,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (288:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                     >
+	// (289:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                             ariaLabel={l10n.prev}                     >
 	function create_default_slot_7(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[13]);
-	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[13]);
+	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
 	      }
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
 	      }
 	    },
 	    d(detaching) {
@@ -16994,18 +17013,18 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (301:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
+	// (303:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
 	function create_default_slot_6(ctx) {
 	  let t;
 	  return {
 	    c() {
-	      t = text(/*title*/ctx[22]);
+	      t = text(/*title*/ctx[23]);
 	    },
 	    m(target, anchor) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*title*/4194304) set_data(t, /*title*/ctx[22]);
+	      if (dirty[0] & /*title*/8388608) set_data(t, /*title*/ctx[23]);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17015,25 +17034,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (313:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                     >
+	// (315:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                             ariaLabel={l10n.next}                     >
 	function create_default_slot_5(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[13]);
-	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[13]);
+	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
 	      }
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
 	      }
 	    },
 	    d(detaching) {
@@ -17044,7 +17063,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (429:12) {:else}
+	// (432:12) {:else}
 	function create_else_block_1(ctx) {
 	  let div;
 	  let div_transition;
@@ -17077,7 +17096,7 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, view*/656387) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, view*/1312771) {
 	        each_value_4 = ensure_array_like({
 	          length: 9
 	        });
@@ -17136,7 +17155,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (404:39) 
+	// (407:39) 
 	function create_if_block_7$1(ctx) {
 	  let div;
 	  let div_transition;
@@ -17169,7 +17188,7 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, month, dispatch, view, datePicker*/9045015) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, month, dispatch, view, datePicker*/18090007) {
 	        each_value_3 = ensure_array_like({
 	          length: 12
 	        });
@@ -17228,7 +17247,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (328:12) {#if view === 'calendar'}
+	// (331:12) {#if view === 'calendar'}
 	function create_if_block_1$2(ctx) {
 	  let div1;
 	  let t;
@@ -17242,7 +17261,7 @@ var bookly = (function ($) {
 	  let current_block_type = select_block_type_1(ctx);
 	  let if_block = current_block_type(ctx);
 	  let each_value = ensure_array_like({
-	    length: _parseInt(/*days*/ctx[11].length / 7)
+	    length: _parseInt(/*days*/ctx[12].length / 7)
 	  });
 	  let each_blocks = [];
 	  for (let i = 0; i < each_value.length; i += 1) {
@@ -17286,9 +17305,9 @@ var bookly = (function ($) {
 	          if_block.m(div1, t);
 	        }
 	      }
-	      if (dirty[0] & /*mode, controlButtonClasses, loading, limits, month, year, onClickRight, rtl, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker, currentWeek, onClickLeft*/238958687) {
+	      if (dirty[0] & /*mode, controlButtonClasses, loading, limits, month, year, onClickRight, rtl, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker, currentWeek, onClickLeft*/477917279) {
 	        each_value = ensure_array_like({
-	          length: _parseInt(/*days*/ctx[11].length / 7)
+	          length: _parseInt(/*days*/ctx[12].length / 7)
 	        });
 	        let i;
 	        for (i = 0; i < each_value.length; i += 1) {
@@ -17346,9 +17365,9 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (436:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (439:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_4(ctx) {
-	  let t_value = /*__year*/ctx[60] + "";
+	  let t_value = /*__year*/ctx[61] + "";
 	  let t;
 	  return {
 	    c() {
@@ -17358,7 +17377,7 @@ var bookly = (function ($) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*year*/2 && t_value !== (t_value = /*__year*/ctx[60] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*year*/2 && t_value !== (t_value = /*__year*/ctx[61] + "")) set_data(t, t_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17368,17 +17387,17 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (431:20) {#each {length: 9} as _,_year}
+	// (434:20) {#each {length: 9} as _,_year}
 	function create_each_block_4(ctx) {
 	  let div;
 	  let button;
 	  let t;
 	  let current;
 	  function click_handler_2() {
-	    return /*click_handler_2*/ctx[43](/*__year*/ctx[60]);
+	    return /*click_handler_2*/ctx[44](/*__year*/ctx[61]);
 	  }
 	  function keypress_handler_2() {
-	    return /*keypress_handler_2*/ctx[44](/*__year*/ctx[60]);
+	    return /*keypress_handler_2*/ctx[45](/*__year*/ctx[61]);
 	  }
 	  button = new Button({
 	    props: {
@@ -17387,8 +17406,8 @@ var bookly = (function ($) {
 	      rounded: false,
 	      paddings: false,
 	      margins: false,
-	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + /*buttonClasses*/ctx[17],
-	      disabled: /*_disabled*/ctx[52],
+	      class: "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
+	      disabled: /*_disabled*/ctx[53],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -17417,9 +17436,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/655363) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + /*buttonClasses*/ctx[17];
-	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[52];
-	      if (dirty[0] & /*year*/2 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
+	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
+	      if (dirty[0] & /*year*/2 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17445,9 +17464,9 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (411:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (414:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_3(ctx) {
-	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[59]] + "";
+	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[60]] + "";
 	  let t;
 	  return {
 	    c() {
@@ -17457,7 +17476,7 @@ var bookly = (function ($) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[59]] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[60]] + "")) set_data(t, t_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17467,27 +17486,27 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (406:20) {#each {length: 12} as _,_month}
+	// (409:20) {#each {length: 12} as _,_month}
 	function create_each_block_3(ctx) {
 	  let div;
 	  let button;
 	  let t;
 	  let current;
 	  function click_handler_1() {
-	    return /*click_handler_1*/ctx[41](/*_month*/ctx[59]);
+	    return /*click_handler_1*/ctx[42](/*_month*/ctx[60]);
 	  }
 	  function keypress_handler_1() {
-	    return /*keypress_handler_1*/ctx[42](/*_month*/ctx[59]);
+	    return /*keypress_handler_1*/ctx[43](/*_month*/ctx[60]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + /*buttonClasses*/ctx[17],
+	      class: "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
 	      paddings: false,
-	      disabled: /*_disabled*/ctx[52],
+	      disabled: /*_disabled*/ctx[53],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -17515,9 +17534,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/655363) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + /*buttonClasses*/ctx[17];
-	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[52];
-	      if (dirty[0] & /*datePicker*/16 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
+	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
+	      if (dirty[0] & /*datePicker*/16 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17543,7 +17562,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (334:20) {:else}
+	// (337:20) {:else}
 	function create_else_block(ctx) {
 	  let div;
 	  let div_class_value;
@@ -17560,7 +17579,7 @@ var bookly = (function ($) {
 	      for (let i = 0; i < each_blocks.length; i += 1) {
 	        each_blocks[i].c();
 	      }
-	      attr(div, "class", div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[16] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9");
+	      attr(div, "class", div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -17571,7 +17590,7 @@ var bookly = (function ($) {
 	      }
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*textColor, datePicker*/32784) {
+	      if (dirty[0] & /*textColor, datePicker*/65552) {
 	        each_value_2 = ensure_array_like({
 	          length: 7
 	        });
@@ -17591,7 +17610,7 @@ var bookly = (function ($) {
 	        }
 	        each_blocks.length = each_value_2.length;
 	      }
-	      if (dirty[0] & /*borderColor*/65536 && div_class_value !== (div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[16] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*borderColor*/131072 && div_class_value !== (div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17604,7 +17623,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (330:20) {#if mode === 'horizontal'}
+	// (333:20) {#if mode === 'horizontal'}
 	function create_if_block_6$1(ctx) {
 	  let div;
 	  let t;
@@ -17612,16 +17631,16 @@ var bookly = (function ($) {
 	  return {
 	    c() {
 	      div = element("div");
-	      t = text(/*title*/ctx[22]);
-	      attr(div, "class", div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[16] + " " + /*textColor*/ctx[15] + " bookly:mb-1" + " svelte-1ug41q9");
+	      t = text(/*title*/ctx[23]);
+	      attr(div, "class", div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[17] + " " + /*textColor*/ctx[16] + " bookly:mb-1" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
 	      append(div, t);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*title*/4194304) set_data(t, /*title*/ctx[22]);
-	      if (dirty[0] & /*borderColor, textColor*/98304 && div_class_value !== (div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[16] + " " + /*textColor*/ctx[15] + " bookly:mb-1" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*title*/8388608) set_data(t, /*title*/ctx[23]);
+	      if (dirty[0] & /*borderColor, textColor*/196608 && div_class_value !== (div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[17] + " " + /*textColor*/ctx[16] + " bookly:mb-1" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17633,25 +17652,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (336:28) {#each {length: 7} as _, i}
+	// (339:28) {#each {length: 7} as _, i}
 	function create_each_block_2(ctx) {
 	  let div;
-	  let t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[50] + /*datePicker*/ctx[4].firstDay) % 7] + "";
+	  let t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[51] + /*datePicker*/ctx[4].firstDay) % 7] + "";
 	  let t;
 	  let div_class_value;
 	  return {
 	    c() {
 	      div = element("div");
 	      t = text(t_value);
-	      attr(div, "class", div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[15] + " bookly:cursor-default" + " svelte-1ug41q9");
+	      attr(div, "class", div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[16] + " bookly:cursor-default" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
 	      append(div, t);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[50] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
-	      if (dirty[0] & /*textColor*/32768 && div_class_value !== (div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[15] + " bookly:cursor-default" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[51] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*textColor*/65536 && div_class_value !== (div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[16] + " bookly:cursor-default" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17663,7 +17682,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (343:28) {#if mode !== 'horizontal' || i === currentWeek}
+	// (346:28) {#if mode !== 'horizontal' || i === currentWeek}
 	function create_if_block_2$2(ctx) {
 	  let div;
 	  let t0;
@@ -17729,7 +17748,7 @@ var bookly = (function ($) {
 	        });
 	        check_outros();
 	      }
-	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker*/136185936) {
+	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker*/272371792) {
 	        each_value_1 = ensure_array_like({
 	          length: 7
 	        });
@@ -17801,18 +17820,18 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (345:36) {#if mode === 'horizontal'}
+	// (348:36) {#if mode === 'horizontal'}
 	function create_if_block_5$1(ctx) {
 	  let button;
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21]),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
 	      type: "calendar",
 	      bordered: false,
 	      rounded: /*mode*/ctx[6] === 'horizontal',
 	      margins: false,
-	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[12] <= 0),
+	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[13] <= 0),
 	      container: "div",
 	      $$slots: {
 	        default: [create_default_slot_2]
@@ -17822,8 +17841,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button.$on("click", /*onClickLeft*/ctx[25]);
-	  button.$on("keypress", /*onClickLeft*/ctx[25]);
+	  button.$on("click", /*onClickLeft*/ctx[26]);
+	  button.$on("keypress", /*onClickLeft*/ctx[26]);
 	  return {
 	    c() {
 	      create_component(button.$$.fragment);
@@ -17834,10 +17853,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/2097216) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21]);
+	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
 	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
-	      if (dirty[0] & /*loading, limits, month, year, mode, currentWeek*/4175) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[12] <= 0);
-	      if (dirty[0] & /*rtl*/8192 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*loading, limits, month, year, mode, currentWeek*/8271) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[13] <= 0);
+	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17860,25 +17879,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (346:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (mode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
+	// (349:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (mode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
 	function create_default_slot_2(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[13]);
-	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[13]);
+	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
 	      }
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
 	      }
 	    },
 	    d(detaching) {
@@ -17889,10 +17908,10 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (373:44) {#if mode === 'horizontal'}
+	// (376:44) {#if mode === 'horizontal'}
 	function create_if_block_4$1(ctx) {
 	  let span;
-	  let t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[54] + /*datePicker*/ctx[4].firstDay) % 7] + "";
+	  let t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[55] + /*datePicker*/ctx[4].firstDay) % 7] + "";
 	  let t0;
 	  let t1;
 	  let br;
@@ -17911,7 +17930,7 @@ var bookly = (function ($) {
 	      insert(target, br, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t0_value !== (t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[54] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t0, t0_value);
+	      if (dirty[0] & /*datePicker*/16 && t0_value !== (t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[55] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t0, t0_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17922,11 +17941,11 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (363:40) <Button                                                 type='calendar'                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
+	// (366:40) <Button                                                 type='calendar'                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
 	function create_default_slot_1(ctx) {
 	  let t0;
 	  let span;
-	  let t1_value = /*_day*/ctx[51].title + "";
+	  let t1_value = /*_day*/ctx[52].title + "";
 	  let t1;
 	  let if_block = /*mode*/ctx[6] === 'horizontal' && create_if_block_4$1(ctx);
 	  return {
@@ -17957,7 +17976,7 @@ var bookly = (function ($) {
 	        if_block.d(1);
 	        if_block = null;
 	      }
-	      if (dirty[0] & /*days*/2048 && t1_value !== (t1_value = /*_day*/ctx[51].title + "")) set_data(t1, t1_value);
+	      if (dirty[0] & /*days*/4096 && t1_value !== (t1_value = /*_day*/ctx[52].title + "")) set_data(t1, t1_value);
 	      if (dirty[0] & /*mode*/64) {
 	        toggle_class(span, "bookly:text-lg", /*mode*/ctx[6] === 'horizontal');
 	      }
@@ -17975,22 +17994,22 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (360:36) {#each {length: 7} as _, j}
+	// (363:36) {#each {length: 7} as _, j}
 	function create_each_block_1(ctx) {
 	  let button;
 	  let current;
 	  function click_handler() {
-	    return /*click_handler*/ctx[39](/*_disabled*/ctx[52], /*_day*/ctx[51]);
+	    return /*click_handler*/ctx[40](/*_disabled*/ctx[53], /*_day*/ctx[52]);
 	  }
 	  function keypress_handler() {
-	    return /*keypress_handler*/ctx[40](/*_disabled*/ctx[52], /*_day*/ctx[51]);
+	    return /*keypress_handler*/ctx[41](/*_disabled*/ctx[53], /*_day*/ctx[52]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + (/*_day*/ctx[51].active ? /*activeButtonClasses*/ctx[18] : /*_day*/ctx[51].current ? /*buttonClasses*/ctx[17] : /*otherMonthButtonClasses*/ctx[20]) + " " + (/*_day*/ctx[51].current ? 'bookly-calendar-current-month-mark' : '')),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : '')),
 	      bordered: false,
-	      disabled: /*_disabled*/ctx[52],
+	      disabled: /*_disabled*/ctx[53],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -18014,9 +18033,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/1968192) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[52] ? /*disabledButtonClasses*/ctx[19] : '') + " " + (/*_day*/ctx[51].active ? /*activeButtonClasses*/ctx[18] : /*_day*/ctx[51].current ? /*buttonClasses*/ctx[17] : /*otherMonthButtonClasses*/ctx[20]) + " " + (/*_day*/ctx[51].current ? 'bookly-calendar-current-month-mark' : ''));
-	      if (dirty[0] & /*days*/2048) button_changes.disabled = /*_disabled*/ctx[52];
-	      if (dirty[0] & /*mode, days, datePicker*/2128 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/3936320) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : ''));
+	      if (dirty[0] & /*days*/4096) button_changes.disabled = /*_disabled*/ctx[53];
+	      if (dirty[0] & /*mode, days, datePicker*/4176 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -18039,13 +18058,13 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (386:36) {#if mode === 'horizontal'}
+	// (389:36) {#if mode === 'horizontal'}
 	function create_if_block_3$1(ctx) {
 	  let button;
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21]),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
 	      type: "calendar",
 	      bordered: false,
 	      rounded: /*mode*/ctx[6] === 'horizontal',
@@ -18060,8 +18079,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button.$on("click", /*onClickRight*/ctx[26]);
-	  button.$on("keypress", /*onClickRight*/ctx[26]);
+	  button.$on("click", /*onClickRight*/ctx[27]);
+	  button.$on("keypress", /*onClickRight*/ctx[27]);
 	  return {
 	    c() {
 	      create_component(button.$$.fragment);
@@ -18072,10 +18091,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/2097216) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[21]);
+	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
 	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
 	      if (dirty[0] & /*loading, limits, month, year*/15) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
-	      if (dirty[0] & /*rtl*/8192 | dirty[2] & /*$$scope*/2) {
+	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -18098,25 +18117,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (387:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
+	// (390:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
 	function create_default_slot(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[13]);
-	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[13]);
+	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
 	      }
-	      if (dirty[0] & /*rtl*/8192) {
-	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[13]);
+	      if (dirty[0] & /*rtl*/16384) {
+	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
 	      }
 	    },
 	    d(detaching) {
@@ -18127,11 +18146,11 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (342:24) {#each {length: parseInt(days.length / 7)} as _, i}
+	// (345:24) {#each {length: parseInt(days.length / 7)} as _, i}
 	function create_each_block$2(ctx) {
 	  let if_block_anchor;
 	  let current;
-	  let if_block = (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[50] === /*currentWeek*/ctx[12]) && create_if_block_2$2(ctx);
+	  let if_block = (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[51] === /*currentWeek*/ctx[13]) && create_if_block_2$2(ctx);
 	  return {
 	    c() {
 	      if (if_block) if_block.c();
@@ -18143,10 +18162,10 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[50] === /*currentWeek*/ctx[12]) {
+	      if (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[51] === /*currentWeek*/ctx[13]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
-	          if (dirty[0] & /*mode, currentWeek*/4160) {
+	          if (dirty[0] & /*mode, currentWeek*/8256) {
 	            transition_in(if_block, 1);
 	          }
 	        } else {
@@ -18183,7 +18202,7 @@ var bookly = (function ($) {
 	function create_fragment$3(ctx) {
 	  let if_block_anchor;
 	  let current;
-	  let if_block = /*show*/ctx[7] && create_if_block$3(ctx);
+	  let if_block = /*show*/ctx[8] && create_if_block$3(ctx);
 	  return {
 	    c() {
 	      if (if_block) if_block.c();
@@ -18195,10 +18214,10 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (/*show*/ctx[7]) {
+	      if (/*show*/ctx[8]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
-	          if (dirty[0] & /*show*/128) {
+	          if (dirty[0] & /*show*/256) {
 	            transition_in(if_block, 1);
 	          }
 	        } else {
@@ -18268,6 +18287,9 @@ var bookly = (function ($) {
 	    mode = 'regular'
 	  } = $$props;
 	  let {
+	    l10n = {}
+	  } = $$props;
+	  let {
 	    disabledWeekDays = []
 	  } = $$props;
 	  let {
@@ -18299,8 +18321,8 @@ var bookly = (function ($) {
 	      break;
 	  }
 	  function forceLoadSchedule() {
-	    $$invalidate(30, holidays = []);
-	    $$invalidate(31, loadedMonths = []);
+	    $$invalidate(31, holidays = []);
+	    $$invalidate(32, loadedMonths = []);
 	    $$invalidate(3, loading = true);
 	  }
 	  if (maxDays) {
@@ -18333,19 +18355,19 @@ var bookly = (function ($) {
 	  function changeView() {
 	    switch (view) {
 	      case 'calendar':
-	        $$invalidate(10, view = 'month');
+	        $$invalidate(11, view = 'month');
 	        break;
 	      case 'month':
-	        $$invalidate(10, view = 'year');
+	        $$invalidate(11, view = 'year');
 	        break;
 	      case 'year':
-	        $$invalidate(10, view = 'calendar');
+	        $$invalidate(11, view = 'calendar');
 	        break;
 	    }
 	  }
 	  function onClickLeft() {
 	    if (mode === 'horizontal' && currentWeek > 0) {
-	      $$invalidate(12, currentWeek--, currentWeek);
+	      $$invalidate(13, currentWeek--, currentWeek);
 	      return;
 	    }
 	    switch (view) {
@@ -18356,7 +18378,7 @@ var bookly = (function ($) {
 	        } else {
 	          $$invalidate(2, month--, month);
 	        }
-	        $$invalidate(12, currentWeek = 999);
+	        $$invalidate(13, currentWeek = 999);
 	        dispatch('month-change', 'prev');
 	        break;
 	      case 'month':
@@ -18369,7 +18391,7 @@ var bookly = (function ($) {
 	  }
 	  function onClickRight() {
 	    if (mode === 'horizontal' && currentWeek < _parseInt(days.length / 7) - 1) {
-	      $$invalidate(12, currentWeek++, currentWeek);
+	      $$invalidate(13, currentWeek++, currentWeek);
 	      return;
 	    }
 	    switch (view) {
@@ -18380,7 +18402,7 @@ var bookly = (function ($) {
 	        } else {
 	          $$invalidate(2, month++, month);
 	        }
-	        $$invalidate(12, currentWeek = days[days.length - 1].title < 7 ? 1 : 0);
+	        $$invalidate(13, currentWeek = days[days.length - 1].title < 7 ? 1 : 0);
 	        dispatch('month-change', 'next');
 	        break;
 	      case 'month':
@@ -18396,14 +18418,14 @@ var bookly = (function ($) {
 	  function _loadSchedule() {
 	    if (!_includesInstanceProperty(loadedMonths).call(loadedMonths, monthWithYear)) {
 	      loadSchedule(month + 1, year).then(response => {
-	        $$invalidate(31, loadedMonths = [...new _Set$1([...loadedMonths, ...(response?.data.parsed_months || [])])]);
-	        $$invalidate(30, holidays = [...new _Set$1([...holidays, ...(response?.data.holidays || [])])]);
+	        $$invalidate(32, loadedMonths = [...new _Set$1([...loadedMonths, ...(response?.data.parsed_months || [])])]);
+	        $$invalidate(31, holidays = [...new _Set$1([...holidays, ...(response?.data.holidays || [])])]);
 	        if (date === null) {
 	          let firstDate = new Date();
-	          while (_includesInstanceProperty(holidays).call(holidays, $$invalidate(28, date = formatDate(firstDate)))) {
+	          while (_includesInstanceProperty(holidays).call(holidays, $$invalidate(29, date = formatDate(firstDate)))) {
 	            firstDate.setDate(firstDate.getDate() + 1);
 	          }
-	          $$invalidate(28, date = formatDate(firstDate));
+	          $$invalidate(29, date = formatDate(firstDate));
 	          $$invalidate(2, month = firstDate.getMonth());
 	          $$invalidate(1, year = firstDate.getFullYear());
 	          dispatch('change');
@@ -18411,7 +18433,7 @@ var bookly = (function ($) {
 	      }).catch(() => {
 	        if (date === null) {
 	          let firstDate = new Date();
-	          $$invalidate(28, date = formatDate(firstDate));
+	          $$invalidate(29, date = formatDate(firstDate));
 	          $$invalidate(2, month = firstDate.getMonth());
 	          $$invalidate(1, year = firstDate.getFullYear());
 	          dispatch('change');
@@ -18425,8 +18447,8 @@ var bookly = (function ($) {
 	    document.activeElement && document.activeElement.blur();
 	    $$invalidate(2, month = _day.date.getMonth());
 	    $$invalidate(1, year = _day.date.getFullYear());
-	    $$invalidate(28, date = formatDate(_day.date));
-	    $$invalidate(12, currentWeek = -1);
+	    $$invalidate(29, date = formatDate(_day.date));
+	    $$invalidate(13, currentWeek = -1);
 	    dispatch('change');
 	  }
 	  const click_handler = (_disabled, _day) => !_disabled && onClickDate(_day);
@@ -18434,83 +18456,84 @@ var bookly = (function ($) {
 	  const click_handler_1 = _month => {
 	    $$invalidate(2, month = _month);
 	    dispatch('month-change');
-	    $$invalidate(10, view = 'calendar');
+	    $$invalidate(11, view = 'calendar');
 	  };
 	  const keypress_handler_1 = _month => {
 	    $$invalidate(2, month = _month);
 	    dispatch('month-change');
-	    $$invalidate(10, view = 'calendar');
+	    $$invalidate(11, view = 'calendar');
 	  };
 	  const click_handler_2 = __year => {
 	    $$invalidate(1, year = __year);
-	    $$invalidate(10, view = 'month');
+	    $$invalidate(11, view = 'month');
 	  };
 	  const keypress_handler_2 = __year => {
 	    $$invalidate(1, year = __year);
-	    $$invalidate(10, view = 'month');
+	    $$invalidate(11, view = 'month');
 	  };
 	  function div1_binding($$value) {
 	    binding_callbacks[$$value ? 'unshift' : 'push'](() => {
 	      el = $$value;
-	      $$invalidate(9, el);
+	      $$invalidate(10, el);
 	    });
 	  }
 	  $$self.$$set = $$props => {
-	    if ('layout' in $$props) $$invalidate(32, layout = $$props.layout);
-	    if ('date' in $$props) $$invalidate(28, date = $$props.date);
-	    if ('startDate' in $$props) $$invalidate(29, startDate = $$props.startDate);
-	    if ('holidays' in $$props) $$invalidate(30, holidays = $$props.holidays);
+	    if ('layout' in $$props) $$invalidate(33, layout = $$props.layout);
+	    if ('date' in $$props) $$invalidate(29, date = $$props.date);
+	    if ('startDate' in $$props) $$invalidate(30, startDate = $$props.startDate);
+	    if ('holidays' in $$props) $$invalidate(31, holidays = $$props.holidays);
 	    if ('datePicker' in $$props) $$invalidate(4, datePicker = $$props.datePicker);
-	    if ('maxDays' in $$props) $$invalidate(33, maxDays = $$props.maxDays);
+	    if ('maxDays' in $$props) $$invalidate(34, maxDays = $$props.maxDays);
 	    if ('limits' in $$props) $$invalidate(0, limits = $$props.limits);
 	    if ('disabled' in $$props) $$invalidate(5, disabled = $$props.disabled);
 	    if ('mode' in $$props) $$invalidate(6, mode = $$props.mode);
-	    if ('disabledWeekDays' in $$props) $$invalidate(34, disabledWeekDays = $$props.disabledWeekDays);
-	    if ('loadSchedule' in $$props) $$invalidate(35, loadSchedule = $$props.loadSchedule);
+	    if ('l10n' in $$props) $$invalidate(7, l10n = $$props.l10n);
+	    if ('disabledWeekDays' in $$props) $$invalidate(35, disabledWeekDays = $$props.disabledWeekDays);
+	    if ('loadSchedule' in $$props) $$invalidate(36, loadSchedule = $$props.loadSchedule);
 	    if ('year' in $$props) $$invalidate(1, year = $$props.year);
 	    if ('month' in $$props) $$invalidate(2, month = $$props.month);
-	    if ('loadedMonths' in $$props) $$invalidate(31, loadedMonths = $$props.loadedMonths);
+	    if ('loadedMonths' in $$props) $$invalidate(32, loadedMonths = $$props.loadedMonths);
 	    if ('loading' in $$props) $$invalidate(3, loading = $$props.loading);
-	    if ('show' in $$props) $$invalidate(7, show = $$props.show);
-	    if ('border' in $$props) $$invalidate(8, border = $$props.border);
+	    if ('show' in $$props) $$invalidate(8, show = $$props.show);
+	    if ('border' in $$props) $$invalidate(9, border = $$props.border);
 	  };
 	  $$self.$$.update = () => {
-	    if ($$self.$$.dirty[0] & /*el*/512) {
+	    if ($$self.$$.dirty[0] & /*el*/1024) {
 	      if (el) {
-	        $$invalidate(13, rtl = getComputedStyle(el).direction === 'rtl');
+	        $$invalidate(14, rtl = getComputedStyle(el).direction === 'rtl');
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*startDate*/536870912) {
+	    if ($$self.$$.dirty[0] & /*startDate*/1073741824) {
 	      if (startDate === null) {
-	        $$invalidate(29, startDate = new Date());
+	        $$invalidate(30, startDate = new Date());
 	      } else {
 	        $$invalidate(1, year = startDate.getFullYear());
 	        $$invalidate(2, month = startDate.getMonth());
 	      }
 	    }
 	    if ($$self.$$.dirty[0] & /*month, year*/6) {
-	      $$invalidate(37, monthWithYear = month + '-' + year);
+	      $$invalidate(38, monthWithYear = month + '-' + year);
 	    }
-	    if ($$self.$$.dirty[0] & /*view, year, month*/1030 | $$self.$$.dirty[1] & /*loadSchedule, lastDate, monthWithYear*/208) {
+	    if ($$self.$$.dirty[0] & /*view, year, month*/2054 | $$self.$$.dirty[1] & /*loadSchedule, lastDate, monthWithYear*/416) {
 	      if (loadSchedule !== false && view === 'calendar' && (year || month)) {
 	        if (lastDate !== monthWithYear) {
-	          $$invalidate(38, lastDate = monthWithYear);
+	          $$invalidate(39, lastDate = monthWithYear);
 	          $$invalidate(3, loading = true);
 	        }
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*loading*/8 | $$self.$$.dirty[1] & /*loadSchedule*/16) {
+	    if ($$self.$$.dirty[0] & /*loading*/8 | $$self.$$.dirty[1] & /*loadSchedule*/32) {
 	      if (loadSchedule !== false && loading) {
 	        _loadSchedule();
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*year, month, datePicker, days, limits, holidays, date*/1342179351 | $$self.$$.dirty[1] & /*disabledWeekDays, loadedMonths, monthWithYear*/73) {
+	    if ($$self.$$.dirty[0] & /*year, month, datePicker, days, limits, date*/536875031 | $$self.$$.dirty[1] & /*disabledWeekDays, loadedMonths, monthWithYear, holidays*/147) {
 	      {
 	        let _day = new Date(year, month, 1);
 	        _day.setDate(_day.getDate() - ((_day.getDay() - datePicker.firstDay) % 7 + 7) % 7);
 	        let lastDay = new Date(year, month + 1, 0);
 	        lastDay.setDate(lastDay.getDate() - ((lastDay.getDay() - datePicker.firstDay) % 7 + 7) % 7 + 6);
-	        $$invalidate(11, days = []);
+	        $$invalidate(12, days = []);
 	        do {
 	          let dayFormatted = formatDate(_day);
 	          days.push({
@@ -18524,61 +18547,62 @@ var bookly = (function ($) {
 	        } while (lastDay >= _day);
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*mode, currentWeek, days*/6208) {
+	    if ($$self.$$.dirty[0] & /*mode, currentWeek, days*/12352) {
 	      if (mode === 'horizontal') {
 	        if (currentWeek === -1 && days.length > 0) {
 	          _forEachInstanceProperty(days).call(days, (day, index) => {
 	            if (day.active) {
-	              $$invalidate(12, currentWeek = _parseInt(index / 7));
+	              $$invalidate(13, currentWeek = _parseInt(index / 7));
 	            }
 	          });
 	        } else if (currentWeek === 999) {
-	          $$invalidate(12, currentWeek = _parseInt(days.length / 7) - (days[days.length - 1].title < 7 ? 2 : 1));
+	          $$invalidate(13, currentWeek = _parseInt(days.length / 7) - (days[days.length - 1].title < 7 ? 2 : 1));
 	        }
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*view, datePicker, month, year*/1046) {
+	    if ($$self.$$.dirty[0] & /*view, datePicker, month, year*/2070) {
 	      if (view) {
 	        switch (view) {
 	          case 'calendar':
-	            $$invalidate(22, title = datePicker.monthNamesShort[month] + ' ' + year);
+	            $$invalidate(23, title = datePicker.monthNamesShort[month] + ' ' + year);
 	            break;
 	          case 'month':
 	          case 'year':
-	            $$invalidate(22, title = year);
+	            $$invalidate(23, title = year);
 	            break;
 	        }
 	      }
 	    }
 	  };
-	  return [limits, year, month, loading, datePicker, disabled, mode, show, border, el, view, days, currentWeek, rtl, bgColor, textColor, borderColor, buttonClasses, activeButtonClasses, disabledButtonClasses, otherMonthButtonClasses, controlButtonClasses, title, dispatch, changeView, onClickLeft, onClickRight, onClickDate, date, startDate, holidays, loadedMonths, layout, maxDays, disabledWeekDays, loadSchedule, forceLoadSchedule, monthWithYear, lastDate, click_handler, keypress_handler, click_handler_1, keypress_handler_1, click_handler_2, keypress_handler_2, div1_binding];
+	  return [limits, year, month, loading, datePicker, disabled, mode, l10n, show, border, el, view, days, currentWeek, rtl, bgColor, textColor, borderColor, buttonClasses, activeButtonClasses, disabledButtonClasses, otherMonthButtonClasses, controlButtonClasses, title, dispatch, changeView, onClickLeft, onClickRight, onClickDate, date, startDate, holidays, loadedMonths, layout, maxDays, disabledWeekDays, loadSchedule, forceLoadSchedule, monthWithYear, lastDate, click_handler, keypress_handler, click_handler_1, keypress_handler_1, click_handler_2, keypress_handler_2, div1_binding];
 	}
 	class Calendar extends SvelteComponent {
 	  constructor(options) {
 	    super();
 	    init(this, options, instance$3, create_fragment$3, safe_not_equal, {
-	      layout: 32,
-	      date: 28,
-	      startDate: 29,
-	      holidays: 30,
+	      layout: 33,
+	      date: 29,
+	      startDate: 30,
+	      holidays: 31,
 	      datePicker: 4,
-	      maxDays: 33,
+	      maxDays: 34,
 	      limits: 0,
 	      disabled: 5,
 	      mode: 6,
-	      disabledWeekDays: 34,
-	      loadSchedule: 35,
-	      forceLoadSchedule: 36,
+	      l10n: 7,
+	      disabledWeekDays: 35,
+	      loadSchedule: 36,
+	      forceLoadSchedule: 37,
 	      year: 1,
 	      month: 2,
-	      loadedMonths: 31,
+	      loadedMonths: 32,
 	      loading: 3,
-	      show: 7,
-	      border: 8
+	      show: 8,
+	      border: 9
 	    }, null, [-1, -1, -1]);
 	  }
 	  get layout() {
-	    return this.$$.ctx[32];
+	    return this.$$.ctx[33];
 	  }
 	  set layout(layout) {
 	    this.$$set({
@@ -18587,7 +18611,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get date() {
-	    return this.$$.ctx[28];
+	    return this.$$.ctx[29];
 	  }
 	  set date(date) {
 	    this.$$set({
@@ -18596,7 +18620,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get startDate() {
-	    return this.$$.ctx[29];
+	    return this.$$.ctx[30];
 	  }
 	  set startDate(startDate) {
 	    this.$$set({
@@ -18605,7 +18629,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get holidays() {
-	    return this.$$.ctx[30];
+	    return this.$$.ctx[31];
 	  }
 	  set holidays(holidays) {
 	    this.$$set({
@@ -18623,7 +18647,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get maxDays() {
-	    return this.$$.ctx[33];
+	    return this.$$.ctx[34];
 	  }
 	  set maxDays(maxDays) {
 	    this.$$set({
@@ -18658,8 +18682,17 @@ var bookly = (function ($) {
 	    });
 	    flush();
 	  }
+	  get l10n() {
+	    return this.$$.ctx[7];
+	  }
+	  set l10n(l10n) {
+	    this.$$set({
+	      l10n
+	    });
+	    flush();
+	  }
 	  get disabledWeekDays() {
-	    return this.$$.ctx[34];
+	    return this.$$.ctx[35];
 	  }
 	  set disabledWeekDays(disabledWeekDays) {
 	    this.$$set({
@@ -18668,7 +18701,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get loadSchedule() {
-	    return this.$$.ctx[35];
+	    return this.$$.ctx[36];
 	  }
 	  set loadSchedule(loadSchedule) {
 	    this.$$set({
@@ -18677,7 +18710,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get forceLoadSchedule() {
-	    return this.$$.ctx[36];
+	    return this.$$.ctx[37];
 	  }
 	  get year() {
 	    return this.$$.ctx[1];
@@ -18698,7 +18731,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get loadedMonths() {
-	    return this.$$.ctx[31];
+	    return this.$$.ctx[32];
 	  }
 	  set loadedMonths(loadedMonths) {
 	    this.$$set({
@@ -18716,7 +18749,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get show() {
-	    return this.$$.ctx[7];
+	    return this.$$.ctx[8];
 	  }
 	  set show(show) {
 	    this.$$set({
@@ -18725,7 +18758,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get border() {
-	    return this.$$.ctx[8];
+	    return this.$$.ctx[9];
 	  }
 	  set border(border) {
 	    this.$$set({
@@ -23975,59 +24008,73 @@ var bookly = (function ($) {
 	 * @param options
 	 */
 	function main (options) {
-	  var _context;
-	  let $container = $('#bookly-form-' + options.form_id);
-	  if (!$container.length) {
-	    return;
-	  }
-	  opt[options.form_id] = options;
-	  opt[options.form_id].$container = $container;
-	  opt[options.form_id].timeZone = typeof Intl === 'object' ? Intl.DateTimeFormat().resolvedOptions().timeZone : undefined;
-	  opt[options.form_id].timeZoneOffset = new Date().getTimezoneOffset();
-	  opt[options.form_id].skip_steps.service = options.skip_steps.service_part1 && options.skip_steps.service_part2;
-	  if (!_includesInstanceProperty$1(_context = moment.locales()).call(_context, 'bookly-daterange')) {
-	    let current_locale = moment.locale();
-	    moment.defineLocale('bookly-daterange', {
-	      months: BooklyL10n.months,
-	      monthsShort: BooklyL10n.monthsShort,
-	      weekdays: BooklyL10n.days,
-	      weekdaysShort: BooklyL10n.daysShort
-	    });
-	    moment.locale(current_locale);
-	  }
+	  booklyAjax({
+	    type: 'POST',
+	    data: {
+	      action: 'bookly_get_form_id',
+	      form_container_id: options.form_container_id,
+	      form_id: options.form_token,
+	      form_data: options.form_data
+	    }
+	  }).then(response => {
+	    if (response.success) {
+	      var _context;
+	      let $container = $('#bookly-form-container-' + options.form_id);
+	      if (!$container.length) {
+	        return;
+	      }
+	      options.form_id = response.form_id;
+	      $container.data('form_id', options.form_id);
+	      opt[options.form_id] = options;
+	      opt[options.form_id].$container = $container;
+	      opt[options.form_id].timeZone = typeof Intl === 'object' ? Intl.DateTimeFormat().resolvedOptions().timeZone : undefined;
+	      opt[options.form_id].timeZoneOffset = new Date().getTimezoneOffset();
+	      opt[options.form_id].skip_steps.service = options.skip_steps.service_part1 && options.skip_steps.service_part2;
+	      if (!_includesInstanceProperty$1(_context = moment.locales()).call(_context, 'bookly-daterange')) {
+	        let current_locale = moment.locale();
+	        moment.defineLocale('bookly-daterange', {
+	          months: BooklyL10n.months,
+	          monthsShort: BooklyL10n.monthsShort,
+	          weekdays: BooklyL10n.days,
+	          weekdaysShort: BooklyL10n.daysShort
+	        });
+	        moment.locale(current_locale);
+	      }
 
-	  // initialize
-	  if (options.status.booking == 'finished') {
-	    opt[options.form_id].scroll = true;
-	    stepComplete({
-	      form_id: options.form_id
-	    });
-	  } else if (options.status.booking == 'cancelled') {
-	    opt[options.form_id].scroll = true;
-	    stepPayment({
-	      form_id: options.form_id
-	    });
-	  } else {
-	    opt[options.form_id].scroll = false;
-	    stepService({
-	      form_id: options.form_id,
-	      new_chain: true
-	    });
-	  }
-	  if (options.hasOwnProperty('facebook') && options.facebook.enabled) {
-	    initFacebookLogin(options);
-	  }
+	      // initialize
+	      if (response.status.booking === 'finished') {
+	        opt[options.form_id].scroll = true;
+	        stepComplete({
+	          form_id: options.form_id
+	        });
+	      } else if (response.status.booking === 'cancelled') {
+	        opt[options.form_id].scroll = true;
+	        stepPayment({
+	          form_id: options.form_id
+	        });
+	      } else {
+	        opt[options.form_id].scroll = false;
+	        stepService({
+	          form_id: options.form_id,
+	          new_chain: true
+	        });
+	      }
+	      if (options.hasOwnProperty('facebook') && options.facebook.enabled) {
+	        initFacebookLogin(options);
+	      }
 
-	  // init google places
+	      // init google places
 
-	  if (options.hasOwnProperty('google_maps') && options.google_maps.enabled) {
-	    var apiKey = options.google_maps.api_key,
-	      src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&libraries=places';
-	    importScript(src, true);
-	  }
-	  if (options.hasOwnProperty('stripe') && options.stripe.enabled) {
-	    importScript('https://js.stripe.com/v3/', true);
-	  }
+	      if (options.hasOwnProperty('google_maps') && options.google_maps.enabled) {
+	        var apiKey = options.google_maps.api_key,
+	          src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&libraries=places';
+	        importScript(src, true);
+	      }
+	      if (options.hasOwnProperty('stripe') && options.stripe.enabled) {
+	        importScript('https://js.stripe.com/v3/', true);
+	      }
+	    }
+	  });
 	}
 
 	/**

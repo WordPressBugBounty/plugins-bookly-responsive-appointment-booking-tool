@@ -337,32 +337,29 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function getDurationSelectOptions( $duration )
     {
-        $time_interval = get_option( 'bookly_gen_time_slot_length' );
-
-        $options = array();
-
-        for ( $j = $time_interval; $j <= 720; $j += $time_interval ) {
-
-            if ( ( $duration / 60 > $j - $time_interval ) && ( $duration / 60 < $j ) ) {
-                $options[] = array(
-                    'value' => $duration,
-                    'label' => DateTime::secondsToInterval( $duration ),
-                    'selected' => 'selected',
-                );
-            }
-
-            $options[] = array(
-                'value' => $j * 60,
-                'label' => DateTime::secondsToInterval( $j * 60 ),
-                'selected' => selected( $duration, $j * 60, false ),
-            );
+        $step = (int) get_option( 'bookly_gen_time_slot_length', 15 );
+        // up 12 hours
+        $durations = range( $step, 720, $step );
+        // add $duration
+        $durations[] = (int) ( $duration / 60 );
+        // up 1 week
+        for ( $day = 1; $day <= 7; $day++ ) {
+            $durations[] = $day * 1440;
         }
-
-        for ( $j = 86400; $j <= 604800; $j += 86400 ) {
+        // add extra lengths
+        foreach ( explode( ',', get_option( 'bookly_advanced_time_slot_length_minutes', '' ) ) ?: array() as $minutes ) {
+            $minutes && $durations[] = (int) $minutes;
+        }
+        // sort
+        $durations = array_unique( $durations, SORT_NUMERIC );
+        sort( $durations, SORT_NUMERIC );
+        $options = array();
+        foreach ( $durations as $min ) {
+            $sec = $min * 60;
             $options[] = array(
-                'value' => $j,
-                'label' => DateTime::secondsToInterval( $j ),
-                'selected' => selected( $duration, $j, false ),
+                'value' => $sec,
+                'label' => DateTime::secondsToInterval( $sec ),
+                'selected' => selected( $duration, $sec, false ),
             );
         }
 

@@ -287,6 +287,8 @@ class CustomerAppointment extends Lib\Base\Entity
                 return __( 'Done', 'bookly' );
             case 'mixed':
                 return __( 'Mixed', 'bookly' );
+            case null:
+                return null;
             default:
                 return Lib\Proxy\CustomStatuses::statusToString( $status );
         }

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2026-01-13 09:51+0000\n"
+"PO-Revision-Date: 2026-02-07 13:12+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -297,6 +297,10 @@ msgstr "Доступ до ваших бронювань вимкнено."
 
 msgid "Access token"
 msgstr "Токен доступу"
+
+msgid "Access token link for quick authorization in the mobile app"
+msgstr ""
+"Посилання з токеном доступу для швидкої авторизації в мобільному застосунку"
 
 msgid "Access tokens"
 msgstr "Токени доступу"
@@ -963,9 +967,6 @@ msgstr "Статус пов'язаного платежу"
 
 msgid "Associated staff member"
 msgstr "Зв'язаний співробітник"
-
-msgid "at"
-msgstr "в"
 
 msgid "At the top of your screen press on App ID to copy it."
 msgstr ""
@@ -3538,15 +3539,6 @@ msgstr ""
 "місткості сервісу до одного разу."
 
 msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr ""
-"Увімкніть цю опцію, щоб Bookly закривав сесію PHP одразу після завершення "
-"роботи. Це має запобігти блокуванню сесії, яке може призвести до тайм-ауту "
-"або збою інших процесів"
-
-msgid ""
 "Enable this option to make slot length equal to service duration at the Time "
 "step of booking form."
 msgstr ""
@@ -5156,6 +5148,13 @@ msgstr ""
 "прокручуватиметься разом з усією сторінкою."
 
 msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
+msgstr ""
+"Якщо увімкнено, календар використовуватиме Застарілий режим, що покращує "
+"сумісність зі старими браузерами."
+
+msgid ""
 "If enabled, the card will be automatically associated with the customer who "
 "purchases it via the frontend booking form"
 msgstr ""
@@ -5986,6 +5985,9 @@ msgstr "Залиште нам повідомлення"
 
 msgid "Leave your comment"
 msgstr "Залиште свій коментар"
+
+msgid "Legacy mode"
+msgstr "Застарілий режим"
 
 msgid "Legal services"
 msgstr "Юридичні послуги"
@@ -6965,8 +6967,9 @@ msgstr "Гаразд, ви на це заслуговуєте"
 msgid "Old password"
 msgstr "Старий пароль"
 
+msgctxt "on date"
 msgid "On"
-msgstr "В"
+msgstr "На"
 
 msgctxt "on date"
 msgid "on"
@@ -7366,9 +7369,6 @@ msgstr "Фото співробітника"
 msgid "Photographers"
 msgstr "Фотографи"
 
-msgid "PHP Sessions"
-msgstr "Сесії PHP"
-
 msgid "Physiologists"
 msgstr "Фізіологи"
 
@@ -7740,11 +7740,11 @@ msgstr ""
 msgid "Prevent caching of pages with booking form"
 msgstr "Заборонити кешування сторінок з формою бронювання"
 
-msgid "Prevent PHP session locking"
-msgstr "Запобігання блокуванню PHP сесії"
-
 msgid "Preview"
 msgstr "Попередній перегляд"
+
+msgid "Previous"
+msgstr "Попередній"
 
 msgid "Price"
 msgstr "Ціна"
@@ -8052,6 +8052,9 @@ msgstr "Видалити промокод"
 
 msgid "Renew"
 msgstr "Відновити"
+
+msgid "Reorder"
+msgstr "Змінити порядок"
 
 msgid "Repeat"
 msgstr "Повторити"
@@ -8477,9 +8480,6 @@ msgstr ""
 "Виберіть, коли надсилати клієнту повідомлення з кодом підтвердження на SMS "
 "або електронну пошту."
 
-msgid "Select where to store session data"
-msgstr "Виберіть, де зберігати дані сесії"
-
 msgid "Select who can administrate Bookly"
 msgstr "Виберіть, хто може адмініструвати Bookly"
 
@@ -8648,9 +8648,6 @@ msgstr ""
 
 msgid "Session error."
 msgstr "Помилка сеансу."
-
-msgid "Session storage mode"
-msgstr "Режим зберігання сесії"
 
 msgid ""
 "Set 0 to disable waiting list for this service or set the required value."
@@ -10067,16 +10064,6 @@ msgstr "Це налаштування встановлює термін опла
 
 msgid "This test checks for critical errors in Bookly."
 msgstr "Цей тест перевіряє наявність критичних помилок у Bookly."
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr ""
-"Цей тест перевіряє, чи ввімкнені сесії PHP. Для коректної роботи Bookly "
-"потрібні сесії PHP. Для отримання додаткової інформації про сесії PHP, будь "
-"ласка, зверніться до офіційної документації PHP %s."
 
 msgid ""
 "This test checks the ability to establish a connection with the Bookly Cloud "

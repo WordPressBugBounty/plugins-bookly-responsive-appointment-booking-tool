@@ -131,13 +131,28 @@
                         return moment(date).locale('bookly').format('dddd');
                     },
                     pointer: true,
-                    columnWidth: 'minmax(120px, 1fr)'
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
                 },
                 timeGridWeek: {pointer: true},
-                resourceTimeGridDay: {pointer: true, columnWidth: 'minmax(120px, 1fr)'},
-                resourceTimelineDay: {pointer: true, displayEventEnd: true, slotWidth: 120},
-                resourceTimelineWeek: {pointer: true, displayEventEnd: true, slotWidth: 120},
-                resourceTimelineMonth: {pointer: true, displayEventEnd: true, columnWidth: 'minmax(120px, 1fr)'}
+                resourceTimeGridDay: {
+                    pointer: true,
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
+                },
+                resourceTimelineDay: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    slotWidth: obj.options.l10n.calendar_version === 'latest' ? 120 : 180
+                },
+                resourceTimelineWeek: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    slotWidth: obj.options.l10n.calendar_version === 'latest' ? 120 : 180
+                },
+                resourceTimelineMonth: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
+                }
             },
             nowIndicator: true,
             hiddenDays: obj.options.l10n.hiddenDays,
@@ -209,7 +224,7 @@
                     }
                     if (!$popover.length) {
                         $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
-                        let $calendar_container = $event.closest('.ec-main');
+                        let $calendar_container = $event.closest('.ec');
                         let $arrow = $('<div class="arrow"></div><div class="bookly-arrow-background"></div>');
                         let $body = $('<div class="popover-body">');
                         let $buttons = allowEditAppointment ? popoverButtons(arg) : '';
