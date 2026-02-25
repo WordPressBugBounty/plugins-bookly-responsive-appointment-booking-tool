@@ -1093,7 +1093,7 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\FormSession::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `token` VARCHAR(255) NOT NULL,
+                `token` VARCHAR(64) NOT NULL,
                 `value` TEXT DEFAULT NULL,
                 `expire` DATETIME NOT NULL,
                 INDEX `token` (`token`),

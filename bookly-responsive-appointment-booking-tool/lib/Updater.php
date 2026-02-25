@@ -3,6 +3,29 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_26_9()
+    {
+        if ( $this->existsTable( $this->getTableName( 'bookly_form_sessions' ) ) ) {
+            $this->alterTables( array(
+                'bookly_form_sessions' => array(
+                    'ALTER TABLE `%s` CHANGE `token` `token` VARCHAR(64) NOT NULL',
+                ),
+            ) );
+        } else {
+            $this->createTables( array(
+                'bookly_form_sessions' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `token` VARCHAR(64) NOT NULL,
+                    `value` TEXT DEFAULT NULL,
+                    `expire` DATETIME NOT NULL,
+                    INDEX `token` (`token`),
+                    INDEX `expire` (`expire`)
+                ) ENGINE = INNODB',
+            ) );
+        }
+    }
+
     function update_26_8()
     {
         $this->createTables( array(
