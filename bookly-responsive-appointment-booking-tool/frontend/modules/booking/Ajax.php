@@ -1444,6 +1444,7 @@ class Ajax extends Lib\Base\Ajax
             'renderService',
             'renderExtras',
             'renderTime',
+            'getFormId'
         );
 
         return in_array( $action, $excluded_actions ) || parent::csrfTokenValid( $action );
