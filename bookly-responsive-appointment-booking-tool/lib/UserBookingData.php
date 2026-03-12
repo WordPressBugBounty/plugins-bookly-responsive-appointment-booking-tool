@@ -144,7 +144,6 @@ class UserBookingData
         // Step payment
         'coupon_code',
         'gift_code',
-        'tips',
         'deposit_full',
         // Cart item keys being edited
         'edit_cart_keys',
@@ -361,7 +360,9 @@ class UserBookingData
     public function fillData( array $data )
     {
         foreach ( $data as $name => $value ) {
-            if ( in_array( $name, $this->properties ) ) {
+            if ( $name === 'tips' ) {
+                $this->setTips( $value );
+            } elseif ( in_array( $name, $this->properties ) ) {
                 $this->{$name} = $value;
             } elseif ( $name == 'chain' ) {
                 $chain_items = $this->chain->getItems();
@@ -1898,7 +1899,7 @@ class UserBookingData
      */
     public function setTips( $tips )
     {
-        $this->tips = $tips;
+        $this->tips = max( 0, (float) $tips );
 
         return $this;
     }
