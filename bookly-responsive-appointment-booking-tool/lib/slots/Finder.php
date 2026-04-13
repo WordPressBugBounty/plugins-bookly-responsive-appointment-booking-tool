@@ -724,6 +724,13 @@ class Finder
                 $this->staff[ $staff_id ]->addBooking( $booking );
             }
         }
+
+        // Apple Calendar events.
+        foreach ( Lib\Proxy\AppleCalendar::getBookings( array_keys( $this->staff ), $this->start_dp ) ?: array() as $staff_id => $bookings ) {
+            foreach ( $bookings as $booking ) {
+                $this->staff[ $staff_id ]->addBooking( $booking );
+            }
+        }
     }
 
     /**

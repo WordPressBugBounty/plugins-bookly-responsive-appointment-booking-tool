@@ -225,11 +225,11 @@ class UserBookingData
             }
         } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
             if ( isset( $_COOKIE['bookly-customer-full-name'] ) ) {
-                $this->setFullName( $_COOKIE['bookly-customer-full-name'] );
+                $this->setFullName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-full-name'] ) );
             }
             Proxy\CustomerInformation::setFromCookies( $this );
             if ( isset( $_COOKIE['bookly-customer-birthday'] ) ) {
-                $date = explode( '-', $_COOKIE['bookly-customer-birthday'] );
+                $date = explode( '-', Utils\Common::stripWpKses( $_COOKIE['bookly-customer-birthday'] ) );
                 $birthday = array(
                     'year' => $date[0],
                     'month' => isset( $date[1] ) ? (int) $date[1] : 0,
@@ -238,37 +238,39 @@ class UserBookingData
                 $this->setBirthday( $birthday );
             }
             if ( isset( $_COOKIE['bookly-customer-email'] ) ) {
-                $this->setEmail( $_COOKIE['bookly-customer-email'] )->setEmailConfirm( $_COOKIE['bookly-customer-email'] );
+                $this
+                    ->setEmail( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-email'] ) )
+                    ->setEmailConfirm( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-email'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-phone'] ) ) {
-                $this->setPhone( $_COOKIE['bookly-customer-phone'] );
+                $this->setPhone( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-phone'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-first-name'] ) ) {
-                $this->setFirstName( $_COOKIE['bookly-customer-first-name'] );
+                $this->setFirstName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-first-name'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-last-name'] ) ) {
-                $this->setLastName( $_COOKIE['bookly-customer-last-name'] );
+                $this->setLastName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-last-name'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-country'] ) ) {
-                $this->setCountry( $_COOKIE['bookly-customer-country'] );
+                $this->setCountry( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-country'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-state'] ) ) {
-                $this->setState( $_COOKIE['bookly-customer-state'] );
+                $this->setState( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-state'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-postcode'] ) ) {
-                $this->setPostcode( $_COOKIE['bookly-customer-postcode'] );
+                $this->setPostcode( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-postcode'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-city'] ) ) {
-                $this->setCity( $_COOKIE['bookly-customer-city'] );
+                $this->setCity( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-city'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-street'] ) ) {
-                $this->setStreet( $_COOKIE['bookly-customer-street'] );
+                $this->setStreet( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-street'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-street-number'] ) ) {
-                $this->setStreetNumber( $_COOKIE['bookly-customer-street-number'] );
+                $this->setStreetNumber( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-street-number'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-additional-address'] ) ) {
-                $this->setAdditionalAddress( $_COOKIE['bookly-customer-additional-address'] );
+                $this->setAdditionalAddress( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-additional-address'] ) );
             }
         }
     }

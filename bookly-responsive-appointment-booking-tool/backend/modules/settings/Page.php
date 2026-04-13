@@ -204,6 +204,8 @@ class Page extends Lib\Base\Ajax
             'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
+            'showMore' => __( 'Show more', 'bookly' ),
+            'noResultsFound' => __( 'No results found', 'bookly' ),
         ) );
         $values = array();
         foreach ( Lib\Config::getTimeSlotLengthOptions() as $duration ) {

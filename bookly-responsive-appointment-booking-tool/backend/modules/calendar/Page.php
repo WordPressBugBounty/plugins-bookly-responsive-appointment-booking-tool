@@ -79,6 +79,7 @@ class Page extends Lib\Base\Ajax
             Lib\Utils\Common::getCalendarSettings(),
             array(
                 'calendar_version' => $calendar_version,
+                'clmn_min_width' => get_option( 'bookly_bc_clmn_min_width', '120' ),
                 'delete' => __( 'Delete', 'bookly' ),
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
@@ -252,14 +253,14 @@ class Page extends Lib\Base\Ajax
                 'appointment_id' => $appointment['id'],
                 'appointment_notes' => $appointment['appointment_notes'],
                 'booking_number' => Config::groupBookingActive() ? $appointment['id'] . '-' . $appointment['ca_id'] : $appointment['ca_id'],
-                'client_birthday' => $appointment['client_birthday'],
-                'client_email' => $appointment['client_email'],
-                'client_first_name' => $appointment['client_first_name'],
-                'client_last_name' => $appointment['client_last_name'],
-                'client_name' => $appointment['client_name'],
+                'client_birthday' => Common::stripWpKses( $appointment['client_birthday'] ),
+                'client_email' => Common::stripWpKses( $appointment['client_email'] ),
+                'client_first_name' => Common::stripWpKses( $appointment['client_first_name'] ),
+                'client_last_name' => Common::stripWpKses( $appointment['client_last_name'] ),
+                'client_name' => Common::stripWpKses( $appointment['client_name'] ),
                 'client_note' => $appointment['client_note'],
-                'client_phone' => $appointment['client_phone'],
-                'number_of_persons' => $appointment['number_of_persons'],
+                'client_phone' =>  Common::stripWpKses( $appointment['client_phone'] ),
+                'number_of_persons' => Common::stripWpKses( $appointment['number_of_persons'] ),
                 'payment_status' => Lib\Entities\Payment::statusToString( $appointment['payment_status'] ),
                 'payment_type' => Lib\Entities\Payment::typeToString( $appointment['payment_gateway'] ),
                 'status' => $appointment['status'],
@@ -399,6 +400,7 @@ class Page extends Lib\Base\Ajax
                     'waitlisted' => $participants === 'one' ? (int) $appointment['on_waiting_list'] : null,
                     'staff_any' => (int) $appointment['staff_any'],
                     'overall_status' => $overall_status,
+                    'participants' => $participants
                 ),
             );
             if ( $appointment['duration'] * max( 1, $appointment['units'] ) >= DAY_IN_SECONDS && $appointment['start_time_info'] ) {

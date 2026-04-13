@@ -9,16 +9,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2026-02-10 04:41+0000\n"
+"PO-Revision-Date: 2026-04-01 04:48+0000\n"
 "Last-Translator: Mathilde Massardier\n"
 "Language-Team: French (France)\n"
-"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.11"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
 #, php-format
 msgid " and %d more item"
 msgid_plural " and %d more items"
 msgstr[0] " et %d élément en plus"
 msgstr[1] " et %d éléments en plus"
+
+msgid " Give it a try!"
+msgstr "Essayez !"
 
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
@@ -822,11 +825,23 @@ msgstr "Utilisateur API"
 msgid "App ID"
 msgstr "ID App"
 
+msgid "App-specific password"
+msgstr "Mot de passe spécifique à l’app"
+
 msgid "Appearance"
 msgstr "Apparence"
 
 msgid "Appearance form name"
 msgstr "Nom du formulaire d'apparence"
+
+msgid "Apple Calendar"
+msgstr "Calendrier Apple"
+
+msgid "Apple Calendar event"
+msgstr "Événement du calendrier Apple"
+
+msgid "Apple Calendar integration"
+msgstr "Intégration du calendrier Apple"
 
 msgid "Application ID"
 msgstr "ID application"
@@ -1825,6 +1840,13 @@ msgid "Conditions"
 msgstr "Conditions"
 
 msgid ""
+"Configure what information should be placed in the title of Apple Calendar "
+"event."
+msgstr ""
+"Configurer les informations à afficher dans le titre de l’événement du "
+"calendrier Apple."
+
+msgid ""
 "Configure what information should be placed in the title of Google Calendar "
 "event."
 msgstr ""
@@ -1862,6 +1884,15 @@ msgstr "Connecter"
 msgid "Connected"
 msgstr "Connecté"
 
+msgid "Connecting..."
+msgstr "Connexion en cours..."
+
+msgid "Connection error. Please try again."
+msgstr "Erreur de connexion. Veuillez réessayer."
+
+msgid "Connection failed. Please reconnect."
+msgstr "Échec de la connexion. Veuillez vous reconnecter."
+
 msgid "Consulting"
 msgstr "Conseil"
 
@@ -1888,6 +1919,9 @@ msgstr "copié"
 
 msgid "Copied to clipboard"
 msgstr "Copié dans le presse-papiers"
+
+msgid "Copy Apple Calendar event titles"
+msgstr "Copier les titres des événements du calendrier Apple"
 
 msgid "Copy checkout URL"
 msgstr "Copier l'URL de paiement"
@@ -3108,6 +3142,9 @@ msgstr "Supprimer uniquement ce rendez-vous"
 msgid "Delete package appointment"
 msgstr "Supprimer le rendez-vous du pack"
 
+msgid "Delete series"
+msgstr "Supprimer la série"
+
 msgid "Delete this and the following appointments"
 msgstr "Supprimer ce rendez-vous et les suivants"
 
@@ -3257,6 +3294,9 @@ msgstr "Afficher le calendrier frontend"
 msgid "Display gift cards"
 msgstr "Afficher les cartes cadeaux"
 
+msgid "Display only busy slots"
+msgstr "Afficher uniquement les créneaux occupés"
+
 msgid "Display packages"
 msgstr "Affichage des paquets"
 
@@ -3373,9 +3413,13 @@ msgstr ""
 "code d’achat. Une fois l’essai terminé, l’activation à l’aide d’un code "
 "d’achat sera requise."
 
+#, fuzzy
+#| msgid ""
+#| "During the trial period, you will have full access to all features of "
+#| "this product  completely free of charge."
 msgid ""
 "During the trial period, you will have full access to all features of this "
-"product  completely free of charge."
+"product - completely free of charge."
 msgstr ""
 "Pendant la période d’essai, vous aurez un accès complet à toutes les "
 "fonctionnalités de ce produit, entièrement gratuit."
@@ -3694,7 +3738,7 @@ msgid ""
 msgstr ""
 "Entrez un montant fixe de la remise (par ex. 10). Pour spécifier un "
 "pourcentage de remise (par ex. 10 %), ajoutez le symbole '%' à la valeur "
-"numérique. "
+"numérique."
 
 #, php-format
 msgid ""
@@ -3728,7 +3772,9 @@ msgstr ""
 "Saisissez les balises des champs dans les paramètres de votre audience "
 "Mailchimp en fonction des données Bookly."
 
-msgid "Enter the URL of the page where this forms shortcode is placed."
+#, fuzzy
+#| msgid "Enter the URL of the page where this forms shortcode is placed."
+msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "Entrez l'URL de la page où ce shortcode de formulaire est placé."
 
 msgid "Enter this URL as a redirect URI in the Google Cloud Platform"
@@ -3746,6 +3792,13 @@ msgstr "Saisissez le code de vérification figurant dans l'e-mail"
 
 msgid "Enter verification code from SMS"
 msgstr "Saisissez le code de vérification figurant dans le SMS"
+
+msgid ""
+"Enter your iCloud email and the app-specific password in Edit Staff > "
+"Advanced > Apple Calendar."
+msgstr ""
+"Saisissez votre adresse e-mail iCloud et le mot de passe spécifique à l’app "
+"dans Éditer le personnel > Avancé > Calendrier Apple."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Saisissez votre code d'achat pour un pack ou un add-on Bookly"
@@ -3854,6 +3907,9 @@ msgstr "Expire"
 
 msgid "Explore Bookly products"
 msgstr "Explorer les produits Bookly"
+
+msgid "Export"
+msgstr "Exporter"
 
 msgid "Export only active coupons"
 msgstr "Exporter uniquement les codes promo actifs"
@@ -4105,6 +4161,13 @@ msgstr "Paramètres généraux"
 msgid "Generate"
 msgstr "Créer"
 
+msgid "Generate a new app-specific password for Bookly."
+msgstr "Générer un nouveau mot de passe spécifique à l’app pour Bookly."
+
+#, php-format
+msgid "Generate an app-specific password at %s"
+msgstr "Générer un mot de passe spécifique à l’app sur %s"
+
 msgid "Generate new API Key"
 msgstr "Générer une nouvelle clé API"
 
@@ -4156,6 +4219,10 @@ msgstr "Paramètres des cartes cadeaux"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "L'adresse e-mail fournie est déjà enregistrée. Merci."
+
+msgid "Go to appleid.apple.com and sign in with your Apple ID."
+msgstr ""
+"Accédez à appleid.apple.com et connectez-vous avec votre identifiant Apple."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4989,6 +5056,9 @@ msgstr "Flux de données ICalendar"
 msgid "ICalendar feed URL"
 msgstr "URL du flux ICalendar"
 
+msgid "iCloud email"
+msgstr "Adresse e-mail iCloud"
+
 msgid "ICS description for staff"
 msgstr "Description de l'ICS pour le personnel"
 
@@ -5033,6 +5103,15 @@ msgstr ""
 "Si cette option est activée, la description des événements de Google Agenda "
 "initialement copiée dans Bookly sera remplacée par les données de rendez-"
 "vous de Bookly après leur modification dans Bookly Calendar"
+
+msgid ""
+"If enabled then titles of Apple Calendar events will be copied to Bookly "
+"appointments. If disabled, a standard title \"Apple Calendar event\" will be "
+"used."
+msgstr ""
+"Si activé, les titres des événements du calendrier Apple seront copiés dans "
+"les rendez-vous Bookly. Si désactivé, un titre standard « Événement du "
+"calendrier Apple » sera utilisé."
 
 msgid ""
 "If enabled then titles of Google Calendar events will be copied to Bookly "
@@ -5243,6 +5322,15 @@ msgid "If the problem persists, contact our support at %s."
 msgstr "Si le problème persiste, contactez notre support à %s."
 
 msgid ""
+"If there are a lot of events in Apple Calendar sometimes this leads to a "
+"lack of memory in PHP when Bookly tries to fetch all events. You can limit "
+"the number of fetched events here."
+msgstr ""
+"S’il y a beaucoup d’événements dans le calendrier Apple, cela peut parfois "
+"entraîner un manque de mémoire en PHP lorsque Bookly tente de récupérer tous "
+"les événements. Vous pouvez limiter ici le nombre d’événements récupérés."
+
+msgid ""
 "If there is a lot of events in Google Calendar sometimes this leads to a "
 "lack of memory in PHP when Bookly tries to fetch all events. You can limit "
 "the number of fetched events here."
@@ -5310,6 +5398,15 @@ msgid ""
 msgstr ""
 "Si cette option est activée, l'adresse e-mail du client est utilisée comme "
 "adresse  d'expéditeur des e-mails vers l'équipe et les administrateurs."
+
+msgid ""
+"If this option is enabled then the front-end calendar will only show "
+"appointments with busy status (pending or approved). Free/available slots "
+"will not be displayed."
+msgstr ""
+"Si cette option est activée, le calendrier front-end affichera uniquement "
+"les rendez-vous avec un statut occupé (en attente ou approuvé). Les créneaux "
+"libres/disponibles ne seront pas affichés."
 
 msgid ""
 "If this setting is enabled then Bookly will be creating WordPress user "
@@ -5402,6 +5499,13 @@ msgid ""
 msgstr ""
 "Si vous choisissez Google Meet, les réunions seront créées pour les membres "
 "du personnel qui ont configuré Google Calendar."
+
+msgid ""
+"If you choose Microsoft Teams then meetings will be created for those staff "
+"members who have Outlook Calendar configured."
+msgstr ""
+"Si vous choisissez Microsoft Teams, des réunions seront créées pour les "
+"membres du personnel ayant configuré Outlook Calendar."
 
 msgid ""
 "If you do not provide a valid purchase code within {days}, access to your "
@@ -5593,6 +5697,15 @@ msgid ""
 msgstr ""
 "Important : si vous désactivez l’essai avant sa fin, il ne pourra pas être "
 "réactivé. Pour continuer à utiliser le produit, activez le forfait choisi."
+
+msgid ""
+"Important: your website must use HTTPS. Google Calendar API will be able to "
+"send notifications only if there is a valid SSL certificate installed on "
+"your web server."
+msgstr ""
+"Important : votre site web doit utiliser HTTPS. L’API Google Calendar ne "
+"pourra envoyer des notifications que si un certificat SSL valide est "
+"installé sur votre serveur web."
 
 msgid "Imported appointments will not be synced with external calendars."
 msgstr ""
@@ -6409,6 +6522,10 @@ msgstr "Nom de la catégorie de personnel"
 
 msgid "Name of ticket type"
 msgstr "Nom du type de ticket"
+
+msgid "Navigate to Sign-In and Security > App-Specific Passwords."
+msgstr ""
+"Accédez à Connexion et sécurité > Mots de passe spécifiques aux applications."
 
 #, php-format
 msgid ""
@@ -7529,6 +7646,9 @@ msgstr "Veuillez entrer un nom de service"
 msgid "Please enter your email (optional)"
 msgstr "Entrez votre e-mail (optionnel)"
 
+msgid "Please fill in both fields."
+msgstr "Veuillez remplir les deux champs."
+
 msgid "Please note that \"I'm available on or after\" picker will be hidden"
 msgstr ""
 "Veuillez noter que le choix \"Je suis disponible le ou après\" sera masqué."
@@ -8046,6 +8166,14 @@ msgstr "URI de redirection"
 msgid "Redirect URL for OAuth"
 msgstr "URL de redirection pour OAuth"
 
+msgid ""
+"Reduce no-shows, keep your staff and customers informed, and send timely "
+"reminders - use SMS Notifications. Send a free test message!"
+msgstr ""
+"Réduisez les absences, tenez votre personnel et vos clients informés et "
+"envoyez des rappels en temps opportun : utilisez les notifications SMS. "
+"Envoyez un message de test gratuit !"
+
 msgid "Reference"
 msgstr "Référennce"
 
@@ -8203,6 +8331,9 @@ msgstr "Révoquer "
 msgid "Rollback"
 msgstr "Retour en arrière"
 
+msgid "Rows per page"
+msgstr "Lignes par page"
+
 msgid "Run tests automatically"
 msgstr "Lancer les tests automatiquement"
 
@@ -8270,6 +8401,9 @@ msgstr "Formulaire de recherche"
 
 msgid "Search payment"
 msgstr "Trouver paiement"
+
+msgid "Search settings..."
+msgstr "Paramètres de recherche..."
 
 msgid "Searching"
 msgstr "Recherche en cours"
@@ -8620,6 +8754,9 @@ msgstr "Envoyer des notifications"
 
 msgid "Send recovery code"
 msgstr "Envoyer le code de récupération"
+
+msgid "Send SMS"
+msgstr "Envoyer un SMS"
 
 msgid "Send tax information"
 msgstr "Envoyer information taxe"
@@ -9250,6 +9387,9 @@ msgstr "Durée du créneau comme durée du service"
 msgid "Slug"
 msgstr "Slug"
 
+msgid "SMS"
+msgstr "SMS"
+
 msgid "Sms"
 msgstr "Sms"
 
@@ -9600,12 +9740,19 @@ msgstr "Synchroniser l'historique des rendez-vous (passé et futur)"
 msgid "Synchronization mode"
 msgstr "Mode synchronisation"
 
+msgid "Synchronize staff member appointments with Apple Calendar."
+msgstr ""
+"Synchroniser les rendez-vous du membre du personnel avec le calendrier Apple."
+
 msgid "Synchronize staff member appointments with Google Calendar."
 msgstr "Synchroniser les membres d'équipe avec Google Calendar."
 
 msgid "Synchronize staff member appointments with Outlook Calendar."
 msgstr ""
 "Synchroniser les rendez-vous des membres de l'équipe avec Outlook Calendar"
+
+msgid "Synchronize with Apple Calendar"
+msgstr "Synchroniser avec le calendrier Apple"
 
 msgid "Synchronize with Google Calendar"
 msgstr "Synchroniser avec Google Calendar"
@@ -10189,6 +10336,13 @@ msgstr ""
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Ce texte peut être inséré dans les notifications avec le code %s"
 
+msgid ""
+"This will permanently delete all appointments in this series. This action "
+"cannot be undone."
+msgstr ""
+"Cette action supprimera définitivement tous les rendez-vous de cette série. "
+"Cette action est irréversible."
+
 #, php-format
 msgid "This will permanently remove the ticket %s"
 msgstr "Cela supprimera définitivement le ticket %s"
@@ -10350,6 +10504,17 @@ msgstr ""
 "Pour permettre l'accès à vos réservations, veuillez vérifier votre licence "
 "en fournissant un code d'achat valide. <a href=\"{url}\">Détails </a>"
 
+#, php-format
+msgid ""
+"To ensure stable operation of the \"Time interval of payment gateway\" "
+"feature, please activate %s or follow <a href=\"%s\" target=\"_blank\">the "
+"instructions</a> about cron setup."
+msgstr ""
+"Pour garantir le bon fonctionnement de la fonctionnalité « Intervalle de "
+"temps de la passerelle de paiement », veuillez activer %s ou suivre <a "
+"href=\"%s\" target=\"_blank\">les instructions</a> concernant la "
+"configuration du cron."
+
 msgid ""
 "To find the value, log into Mailchimp account and look at the URL in your "
 "browser. You'll see something like https://us19.admin.mailchimp.com/; the "
@@ -10459,6 +10624,9 @@ msgstr ""
 "Pour sauvegarder les données, veuillez choisir l'option \"Ne pas supprimer\" "
 "dans Réglages Bookly > Général > Données Bookly lors de la suppression "
 "d'éléments Bookly."
+
+msgid "To set up Apple Calendar integration:"
+msgstr "Pour configurer l’intégration du calendrier Apple :"
 
 msgid "To set up Facebook integration, do the following:"
 msgstr ""
@@ -10970,61 +11138,47 @@ msgstr "Où, dans votre workflow, rencontrez-vous ce problème ?"
 msgid "Width"
 msgstr "Largeur"
 
+#, php-format
 msgid ""
 "With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step)."
+"to %s."
 msgstr ""
-"Avec le mode de synchronisation \"One-way\", Bookly envoie les nouveaux "
-"rendez-vous et les mises à jour ultérieures à Google Calendar. Avec le mode "
-"de synchronisation \"Two-way front-end\" Bookly va récupérer les événements "
-"de Google Calendar et va supprimer les créneaux horaires correspondants "
-"avant d'afficher l'étape \"Time\" du formulaire de réservation (ceci peut "
-"entrainer un délai lorsque l'utilisateur clique sur SUIVANT pour afficher "
-"l'étape \"Time\")."
+"Avec la synchronisation « Sens unique », Bookly envoie les nouveaux rendez-"
+"vous ainsi que toutes les modifications ultérieures vers %s."
+
+#, php-format
+msgid ""
+"With \"Two-way front-end only\" sync Bookly will additionally fetch events "
+"from %s and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
+msgstr ""
+"Avec la synchronisation « Bidirectionnelle front-end uniquement », Bookly "
+"récupère également les événements depuis %s et supprime les créneaux "
+"correspondants avant d’afficher l’étape « Heure » du formulaire de "
+"réservation (cela peut entraîner un délai lorsque les utilisateurs cliquent "
+"sur « Suivant » pour accéder à cette étape)."
+
+#, php-format
+msgid ""
+"With \"Two-way\" sync all bookings created in Bookly Calendar will be "
+"automatically copied to %s and vice versa."
+msgstr ""
+"Avec la synchronisation « Bidirectionnelle », toutes les réservations créées "
+"dans le calendrier Bookly seront automatiquement copiées vers %s et "
+"inversement."
 
 msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step). With \"Two-way\" "
-"sync all bookings created in Bookly Calendar will be automatically copied to "
-"Google Calendar and vice versa. Important: your website must use HTTPS. "
-"Google Calendar API will be able to send notifications only if there is a "
-"valid SSL certificate installed on your web server."
+"With \"Two-way\" sync Bookly will additionally fetch events from Apple "
+"Calendar and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
 msgstr ""
-"Avec la synchronisation \"One-Way\", Bookly envoie les nouveaux rendez-vous "
-"et le modifications ultérieures à Google Calendar. Avec la synchronisation "
-"\"Two-Way front-end\", Bookly va récupérer les événement Google Calendar et "
-"supprimer les créneaux horaires correspondants avant d'afficher l'étape "
-"Temps dans le formulaire de réservation (cela peut conduire à un délai "
-"lorsque l'utilisateur clique sur Suivant pour aller dans l'étape Temps). "
-"Avec la synchronisation \"Two-Way\", toutes les réservations créées seront "
-"automatiquement copiées dans Google Calendar et vice-versa. Important: votre "
-"site web doit utiliser HTTPS. L'API Google Calendar ne pourra envoyer des "
-"notifications que si un certificat SSL valide est installé sur votre serveur "
-"web."
-
-msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Outlook Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Outlook Calendar and remove corresponding "
-"time slots before displaying the Time step of the booking form (this may "
-"lead to a delay when users click Next to get to the Time step). With \"Two-"
-"way\" sync all bookings created in Bookly Calendar will be automatically "
-"copied to Outlook Calendar and vice versa."
-msgstr ""
-"Avec la synchronisation \"One-Way\", Bookly envoie les nouveaux rendez-vous "
-"et le modifications ultérieures à Google Calendar. Avec la synchronisation "
-"\"Two-Way front-end only\", Bookly va récupérer les événement Google "
-"Calendar et supprimer les créneaux horaires correspondants avant d'afficher "
-"l'étape Temps dans le formulaire de réservation (cela peut conduire à un "
-"délai lorsque l'utilisateur clique sur Suivant pour aller dans l'étape Temps)"
-". Avec la synchronisation \"Two-Way\", toutes les réservations créées seront "
-"automatiquement copiées dans Google Calendar et vice-versa. "
+"Avec la synchronisation « Bidirectionnelle », Bookly récupère également les "
+"événements depuis le calendrier Apple et supprime les créneaux "
+"correspondants avant d’afficher l’étape « Heure » du formulaire de "
+"réservation (cela peut entraîner un délai lorsque les utilisateurs cliquent "
+"sur « Suivant » pour accéder à cette étape)."
 
 msgid "With access to Bookly"
 msgstr "Avec un accès à Bookly"
@@ -11410,6 +11564,14 @@ msgstr ""
 "total de {total_price}."
 
 msgid ""
+"You will also be able to import events from Apple Calendar into Bookly. To "
+"do this, go to Calendar and click \"Sync now\"."
+msgstr ""
+"Vous pourrez également importer des événements du calendrier Apple dans "
+"Bookly. Pour ce faire, accédez au calendrier et cliquez sur « Synchroniser "
+"maintenant »."
+
+msgid ""
 "You will be able to use the product until the end of the already paid period."
 " If during this period you decide to keep your subscription, you will have "
 "the option to do so."
@@ -11549,6 +11711,13 @@ msgstr "Vos coordonnées"
 
 msgid "Your license has been verified successfully."
 msgstr "Votre licence a été validée avec succès."
+
+msgid ""
+"Your message has been sent successfully. You can manage your messages in the "
+"'SMS Notifications' section."
+msgstr ""
+"Votre message a été envoyé avec succès. Vous pouvez gérer vos messages dans "
+"la section « Notifications SMS »."
 
 msgid "Your name"
 msgstr "Votre nom"

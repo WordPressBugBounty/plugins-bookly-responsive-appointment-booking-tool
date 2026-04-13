@@ -979,6 +979,7 @@ class Ajax extends Lib\Base\Ajax
                             Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                             // Outlook Calendar.
                             Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                            Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                             // Waiting list.
                             Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
                         }
@@ -1027,6 +1028,7 @@ class Ajax extends Lib\Base\Ajax
                         Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                         // Outlook Calendar.
                         Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                            Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                         // Waiting list.
                         Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
                     }
@@ -1401,7 +1403,7 @@ class Ajax extends Lib\Base\Ajax
             $pay_cloud_stripe = Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) && get_option( 'bookly_cloud_stripe_enabled' );
             if ( $pay_cloud_stripe ) {
                 $cart_info->setGateway( Lib\Entities\Payment::TYPE_CLOUD_STRIPE );
-                $show_price = ( get_option( 'bookly_cloud_square_increase' ) != 0 || get_option( 'bookly_cloud_square_addition' ) != 0 ) ?: Lib\Payment\Proxy\Shared::showPaymentSpecificPrices( false );
+                $show_price = ( get_option( 'bookly_cloud_stripe_increase' ) != 0 || get_option( 'bookly_cloud_stripe_addition' ) != 0 ) ?: Lib\Payment\Proxy\Shared::showPaymentSpecificPrices( false );
                 $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
                     'html' => self::renderTemplate(
                         '_cloud_stripe_option',
@@ -1437,16 +1439,6 @@ class Ajax extends Lib\Base\Ajax
      */
     protected static function csrfTokenValid( $action = null )
     {
-        $excluded_actions = array(
-            'approveAppointment',
-            'cancelAppointment',
-            'rejectAppointment',
-            'renderService',
-            'renderExtras',
-            'renderTime',
-            'getFormId'
-        );
-
-        return in_array( $action, $excluded_actions ) || parent::csrfTokenValid( $action );
+        return true;
     }
 }

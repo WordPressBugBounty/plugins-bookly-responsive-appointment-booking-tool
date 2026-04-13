@@ -136,7 +136,7 @@
                 timeGridWeek: {pointer: true},
                 resourceTimeGridDay: {
                     pointer: true,
-                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(' + obj.options.l10n.clmn_min_width + 'px, 1fr)' : undefined
                 },
                 resourceTimelineDay: {
                     pointer: true,
@@ -435,62 +435,64 @@
                     e.stopPropagation();
                     eventClick(arg);
                 }));
-                if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                    $buttons.append(
-                        $('<a class="btn btn-default btn-sm me-1">').append('<i class="fas fa-fw fa-link">')
-                            .attr('title', obj.options.l10n.recurring_appointments.title)
-                            .on('click', function (e) {
-                                e.stopPropagation();
-                                BooklySeriesDialog.showDialog({
-                                    series_id: props.series_id,
-                                    done: function () {
-                                        calendar.refetchEvents();
+                if (props.participants == 'one') {
+                    if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="fas fa-fw fa-link">')
+                                .attr('title', obj.options.l10n.recurring_appointments.title)
+                                .on('click', function (e) {
+                                    e.stopPropagation();
+                                    BooklySeriesDialog.showDialog({
+                                        series_id: props.series_id,
+                                        done: function () {
+                                            calendar.refetchEvents();
+                                        }
+                                    });
+                                })
+                        );
+                    }
+                    if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-list-alt">')
+                                .attr('title', obj.options.l10n.waiting_list.title)
+                        );
+                    }
+                    if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-calendar-alt">')
+                                .attr('title', obj.options.l10n.packages.title)
+                                .on('click', function (e) {
+                                    e.stopPropagation();
+                                    if (obj.options.l10n.packages.active == '1' && props.package_id) {
+                                        $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
+                                            calendar.refetchEvents();
+                                        }]);
                                     }
-                                });
-                            })
-                    );
-                }
-                if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+                                })
+                        );
+                    }
                     $buttons.append(
-                        $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-list-alt">')
-                            .attr('title', obj.options.l10n.waiting_list.title)
-                    );
-                }
-                if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
-                    $buttons.append(
-                        $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-calendar-alt">')
-                            .attr('title', obj.options.l10n.packages.title)
-                            .on('click', function (e) {
+                        $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
+                            .attr('title', obj.options.l10n.delete)
+                            .on('click', function(e) {
                                 e.stopPropagation();
-                                if (obj.options.l10n.packages.active == '1' && props.package_id) {
-                                    $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
-                                        calendar.refetchEvents();
-                                    }]);
+                                // Localize contains only string values
+                                if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                                    $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
+                                } else {
+                                    new BooklyConfirmDeletingAppointment({
+                                            action: 'bookly_delete_appointment',
+                                            appointment_id: arg.event.id,
+                                            csrf_token: BooklyL10nGlobal.csrf_token
+                                        },
+                                        function(response) {
+                                            calendar.removeEventById(arg.event.id);
+                                        }
+                                    );
                                 }
                             })
                     );
                 }
-                $buttons.append(
-                    $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
-                        .attr('title', obj.options.l10n.delete)
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                            // Localize contains only string values
-                            if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                                $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
-                            } else {
-                                new BooklyConfirmDeletingAppointment({
-                                        action: 'bookly_delete_appointment',
-                                        appointment_id: arg.event.id,
-                                        csrf_token: BooklyL10nGlobal.csrf_token
-                                    },
-                                    function (response) {
-                                        calendar.removeEventById(arg.event.id);
-                                    }
-                                );
-                            }
-                        })
-                );
             }
 
             return $buttons;

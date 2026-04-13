@@ -3,9 +3,31 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_27_3()
+    {
+        add_option( 'bookly_bc_clmn_min_width', '120' );
+        $this->alterTables( array(
+            'bookly_form_sessions' => array(
+                'ALTER TABLE `%s` CHANGE `token` `token` VARCHAR(64) NOT NULL',
+            ),
+            'bookly_staff' => array(
+                'ALTER TABLE `%s` ADD COLUMN `apple_data` TEXT DEFAULT NULL AFTER `outlook_data`',
+            ),
+            'bookly_services' => array(
+                'ALTER TABLE `%s` CHANGE `online_meetings` `online_meetings` ENUM("off","zoom","google_meet","jitsi","bbb","teams") NOT NULL DEFAULT "off"',
+            ),
+            'bookly_appointments' => array(
+                'ALTER TABLE `%s` ADD COLUMN `apple_event_etag` VARCHAR(255) DEFAULT NULL AFTER `outlook_event_series_id`',
+                'ALTER TABLE `%s` ADD COLUMN `apple_event_id` VARCHAR(255) DEFAULT NULL AFTER `outlook_event_series_id`',
+                'ALTER TABLE `%s` CHANGE `created_from` `created_from` ENUM("bookly","google","outlook","apple") NOT NULL DEFAULT "bookly"',
+                'ALTER TABLE `%s` CHANGE `online_meeting_provider` `online_meeting_provider` ENUM("zoom","google_meet","jitsi","bbb","teams") DEFAULT NULL',
+            ),
+        ) );
+    }
+
     function update_26_9()
     {
-        if ( $this->existsTable( $this->getTableName( 'bookly_form_sessions' ) ) ) {
+        if ( $this->existsTable( 'bookly_form_sessions' ) ) {
             $this->alterTables( array(
                 'bookly_form_sessions' => array(
                     'ALTER TABLE `%s` CHANGE `token` `token` VARCHAR(64) NOT NULL',

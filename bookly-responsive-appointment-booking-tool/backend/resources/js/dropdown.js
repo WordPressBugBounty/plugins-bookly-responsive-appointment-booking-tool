@@ -198,6 +198,9 @@
             var obj = this.filter('ul').data('booklyDropdown');
             return obj.$selectAll.prop('checked');
         },
+        itemsCount: function () {
+            return this.filter('ul').data('booklyDropdown').$options.length;
+        },
         getSelectedExt: function () {
             var obj = this.filter('ul').data('booklyDropdown'),
                 res = []

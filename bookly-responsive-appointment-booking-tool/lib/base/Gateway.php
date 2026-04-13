@@ -237,7 +237,7 @@ abstract class Gateway
             $order = BooklyLib\DataHolders\Booking\Order::createFromOrderId( $order_id );
 
             if ( $order ) {
-                list( $sync, $gc, $oc ) = Config::syncCalendars();
+                list( $sync, $gc, $oc, $ac ) = Config::syncCalendars();
                 $order->completePayment();
                 foreach ( $order->getItems() as $item ) {
                     if ( $item->getCA() ) {
@@ -250,6 +250,9 @@ abstract class Gateway
                                 }
                                 if ( $oc && $sub_item->getAppointment()->getOutlookEventId() !== null ) {
                                     BooklyLib\Proxy\OutlookCalendar::syncEvent( $sub_item->getAppointment() );
+                                }
+                                if ( $ac && $sub_item->getAppointment()->getAppleEventId() !== null ) {
+                                    BooklyLib\Proxy\AppleCalendar::syncEvent( $sub_item->getAppointment() );
                                 }
                             }
                         }

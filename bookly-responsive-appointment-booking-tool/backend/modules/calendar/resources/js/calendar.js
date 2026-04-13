@@ -8,6 +8,7 @@ jQuery(function ($) {
         $locationsFilter = $('#bookly-js-locations-filter'),
         $gcSyncButton = $('#bookly-google-calendar-sync'),
         $ocSyncButton = $('#bookly-outlook-calendar-sync'),
+        $acSyncButton = $('#bookly-apple-calendar-sync'),
         staffMembers = [],
         staffIds = getCookie('bookly_cal_st_ids'),
         serviceIds = getCookie('bookly_cal_service_ids'),
@@ -370,6 +371,31 @@ jQuery(function ($) {
             url: ajaxurl,
             type: 'POST',
             data: {action: 'bookly_outlook_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    calendar.ec.refetchEvents();
+                }
+                booklyAlert(response.data.alert);
+                ladda.stop();
+            },
+            error: function (XHR) {
+                booklyAlert({error: ['Server status: ' + XHR.status]});
+                ladda.stop();
+            }
+        });
+    });
+
+    /**
+     * Sync with Apple Calendar.
+     */
+    $acSyncButton.on('click', function () {
+        var ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {action: 'bookly_apple_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
             dataType: 'json',
             success: function (response) {
                 if (response.success) {

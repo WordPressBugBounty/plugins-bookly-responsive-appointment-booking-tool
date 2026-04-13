@@ -732,6 +732,17 @@ abstract class Common extends Lib\Base\Cache
     }
 
     /**
+     * Remove XSS by wp_kses_post()
+     *
+     * @param string $html
+     * @return string
+     */
+    public static function stripWpKses( $html )
+    {
+        return wp_kses( stripslashes( $html ), 'post' );
+    }
+
+    /**
      * Remove <script> tags from the given string
      *
      * @param string $html
@@ -833,10 +844,11 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function syncWithCalendars( Lib\Entities\Appointment $appointment )
     {
-        list( $sync, $gc, $oc ) = Lib\Config::syncCalendars();
+        list( $sync, $gc, $oc, $ac ) = Lib\Config::syncCalendars();
         if ( $sync && $appointment->getStartDate() ) {
             $gc && Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
             $oc && Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+            $ac && Lib\Proxy\AppleCalendar::syncEvent( $appointment );
         }
     }
 

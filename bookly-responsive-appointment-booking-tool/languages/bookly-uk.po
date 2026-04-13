@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2026-02-07 13:12+0000\n"
+"PO-Revision-Date: 2026-03-31 14:57+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Loco https://localise.biz/\n"
 "Report-Msgid-Bugs-To: \n"
-"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.11"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
 #, php-format
 msgid " and %d more item"
@@ -21,6 +21,9 @@ msgid_plural " and %d more items"
 msgstr[0] " і ще %d пункт"
 msgstr[1] " і ще %d пункти"
 msgstr[2] " і ще %d пункт"
+
+msgid " Give it a try!"
+msgstr "Спробуйте!"
 
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
@@ -826,11 +829,23 @@ msgstr "Ім'я користувача API"
 msgid "App ID"
 msgstr "ID додатку"
 
+msgid "App-specific password"
+msgstr "Пароль програми"
+
 msgid "Appearance"
 msgstr "Зовнішній вигляд"
 
 msgid "Appearance form name"
 msgstr "Назва форми зовнішнього вигляду"
+
+msgid "Apple Calendar"
+msgstr "Календар Apple"
+
+msgid "Apple Calendar event"
+msgstr "Подія Календаря Apple"
+
+msgid "Apple Calendar integration"
+msgstr "Інтеграція з Календарем Apple"
 
 msgid "Application ID"
 msgstr "ID додатка"
@@ -1818,6 +1833,12 @@ msgid "Conditions"
 msgstr "Умови"
 
 msgid ""
+"Configure what information should be placed in the title of Apple Calendar "
+"event."
+msgstr ""
+"Налаштуйте, яка інформація має відображатися в назві події Календаря Apple."
+
+msgid ""
 "Configure what information should be placed in the title of Google Calendar "
 "event."
 msgstr ""
@@ -1855,6 +1876,15 @@ msgstr "Підключити"
 msgid "Connected"
 msgstr "Підключено"
 
+msgid "Connecting..."
+msgstr "Підключення..."
+
+msgid "Connection error. Please try again."
+msgstr "Помилка підключення. Спробуйте ще раз"
+
+msgid "Connection failed. Please reconnect."
+msgstr "Підключення не вдалося. Будь ласка, підключіться знову."
+
 msgid "Consulting"
 msgstr "Консалтинг"
 
@@ -1880,6 +1910,9 @@ msgstr "скопійовано"
 
 msgid "Copied to clipboard"
 msgstr "Скопійовано в буфер обміну"
+
+msgid "Copy Apple Calendar event titles"
+msgstr "Копіювати назви подій Календаря Apple"
 
 msgid "Copy checkout URL"
 msgstr "Скопіювати URL оплати"
@@ -3096,6 +3129,9 @@ msgstr "Видалити лише цей запис"
 msgid "Delete package appointment"
 msgstr "Редагувати запис у пакеті послуг"
 
+msgid "Delete series"
+msgstr "Видалити серію"
+
 msgid "Delete this and the following appointments"
 msgstr "Видалити цей та всі наступні записи"
 
@@ -3246,6 +3282,9 @@ msgstr "Відображати календар на фронтенді"
 msgid "Display gift cards"
 msgstr "Відображати подарункові картки"
 
+msgid "Display only busy slots"
+msgstr "Показувати лише зайняті слоти"
+
 msgid "Display packages"
 msgstr "Відображати пакети послуг"
 
@@ -3362,9 +3401,13 @@ msgstr ""
 "коду покупки. Після завершення пробного періоду потрібна активація коду "
 "покупки."
 
+#, fuzzy
+#| msgid ""
+#| "During the trial period, you will have full access to all features of "
+#| "this product  completely free of charge."
 msgid ""
 "During the trial period, you will have full access to all features of this "
-"product  completely free of charge."
+"product - completely free of charge."
 msgstr ""
 "Під час пробного періоду ви матимете повний доступ до всіх функцій цього "
 "продукту абсолютно безкоштовно."
@@ -3711,7 +3754,9 @@ msgstr ""
 "Введіть теги полів у налаштуваннях аудиторії Mailchimp відповідно до даних "
 "Bookly."
 
-msgid "Enter the URL of the page where this forms shortcode is placed."
+#, fuzzy
+#| msgid "Enter the URL of the page where this forms shortcode is placed."
+msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "Введіть URL сторінки, на якій розміщено шорткод цієї форми."
 
 msgid "Enter this URL as a redirect URI in the Google Cloud Platform"
@@ -3728,6 +3773,13 @@ msgstr "Введіть код підтвердження з електронно
 
 msgid "Enter verification code from SMS"
 msgstr "Введіть код підтвердження з SMS"
+
+msgid ""
+"Enter your iCloud email and the app-specific password in Edit Staff > "
+"Advanced > Apple Calendar."
+msgstr ""
+"Введіть вашу iCloud-пошту та пароль програми в Редагувати співробітника > "
+"Додатково > Календар Apple."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Введіть код покупки для доповнення або пакету Bookly"
@@ -3839,6 +3891,9 @@ msgstr "Дата закінчення"
 
 msgid "Explore Bookly products"
 msgstr "Ознайомтеся з продуктами Bookly"
+
+msgid "Export"
+msgstr "Експортувати"
 
 msgid "Export only active coupons"
 msgstr "Експортувати тільки активні купони"
@@ -4092,6 +4147,13 @@ msgstr "Загальні налаштування"
 msgid "Generate"
 msgstr "Генерувати"
 
+msgid "Generate a new app-specific password for Bookly."
+msgstr "Створити новий пароль програми для Bookly."
+
+#, php-format
+msgid "Generate an app-specific password at %s"
+msgstr "Створіть пароль програми на %s"
+
 msgid "Generate new API Key"
 msgstr "Згенерувати новий API Key"
 
@@ -4143,6 +4205,10 @@ msgstr "Налаштування подарункових карток"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "Зазначена адреса електронної пошти вже підписана, дякую!"
+
+msgid "Go to appleid.apple.com and sign in with your Apple ID."
+msgstr ""
+"Перейдіть на appleid.apple.com та авторизуйтеся за допомогою свого Apple ID."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4979,6 +5045,9 @@ msgstr "Стрічка ICalendar"
 msgid "ICalendar feed URL"
 msgstr "URL стрічки календаря ICalendar"
 
+msgid "iCloud email"
+msgstr "Пошта iCloud"
+
 msgid "ICS description for staff"
 msgstr "Опис ICS для співробітників"
 
@@ -5022,6 +5091,15 @@ msgstr ""
 "Якщо увімкнено, то опис подій Календаря Google, спочатку скопійованих до "
 "Bookly, буде замінено даними про запис у Bookly після їх редагування в "
 "Календарі Bookly"
+
+msgid ""
+"If enabled then titles of Apple Calendar events will be copied to Bookly "
+"appointments. If disabled, a standard title \"Apple Calendar event\" will be "
+"used."
+msgstr ""
+"Якщо увімкнено, назви подій Календаря Apple будуть скопійовані до записів "
+"Bookly. Якщо вимкнено, буде використано стандартну назву «Подія Календаря "
+"Apple»."
 
 msgid ""
 "If enabled then titles of Google Calendar events will be copied to Bookly "
@@ -5225,6 +5303,15 @@ msgstr ""
 "Якщо проблема не зникне, зверніться до нашої служби підтримки за адресою %s."
 
 msgid ""
+"If there are a lot of events in Apple Calendar sometimes this leads to a "
+"lack of memory in PHP when Bookly tries to fetch all events. You can limit "
+"the number of fetched events here."
+msgstr ""
+"Якщо в Календарі Apple багато подій, іноді це призводить до нестачі пам’яті "
+"в PHP, коли Bookly намагається завантажити всі події. Тут ви можете обмежити "
+"кількість завантажуваних подій."
+
+msgid ""
 "If there is a lot of events in Google Calendar sometimes this leads to a "
 "lack of memory in PHP when Bookly tries to fetch all events. You can limit "
 "the number of fetched events here."
@@ -5289,6 +5376,15 @@ msgstr ""
 "Якщо ця опція увімкнена, то адреса електронної пошти клієнта "
 "використовується як адреса відправника для сповіщень, що надсилаються "
 "співробітникам та адміністраторам."
+
+msgid ""
+"If this option is enabled then the front-end calendar will only show "
+"appointments with busy status (pending or approved). Free/available slots "
+"will not be displayed."
+msgstr ""
+"Якщо ця опція увімкнена, календар на фронтенді показуватиме лише записи зі "
+"статусом зайнятості (очікує або підтверджено). Вільні/доступні слоти не "
+"відображатимуться."
 
 msgid ""
 "If this setting is enabled then Bookly will be creating WordPress user "
@@ -5378,6 +5474,13 @@ msgid ""
 msgstr ""
 "Якщо ви виберете Google Meet, записи будуть створені для тих спеціалістів, у "
 "яких налаштований Google Календар."
+
+msgid ""
+"If you choose Microsoft Teams then meetings will be created for those staff "
+"members who have Outlook Calendar configured."
+msgstr ""
+"Якщо обрати Microsoft Teams, зустрічі будуть створюватися для тих "
+"співробітників, у яких налаштований Календар Outlook."
 
 msgid ""
 "If you do not provide a valid purchase code within {days}, access to your "
@@ -5565,6 +5668,15 @@ msgstr ""
 "Важливо: якщо ви вимкнете пробний період до його завершення, його неможливо "
 "буде повторно активувати. Щоб продовжити користуватися продуктом, активуйте "
 "обраний тариф."
+
+msgid ""
+"Important: your website must use HTTPS. Google Calendar API will be able to "
+"send notifications only if there is a valid SSL certificate installed on "
+"your web server."
+msgstr ""
+"Важливо: ваш вебсайт має використовувати HTTPS. API Календаря Google зможе "
+"надсилати повідомлення лише за наявності дійсного SSL-сертифіката на вашому "
+"сервері."
 
 msgid "Imported appointments will not be synced with external calendars."
 msgstr ""
@@ -6370,6 +6482,9 @@ msgstr "Назва категорії співробітника"
 
 msgid "Name of ticket type"
 msgstr "Назва типу квитка"
+
+msgid "Navigate to Sign-In and Security > App-Specific Passwords."
+msgstr "Перейдіть у розділ Вхід і безпека > Паролі програм."
 
 #, php-format
 msgid ""
@@ -7472,6 +7587,9 @@ msgstr "Будь ласка, введіть назву послуги"
 msgid "Please enter your email (optional)"
 msgstr "Будь ласка, введіть свою електронну адресу (необов'язково)"
 
+msgid "Please fill in both fields."
+msgstr "Будь ласка, заповніть обидва поля."
+
 msgid "Please note that \"I'm available on or after\" picker will be hidden"
 msgstr "Зверніть увагу, що вибору \"Я доступний в або після\" буде прихована"
 
@@ -7981,6 +8099,14 @@ msgstr "URI перенаправлення"
 msgid "Redirect URL for OAuth"
 msgstr "Перенаправлення URL-адреси для OAuth"
 
+msgid ""
+"Reduce no-shows, keep your staff and customers informed, and send timely "
+"reminders - use SMS Notifications. Send a free test message!"
+msgstr ""
+"Зменште кількість неявок, інформуйте співробітників і клієнтів та надсилайте "
+"нагадування вчасно – скористайтеся SMS-сповіщеннями. Відправте безкоштовне "
+"тестове повідомлення!"
+
 msgid "Reference"
 msgstr "Довідка"
 
@@ -8137,6 +8263,9 @@ msgstr "Відкликати"
 msgid "Rollback"
 msgstr "Відмінити зміни"
 
+msgid "Rows per page"
+msgstr "Рядків на сторінку"
+
 msgid "Run tests automatically"
 msgstr "Запустити тести автоматично"
 
@@ -8203,6 +8332,9 @@ msgstr "Форма пошуку"
 
 msgid "Search payment"
 msgstr "Знайти платіж"
+
+msgid "Search settings..."
+msgstr "Пошук налаштувань..."
 
 msgid "Searching"
 msgstr "Пошук"
@@ -8543,6 +8675,9 @@ msgstr "Відправити сповіщення"
 
 msgid "Send recovery code"
 msgstr "Надіслати код відновлення"
+
+msgid "Send SMS"
+msgstr "Надіслати SMS"
 
 msgid "Send tax information"
 msgstr "Надсилати інформацію про податок"
@@ -9078,7 +9213,7 @@ msgid "Show service price next to employee name"
 msgstr "Показати ціну послуги після імені співробітника"
 
 msgid "Show SMS notification icon"
-msgstr "Показати піктограму SMS-сповіщень"
+msgstr "Показувати значок SMS-сповіщень"
 
 msgid "Show staff info"
 msgstr "Показати інформацію про співробітника"
@@ -9161,6 +9296,9 @@ msgstr "Довжина слоту як тривалість послуги"
 
 msgid "Slug"
 msgstr "Слаг"
+
+msgid "SMS"
+msgstr "SMS"
 
 msgid "Sms"
 msgstr "Смс"
@@ -9508,11 +9646,17 @@ msgstr "Синхронізувати історію записів (минули
 msgid "Synchronization mode"
 msgstr "Режим синхронізації"
 
+msgid "Synchronize staff member appointments with Apple Calendar."
+msgstr "Синхронізувати записи співробітника з Календарем Apple"
+
 msgid "Synchronize staff member appointments with Google Calendar."
 msgstr "Синхронізуйте дані про записи співробітника з Google календарем."
 
 msgid "Synchronize staff member appointments with Outlook Calendar."
 msgstr "Синхронізуйте записи співробітників з календарем Outlook."
+
+msgid "Synchronize with Apple Calendar"
+msgstr "Синхронізувати з Календарем Apple"
 
 msgid "Synchronize with Google Calendar"
 msgstr "Синхронізація з календарем Google"
@@ -10089,6 +10233,12 @@ msgstr ""
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Цей текст можна вставляти в повідомлення за допомогою коду %s"
 
+msgid ""
+"This will permanently delete all appointments in this series. This action "
+"cannot be undone."
+msgstr ""
+"Це назавжди видалить усі записи в цій серії. Скасувати цю дію буде неможливо."
+
 #, php-format
 msgid "This will permanently remove the ticket %s"
 msgstr "Це назавжди видалить квиток %s"
@@ -10248,6 +10398,16 @@ msgstr ""
 "Щоб отримати доступ до своїх замовлень, будь ласка, підтвердіть свою "
 "ліцензію, надавши дійсний ліцензійний ключ. <a href=\"{url}\">Деталі</a>"
 
+#, php-format
+msgid ""
+"To ensure stable operation of the \"Time interval of payment gateway\" "
+"feature, please activate %s or follow <a href=\"%s\" target=\"_blank\">the "
+"instructions</a> about cron setup."
+msgstr ""
+"Щоб забезпечити стабільну роботу функції «Часовий інтервал платіжного "
+"сервісу», будь ласка, активуйте %s або дотримуйтесь <a href=\"%s\" "
+"target=\"_blank\">інструкцій</a> щодо налаштування cron."
+
 msgid ""
 "To find the value, log into Mailchimp account and look at the URL in your "
 "browser. You'll see something like https://us19.admin.mailchimp.com/; the "
@@ -10356,6 +10516,9 @@ msgstr ""
 "Щоб зберегти дані, будь ласка, встановіть \"Не видаляти\" в Налаштування "
 "Bookly > Загальні > Дані Bookly при видаленні елементів Bookly"
 
+msgid "To set up Apple Calendar integration:"
+msgstr "Щоб налаштувати інтеграцію з Календарем Apple:"
+
 msgid "To set up Facebook integration, do the following:"
 msgstr "Щоб налаштувати інтеграцію з Facebook, зробіть наступне:"
 
@@ -10446,10 +10609,10 @@ msgid "Tutoring lessons"
 msgstr "Репетиторські заняття"
 
 msgid "Two-way"
-msgstr "Двохстороння синхронізація"
+msgstr "Двостороння синхронізація"
 
 msgid "Two-way front-end only"
-msgstr "Двухстороння синхронізація для фронтенду"
+msgstr "Двостороння синхронізація для фронтенду"
 
 msgid "Type"
 msgstr "Тип"
@@ -10865,60 +11028,44 @@ msgstr "На якому етапі робочого процесу ви стик
 msgid "Width"
 msgstr "Ширина"
 
+#, php-format
 msgid ""
 "With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step)."
+"to %s."
 msgstr ""
-"При односторонній синхронізації Bookly надсилає дані про нові записи та будь-"
-"які подальші зміни до Google Календаря. При двосторонній синхронізації "
-"Bookly додатково завантажує події з Google Календаря і видаляє відповідні "
-"часові проміжки перед відображенням кроку \"Час\" у формі бронювання (це "
-"може призвести до затримки, коли користувачі натискають кнопку \"Далі\", щоб "
-"перейти до кроку \"Час\")."
+"При синхронізації «Одностороння» Bookly надсилає нові записи та всі подальші "
+"зміни до %s."
+
+#, php-format
+msgid ""
+"With \"Two-way front-end only\" sync Bookly will additionally fetch events "
+"from %s and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
+msgstr ""
+"При синхронізації «Двостороння для фронтенду» Bookly додатково отримуватиме "
+"події з %s та видалятиме відповідні часові слоти перед відображенням кроку "
+"вибору часу у формі бронювання (це може спричинити затримку, коли користувач "
+"натискає «Далі», щоб перейти до кроку часу)."
+
+#, php-format
+msgid ""
+"With \"Two-way\" sync all bookings created in Bookly Calendar will be "
+"automatically copied to %s and vice versa."
+msgstr ""
+"При синхронізації «Двостороння» всі записи, створені в календарі Bookly, "
+"автоматично копіюватимуться до %s і навпаки."
 
 msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step). With \"Two-way\" "
-"sync all bookings created in Bookly Calendar will be automatically copied to "
-"Google Calendar and vice versa. Important: your website must use HTTPS. "
-"Google Calendar API will be able to send notifications only if there is a "
-"valid SSL certificate installed on your web server."
+"With \"Two-way\" sync Bookly will additionally fetch events from Apple "
+"Calendar and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
 msgstr ""
-"При односторонній синхронізації Bookly надсилає нові запису та будь-які "
-"подальші зміни до Google Календаря. При двосторонній синхронізації Bookly "
-"додатково завантажує події з Календаря Google і видаляє відповідні часові "
-"проміжки перед відображенням кроку \"Час\" у формі бронювання (це може "
-"призвести до затримки, коли користувачі натискають кнопку \"Далі\", щоб "
-"перейти до кроку \"Час\"). При двосторонній синхронізації всі бронювання, "
-"створені в Календарі Bookly, будуть автоматично скопійовані до Календаря "
-"Google і навпаки. Важливо: ваш сайт повинен використовувати HTTPS. Google "
-"Calendar API зможе надсилати сповіщення, тільки якщо на вашому веб-сервері "
-"встановлений дійсний SSL-сертифікат."
-
-msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Outlook Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Outlook Calendar and remove corresponding "
-"time slots before displaying the Time step of the booking form (this may "
-"lead to a delay when users click Next to get to the Time step). With \"Two-"
-"way\" sync all bookings created in Bookly Calendar will be automatically "
-"copied to Outlook Calendar and vice versa."
-msgstr ""
-"У режимі \"Односторонньої синхронізації\" Bookly передає інформацію про нові "
-"записи та будь-які подальші зміни в Календар Outlook. У режимі "
-"\"Двосторонньої синхронізації для фронтенду\" Bookly додатково "
-"вивантажуватиме події з Календаря Outlook і видалятиме відповідні часові "
-"інтервали перед тим, як відобразити крок Час у формі бронювання (це може "
-"призвести до затримки, коли користувачі натискають кнопку Далі, щоб перейти "
-"до кроку Час). У режимі двосторонньої синхронізації всі бронювання, створені "
-"в Календарі Bookly, будуть автоматично скопійовані в Календар Outlook і "
-"навпаки."
+"При синхронізації «Двостороння» Bookly додатково отримуватиме події з "
+"Календаря Apple та видалятиме відповідні часові слоти перед відображенням "
+"кроку вибору часу у формі бронювання (це може спричинити затримку, коли "
+"користувач натискає «Далі», щоб перейти до кроку часу)."
 
 msgid "With access to Bookly"
 msgstr "З доступом до Bookly"
@@ -11294,6 +11441,13 @@ msgstr ""
 "{total_price}."
 
 msgid ""
+"You will also be able to import events from Apple Calendar into Bookly. To "
+"do this, go to Calendar and click \"Sync now\"."
+msgstr ""
+"Ви також зможете імпортувати події з Календаря Apple у Bookly. Для цього "
+"перейдіть до Календаря та натисніть «Синхронізувати зараз»."
+
+msgid ""
 "You will be able to use the product until the end of the already paid period."
 " If during this period you decide to keep your subscription, you will have "
 "the option to do so."
@@ -11433,6 +11587,13 @@ msgstr "Ваша інформація"
 
 msgid "Your license has been verified successfully."
 msgstr "Ваша ліцензія успішно пройшла перевірку."
+
+msgid ""
+"Your message has been sent successfully. You can manage your messages in the "
+"'SMS Notifications' section."
+msgstr ""
+"Ваше повідомлення успішно надіслано. Ви можете керувати своїми "
+"повідомленнями в розділі «SMS-повідомлення»."
 
 msgid "Your name"
 msgstr "Ваше ім'я"

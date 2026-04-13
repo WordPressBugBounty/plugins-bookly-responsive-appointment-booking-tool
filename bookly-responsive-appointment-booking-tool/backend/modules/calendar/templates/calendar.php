@@ -23,6 +23,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
             <?php if ( $staff_members ) : ?>
                 <div class="form-row justify-content-xl-end justify-content-center">
                     <?php Proxy\OutlookCalendar::renderSyncButton( $staff_members ) ?>
+                    <?php Proxy\AppleCalendar::renderSyncButton( $staff_members ) ?>
                     <?php Proxy\AdvancedGoogleCalendar::renderSyncButton( $staff_members ) ?>
                     <?php Proxy\Locations::renderCalendarLocationFilter() ?>
                     <div class="col-sm-auto mb-2">
