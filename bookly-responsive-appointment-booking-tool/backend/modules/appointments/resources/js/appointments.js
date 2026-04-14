@@ -448,7 +448,7 @@ jQuery(function ($) {
     $appointmentsList.on('click', '[data-action=export]', function () {
         let columnsHtml = '';
         bt.getColumns().forEach(function (column, index) {
-            columnsHtml += '<div class="custom-control custom-checkbox"><input class="custom-control-input" id="bookly-ea-' + index + '" name="exp[' + column.data + ']" type="checkbox"' + (column.show ? 'checked' : '') + '><label class="custom-control-label" for="bookly-ea-' + index + '">' + column.title + '</label></div>';
+            columnsHtml += '<div class="custom-control custom-checkbox"><input class="custom-control-input" id="bookly-ea-' + index + '" name="exp[' + column.name + ']" type="checkbox"' + (column.show ? 'checked' : '') + '><label class="custom-control-label" for="bookly-ea-' + index + '">' + column.title + '</label></div>';
         })
         $('.bookly-js-columns', $exportDialog).html(columnsHtml);
         $exportDialog.booklyModal('show');

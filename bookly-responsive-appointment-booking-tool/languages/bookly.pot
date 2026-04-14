@@ -183,21 +183,10 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
-msgid "To set up Apple Calendar integration:"
-msgstr ""
-
-msgid "Go to appleid.apple.com and sign in with your Apple ID."
-msgstr ""
-
-msgid "Navigate to Sign-In and Security > App-Specific Passwords."
-msgstr ""
-
-msgid "Generate a new app-specific password for Bookly."
-msgstr ""
-
+#, php-format
 msgid ""
-"Enter your iCloud email and the app-specific password in Edit Staff > "
-"Advanced > Apple Calendar."
+"To setup %s integration, follow the instruction in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
 msgstr ""
 
 msgid ""
@@ -2314,12 +2303,6 @@ msgid ""
 msgstr ""
 
 msgid "Synchronize with Outlook Calendar"
-msgstr ""
-
-#, php-format
-msgid ""
-"To setup %s integration, follow the instruction in <a href=\"%s\" "
-"target=\"_blank\">our documentation</a>"
 msgstr ""
 
 msgid "Application ID"
