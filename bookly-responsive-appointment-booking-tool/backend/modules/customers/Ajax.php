@@ -126,6 +126,7 @@ class Ajax extends Lib\Base\Ajax
                 'wp_user' => $row['wp_user'],
                 'wp_user_id' => $row['wp_user_id'],
                 'tags' => $row['tags'],
+                'image' => Lib\Utils\Common::getAttachmentUrl( $row['attachment_id'], 'thumbnail' ) ?: null,
             );
 
             $customer_data = Proxy\CustomerGroups::prepareCustomerListData( $customer_data, $row );
@@ -202,6 +203,10 @@ class Ajax extends Lib\Base\Ajax
     {
         $target_id = self::parameter( 'target_id' );
         $ids = self::parameter( 'ids', array() );
+
+        if (($key = array_search($target_id, $ids)) !== false) {
+            unset($ids[$key]);
+        }
 
         // Move appointments.
         Lib\Entities\CustomerAppointment::query()

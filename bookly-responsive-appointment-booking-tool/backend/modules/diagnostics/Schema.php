@@ -107,10 +107,13 @@ class Schema
     {
         switch ( $this->getServer() ) {
             case 'MariaDB':
-                $default = trim( $data['COLUMN_DEFAULT'], '\'' );
-                // MariaDB 10.3.22
-                if ( strtolower( $default ) === 'null' ) {
-                    $default = null;
+                $default = $data['COLUMN_DEFAULT'];
+                if ( isset( $default ) ) {
+                    $default = trim( $default, '\'' );
+                    // MariaDB 10.3.22
+                    if ( strtolower( $default ) === 'null' ) {
+                        $default = null;
+                    }
                 }
 
                 $type = $data['DATA_TYPE'];

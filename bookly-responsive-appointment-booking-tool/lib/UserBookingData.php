@@ -156,7 +156,7 @@ class UserBookingData
     private $customer;
     /** @var \BooklyCoupons\Lib\Entities\Coupon|null */
     private $coupon;
-    /** @var \BooklyPro\Lib\Entities\GiftCard|null */
+    /** @var \BooklyGiftCards\Lib\Entities\GiftCard|null */
     private $gift_card;
     /** @var integer|null */
     private $payment_id;
@@ -940,17 +940,12 @@ class UserBookingData
     /**
      * Get gift card.
      *
-     * @return \BooklyPro\Lib\Entities\GiftCard|false
+     * @return \BooklyGiftCards\Lib\Entities\GiftCard|false
      */
     public function getGiftCard()
     {
         if ( $this->gift_card === null ) {
-            $gift_card = BookingProxy\Pro::findOneGiftCardByCode( $this->getGiftCode() );
-            if ( $gift_card instanceof \BooklyPro\Lib\Entities\GiftCard ) {
-                $this->gift_card = $gift_card;
-            } else {
-                $this->gift_card = false;
-            }
+            $this->gift_card = BookingProxy\GiftCards::findOneGiftCardByCode( $this->getGiftCode() ) ?: false;
         }
 
         return $this->gift_card;

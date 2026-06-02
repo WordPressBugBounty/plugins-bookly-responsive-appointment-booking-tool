@@ -67,7 +67,7 @@ jQuery(function($) {
             function(response) {
                 if (response.success) {
                     BooklyL10n.categories = response.data;
-                    $servicesList.DataTable().ajax.reload();
+                    BooklyDatatables.getForm('bookly-services-datatables').reload();
                     $dialog.booklyModal('hide');
                 }
                 ladda.stop();

@@ -34,7 +34,7 @@ class Ajax extends Page
             $query->where( 's.category_id', $filter['category'] );
         }
 
-        if ( $filter['search'] != '' ) {
+        if ( ( isset( $filter['search'] ) ? $filter['search'] : '' ) != '' ) {
             $fields = array();
             foreach ( $columns as $column ) {
                 switch ( $column['data'] ) {
@@ -86,6 +86,7 @@ class Ajax extends Page
                 'duration' => in_array( $service['type'], array( Lib\Entities\Service::TYPE_COLLABORATIVE, Lib\Entities\Service::TYPE_COMPOUND ) )
                     ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count )
                     : Lib\Utils\DateTime::secondsToInterval( $service['duration'] ),
+                'image' => Lib\Utils\Common::getAttachmentUrl( $service['attachment_id'] ),
                 'online_meetings' => $service['online_meetings'],
                 'tags' => $service['tags'],
             );

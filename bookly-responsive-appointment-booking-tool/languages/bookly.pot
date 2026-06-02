@@ -1469,9 +1469,6 @@ msgstr ""
 msgid "Click \"%s\" to create your first one"
 msgstr ""
 
-msgid "Reorder"
-msgstr ""
-
 msgid "Events form"
 msgstr ""
 
@@ -1791,6 +1788,222 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
+msgid "Select card type"
+msgstr ""
+
+#, php-format
+msgid "Code %s already exists"
+msgstr ""
+
+msgid "Please resolve the duplication by changing code."
+msgstr ""
+
+msgid "New gift card"
+msgstr ""
+
+msgid "Edit gift card"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "-- Search customers --"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "Attach payment"
+msgstr ""
+
+msgid "Note"
+msgstr ""
+
+msgid "Gift cards settings"
+msgstr ""
+
+msgid "Use gift card for partial payment"
+msgstr ""
+
+msgid ""
+"If enabled, clients will be able to use gift card when the balance of the "
+"gift card is less than the total amount due. If disabled, clients will only "
+"be able to use gift card that has a balance equal to or greater than the "
+"service price."
+msgstr ""
+
+msgid "Default gift card mask"
+msgstr ""
+
+msgid "Minimum number of asterisks \"*\" - 4"
+msgstr ""
+
+msgid ""
+"Enter default mask for auto-generated codes. You can enter asterisks \"*\" "
+"for variables here."
+msgstr ""
+
+msgid "Uncategorized"
+msgstr ""
+
+msgid ""
+"Specify minimum and maximum (optional) number of services of the same type "
+"required to apply a gift card."
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "New gift card type"
+msgstr ""
+
+msgid "Edit gift card type"
+msgstr ""
+
+#, php-format
+msgid ""
+"Start typing \"{\" to see the available codes. For more information, see the "
+"<a href=\"%s\" target=\"_blank\">documentation</a> page"
+msgstr ""
+
+msgid "Automatically link a gift card to a customer"
+msgstr ""
+
+msgid ""
+"If enabled, the card will be automatically associated with the customer who "
+"purchases it via the frontend booking form"
+msgstr ""
+
+msgid "Gift Cards"
+msgstr ""
+
+msgid "A custom block for displaying gift cards"
+msgstr ""
+
+msgid "Add customer gift cards"
+msgstr ""
+
+msgid "Show gift cards"
+msgstr ""
+
+#, php-format
+msgid "%s of %s"
+msgstr ""
+
+msgid "No gift card types found."
+msgstr ""
+
+msgid "No gift cards found."
+msgstr ""
+
+msgid "All related gift cards will be deleted"
+msgstr ""
+
+msgid "Add gift card"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Gift card code"
+msgstr ""
+
+msgid "Add gift card type"
+msgstr ""
+
+msgid "Export only active gift cards"
+msgstr ""
+
+msgid "Please note that Local payments not allowed for gift cards."
+msgstr ""
+
+msgid "Read more"
+msgstr ""
+
+msgid "Cards"
+msgstr ""
+
+msgid "Card types"
+msgstr ""
+
+msgid "Gift card amount"
+msgstr ""
+
+msgid "Gift card valid-from date"
+msgstr ""
+
+msgid "Gift card expiration date"
+msgstr ""
+
+msgid "Customer notes for gift card"
+msgstr ""
+
+msgid "Image of gift card"
+msgstr ""
+
+msgid "Copied to clipboard"
+msgstr ""
+
+msgid "Gift card"
+msgstr ""
+
+msgid "Your gift card has been created."
+msgstr ""
+
+msgid "Your gift card code if you have one"
+msgstr ""
+
+msgid "This gift card has expired"
+msgstr ""
+
+msgid "This gift card cannot be used for the current order"
+msgstr ""
+
+msgid "Gift card balance is not enough"
+msgstr ""
+
+msgid "Gift card not found"
+msgstr ""
+
+msgid "Untitled"
+msgstr ""
+
+msgid "Display gift cards"
+msgstr ""
+
+msgid "Hidden gift cards"
+msgstr ""
+
+msgid "Notification to customer about purchased gift card"
+msgstr ""
+
+msgid "Your gift card at"
+msgstr ""
+
+msgid ""
+"Dear {client_name},\n"
+"\n"
+"This is a confirmation that the following Gift Card {gift_card} has been "
+"purchased at {company_name}.\n"
+"\n"
+"We are waiting for you at {company_address}."
+msgstr ""
+
+msgid "Thank you for choosing our company."
+msgstr ""
+
+msgid "Applied"
+msgstr ""
+
+msgid "Notification about new gift card creation"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Link with customer"
+msgstr ""
+
 msgid "Show address required"
 msgstr ""
 
@@ -2059,9 +2272,6 @@ msgid ""
 "custom settings and enter custom values."
 msgstr ""
 
-msgid "Settings"
-msgstr ""
-
 msgid "Use default settings"
 msgstr ""
 
@@ -2125,9 +2335,6 @@ msgid "2nd Street"
 msgstr ""
 
 msgid "Please select a location"
-msgstr ""
-
-msgid "Untitled"
 msgstr ""
 
 msgid "Staff members"
@@ -2396,9 +2603,6 @@ msgstr ""
 msgid "Internal note"
 msgstr ""
 
-msgid "Attach payment"
-msgstr ""
-
 msgid "Please select a package"
 msgstr ""
 
@@ -2503,10 +2707,6 @@ msgid "Package life time"
 msgstr ""
 
 msgid "Reason you mentioned while deleting package"
-msgstr ""
-
-#, php-format
-msgid "%s of %s"
 msgstr ""
 
 msgid "No packages for selected period and criteria."
@@ -2771,89 +2971,6 @@ msgstr ""
 msgid ""
 "Please setup and enable New customer's WordPress user login details "
 "notification"
-msgstr ""
-
-msgid "Select card type"
-msgstr ""
-
-#, php-format
-msgid "Code %s already exists"
-msgstr ""
-
-msgid "Please resolve the duplication by changing code."
-msgstr ""
-
-msgid "New gift card"
-msgstr ""
-
-msgid "Edit gift card"
-msgstr ""
-
-msgid "Type"
-msgstr ""
-
-msgid "-- Search customers --"
-msgstr ""
-
-msgid "Balance"
-msgstr ""
-
-msgid "Note"
-msgstr ""
-
-msgid "Gift cards settings"
-msgstr ""
-
-msgid "Use gift card for partial payment"
-msgstr ""
-
-msgid ""
-"If enabled, clients will be able to use gift card when the balance of the "
-"gift card is less than the total amount due. If disabled, clients will only "
-"be able to use gift card that has a balance equal to or greater than the "
-"service price."
-msgstr ""
-
-msgid "Default gift card mask"
-msgstr ""
-
-msgid "Minimum number of asterisks \"*\" - 4"
-msgstr ""
-
-msgid ""
-"Enter default mask for auto-generated codes. You can enter asterisks \"*\" "
-"for variables here."
-msgstr ""
-
-msgid "Uncategorized"
-msgstr ""
-
-msgid ""
-"Specify minimum and maximum (optional) number of services of the same type "
-"required to apply a gift card."
-msgstr ""
-
-msgid "Amount"
-msgstr ""
-
-msgid "New gift card type"
-msgstr ""
-
-msgid "Edit gift card type"
-msgstr ""
-
-#, php-format
-msgid ""
-"Start typing \"{\" to see the available codes. For more information, see the "
-"<a href=\"%s\" target=\"_blank\">documentation</a> page"
-msgstr ""
-
-msgid "Automatically link a gift card to a customer"
-msgstr ""
-
-msgid ""
-"If enabled, the card will be automatically associated with the customer who "
-"purchases it via the frontend booking form"
 msgstr ""
 
 msgid "Specified order"
@@ -3143,12 +3260,6 @@ msgid ""
 "target=\"_blank\"/>Display front-end calendar</a>"
 msgstr ""
 
-msgid "Gift cards"
-msgstr ""
-
-msgid "A custom block for displaying gift cards"
-msgstr ""
-
 #, php-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -3384,9 +3495,6 @@ msgstr ""
 msgid "Add appointment cancellation confirmation"
 msgstr ""
 
-msgid "Add customer gift cards"
-msgstr ""
-
 msgid "Appearance form name"
 msgstr ""
 
@@ -3528,13 +3636,7 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-msgid "Show gift cards"
-msgstr ""
-
 msgid "Display services"
-msgstr ""
-
-msgid "Display gift cards"
 msgstr ""
 
 msgid ""
@@ -3577,9 +3679,6 @@ msgid "Show blocked timeslots"
 msgstr ""
 
 msgid "Hidden services"
-msgstr ""
-
-msgid "Hidden gift cards"
 msgstr ""
 
 msgid "Show information about time slot"
@@ -3686,9 +3785,6 @@ msgstr ""
 msgid "Changes saved."
 msgstr ""
 
-msgid "Gift card"
-msgstr ""
-
 #, php-format
 msgid ""
 "To learn more about this feature, please follow <a href=\"%s\" "
@@ -3705,9 +3801,6 @@ msgid ""
 "added to the page."
 msgstr ""
 
-msgid "Read more"
-msgstr ""
-
 msgid "Main text"
 msgstr ""
 
@@ -3718,9 +3811,6 @@ msgid "First name"
 msgstr ""
 
 msgid "Last name"
-msgstr ""
-
-msgid "Notes"
 msgstr ""
 
 msgid "Terms & conditions"
@@ -3795,9 +3885,6 @@ msgstr ""
 msgid "Your order number"
 msgstr ""
 
-msgid "Your gift card has been created."
-msgstr ""
-
 msgid "Your payment has been accepted for processing."
 msgstr ""
 
@@ -3826,21 +3913,6 @@ msgid ""
 msgstr ""
 
 msgid "Please tell us how you would like to pay"
-msgstr ""
-
-msgid "Your gift card code if you have one"
-msgstr ""
-
-msgid "This gift card has expired"
-msgstr ""
-
-msgid "This gift card cannot be used for the current order"
-msgstr ""
-
-msgid "Gift card balance is not enough"
-msgstr ""
-
-msgid "Gift card not found"
 msgstr ""
 
 msgid "Your time zone"
@@ -3974,39 +4046,6 @@ msgstr ""
 msgid "Print"
 msgstr ""
 
-msgid "No gift card types found."
-msgstr ""
-
-msgid "No gift cards found."
-msgstr ""
-
-msgid "All related gift cards will be deleted"
-msgstr ""
-
-msgid "Add gift card"
-msgstr ""
-
-msgid "Gift card code"
-msgstr ""
-
-msgid "Add gift card type"
-msgstr ""
-
-msgid "Export only active gift cards"
-msgstr ""
-
-msgid "Gift Cards"
-msgstr ""
-
-msgid "Please note that Local payments not allowed for gift cards."
-msgstr ""
-
-msgid "Cards"
-msgstr ""
-
-msgid "Card types"
-msgstr ""
-
 msgid "Import"
 msgstr ""
 
@@ -4057,18 +4096,6 @@ msgstr ""
 msgid "Client birthday full date"
 msgstr ""
 
-msgid "Gift card amount"
-msgstr ""
-
-msgid "Gift card valid-from date"
-msgstr ""
-
-msgid "Gift card expiration date"
-msgstr ""
-
-msgid "Customer notes for gift card"
-msgstr ""
-
 msgid "Info of staff category"
 msgstr ""
 
@@ -4078,16 +4105,16 @@ msgstr ""
 msgid "Time zone of staff"
 msgstr ""
 
-msgid "Image of gift card"
+msgid "Last month"
 msgstr ""
 
-msgid "Last month"
+msgid "Quick search by recipient, subject"
 msgstr ""
 
 msgid "No records for selected period."
 msgstr ""
 
-msgid "Quick search"
+msgid "Rows per page"
 msgstr ""
 
 msgid "Keep logs"
@@ -4358,50 +4385,6 @@ msgid ""
 "to hide the column."
 msgstr ""
 
-#, php-format
-msgid ""
-"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
-msgstr ""
-
-msgid "Select an app or create a new one."
-msgstr ""
-
-msgid ""
-"Depending on the mode (Sandbox or Production), look for the <b>Application "
-"ID</b> and <b>Access token</b>."
-msgstr ""
-
-msgid "Use them in the form below on this page."
-msgstr ""
-
-msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
-msgstr ""
-
-#, php-format
-msgid ""
-"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
-"button, enter the following URL as the destination for events %s and select "
-"%s in <b>Events</b>."
-msgstr ""
-
-msgid "Click <b>Save</b>."
-msgstr ""
-
-msgid "In the sidebar on the left, select <b>Locations</b>."
-msgstr ""
-
-msgid "Look for the necessary location and copy <b>Location ID</b>."
-msgstr ""
-
-msgid "Use it in the form below on this page."
-msgstr ""
-
-msgid "Access token"
-msgstr ""
-
-msgid "Location ID"
-msgstr ""
-
 msgid "Make address mandatory"
 msgstr ""
 
@@ -4582,9 +4565,6 @@ msgstr ""
 msgid "Invalid online meeting url"
 msgstr ""
 
-msgid "Copied to clipboard"
-msgstr ""
-
 msgid "Show more"
 msgstr ""
 
@@ -4755,24 +4735,6 @@ msgid ""
 "{company_website}"
 msgstr ""
 
-msgid "Notification to customer about purchased gift card"
-msgstr ""
-
-msgid "Your gift card at"
-msgstr ""
-
-msgid ""
-"Dear {client_name},\n"
-"\n"
-"This is a confirmation that the following Gift Card {gift_card} has been "
-"purchased at {company_name}.\n"
-"\n"
-"We are waiting for you at {company_address}."
-msgstr ""
-
-msgid "Thank you for choosing our company."
-msgstr ""
-
 msgid ""
 "Hello.\n"
 "An account was created for you at {site_address}\n"
@@ -4802,9 +4764,6 @@ msgid ""
 "{company_name}\n"
 "{company_phone}\n"
 "{company_website}"
-msgstr ""
-
-msgid "Applied"
 msgstr ""
 
 msgid "Please tell us how you would like to pay: "
@@ -4981,13 +4940,7 @@ msgstr ""
 msgid "Online meetings"
 msgstr ""
 
-msgid "Link with customer"
-msgstr ""
-
 msgid "New staff's WordPress user login details"
-msgstr ""
-
-msgid "Notification about new gift card creation"
 msgstr ""
 
 msgid "Email required"
@@ -5671,6 +5624,50 @@ msgid "Disable special hours update"
 msgstr ""
 
 msgid "Highlight special hours"
+msgstr ""
+
+#, php-format
+msgid ""
+"Go to the <a href=\"%s\" target=\"_blank\">Square Developer dashboard</a>."
+msgstr ""
+
+msgid "Select an app or create a new one."
+msgstr ""
+
+msgid ""
+"Depending on the mode (Sandbox or Production), look for the <b>Application "
+"ID</b> and <b>Access token</b>."
+msgstr ""
+
+msgid "Use them in the form below on this page."
+msgstr ""
+
+msgid "In the sidebar on the left, go to the <b>Webhooks > Subscriptions</b>."
+msgstr ""
+
+#, php-format
+msgid ""
+"Depending on the mode (Sandbox or Production), press <b>Add subscription</b> "
+"button, enter the following URL as the destination for events %s and select "
+"%s in <b>Events</b>."
+msgstr ""
+
+msgid "Click <b>Save</b>."
+msgstr ""
+
+msgid "In the sidebar on the left, select <b>Locations</b>."
+msgstr ""
+
+msgid "Look for the necessary location and copy <b>Location ID</b>."
+msgstr ""
+
+msgid "Use it in the form below on this page."
+msgstr ""
+
+msgid "Access token"
+msgstr ""
+
+msgid "Location ID"
 msgstr ""
 
 msgid "A custom block for displaying staff calendar"
@@ -6641,9 +6638,6 @@ msgstr ""
 msgid "Start Now"
 msgstr ""
 
-msgid "New list"
-msgstr ""
-
 msgid "New mailing list"
 msgstr ""
 
@@ -6668,7 +6662,7 @@ msgstr ""
 msgid "Edit access token"
 msgstr ""
 
-msgid "Create new access token"
+msgid "New access token"
 msgstr ""
 
 msgid "Select WordPress user"
@@ -6686,19 +6680,10 @@ msgstr ""
 msgid "WordPress user"
 msgstr ""
 
-msgid "New access token"
-msgstr ""
-
 msgid "New email notification"
 msgstr ""
 
 msgid "Edit email notification"
-msgstr ""
-
-msgid "Create notification"
-msgstr ""
-
-msgid "Save notification"
 msgstr ""
 
 msgid "Attach ICS file"
@@ -6763,7 +6748,7 @@ msgstr ""
 msgid "Are you sure you want to approve refund? This action cannot be undone."
 msgstr ""
 
-msgid "Create service"
+msgid "New service"
 msgstr ""
 
 msgid "Simple"
@@ -6805,13 +6790,13 @@ msgstr ""
 msgid "Adjust the order of services in your booking form"
 msgstr ""
 
-msgid "Sms"
+msgid "SMS"
 msgstr ""
 
-msgid "New sms notification"
+msgid "New SMS notification"
 msgstr ""
 
-msgid "Edit sms notification"
+msgid "Edit SMS notification"
 msgstr ""
 
 msgid "New notification"
@@ -6894,10 +6879,7 @@ msgstr ""
 msgid "The date has already passed."
 msgstr ""
 
-msgid "Create staff"
-msgstr ""
-
-msgid "Edit staff"
+msgid "Edit staff member"
 msgstr ""
 
 msgid "Select from WordPress users"
@@ -7531,10 +7513,10 @@ msgstr ""
 msgid "Form view in case of payment has been accepted for processing"
 msgstr ""
 
-msgid "Created"
+msgid "Quick search by ID, customer, staff, service"
 msgstr ""
 
-msgid "Rows per page"
+msgid "Created"
 msgstr ""
 
 msgid "Export"
@@ -7569,6 +7551,9 @@ msgstr ""
 msgid "Bookly Cloud Billing"
 msgstr ""
 
+msgid "Quick search"
+msgstr ""
+
 msgid "Invoice"
 msgstr ""
 
@@ -7578,9 +7563,6 @@ msgid ""
 msgstr ""
 
 msgid "Staff Cabinet Mobile App"
-msgstr ""
-
-msgid "Invite"
 msgstr ""
 
 msgid "Copy token"
@@ -7599,9 +7581,6 @@ msgid "No matching records found"
 msgstr ""
 
 msgid "Revoke"
-msgstr ""
-
-msgid "Access tokens"
 msgstr ""
 
 msgid "Stripe activation was not completed"
@@ -7766,6 +7745,12 @@ msgstr ""
 msgid "SMS has been sent successfully."
 msgstr ""
 
+#, php-format
+msgid "%d country"
+msgid_plural "%d countries"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "SMS Notifications"
 msgstr ""
 
@@ -7776,6 +7761,60 @@ msgid "Sender ID request is sent."
 msgstr ""
 
 msgid "Sender ID is reset to default."
+msgstr ""
+
+msgid "Select country"
+msgstr ""
+
+msgid "Request Sender ID"
+msgstr ""
+
+msgid "Cancel request"
+msgstr ""
+
+msgid "Declined"
+msgstr ""
+
+msgid "Sender ID"
+msgstr ""
+
+msgid "Can only contain letters or digits (up to 11 characters)."
+msgstr ""
+
+msgid "Destination country"
+msgstr ""
+
+msgid "Search and select country"
+msgstr ""
+
+msgid "Type country name"
+msgstr ""
+
+msgid "Countries marked with this icon require extra steps."
+msgstr ""
+
+msgid "No country found."
+msgstr ""
+
+#, php-format
+msgid ""
+"Once approved, your Sender ID will work in %1$s and %2$d other countries."
+msgstr ""
+
+#, php-format
+msgid "See all %d countries"
+msgstr ""
+
+msgid "Hide list"
+msgstr ""
+
+msgid "Request"
+msgstr ""
+
+msgid "Request failed. Please try again."
+msgstr ""
+
+msgid "Quick search by name"
 msgstr ""
 
 msgid "enable"
@@ -7796,13 +7835,16 @@ msgstr ""
 msgid "Canceled"
 msgstr ""
 
+msgid "New list"
+msgstr ""
+
+msgid "Back to lists"
+msgstr ""
+
 msgid "Resend"
 msgstr ""
 
 msgid "Current mailing list"
-msgstr ""
-
-msgid "Back to lists"
 msgstr ""
 
 msgid "Administrator phone"
@@ -7819,9 +7861,6 @@ msgid ""
 "valid phone number would be +17327572923."
 msgstr ""
 
-msgid "Quick search notifications"
-msgstr ""
-
 msgid ""
 "If you do not see your country in the list please contact us at <a "
 "href=\"mailto:support@bookly.info\">support@bookly.info</a>."
@@ -7832,30 +7871,6 @@ msgid ""
 "sender ID. Please check if particular country supports custom sender ID in "
 "our price list. Also please note that prices for messages with custom sender "
 "ID are usually 20% - 25% higher than normal message price."
-msgstr ""
-
-msgid "Request Sender ID"
-msgstr ""
-
-msgid "Reset to default"
-msgstr ""
-
-msgid "Request"
-msgstr ""
-
-msgid "Cancel request"
-msgstr ""
-
-msgid "Can only contain letters or digits (up to 11 characters)."
-msgstr ""
-
-msgid "Sender ID"
-msgstr ""
-
-msgid "Approved at"
-msgstr ""
-
-msgid "Change the sender's name to your phone number or any other name"
 msgstr ""
 
 msgid "Campaigns"
@@ -7956,31 +7971,23 @@ msgstr ""
 msgid "Create customer"
 msgstr ""
 
-msgid "Quick search customer"
+msgid "Quick search by name, email, phone"
 msgstr ""
 
-msgid "Quick search customers"
-msgstr ""
-
-msgid "Merge with"
-msgstr ""
-
-msgid "Select for merge"
-msgstr ""
-
-msgid "Merge list"
+msgid "Merge"
 msgstr ""
 
 msgid "Merge customers"
 msgstr ""
 
 msgid ""
-"You are about to merge customers from the merge list with the selected one. "
-"This will result in losing the merged customers and moving all their "
-"appointments to the selected customer. Are you sure you want to continue?"
+"You are about to merge the selected customers. All appointments will be "
+"transferred to the chosen customer, and the other customer records will be "
+"removed."
 msgstr ""
 
-msgid "Merge"
+msgid ""
+"Please select the customer from the dropdown who will remain after the merge."
 msgstr ""
 
 msgid ""
@@ -8382,13 +8389,22 @@ msgstr ""
 msgid "Email notifications"
 msgstr ""
 
+msgid "Appointment at any time"
+msgstr ""
+
 msgid "No payments for selected period and criteria."
 msgstr ""
 
 msgid "See details for more items"
 msgstr ""
 
-msgid "Appointment at any time"
+msgid "Quick search by no., customer, provider, service"
+msgstr ""
+
+msgid "Appointment date"
+msgstr ""
+
+msgid "Download all invoices"
 msgstr ""
 
 #, php-format
@@ -8398,7 +8414,11 @@ msgstr ""
 msgid "The service will be created with the visibility of Private."
 msgstr ""
 
-msgid "Quick search services"
+msgid "Quick search by title, category"
+msgstr ""
+
+msgctxt "drag to reorder"
+msgid "Order"
 msgstr ""
 
 msgid "Update service setting"
@@ -8973,9 +8993,6 @@ msgstr ""
 msgid "Cloud"
 msgstr ""
 
-msgid "SMS"
-msgstr ""
-
 msgid ""
 "The initial setup is complete, and you can now continue using Bookly in the "
 "admin panel."
@@ -9054,9 +9071,6 @@ msgid "Subscription"
 msgstr ""
 
 msgid "Add-ons"
-msgstr ""
-
-msgid "Quick search staff"
 msgstr ""
 
 msgid "Show archived"
@@ -9624,9 +9638,6 @@ msgstr ""
 msgid "Undelivered"
 msgstr ""
 
-msgid "Declined"
-msgstr ""
-
 msgid "Incorrect sender ID"
 msgstr ""
 
@@ -9946,10 +9957,23 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
+msgid "Last 90 days"
+msgstr ""
+
+msgid "This week"
+msgstr ""
+
 msgid "Next month"
 msgstr ""
 
-msgid "Appointment date"
+msgid "This year"
+msgstr ""
+
+msgid "Year to date"
+msgstr ""
+
+msgctxt "email recipient"
+msgid "To"
 msgstr ""
 
 msgid "Start at"
@@ -9986,4 +10010,43 @@ msgid "Author"
 msgstr ""
 
 msgid "Reference"
+msgstr ""
+
+msgid "Responsive table"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Search columns"
+msgstr ""
+
+msgid "No columns match"
+msgstr ""
+
+msgid "Reset to defaults"
+msgstr ""
+
+msgid "Jump to today"
+msgstr ""
+
+msgid "Quick range"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Add filter"
+msgstr ""
+
+msgid "Clear search"
+msgstr ""
+
+msgid "Remove filter"
+msgstr ""
+
+msgid "Clear filter"
+msgstr ""
+
+msgid "Failed to load data"
 msgstr ""

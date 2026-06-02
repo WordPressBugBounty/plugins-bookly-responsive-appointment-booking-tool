@@ -17,6 +17,7 @@ class Page extends Lib\Base\Component
         } elseif ( $cloud->account->productActive( Lib\Cloud\Account::PRODUCT_WHATSAPP ) ) {
             self::enqueueStyles( array(
                 'frontend' => array( 'css/intlTelInput.css' => array( 'bookly-backend-globals', ) ),
+                'backend'  => array( 'tailwind/tailwind.css' ),
             ) );
 
             self::enqueueScripts( array(
@@ -27,6 +28,7 @@ class Page extends Lib\Base\Component
                 'module' => array(
                     'js/whatsapp.js' => array( 'bookly-notifications-list.js', ),
                 ),
+                'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
             ) );
 
             // Prepare tables settings.
@@ -38,26 +40,31 @@ class Page extends Lib\Base\Component
             wp_localize_script( 'bookly-whatsapp.js', 'BooklyL10n',
                 array(
                     'moment_format_date_time' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ) . ' ' . Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
-                    'areYouSure' => __( 'Are you sure?', 'bookly' ),
-                    'country' => $cloud->account->getCountry(),
+                    'areYouSure'   => __( 'Are you sure?', 'bookly' ),
+                    'country'      => $cloud->account->getCountry(),
                     'intlTelInput' => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),
                         'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
                     ),
-                    'lastMonth' => __( 'Last month', 'bookly' ),
-                    'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-                    'noResults' => __( 'No records.', 'bookly' ),
-                    'processing' => __( 'Processing', 'bookly' ) . '…',
-                    'emptyTable' => __( 'No data available in table', 'bookly' ),
-                    'loadingRecords' => __( 'Loading...', 'bookly' ),
-                    'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
-                    'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
-                    'edit' => __( 'Edit', 'bookly' ),
-                    'settingsSaved' => __( 'Settings saved.', 'bookly' ),
-                    'gateway' => 'whatsapp',
-                    'datatables' => $datatables,
-                    'status' => array(
-                        'sent' => __( 'Sent', 'bookly' ),
+                    'datePicker'   => Lib\Utils\DateTime::datePickerOptions(),
+                    'dateRange'    => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
+                    'zeroRecords'  => __( 'No records for selected period.', 'bookly' ),
+                    'quick_search' => __( 'Quick search', 'bookly' ),
+                    'state'        => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
+                    'action'       => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
+                    'edit'         => __( 'Edit', 'bookly' ),
+                    'delete'       => __( 'Delete', 'bookly' ) . '…',
+                    'enable'       => __( 'Enable', 'bookly' ),
+                    'disable'      => __( 'Disable', 'bookly' ),
+                    'new_notification' => __( 'New notification', 'bookly' ) . '…',
+                    'settingsSaved'    => __( 'Settings saved.', 'bookly' ),
+                    'filters'      => array(
+                        'date' => __( 'Date', 'bookly' ),
+                    ),
+                    'gateway'      => 'whatsapp',
+                    'datatables'   => $datatables,
+                    'status'       => array(
+                        'sent'   => __( 'Sent', 'bookly' ),
                         'failed' => __( 'Failed', 'bookly' ),
                     ),
                 )

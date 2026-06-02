@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2026-03-31 14:57+0000\n"
+"PO-Revision-Date: 2026-05-29 12:23+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -28,6 +28,13 @@ msgstr "Спробуйте!"
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
 msgstr "\"%s\" є занадто довгим (%d символів максимум)."
+
+#, php-format
+msgid "%d country"
+msgid_plural "%d countries"
+msgstr[0] "%d країна"
+msgstr[1] "%d країни"
+msgstr[2] "%d країн"
 
 #, php-format
 msgid "%d day"
@@ -305,9 +312,6 @@ msgid "Access token link for quick authorization in the mobile app"
 msgstr ""
 "Посилання з токеном доступу для швидкої авторизації в мобільному застосунку"
 
-msgid "Access tokens"
-msgstr "Токени доступу"
-
 msgid "Account ID"
 msgstr "Ідентифікатор акаунта"
 
@@ -422,6 +426,9 @@ msgstr "Додати додаткові послуги"
 
 msgid "Add field"
 msgstr "Додати поле"
+
+msgid "Add filter"
+msgstr "Додати фільтр"
 
 msgid "Add gift card"
 msgstr "Додати подарункову картку"
@@ -925,9 +932,6 @@ msgstr "Підтверджено"
 
 msgid "Approved appointments"
 msgstr "Підтверджені записи"
-
-msgid "Approved at"
-msgstr "Підтверджено на"
 
 msgid "Archive"
 msgstr "Архівувати"
@@ -1542,9 +1546,6 @@ msgstr "Змінити"
 msgid "Change password"
 msgstr "Змінити пароль"
 
-msgid "Change the sender's name to your phone number or any other name"
-msgstr "Змініть ім'я відправника на свій номер телефону або будь-яке інше ім'я"
-
 msgid "Changes saved."
 msgstr "Зміни збережено."
 
@@ -1652,6 +1653,12 @@ msgstr "Очистити всі логи"
 
 msgid "Clear field"
 msgstr "Очистити поле"
+
+msgid "Clear filter"
+msgstr "Очистити фільтр"
+
+msgid "Clear search"
+msgstr "Очистити пошук"
 
 #, php-format
 msgid "Click \"%s\" to create your first one"
@@ -1961,6 +1968,9 @@ msgstr ""
 msgid "Counselling"
 msgstr "Консультування"
 
+msgid "Countries marked with this icon require extra steps."
+msgstr "Країни, позначені цією іконкою, потребують додаткових дій."
+
 msgid "Country"
 msgstr "Країна"
 
@@ -2006,14 +2016,8 @@ msgstr "Створити ще один купон"
 msgid "Create customer"
 msgstr "Створити клієнта"
 
-msgid "Create new access token"
-msgstr "Створити новий токен доступу"
-
 msgid "Create new appointment for every recurring booking"
 msgstr "Створювати новий запис для кожного повторюваного бронювання"
-
-msgid "Create notification"
-msgstr "Створити сповіщення"
 
 msgid "Create online meetings"
 msgstr "Створити онлайн-зустріч"
@@ -2027,12 +2031,6 @@ msgstr "Створити пакет послуг"
 
 msgid "Create payment"
 msgstr "Створити платіж"
-
-msgid "Create service"
-msgstr "Створити сервіс"
-
-msgid "Create staff"
-msgstr "Створити співробітника"
 
 msgid "Create WordPress user"
 msgstr "Створити користувача WordPress"
@@ -3185,6 +3183,9 @@ msgstr "Опис для календаря клієнта"
 msgid "Design consultants"
 msgstr "Консультанти з дизайну"
 
+msgid "Destination country"
+msgstr "Країна призначення"
+
 msgid ""
 "Destination URL where Zoom will send the access token after the user "
 "completes the OAuth authentication"
@@ -3342,6 +3343,9 @@ msgstr "Готово"
 msgid "Download"
 msgstr "Завантажити"
 
+msgid "Download all invoices"
+msgstr "Завантажити всі рахунки"
+
 msgid "Download filtered invoices"
 msgstr "Завантажити відфільтровані рахунки"
 
@@ -3356,6 +3360,10 @@ msgstr "Завантажити рахунки"
 
 msgid "Download selected invoices"
 msgstr "Завантажити вибрані рахунки"
+
+msgctxt "drag to reorder"
+msgid "Order"
+msgstr "Порядок"
 
 msgid "Driving Instructors"
 msgstr "Інструктори з водіння"
@@ -3401,7 +3409,6 @@ msgstr ""
 "коду покупки. Після завершення пробного періоду потрібна активація коду "
 "покупки."
 
-#, fuzzy
 #| msgid ""
 #| "During the trial period, you will have full access to all features of "
 #| "this product  completely free of charge."
@@ -3475,10 +3482,11 @@ msgstr "Редагувати запис у пакеті послуг"
 msgid "Edit service"
 msgstr "Редагувати послугу"
 
-msgid "Edit sms notification"
+#| msgid "Edit sms notification"
+msgid "Edit SMS notification"
 msgstr "Редагувати смс-повідомлення"
 
-msgid "Edit staff"
+msgid "Edit staff member"
 msgstr "Редагувати співробітника"
 
 msgid "Edit Status"
@@ -3754,7 +3762,6 @@ msgstr ""
 "Введіть теги полів у налаштуваннях аудиторії Mailchimp відповідно до даних "
 "Bookly."
 
-#, fuzzy
 #| msgid "Enter the URL of the page where this forms shortcode is placed."
 msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "Введіть URL сторінки, на якій розміщено шорткод цієї форми."
@@ -3773,13 +3780,6 @@ msgstr "Введіть код підтвердження з електронно
 
 msgid "Enter verification code from SMS"
 msgstr "Введіть код підтвердження з SMS"
-
-msgid ""
-"Enter your iCloud email and the app-specific password in Edit Staff > "
-"Advanced > Apple Calendar."
-msgstr ""
-"Введіть вашу iCloud-пошту та пароль програми в Редагувати співробітника > "
-"Додатково > Календар Apple."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Введіть код покупки для доповнення або пакету Bookly"
@@ -3946,6 +3946,9 @@ msgstr "Невдача"
 msgid "Failed to create an online meeting"
 msgstr "Не вдалося створити онлайн-зустріч"
 
+msgid "Failed to load data"
+msgstr "Не вдалося завантажити дані"
+
 msgid "Failed to send SMS."
 msgstr "Не вдалося відправити SMS."
 
@@ -3988,6 +3991,9 @@ msgstr "Недопустиме розширення файлу"
 
 msgid "Files"
 msgstr "Файли"
+
+msgid "Filter"
+msgstr "Фільтр"
 
 msgid "Filter events"
 msgstr "Фільтр подій"
@@ -4147,9 +4153,6 @@ msgstr "Загальні налаштування"
 msgid "Generate"
 msgstr "Генерувати"
 
-msgid "Generate a new app-specific password for Bookly."
-msgstr "Створити новий пароль програми для Bookly."
-
 #, php-format
 msgid "Generate an app-specific password at %s"
 msgstr "Створіть пароль програми на %s"
@@ -4197,18 +4200,11 @@ msgstr "Подарункова картка дійсна з дати"
 msgid "Gift Cards"
 msgstr "Подарункові картки"
 
-msgid "Gift cards"
-msgstr "Подарункові картки"
-
 msgid "Gift cards settings"
 msgstr "Налаштування подарункових карток"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "Зазначена адреса електронної пошти вже підписана, дякую!"
-
-msgid "Go to appleid.apple.com and sign in with your Apple ID."
-msgstr ""
-"Перейдіть на appleid.apple.com та авторизуйтеся за допомогою свого Apple ID."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4916,6 +4912,9 @@ msgstr "Приховати коментар"
 msgid "Hide form borders"
 msgstr "Приховати рамки форми"
 
+msgid "Hide list"
+msgstr "Приховати список"
+
 msgid "Hide services step"
 msgstr "Приховати крок вибору послуги"
 
@@ -5195,9 +5194,9 @@ msgid ""
 "If enabled, invoices will be numbered sequentially. If disabled, invoice "
 "numbers will match the corresponding payment numbers."
 msgstr ""
-"Якщо цей параметр увімкнено, рахунки будуть нумеруватися послідовно.Якщо цей "
-"параметр вимкнено, номери рахунків будуть збігатися з відповідними номерами "
-"платежів."
+"Якщо цей параметр увімкнено, рахунки будуть нумеруватися послідовно. Якщо "
+"цей параметр вимкнено, номери рахунків будуть збігатися з відповідними "
+"номерами платежів."
 
 msgid "If enabled, News notification icon will be displayed"
 msgstr "Якщо увімкнено, відображатиметься піктограма сповіщення про новини"
@@ -5943,9 +5942,6 @@ msgstr "Невірний номер"
 msgid "Invert datepicker colors"
 msgstr "Інвертувати кольори календаря"
 
-msgid "Invite"
-msgstr "Запросити"
-
 msgid "INVOICE"
 msgstr "РАХУНОК"
 
@@ -6046,6 +6042,9 @@ msgstr "Приєднатися"
 msgid "Join online meeting"
 msgstr "Приєднатися до онлайн-зустрічі"
 
+msgid "Jump to today"
+msgstr "Перейти до сьогоднішнього дня"
+
 msgid "Just to help us spread the word and boost our motivation."
 msgstr ""
 "Просто щоб допомогти нам поширювати інформацію та підвищити нашу мотивацію."
@@ -6064,6 +6063,9 @@ msgstr "Останні 30 днів"
 
 msgid "Last 7 days"
 msgstr "Останні 7 днів"
+
+msgid "Last 90 days"
+msgstr "Останні 90 днів"
 
 msgid "Last appointment"
 msgstr "Останній запис"
@@ -6350,14 +6352,8 @@ msgstr "Об'єднати"
 msgid "Merge customers"
 msgstr "Об'єднати клієнтів"
 
-msgid "Merge list"
-msgstr "Список для об’єднання"
-
 msgid "Merge repeating custom fields for multiple bookings of the service"
 msgstr "Об'єднати повторювані настроювані поля для декількох бронювань послуги"
-
-msgid "Merge with"
-msgstr "Об'єднати з"
 
 msgid "Message"
 msgstr "Повідомлення"
@@ -6483,9 +6479,6 @@ msgstr "Назва категорії співробітника"
 msgid "Name of ticket type"
 msgstr "Назва типу квитка"
 
-msgid "Navigate to Sign-In and Security > App-Specific Passwords."
-msgstr "Перейдіть у розділ Вхід і безпека > Паролі програм."
-
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6504,7 +6497,7 @@ msgid "New access token"
 msgstr "Новий токен доступу"
 
 msgid "New appointment"
-msgstr "Навий запис"
+msgstr "Новий запис"
 
 msgid "New booking"
 msgstr "Нове бронювання"
@@ -6581,7 +6574,11 @@ msgstr "Новий пароль"
 msgid "New recurring booking notification"
 msgstr "Сповіщення про нове повторюване бронювання"
 
-msgid "New sms notification"
+msgid "New service"
+msgstr "Нова послуга"
+
+#| msgid "New sms notification"
+msgid "New SMS notification"
 msgstr "Нове смс-повідомлення"
 
 msgid "New staff account role"
@@ -6674,6 +6671,12 @@ msgstr "Записів не знайдено."
 
 msgid "No appointments."
 msgstr "Немає записів."
+
+msgid "No columns match"
+msgstr "Немає відповідних стовпців"
+
+msgid "No country found."
+msgstr "Країну не знайдено."
 
 msgid "No coupons found."
 msgstr "Купонів не знайдено."
@@ -7107,6 +7110,12 @@ msgstr "того ж дня"
 
 msgid "On waiting list"
 msgstr "У списку очікування"
+
+#, php-format
+#| msgid "Your Sender ID will work in %1$s and %2$d other countries."
+msgid ""
+"Once approved, your Sender ID will work in %1$s and %2$d other countries."
+msgstr "Після схвалення ваш Sender ID працюватиме в %1$s та ще %2$d країнах."
 
 msgid ""
 "Once created, copy <b>Client ID</b> and <b>Secret</b> and use them in the "
@@ -7729,6 +7738,11 @@ msgid "Please select some days"
 msgstr "Будь ласка, виберіть дні"
 
 msgid ""
+"Please select the customer from the dropdown who will remain after the merge."
+msgstr ""
+"Будь ласка, виберіть зі списку клієнта, який залишиться після об’єднання."
+
+msgid ""
 "Please setup and enable New customer's WordPress user login details "
 "notification"
 msgstr ""
@@ -7995,23 +8009,29 @@ msgstr "Кількість квитків даного типу"
 msgid "Queued"
 msgstr "У черзі"
 
+msgid "Quick range"
+msgstr "Швидкий діапазон"
+
 msgid "Quick search"
 msgstr "Швидкий пошук"
 
-msgid "Quick search customer"
-msgstr "Швидкий пошук клієнта"
+msgid "Quick search by ID, customer, staff, service"
+msgstr "Швидкий пошук за ID, клієнтом, співробітником, послугою"
 
-msgid "Quick search customers"
-msgstr "Швидкий пошук клієнтів"
+msgid "Quick search by name"
+msgstr "Швидкий пошук за ім’ям"
 
-msgid "Quick search notifications"
-msgstr "Швидкий пошук сповіщень"
+msgid "Quick search by name, email, phone"
+msgstr "Швидкий пошук за ім’ям, електронною поштою, телефоном"
 
-msgid "Quick search services"
-msgstr "Швидкий пошук сервісів"
+msgid "Quick search by no., customer, provider, service"
+msgstr "Швидкий пошук за №, клієнтом, виконавцем, послугою"
 
-msgid "Quick search staff"
-msgstr "Швидкий пошук співробітника"
+msgid "Quick search by recipient, subject"
+msgstr "Швидкий пошук за отримувачем, темою"
+
+msgid "Quick search by title, category"
+msgstr "Швидкий пошук за назвою, категорією"
 
 msgid "Radio Button"
 msgstr "Перемикач"
@@ -8110,6 +8130,9 @@ msgstr ""
 msgid "Reference"
 msgstr "Довідка"
 
+msgid "Refresh"
+msgstr "Оновити"
+
 msgid "Refund"
 msgstr "Повернення коштів"
 
@@ -8170,6 +8193,9 @@ msgstr "Видалити клієнта"
 msgid "Remove field"
 msgstr "Видалити поле"
 
+msgid "Remove filter"
+msgstr "Видалити фільтр"
+
 msgid "Remove item"
 msgstr "Видалити елемент"
 
@@ -8178,9 +8204,6 @@ msgstr "Видалити промокод"
 
 msgid "Renew"
 msgstr "Відновити"
-
-msgid "Reorder"
-msgstr "Змінити порядок"
 
 msgid "Repeat"
 msgstr "Повторити"
@@ -8202,6 +8225,9 @@ msgstr "Відповідайте безпосередньо клієнтам"
 
 msgid "Request"
 msgstr "Запит"
+
+msgid "Request failed. Please try again."
+msgstr "Не вдалося виконати запит. Спробуйте ще раз."
 
 msgid "Request Sender ID"
 msgstr "Запитати ID відправника"
@@ -8236,8 +8262,12 @@ msgstr "Заброньовано квитків даного типу"
 msgid "Reset"
 msgstr "Скинути"
 
-msgid "Reset to default"
+#| msgid "Reset to default"
+msgid "Reset to defaults"
 msgstr "Скинути за замовчуванням"
+
+msgid "Responsive table"
+msgstr "Адаптивна таблиця"
 
 msgid "Restaurants"
 msgstr "Ресторани"
@@ -8296,9 +8326,6 @@ msgstr "Збережіть подію, щоб створити зустріч"
 msgid "Save invoice settings"
 msgstr "Зберегти налаштування рахунку-фактури"
 
-msgid "Save notification"
-msgstr "Зберегти сповіщення"
-
 msgid "Save the appearance to apply changes."
 msgstr "Збережіть зовнішній вигляд, щоб застосувати зміни."
 
@@ -8323,6 +8350,12 @@ msgstr "Календар з прокруткою"
 
 msgid "Search"
 msgstr "Пошук"
+
+msgid "Search and select country"
+msgstr "Знайти та вибрати країну"
+
+msgid "Search columns"
+msgstr "Пошук стовпців"
 
 msgid "Search for customer"
 msgstr "Пошук клієнта"
@@ -8359,6 +8392,10 @@ msgstr "Шифрування"
 
 msgid "Secure connection"
 msgstr "Безпечне з'єднання"
+
+#, php-format
+msgid "See all %d countries"
+msgstr "Переглянути всі країни (%d)"
 
 msgid "See details for more items"
 msgstr "Для отримання інформації по інших товарах дивіться \"Деталі\""
@@ -8433,6 +8470,9 @@ msgstr ""
 msgid "Select company size"
 msgstr "Виберіть розмір компанії"
 
+msgid "Select country"
+msgstr "Виберіть країну"
+
 msgid "Select day"
 msgstr "Виберіть день"
 
@@ -8450,9 +8490,6 @@ msgstr "Вибрати подію"
 
 msgid "Select file"
 msgstr "Вибрати файл"
-
-msgid "Select for merge"
-msgstr "Вибрати для об'єднання"
 
 msgid ""
 "Select format for displaying the time slot occupancy for group bookings."
@@ -9299,9 +9336,6 @@ msgstr "Слаг"
 
 msgid "SMS"
 msgstr "SMS"
-
-msgid "Sms"
-msgstr "Смс"
 
 msgid "SMS Details"
 msgstr "Деталі SMS"
@@ -10233,6 +10267,9 @@ msgstr ""
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Цей текст можна вставляти в повідомлення за допомогою коду %s"
 
+msgid "This week"
+msgstr "Цього тижня"
+
 msgid ""
 "This will permanently delete all appointments in this series. This action "
 "cannot be undone."
@@ -10246,6 +10283,9 @@ msgstr "Це назавжди видалить квиток %s"
 #, php-format
 msgid "This WP user is already connected to another customer: %s"
 msgstr "Цей користувач WP вже підключений до іншого клієнта: %s"
+
+msgid "This year"
+msgstr "Цього року"
 
 msgid ""
 "Though, every new version is thoroughly tested to its highest quality before "
@@ -10516,9 +10556,6 @@ msgstr ""
 "Щоб зберегти дані, будь ласка, встановіть \"Не видаляти\" в Налаштування "
 "Bookly > Загальні > Дані Bookly при видаленні елементів Bookly"
 
-msgid "To set up Apple Calendar integration:"
-msgstr "Щоб налаштувати інтеграцію з Календарем Apple:"
-
 msgid "To set up Facebook integration, do the following:"
 msgstr "Щоб налаштувати інтеграцію з Facebook, зробіть наступне:"
 
@@ -10616,6 +10653,9 @@ msgstr "Двостороння синхронізація для фронтен�
 
 msgid "Type"
 msgstr "Тип"
+
+msgid "Type country name"
+msgstr "Введіть назву країни"
 
 msgid "Unassigned"
 msgstr "Не призначено"
@@ -11114,6 +11154,9 @@ msgstr "рік"
 msgid "Year is required"
 msgstr "Необхідно вказати рік"
 
+msgid "Year to date"
+msgstr "З початку року"
+
 msgid "Yes"
 msgstr "Так"
 
@@ -11141,13 +11184,12 @@ msgstr ""
 "співробітників?"
 
 msgid ""
-"You are about to merge customers from the merge list with the selected one. "
-"This will result in losing the merged customers and moving all their "
-"appointments to the selected customer. Are you sure you want to continue?"
+"You are about to merge the selected customers. All appointments will be "
+"transferred to the chosen customer, and the other customer records will be "
+"removed."
 msgstr ""
-"Ви збираєтеся об'єднати клієнтів зі списку об'єднання з вибраним клієнтом. "
-"Це призведе до втрати об'єднаних клієнтів і перенесення всіх їхніх записів "
-"до вибраного клієнта. Ви впевнені, що хочете продовжити?"
+"Ви збираєтеся об’єднати вибраних клієнтів. Усі записи будуть перенесені до "
+"вибраного клієнта, а записи інших клієнтів буде видалено."
 
 msgid "You are currently logged into Bookly Cloud with the account"
 msgstr "Ви увійшли до Bookly Cloud під обліковим записом"

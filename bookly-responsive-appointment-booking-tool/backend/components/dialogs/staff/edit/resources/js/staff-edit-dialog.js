@@ -10,7 +10,7 @@ jQuery(function ($) {
         $archiveBtn = $('.bookly-js-staff-archive', $modalFooter),
         $validateErrors = $('.bookly-js-errors', $modalFooter),
         $deleteCascadeModal = $('.bookly-js-delete-cascade-confirm'),
-        $staffCount = $('.bookly-js-staff-count'),
+        bt = BooklyDatatables.getForm('bookly-staff_members-datatables'),
         currentTab = 'bookly-' + BooklyStaffEditDialogL10n.currentTab + '-tab',
         tabs = {
             daysOff: null,
@@ -33,44 +33,37 @@ jQuery(function ($) {
             }
         });
 
-    $staffList
-        .on('click', '[data-action="edit"]', function () {
-            let data = $staffList.DataTable().row($(this).closest('td')).data();
-            staff_id = data.id;
-            editStaff(staff_id);
-        });
-
-    $('#bookly-js-new-staff')
-        .on('click', function () {
-            if (BooklyStaffEditDialogL10n.proRequired == '1') {
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'bookly_get_staff_count',
-                        csrf_token: BooklyL10nGlobal.csrf_token
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response.data.count > 0) {
-                            requiredBooklyPro();
-                        } else {
-                            staff_id = 0;
-                            editStaff(staff_id);
-                        }
+    window.addEventListener("bookly:create-staff", function (e) {
+        if (BooklyStaffEditDialogL10n.proRequired == '1') {
+            $.ajax({
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'bookly_get_staff_count',
+                    csrf_token: BooklyL10nGlobal.csrf_token
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.data.count > 0) {
+                        requiredBooklyPro();
+                    } else {
+                        staff_id = 0;
+                        editStaff(staff_id);
                     }
-                })
-            } else {
-                staff_id = 0;
-                editStaff(staff_id);
-            }
-        });
+                }
+            })
+        } else {
+            staff_id = 0;
+            editStaff(staff_id);
+        }
+    });
 
     /**
      * Edit staff member.
      */
     function editStaff(staff_id) {
         $modalTitle.html(staff_id ? BooklyStaffEditDialogL10n.editStaff : BooklyStaffEditDialogL10n.createStaff);
+        $saveBtn.find('.ladda-label').text(staff_id ? BooklyStaffEditDialogL10n.save : BooklyStaffEditDialogL10n.create);
         $('#bookly-staff-delete', $modalFooter).toggle(staff_id != 0);
 
         $modalFooter.hide();
@@ -135,7 +128,7 @@ jQuery(function ($) {
                 csrf_token: BooklyL10nGlobal.csrf_token
             };
             $.post(ajaxurl, data, function () {
-                $staffList.DataTable().ajax.reload();
+                BooklyDatatables.getForm('bookly-staff_members-datatables').reload();
                 $deleteCascadeModal.booklyModal('hide');
                 $modal.booklyModal('hide');
                 ladda.stop();
@@ -257,7 +250,8 @@ jQuery(function ($) {
 
     let waitResposes = 0,
         ladda,
-        success;
+        success,
+        pendingSaveButtons = [];
 
     $saveBtn
         .on('click', function (e) {
@@ -265,17 +259,18 @@ jQuery(function ($) {
             ladda = Ladda.create(this);
             ladda.start();
 
-            let $buttons = $('.bookly-js-modal-footer', $modalBody);
-            waitResposes = 0;
+            pendingSaveButtons = [];
+            $('.bookly-js-modal-footer', $modalBody).each(function () {
+                let $button = $('.bookly-js-save', this);
+                if ($button.length > 0) {
+                    pendingSaveButtons.push($button);
+                }
+            });
+            waitResposes = pendingSaveButtons.length;
             success = true;
-            $buttons
-                .each(function () {
-                    let $button = $('.bookly-js-save', this);
-                    if ($button.length > 0) {
-                        waitResposes++;
-                        $button.trigger('click');
-                    }
-                });
+            if (pendingSaveButtons.length > 0) {
+                pendingSaveButtons.shift().trigger('click');
+            }
         });
 
     $(document.body)
@@ -286,11 +281,13 @@ jQuery(function ($) {
                         success = false;
                     }
                     waitResposes--;
+                    if (pendingSaveButtons.length > 0) {
+                        pendingSaveButtons.shift().trigger('click');
+                        return;
+                    }
                 }
                 if (waitResposes <= 0) {
-                    $staffList.DataTable().ajax.reload(function () {
-                        $staffList.DataTable().responsive.recalc();
-                    });
+                    bt.reload();
                     ladda ? ladda.stop() : null;
                     $modal.booklyModal('hide');
                     booklyAlert({success: [BooklyStaffEditDialogL10n.settingsSaved]})
@@ -312,9 +309,8 @@ jQuery(function ($) {
                 $saveBtn.prop('disabled', $('>', $validateErrors).length !== 0);
             });
 
-    $(document.body).on('bookly.staff.edit', {},
-        function (event, staff_id) {
-            editStaff(staff_id)
-        }
-    );
+    window.addEventListener("bookly:edit-staff", function (e) {
+        staff_id = e.detail.id;
+        editStaff(e.detail.id)
+    });
 });

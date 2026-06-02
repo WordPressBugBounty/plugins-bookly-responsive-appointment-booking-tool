@@ -378,8 +378,8 @@ class Ajax extends Lib\Base\Ajax
         $appointment_id = (int) self::parameter( 'id', 0 );
         $staff_id = (int) self::parameter( 'staff_id', 0 );
         $service_id = (int) self::parameter( 'service_id', -1 );
-        $custom_service_name = trim( self::parameter( 'custom_service_name', '' ) );
-        $custom_service_price = trim( self::parameter( 'custom_service_price', '' ) );
+        $custom_service_name = trim( (string) self::parameter( 'custom_service_name', '' ) );
+        $custom_service_price = trim( (string) self::parameter( 'custom_service_price', '' ) );
         $location_id = (int) self::parameter( 'location_id', 0 );
         $skip_date = self::parameter( 'skip_date', 0 );
         $start_date = self::parameter( 'start_date' );

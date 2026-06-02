@@ -114,10 +114,20 @@ namespace Bookly\Lib\Base
     abstract class Controller{public static function getInstance(){$class = get_called_class();return new $class();}}
 }
 
+namespace Bookly\Lib\Cloud\Proxy
+{
+    abstract class Shared extends \Bookly\Lib\Base\Proxy{}
+}
+
 namespace Bookly\Lib\Proxy
 {
     abstract class CollaborativeServices extends \Bookly\Lib\Base\Proxy{}
     abstract class CompoundServices extends \Bookly\Lib\Base\Proxy{}
+}
+
+namespace Bookly\Lib\Payment\Proxy
+{
+    abstract class Pro extends \Bookly\Lib\Base\Proxy{}
 }
 
 namespace BooklyPro\Lib\Payment

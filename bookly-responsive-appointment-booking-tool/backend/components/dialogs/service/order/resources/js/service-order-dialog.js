@@ -6,7 +6,7 @@ jQuery(function($) {
             // Bind submit handler for service saving.
             function(event, $panel, data) {
                 BooklyServiceOrderDialogL10n.services
-                    .find(function(service) { return service.id == data.id; }).title = $.fn.dataTable.render.text().display(data.title);
+                    .find(function(service) { return service.id == data.id; }).title =  BooklyDatatables.escapeHtml(data.title);
             })
         .on('service.deleted', {},
             function(event, services) {

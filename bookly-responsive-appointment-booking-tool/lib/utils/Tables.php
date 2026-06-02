@@ -5,38 +5,38 @@ use Bookly\Lib;
 
 abstract class Tables
 {
-    const APPOINTMENTS = 'appointments';
-    const CLOUD_MOBILE_STAFF_CABINET = 'cloud_mobile_staff_cabinet';
-    const CLOUD_PURCHASES = 'cloud_purchases';
-    const COUPONS = 'coupons';
-    const CUSTOMERS = 'customers';
-    const CUSTOMER_GROUPS = 'customer_groups';
-    const CUSTOM_STATUSES = 'custom_statuses';
-    const DISCOUNTS = 'discounts';
-    const EMAIL_LOGS = 'email_logs';
-    const EMAIL_NOTIFICATIONS = 'email_notifications';
-    const EVENTS = 'events';
-    const GIFT_CARDS = 'gift_cards';
-    const GIFT_CARD_TYPES = 'gift_card_types';
-    const LOCATIONS = 'locations';
-    const PACKAGES = 'packages';
-    const PAYMENTS = 'payments';
-    const SERVICES = 'services';
-    const SMS_DETAILS = 'sms_details';
-    const SMS_MAILING_CAMPAIGNS = 'sms_mailing_campaigns';
-    const SMS_MAILING_LISTS = 'sms_mailing_lists';
-    const SMS_MAILING_RECIPIENTS_LIST = 'sms_mailing_recipients_list';
-    const SMS_NOTIFICATIONS = 'sms_notifications';
-    const SMS_PRICES = 'sms_prices';
-    const SMS_SENDER = 'sms_sender';
-    const STAFF_MEMBERS = 'staff_members';
-    const TAXES = 'taxes';
-    const VOICE_DETAILS = 'voice_details';
-    const VOICE_NOTIFICATIONS = 'voice_notifications';
-    const VOICE_PRICES = 'voice_prices';
-    const WHATSAPP_DETAILS = 'whatsapp_details';
-    const WHATSAPP_NOTIFICATIONS = 'whatsapp_notifications';
-    const LOGS = 'logs';
+    const APPOINTMENTS                  = 'appointments';
+    const CLOUD_MOBILE_STAFF_CABINET    = 'cloud_mobile_staff_cabinet';
+    const CLOUD_PURCHASES               = 'cloud_purchases';
+    const COUPONS                       = 'coupons';
+    const CUSTOMERS                     = 'customers';
+    const CUSTOMER_GROUPS               = 'customer_groups';
+    const CUSTOM_STATUSES               = 'custom_statuses';
+    const DISCOUNTS                     = 'discounts';
+    const EMAIL_LOGS                    = 'email_logs';
+    const EMAIL_NOTIFICATIONS           = 'email_notifications';
+    const EVENTS                        = 'events';
+    const GIFT_CARDS                    = 'gift_cards';
+    const GIFT_CARD_TYPES               = 'gift_card_types';
+    const LOCATIONS                     = 'locations';
+    const PACKAGES                      = 'packages';
+    const PAYMENTS                      = 'payments';
+    const SERVICES                      = 'services';
+    const SMS_DETAILS                   = 'sms_details';
+    const SMS_MAILING_CAMPAIGNS         = 'sms_mailing_campaigns';
+    const SMS_MAILING_LISTS             = 'sms_mailing_lists';
+    const SMS_MAILING_RECIPIENTS_LIST   = 'sms_mailing_recipients_list';
+    const SMS_NOTIFICATIONS             = 'sms_notifications';
+    const SMS_PRICES                    = 'sms_prices';
+    const SMS_SENDER                    = 'sms_sender';
+    const STAFF_MEMBERS                 = 'staff_members';
+    const TAXES                         = 'taxes';
+    const VOICE_DETAILS                 = 'voice_details';
+    const VOICE_NOTIFICATIONS           = 'voice_notifications';
+    const VOICE_PRICES                  = 'voice_prices';
+    const WHATSAPP_DETAILS              = 'whatsapp_details';
+    const WHATSAPP_NOTIFICATIONS        = 'whatsapp_notifications';
+    const LOGS                          = 'logs';
     const CUSTOMER_CABINET_APPOINTMENTS = 'customer_cabinet_appointments';
 
     /**
@@ -80,6 +80,7 @@ abstract class Tables
             case self::CUSTOMERS:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
+                    'image' => esc_html__( 'Image', 'bookly' ),
                     'full_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_name' ) ),
                     'first_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_first_name' ) ),
                     'last_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_last_name' ) ),
@@ -107,7 +108,7 @@ abstract class Tables
             case self::EMAIL_LOGS:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
-                    'to' => esc_html__( 'To', 'bookly' ),
+                    'to' => esc_html_x( 'To', 'email recipient', 'bookly' ),
                     'subject' => esc_html__( 'Subject', 'bookly' ),
                     'created_at' => esc_html__( 'Created', 'bookly' ),
                 );
@@ -129,6 +130,7 @@ abstract class Tables
             case self::SERVICES:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
+                    'image' => esc_html__( 'Image', 'bookly' ),
                     'title' => esc_html__( 'Title', 'bookly' ),
                     'category_name' => esc_html__( 'Category', 'bookly' ),
                     'duration' => esc_html__( 'Duration', 'bookly' ),
@@ -167,7 +169,6 @@ abstract class Tables
                     'charge' => esc_html__( 'Cost', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
                     'info' => esc_html__( 'Info', 'bookly' ),
-                    'resend' => esc_html__( 'Resend', 'bookly' ),
                 );
                 break;
             case self::VOICE_DETAILS:
@@ -214,6 +215,7 @@ abstract class Tables
                 $columns = array(
                     'date' => esc_html__( 'Date', 'bookly' ),
                     'name' => esc_html__( 'Requested ID', 'bookly' ),
+                    'country' => esc_html__( 'Country', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
                     'status_date' => esc_html__( 'Status date', 'bookly' ),
                 );
@@ -225,6 +227,7 @@ abstract class Tables
                     'email' => esc_html__( 'Email', 'bookly' ),
                     'phone' => esc_html__( 'Phone', 'bookly' ),
                     'wp_user' => esc_html__( 'User', 'bookly' ),
+                    'image' => esc_html__( 'Image', 'bookly' ),
                 );
                 break;
             case self::CLOUD_MOBILE_STAFF_CABINET:
@@ -281,6 +284,31 @@ abstract class Tables
             $tables = array( $tables );
         }
         $result = array();
+        $l10n = array(
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'zeroRecords' => __( 'No matching records found', 'bookly' ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
+            'responsiveTable' => __( 'Responsive table', 'bookly' ),
+            'refresh' => __( 'Refresh', 'bookly' ),
+            'tableSettings' => __( 'Table settings', 'bookly' ),
+            'columns' => __( 'Columns', 'bookly' ),
+            'searchColumns' => __( 'Search columns', 'bookly' ) . '…',
+            'noColumnsMatch' => __( 'No columns match', 'bookly' ),
+            'resetToDefaults' => __( 'Reset to defaults', 'bookly' ),
+            'save' => __( 'Save', 'bookly' ),
+            'cancel' => __( 'Cancel', 'bookly' ),
+            'apply' => __( 'Apply', 'bookly' ),
+            'jumpToToday' => __( 'Jump to today', 'bookly' ),
+            'quickRange' => __( 'Quick range', 'bookly' ),
+            'custom' => __( 'Custom', 'bookly' ),
+            'filter' => __( 'Filter', 'bookly' ),
+            'addFilter' => __( 'Add filter', 'bookly' ),
+            'clearSearch' => __( 'Clear search', 'bookly' ),
+            'removeFilter' => __( 'Remove filter', 'bookly' ),
+            'clearFilter' => __( 'Clear filter', 'bookly' ),
+            'nOfM' => __( '%s of %s', 'bookly' ),
+            'loadError' => __( 'Failed to load data', 'bookly' ),
+        );
         foreach ( $tables as $table ) {
             $columns = self::getColumns( $table );
             $meta = get_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', true );
@@ -312,17 +340,36 @@ abstract class Tables
                 }
             }
 
+            // Factory defaults — what the user sees on the very first visit
+            // (no per-user customisations applied). The frontend uses this for
+            // the "Reset to defaults" button.
+            $factory_columns = array();
+            $factory_order = array();
+            foreach ( $columns as $column => $title ) {
+                $factory_columns[ $column ] = array_key_exists( $column, $defaults ) ? $defaults[ $column ] : true;
+                $factory_order[] = $column;
+            }
+            $factory_appearance = array( 'responsive_table' => true );
+
             $result[ $table ] = array(
                 'settings' => array(
                     'columns' => $meta['columns'],
                     'filter' => isset ( $meta['filter'] ) ? $meta['filter'] : array(),
                     'order' => isset ( $meta['order'] ) ? $meta['order'] : array(),
                     'page_length' => isset ( $meta['page_length'] ) ? $meta['page_length'] : 25,
+                    'appearance' => isset( $meta['appearance'] ) ? $meta['appearance'] : $factory_appearance,
+                ),
+                'defaults' => array(
+                    'columns' => $factory_columns,
+                    'order' => $factory_order,
+                    'page_length' => 25,
+                    'appearance' => $factory_appearance,
                 ),
                 'titles' => $columns,
                 'exist' => $exist,
             );
         }
+        $result['l10n'] = $l10n;
 
         return $result;
     }

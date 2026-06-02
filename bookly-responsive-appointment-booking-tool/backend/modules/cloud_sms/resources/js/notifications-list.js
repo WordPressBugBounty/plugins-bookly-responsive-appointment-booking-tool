@@ -1,214 +1,195 @@
 jQuery(function ($) {
     'use strict';
+
     window.BooklyNotificationsList = function () {
-        let $notificationList = $('#bookly-notification-list'),
-            $modalTestEmail = $('#bookly-test-email-notifications-modal'),
-            $btnTestEmail = $('#bookly-js-test-email-notifications'),
-            $testNotificationsList = $('#bookly-js-test-notifications-list', $modalTestEmail),
-            $btnDeleteNotifications = $('#bookly-js-delete-notifications'),
-            $filter = $('#bookly-filter'),
-            columns = []
-        ;
+        const table = BooklyL10n.gateway + '_notifications';
+        const $modalTestEmail = $('#bookly-test-email-notifications-modal');
+        const $btnTestEmail = $('#bookly-js-test-email-notifications');
+        const $testNotificationsList = $('#bookly-js-test-notifications-list', $modalTestEmail);
+
+        const stateBadgeClass = {
+            1: 'bookly:bg-green-100 bookly:text-green-800 bookly:border-green-200', // enabled
+            0: 'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200',    // disabled
+        };
 
         /**
          * Init Columns.
          */
-        $.each(BooklyL10n.datatables[BooklyL10n.gateway + '_notifications'].settings.columns, function (column, show) {
-            if (show) {
-                switch (column) {
-                    case 'type':
-                        columns.push({
-                            data: 'order',
-                            render: function (data, type, row, meta) {
-                                return '<span class="hidden">' + data + '</span><i class="fa-fw ' + row.icon + '" title="' + row.title + '"></i>';
-                            }
-                        });
-                        break;
-                    case 'active':
-                        columns.push({
-                            data: column,
-                            render: function (data, type, row, meta) {
-                                return '<span class="badge ' + (row.active == 1 ? 'badge-success' : 'badge-info') + '">' + BooklyL10n.state[data] + '</span>' + ' (<a href="#" data-action="toggle-active">' + BooklyL10n.action[data] + '</a>)';
-                            }
-                        });
-                        break;
-                    default:
-                        columns.push({data: column, render: $.fn.dataTable.render.text()});
-                        break;
-                }
+        const columns = [];
+        $.each(BooklyL10n.datatables[table].settings.columns, function (column, show) {
+            switch (column) {
+                case 'id':
+                    columns.push({
+                        data: column,
+                        orderMethod: 'numeric',
+                        class: 'bookly:w-8',
+                        render: function (data) { return BooklyDatatables.escapeHtml(data); }
+                    });
+                    break;
+                case 'type':
+                    columns.push({
+                        data: 'order',
+                        searchable: false,
+                        noCopy: true,
+                        class: 'bookly:w-8',
+                        render: function (data, type, row) {
+                            return '<span class="hidden">' + data + '</span><i class="fa-fw ' + row.icon + '" title="' + row.title + '"></i>';
+                        }
+                    });
+                    break;
+                case 'active':
+                    columns.push({
+                        data: column,
+                        searchable: false,
+                        render: function (data) { return BooklyL10n.state[data]; },
+                        badge: function (row) { return stateBadgeClass[row.active == 1 ? 1 : 0]; },
+                    });
+                    break;
+                default:
+                    columns.push({
+                        data: column,
+                        render: function (data) { return BooklyDatatables.escapeHtml(data); }
+                    });
+                    break;
             }
-        });
-        columns.push({
-            data: null,
-            className: 'text-right',
-            orderable: false,
-            responsivePriority: 1,
-            render: function (data, type, row, meta) {
-                return ' <button type="button" class="btn btn-default ladda-button" data-action="edit" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666"><span class="ladda-label"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></span></button>';
-            }
+            columns[columns.length - 1].title = BooklyL10n.datatables[table].titles[column] || column;
+            columns[columns.length - 1].name = column;
+            columns[columns.length - 1].show = show;
         });
 
-        columns[0].responsivePriority = 0;
-
-        function toggleActive(row) {
-            let data = row.data();
-            data.active = data.active === '1' ? '0' : '1';
+        function setState(state) {
             $.ajax({
                 url: ajaxurl,
                 method: 'POST',
                 data: {
-                    action: 'bookly_set_notification_state',
+                    action: 'bookly_set_notifications_state',
                     csrf_token: BooklyL10nGlobal.csrf_token,
-                    id: data.id,
-                    active: data.active
+                    ids: bt.getCheckedRows().map(function (row) { return row.id; }),
+                    active: state
                 },
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {
-                        row.data(data).draw();
-                        booklyAlert({success: [BooklyL10n.settingsSaved]});
+                        bt.reload();
+                        booklyAlert({ success: [BooklyL10n.settingsSaved] });
                     }
                 }
             });
         }
 
-        /**
-         * Notification list
-         */
-        var dt = booklyDataTables.init($notificationList, BooklyL10n.datatables[BooklyL10n.gateway + '_notifications'].settings, {
-            paging: false,
-            searching: true,
+        const bt = BooklyDatatables.showForm('bookly-' + table + '-datatables', {
             serverSide: false,
             ajax: {
                 url: ajaxurl,
-                data: {
-                    action: 'bookly_get_notifications',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                    gateway: BooklyL10n.gateway
+                method: 'POST',
+                data: function (d) {
+                    return $.extend({}, d, {
+                        action: 'bookly_get_notifications',
+                        csrf_token: BooklyL10nGlobal.csrf_token,
+                        gateway: BooklyL10n.gateway
+                    });
                 }
             },
             columns: columns,
-            language: {
-                zeroRecords: BooklyL10n.zeroRecordsAlt,
-                emptyTable: BooklyL10n.emptyTable,
-                processing: BooklyL10n.processing,
-                loadingRecords: BooklyL10n.loadingRecords
+            tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+            edit: function (row) {
+                const event = new CustomEvent('bookly:edit-notification', { detail: { id: row.id } });
+                window.dispatchEvent(event);
             },
-            add_checkbox_column: true
-        }).on('click', '[data-action=toggle-active]', function (e) {
-            e.preventDefault();
-            let $tr = $(this).closest('tr');
-            if ($tr.hasClass('child')) {
-                toggleActive(dt.row($tr.prev().closest('tr')));
-            } else {
-                toggleActive(dt.row($tr));
-            }
-        }).on('order', function () {
-            let order = [];
-            dt.order().forEach(function (data) {
-                order.push({
-                    column: columns[data[0]].data,
-                    order: data[1]
-                });
-            });
-            $.ajax({
-                url: ajaxurl,
-                method: 'POST',
-                data: {
-                    action: 'bookly_update_table_order',
-                    table: BooklyL10n.gateway + '_notifications',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                    order: order
-                },
-                dataType: 'json'
-            });
-        });
-
-        /**
-         * On filters change.
-         */
-        $filter
-            .on('keyup', function () {
-                dt.search(this.value).draw();
-            })
-            .on('keydown', function (e) {
-                if (e.keyCode == 13) {
-                    e.preventDefault();
-                    return false;
+            checked: function (rows) {
+                const hasEnabled = rows.some(function (row) { return row.active === '1'; });
+                const hasDisabled = rows.some(function (row) { return row.active !== '1'; });
+                const actions = [];
+                if (hasDisabled) {
+                    actions.push({
+                        label: BooklyL10n.enable,
+                        icon: 'play',
+                        variant: 'outline',
+                        click: function () { setState(1); }
+                    });
                 }
-            })
-        ;
-
-        /**
-         * Delete notifications.
-         */
-        $btnDeleteNotifications.on('click', function () {
-            if (confirm(BooklyL10n.areYouSure)) {
-                let ladda = Ladda.create(this),
-                    data = [],
-                    $checkboxes = $('input:checked', $notificationList);
-                ladda.start();
-
-                $checkboxes.each(function () {
-                    data.push(this.value);
-                });
-
-                $.ajax({
-                    url: ajaxurl,
-                    method: 'POST',
-                    data: {
-                        action: 'bookly_delete_notifications',
-                        csrf_token: BooklyL10nGlobal.csrf_token,
-                        notifications: data
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        ladda.stop();
-                        if (response.success) {
-                            dt.rows($checkboxes.closest('td')).remove().draw();
-                        }
+                if (hasEnabled) {
+                    actions.push({
+                        label: BooklyL10n.disable,
+                        icon: 'ban',
+                        variant: 'outline',
+                        click: function () { setState(0); }
+                    });
+                }
+                actions.push({
+                    label: BooklyL10n.delete,
+                    icon: 'trash',
+                    variant: 'destructive',
+                    click: function (selected) {
+                        if (!confirm(BooklyL10n.areYouSure)) return;
+                        $.ajax({
+                            url: ajaxurl,
+                            method: 'POST',
+                            data: {
+                                action: 'bookly_delete_notifications',
+                                csrf_token: BooklyL10nGlobal.csrf_token,
+                                notifications: selected.map(function (row) { return row.id; })
+                            },
+                            dataType: 'json',
+                            success: function (response) { if (response.success) bt.reload(); }
+                        });
                     }
                 });
+                return actions;
+            },
+            saveSettings: function (settings) {
+                $.post(ajaxurl, Object.assign({
+                    action: 'bookly_update_table_settings',
+                    table: table,
+                    csrf_token: BooklyL10nGlobal.csrf_token
+                }, settings));
+            },
+            topToolbar: [{
+                id: 'bookly-js-new-notification',
+                label: BooklyL10n.new_notification,
+                icon: 'plus',
+                variant: 'default',
+                click: function () {
+                    const event = new CustomEvent('bookly:edit-notification');
+                    window.dispatchEvent(event);
+                }
+            }],
+            searchFilter: { placeholder: BooklyL10n.quick_search, name: 'filter' }
+        });
+
+        $('[href="#bookly-js-auto"]').click(function () {
+            if (this.classList.contains('toggle')) {
+                $(this).removeClass('border rounded mb-3 toggle');
+                $(this).addClass('border-light rounded-top bg-light');
+            } else {
+                $(this).removeClass('border-light rounded-top bg-light');
+                $(this).addClass('border rounded mb-3 toggle');
             }
         });
 
-        $('[href="#bookly-js-auto"]').click(
-            function () {
-                if (this.classList.contains("toggle")) {
-                    $(this).removeClass("border rounded mb-3 toggle");
-                    $(this).addClass("border-light rounded-top bg-light");
-                } else {
-                    $(this).removeClass("border-light rounded-top bg-light")
-                    $(this).addClass("border rounded mb-3 toggle");
-                }
-            });
+        $btnTestEmail.on('click', function () { $modalTestEmail.booklyModal(); });
 
-        $btnTestEmail
-            .on('click', function () {
-                $modalTestEmail.booklyModal()
-            });
+        const $check = $('<div/>', { class: 'bookly-dropdown-item my-0 pl-3' }).append(
+            $('<div>', { class: 'custom-control custom-checkbox' }).append(
+                $('<input>', { class: 'custom-control-input', type: 'checkbox' }),
+                $('<label>', { class: 'custom-control-label text-wrap w-100' })
+            )
+        );
 
-        let $check = $('<div/>', {class: 'bookly-dropdown-item my-0 pl-3'}).append(
-            $('<div>', {class: 'custom-control custom-checkbox'}).append(
-                $('<input>', {class: 'custom-control-input', type: 'checkbox'}),
-                $('<label>', {class: 'custom-control-label text-wrap w-100'})
-            ));
         $modalTestEmail
             .on('change', '#bookly-check-all-entities', function () {
                 $(':checkbox', $testNotificationsList).prop('checked', this.checked);
                 $(':checkbox:first-child', $testNotificationsList).trigger('change');
             })
-            .on('click', '[for=bookly-check-all-entities]', function (e) {
-                e.stopPropagation();
-            })
+            .on('click', '[for=bookly-check-all-entities]', function (e) { e.stopPropagation(); })
             .on('click', '.btn-success', function () {
-                var ladda = Ladda.create(this),
-                    data = $(this).closest('form').serializeArray();
+                const ladda = Ladda.create(this);
+                const data = $(this).closest('form').serializeArray();
                 ladda.start();
                 $(':checked', $testNotificationsList).each(function () {
-                    data.push({name: 'notification_ids[]', value: $(this).data('notification-id')});
+                    data.push({ name: 'notification_ids[]', value: $(this).data('notification-id') });
                 });
-                data.push({name: 'action', value: 'bookly_test_email_notifications'});
+                data.push({ name: 'action', value: 'bookly_test_email_notifications' });
                 $.ajax({
                     url: ajaxurl,
                     method: 'POST',
@@ -217,44 +198,34 @@ jQuery(function ($) {
                     success: function (response) {
                         ladda.stop();
                         if (response.success) {
-                            booklyAlert({success: [BooklyL10n.sentSuccessfully]});
+                            booklyAlert({ success: [BooklyL10n.sentSuccessfully] });
                             $modalTestEmail.booklyModal('hide');
                         }
                     }
                 });
             })
             .on('shown.bs.modal', function () {
-                let $send = $(this).find('.btn-success'),
-                    active = 0;
+                const $send = $(this).find('.btn-success');
+                let active = 0;
                 $send.prop('disabled', true);
                 $testNotificationsList.html('');
-                (dt.rows().data()).each(function (notification) {
-                    let $cloneCheck = $check.clone();
-
+                bt.getRows().forEach(function (notification) {
+                    const $cloneCheck = $check.clone();
                     $('label', $cloneCheck).html(notification.name).attr('for', 'bookly-n-' + notification.id)
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                        })
-                    ;
+                        .on('click', function (e) { e.stopPropagation(); });
                     $(':checkbox', $cloneCheck)
                         .prop('checked', notification.active == '1')
                         .attr('id', 'bookly-n-' + notification.id)
-                        .data('notification-id', notification.id)
-                    ;
-
+                        .data('notification-id', notification.id);
                     $testNotificationsList.append($cloneCheck);
-
-                    if (notification.active == '1') {
-                        active++;
-                    }
+                    if (notification.active == '1') active++;
                 });
                 $('.bookly-js-count', $modalTestEmail).html(active);
                 $send.prop('disabled', false);
             });
 
-        $testNotificationsList
-            .on('change', ':checkbox', function () {
-                $('.bookly-js-count', $modalTestEmail).html($(':checked', $testNotificationsList).length);
-            });
+        $testNotificationsList.on('change', ':checkbox', function () {
+            $('.bookly-js-count', $modalTestEmail).html($(':checked', $testNotificationsList).length);
+        });
     };
 });

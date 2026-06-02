@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 /**
  * @method static void renderDownloadButton() Render button for downloading invoice(s).
+ * @method static string getDownloadUrl() Get URL for downloading invoice(s).
  */
 abstract class Invoices extends Lib\Base\Proxy
 {

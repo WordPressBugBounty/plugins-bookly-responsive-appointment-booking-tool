@@ -16,11 +16,13 @@ class Page extends Lib\Base\Component
             Components\Cloud\LoginRequired\Page::render( __( 'Bookly Cloud Billing', 'bookly' ), self::pageSlug() );
         } else {
             self::enqueueStyles( array(
-                'alias' => array( 'bookly-backend-globals', ),
+                'alias'   => array( 'bookly-backend-globals', ),
+                'backend' => array( 'tailwind/tailwind.css' ),
             ) );
 
             self::enqueueScripts( array(
-                'module' => array( 'js/cloud-billing.js' => array( 'bookly-backend-globals' ), ),
+                'module'  => array( 'js/cloud-billing.js' => array( 'bookly-backend-globals' ), ),
+                'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
             ) );
 
             $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CLOUD_PURCHASES );
@@ -29,18 +31,19 @@ class Page extends Lib\Base\Component
 
             wp_localize_script( 'bookly-cloud-billing.js', 'BooklyL10n', array(
                 'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-                'processing' => __( 'Processing', 'bookly' ) . '…',
-                'emptyTable' => __( 'No data available in table', 'bookly' ),
-                'loadingRecords' => __( 'Loading...', 'bookly' ),
-                'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
-                'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
-                'invoice' => array(
-                    'button' => __( 'Invoice', 'bookly' ),
-                    'alert' => __( 'To generate an invoice you should fill in company information in Bookly Cloud settings -> Invoice', 'bookly' ),
-                    'link' => $cloud->account->getInvoiceLink(),
-                    'valid' => isset ( $invoice_data['company_name'], $invoice_data['company_address'] ) && $invoice_data['company_name'] != '' && $invoice_data['company_address'] != '',
+                'search'      => __( 'Quick search', 'bookly' ),
+                'datePicker'  => Lib\Utils\DateTime::datePickerOptions(),
+                'dateRange'   => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
+                'filters'     => array(
+                    'date' => __( 'Date', 'bookly' ),
                 ),
-                'datatables' => $datatables,
+                'invoice'     => array(
+                    'button' => __( 'Invoice', 'bookly' ),
+                    'alert'  => __( 'To generate an invoice you should fill in company information in Bookly Cloud settings -> Invoice', 'bookly' ),
+                    'link'   => $cloud->account->getInvoiceLink(),
+                    'valid'  => isset ( $invoice_data['company_name'], $invoice_data['company_address'] ) && $invoice_data['company_name'] != '' && $invoice_data['company_address'] != '',
+                ),
+                'datatables'  => $datatables,
             ) );
 
             self::renderTemplate( 'index', compact( 'datatables' ) );

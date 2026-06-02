@@ -98,16 +98,6 @@ abstract class Routines
                 ->fetchCol( 'id' );
         }
 
-        $timeout = (int) get_option( 'bookly_cloud_square_timeout' );
-        if ( $timeout ) {
-            // Get list of outdated unpaid Cloud Square payments
-            $payment_ids = array_merge( $payment_ids, Payment::query()
-                ->where( 'type', Payment::TYPE_CLOUD_SQUARE )
-                ->where( 'status', Payment::STATUS_PENDING )
-                ->whereLt( 'created_at', date_create( current_time( 'mysql' ) )->modify( sprintf( '- %s seconds', $timeout ) )->format( 'Y-m-d H:i:s' ) )
-                ->fetchCol( 'id' ) );
-        }
-
         // Mark unpaid appointments as rejected.
         $payment_ids = \Bookly\Lib\Payment\Proxy\Shared::prepareOutdatedUnpaidPayments( $payment_ids );
         if ( ! empty( $payment_ids ) ) {

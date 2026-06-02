@@ -29,7 +29,7 @@ use Bookly\Lib\Utils\Common;
                 </div>
                 <div class="ml-auto">
                     <?php Buttons::renderSubmit( null, 'bookly-js-save bookly-js-hide-on-loading' ) ?>
-                    <?php Buttons::renderCancel( __( 'Close', 'bookly' ) ) ?>
+                    <?php Buttons::renderCancel() ?>
                 </div>
             </div>
         </div>

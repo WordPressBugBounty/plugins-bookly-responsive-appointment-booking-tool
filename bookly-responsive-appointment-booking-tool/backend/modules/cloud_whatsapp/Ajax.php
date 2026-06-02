@@ -25,9 +25,19 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getMessagesList()
     {
-        $dates = explode( ' - ', self::parameter( 'range' ), 2 );
-        $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
-        $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        $filter = self::parameter( 'filter' );
+        $range  = $filter['range'];
+
+        if ( $range === 'any' ) {
+            $start = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '-100 year' ) ), 0 );
+            $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day' ) ), 0 );
+        } else {
+            $dates = explode( ' - ', $range, 2 );
+            $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
+            $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        }
+
+        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::WHATSAPP_DETAILS, null, null, $filter );
 
         wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->getMessagesList( $start, $end ) );
     }

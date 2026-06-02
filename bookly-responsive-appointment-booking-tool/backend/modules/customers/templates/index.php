@@ -6,84 +6,42 @@ use Bookly\Backend\Modules\Customers\Proxy;
 use Bookly\Lib\Utils\Common;
 /** @var array $datatable */
 ?>
-<div id="bookly-tbs" class="wrap">
+<div id="bookly-tbs" class="wrap bookly-css-root">
     <div class="form-row align-items-center mb-3">
         <h4 class="col m-0"><?php esc_html_e( 'Customers', 'bookly' ) ?></h4>
         <?php Support\Buttons::render( $self::pageSlug() ) ?>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="d-block d-lg-flex">
-                <div>
-                    <div class="form-group">
-                        <input class="form-control" type="text" id="bookly-filter" placeholder="<?php esc_attr_e( 'Quick search customers', 'bookly' ) ?>"/>
-                    </div>
-                </div>
-                <div class="flex-fill justify-content-end form-row">
-                    <?php Proxy\Pro::renderExportButton() ?>
-                    <?php Proxy\Pro::renderImportButton() ?>
-                    <div class="col-auto">
-                        <?php Buttons::render( 'bookly-new-customer', 'btn-success w-100 mb-3', __( 'New customer', 'bookly' ), array(), '<i class="fas fa-fw fa-plus"></i> {caption}…' ) ?>
-                    </div>
-                    <?php Dialogs\TableSettings\Dialog::renderButton( 'customers' ) ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <table id="bookly-customers-list" class="table table-striped w-100">
-                        <thead>
-                        <tr>
-                            <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
-                                <?php if ( $show ) : ?>
-                                    <th><?php echo Common::html( $datatable['titles'][ $column ] ) ?></th>
-                                <?php endif ?>
-                            <?php endforeach ?>
-                            <th></th>
-                        </tr>
-                        </thead>
-                    </table>
-
-                    <div class="form-row justify-content-end mt-3">
-                        <div class="col-auto">
-                            <button type="button" id="bookly-merge-with" class="btn btn-default" data-toggle="bookly-modal" data-target="#bookly-merge-dialog" disabled="disabled" style="display:none"><i class="fas fa-fw fa-road mr-lg-1"></i><span class="d-none d-lg-inline"><?php esc_html_e( 'Merge with', 'bookly' ) ?>…</span></button>
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" id="bookly-select-for-merge" class="btn btn-default"><i class="fas fa-fw fa-plus mr-lg-1"></i><span class="d-none d-lg-inline"><?php esc_html_e( 'Select for merge', 'bookly' ) ?>…</span></button>
-                        </div>
-                        <div class="col-auto pr-0">
-                            <?php Buttons::renderDelete( 'bookly-customers-list-delete-button' ) ?>
-                        </div>
-                    </div>
-
-                    <div id="bookly-merge-list" class="mt-3" style="display:none">
-                        <h4><?php esc_html_e( 'Merge list', 'bookly' ) ?></h4>
-                    </div>
-                </div>
-            </div>
+    <div class="bookly:card">
+        <div class="bookly:card-body">
+            <div id="bookly-customers-datatables"></div>
         </div>
-
-        <?php Proxy\Pro::renderImportDialog() ?>
-        <?php Proxy\Pro::renderExportDialog( $datatable['settings'], $datatable['titles'] ) ?>
-        <?php Dialogs\Customer\Delete\Dialog::render() ?>
-
-        <div id="bookly-merge-dialog" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"><?php esc_html_e( 'Merge customers', 'bookly' ) ?></h5>
-                        <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>&times;</span></button>
+    </div>
+    <div id="bookly-merge-dialog" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><?php esc_html_e( 'Merge customers', 'bookly' ) ?></h5>
+                    <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="bookly:mb-4">
+                    <?php esc_html_e( 'You are about to merge the selected customers. All appointments will be transferred to the chosen customer, and the other customer records will be removed.', 'bookly' ) ?>
                     </div>
-                    <div class="modal-body">
-                        <?php esc_html_e( 'You are about to merge customers from the merge list with the selected one. This will result in losing the merged customers and moving all their appointments to the selected customer. Are you sure you want to continue?', 'bookly' ) ?>
+                    <div class="bookly:mb-2">
+                    <?php esc_html_e( 'Please select the customer from the dropdown who will remain after the merge.', 'bookly' ) ?>
                     </div>
-                    <div class="modal-footer">
-                        <?php Buttons::render( 'bookly-merge', 'btn-danger', __( 'Merge', 'bookly' ), array(), '<span class="ladda-label"><i class="fas fa-fw fa-road mr-1"></i>{caption}</span>' ) ?>
-                        <?php Buttons::renderCancel() ?>
-                    </div>
+                    <div id="bookly-merge-customers-target"></div>
+                </div>
+                <div class="modal-footer">
+                    <?php Buttons::render( 'bookly-merge', 'btn-danger', __( 'Merge', 'bookly' ), array(), '<span class="ladda-label"><i class="fas fa-fw fa-road mr-1"></i>{caption}</span>' ) ?>
+                    <?php Buttons::renderCancel() ?>
                 </div>
             </div>
         </div>
     </div>
+    <?php Proxy\Pro::renderImportDialog() ?>
+    <?php Proxy\Pro::renderExportDialog( $datatable['settings'], $datatable['titles'] ) ?>
+    <?php Dialogs\Customer\Delete\Dialog::render() ?>
     <?php Dialogs\TableSettings\Dialog::render() ?>
     <?php Dialogs\Customer\Edit\Dialog::render() ?>
 </div>

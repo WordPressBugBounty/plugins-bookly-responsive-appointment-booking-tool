@@ -12,7 +12,7 @@ use Bookly\Backend\Components\Controls\Buttons;
                 <?php static::renderTemplate( '_modal_body', compact( 'self', 'gateway' ) ) ?>
             </div>
             <div class="modal-footer">
-                <?php Buttons::render( null, 'bookly-js-save btn-success', __( 'Save notification', 'bookly' ) ) ?>
+                <?php Buttons::render( null, 'bookly-js-save btn-success', __( 'Save', 'bookly' ) ) ?>
                 <?php Buttons::renderCancel() ?>
             </div>
         </div>

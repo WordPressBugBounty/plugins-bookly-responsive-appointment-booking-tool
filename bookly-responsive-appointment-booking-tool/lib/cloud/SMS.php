@@ -1,20 +1,22 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
+use Bookly\Lib\Config;
 use Bookly\Lib\Entities\SmsLog;
 use Bookly\Lib\Utils;
 
 class SMS extends Base
 {
-    const CANCEL_SENDER_ID = '/1.0/users/%token%/sender-ids/cancel'; //GET
-    const CHANGE_SMS_STATUS = '/1.0/users/%token%/sms';               //PATCH
-    const GET_PRICES = '/1.0/prices';                          //GET
-    const GET_SENDER_IDS_LIST = '/1.0/users/%token%/sender-ids';        //GET
-    const GET_SMS_LIST = '/1.1/users/%token%/sms-list';          //POST
-    const REQUEST_SENDER_ID = '/1.0/users/%token%/sender-ids';        //POST
-    const RESET_SENDER_ID = '/1.0/users/%token%/sender-ids/reset';  //GET
-    const SEND_SMS = '/1.1/users/%token%/sms';               //POST
-    const SEND_WIZARD_SMS = '/1.1/users/%token%/wizard/sms';               //POST
+    const CANCEL_SENDER_ID        = '/1.0/users/%token%/sender-ids/cancel'; //GET
+    const CHANGE_SMS_STATUS       = '/1.0/users/%token%/sms';               //PATCH
+    const GET_PRICES              = '/1.0/prices';                          //GET
+    const GET_SENDER_ID_COUNTRIES = '/1.0/sender-id-countries'; //GET
+    const GET_SENDER_IDS_LIST     = '/1.0/users/%token%/sender-ids';        //GET
+    const GET_SMS_LIST            = '/1.1/users/%token%/sms-list';          //POST
+    const REQUEST_SENDER_ID       = '/1.0/users/%token%/sender-ids';        //POST
+    const RESET_SENDER_ID         = '/1.0/users/%token%/sender-ids/reset';  //GET
+    const SEND_SMS                = '/1.1/users/%token%/sms';               //POST
+    const SEND_WIZARD_SMS         = '/1.1/users/%token%/wizard/sms';               //POST
 
     /** @var array */
     protected $sender_id;
@@ -169,10 +171,11 @@ class SMS extends Base
                     $date_time = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
                     $item['date'] = Utils\DateTime::formatDate( $date_time );
                     $item['time'] = Utils\DateTime::formatTime( $date_time );
-                    $item['message'] = nl2br( preg_replace( '/([^\s]{50})+/U', '$1 ', htmlspecialchars( $item['message'] ) ) );
+                    $item['message'] = preg_replace( '/([^\s]{50})+/U', '$1 ', htmlspecialchars( $item['message'] ) );
                     $item['phone'] = '+' . $item['phone'];
                     $item['charge'] = $item['charge'] === null ? '' : rtrim( $item['charge'], '0' );
                     $item['info'] = $item['info'] === null ? '' : nl2br( htmlspecialchars( $item['info'] ) );
+                    $item['status_code'] = (int) $item['status'];
                     switch ( $item['status'] ) {
                         case 1:
                         case 10:
@@ -254,6 +257,37 @@ class SMS extends Base
     }
 
     /**
+     * Get Sender ID countries.
+     *
+     * @return array
+     */
+    public function getSenderIdCountries()
+    {
+        $response = $this->api->sendGetRequest( self::GET_SENDER_ID_COUNTRIES );
+        if ( $response ) {
+            $locale = Config::getLocale();
+            $email  = $this->api->account->getUserName();
+            if ( ! $email ) {
+                $this->api->general->loadInfo();
+                $email = $this->api->account->getUserName();
+            }
+            foreach ( $response['list'] as &$item ) {
+                if ( $item['instruction'] !== null ) {
+                    $item['instruction'] = isset( $item['instruction'][ $locale ] ) && $item['instruction'][ $locale ] !== ''
+                        ? $item['instruction'][ $locale ]
+                        : $item['instruction']['en'];
+                    $item['instruction'] = str_replace( '%email%', $email, $item['instruction'] );
+                }
+            }
+            unset( $item );
+
+            return $response;
+        }
+
+        return array( 'success' => false, 'list' => array() );
+    }
+
+    /**
      * Get list of all requests for SENDER IDs.
      *
      * @return array
@@ -266,6 +300,7 @@ class SMS extends Base
             foreach ( $response['list'] as &$item ) {
                 $item['date'] = Utils\DateTime::formatDate( Utils\DateTime::UTCToWPTimeZone( $item['date'] ) );
                 $item['status_date'] = $item['status_date'] ? Utils\DateTime::formatDate( Utils\DateTime::UTCToWPTimeZone( $item['status_date'] ) ) : '';
+                $item['status_code'] = $item['status'];
                 switch ( $item['status'] ) {
                     case 0:
                         $item['status'] = __( 'Pending', 'bookly' );
@@ -293,12 +328,21 @@ class SMS extends Base
      * Request new SENDER ID.
      *
      * @param string $sender_id
+     * @param string $country
+     * @param string $document_code
      * @return array|false
      */
-    public function requestSenderId( $sender_id )
+    public function requestSenderId( $sender_id, $country = '', $document_code = '' )
     {
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendPostRequest( self::REQUEST_SENDER_ID, array( 'name' => $sender_id ) );
+            $params = array( 'name' => $sender_id );
+            if ( $country !== '' ) {
+                $params['country'] = $country;
+            }
+            if ( $document_code !== '' ) {
+                $params['document_code'] = $document_code;
+            }
+            $response = $this->api->sendPostRequest( self::REQUEST_SENDER_ID, $params );
             if ( $response ) {
 
                 return $response;
@@ -313,10 +357,11 @@ class SMS extends Base
      *
      * @return bool
      */
-    public function cancelSenderId()
+    public function cancelSenderId( array $ids = array() )
     {
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendGetRequest( self::CANCEL_SENDER_ID );
+            $data = array( 'ids' => implode( ',', $ids ) );
+            $response = $this->api->sendGetRequest( self::CANCEL_SENDER_ID, $data );
             if ( $response ) {
 
                 return true;

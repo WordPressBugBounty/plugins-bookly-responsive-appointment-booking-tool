@@ -267,7 +267,6 @@ abstract class Component extends Cache
                     'areYouSure' => __( 'Are you sure?', 'bookly' ),
                 ),
                 'addons' => array(),
-                'cloud_products' => get_option( 'bookly_cloud_account_products', array() ),
                 'data' => (object) array(),
             ) ) );
         }

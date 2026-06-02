@@ -1,201 +1,291 @@
 jQuery(function ($) {
-    let $servicesList = $('#bookly-services-list'),
-        filters = {
-            category: $('#bookly-filter-category'),
-            search: $('#bookly-filter-search')
-        },
-        $deleteButton = $('#bookly-services-list-delete-button'),
-        $deleteModal = $('.bookly-js-delete-cascade-confirm'),
-        urlParts = document.URL.split('#'),
-        columns = []
-    ;
+    'use strict';
 
-    $('.bookly-js-select').val(null);
+    const table = 'services';
+    const $servicesList = $('#bookly-services-datatables');
+    const $deleteModal = $('.bookly-js-delete-cascade-confirm');
+    const urlParts = document.URL.split('#');
 
-    // Apply filter from anchor
+    /**
+     * Restore initial filter values from URL anchor or saved user_meta.
+     * URL anchor wins (e.g. ?#category=42 deep-link).
+     */
+    let categoryValue = '';
+    const savedFilter = BooklyL10n.datatables[table].settings.filter || {};
+
     if (urlParts.length > 1) {
         urlParts[1].split('&').forEach(function (part) {
-            var params = part.split('=');
-            $('#bookly-filter-' + params[0]).val(params[1]);
+            const params = part.split('=');
+            if (params[0] === 'category') categoryValue = params[1] || '';
         });
-    } else {
-        $.each(BooklyL10n.datatables.services.settings.filter, function (field, value) {
-            if (value != '') {
-                $('#bookly-filter-' + field).val(value);
-            }
-            // check if select has correct values
-            if ($('#bookly-filter-' + field).prop('type') == 'select-one') {
-                if ($('#bookly-filter-' + field + ' option[value="' + value + '"]').length == 0) {
-                    $('#bookly-filter-' + field).val(null);
-                }
-            }
-        });
+    } else if (savedFilter.category) {
+        categoryValue = String(savedFilter.category);
+    }
+
+    const categoryOptions = (BooklyL10n.categories || []).map(function (c) {
+        return { value: String(c.id), label: c.name };
+    });
+
+    // If saved category id is no longer in the options list (deleted), drop it.
+    if (categoryValue && !categoryOptions.some(function (o) { return o.value === categoryValue; })) {
+        categoryValue = '';
     }
 
     /**
      * Init Columns.
      */
+    let columns = [];
+
     if (BooklyL10n.show_type) {
         columns.push({
             data: null,
-            responsivePriority: 1,
+            name: '__type_icon',
+            permanent: true,
+            class: 'bookly:w-8',
+            show: true,
             orderable: false,
-            render: function (data, type, row, meta) {
+            render: function (data, type, row) {
                 return '<i class="' + row.type_icon + ' fa-fw" title="' + row.type + '"></i>';
             },
         });
     }
     columns.push({
         data: null,
-        responsivePriority: 1,
+        name: '__color_dot',
+        permanent: true,
+        class: 'bookly:w-8',
+        show: true,
         orderable: false,
-        render: function (data, type, row, meta) {
+        render: function (data, type, row) {
             return '<i class="fas fa-fw fa-circle" style="color:' + row.color + ';">';
         }
     });
 
-    $.each(BooklyL10n.datatables.services.settings.columns, function (column, show) {
-        if (show) {
-            switch (column) {
-                case 'category_id':
-                    columns.push({
-                        data: column,
-                        render: function (data, type, row, meta) {
-                            if (row.category != null) {
-                                return BooklyL10n.categories.find(function (category) {
-                                    return category.id === row.category;
-                                }).name;
-                            } else {
-                                return BooklyL10n.uncategorized;
-                            }
+    $.each(BooklyL10n.datatables[table].settings.columns, function (column, show) {
+        switch (column) {
+            case 'category_id':
+                columns.push({
+                    data: column,
+                    render: function (data, type, row) {
+                        if (row.category != null) {
+                            return BooklyL10n.categories.find(function (category) {
+                                return category.id === row.category;
+                            }).name;
                         }
-                    });
-                    break;
-                case 'online_meetings':
-                    columns.push({
-                        data: column,
-                        render: function (data, type, row, meta) {
-                            switch (data) {
-                                case 'zoom':
-                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Zoom</span>';
-                                case 'google_meet':
-                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Meet</span>';
-                                case 'jitsi':
-                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Jitsi Meet</span>';
-                                case 'bbb':
-                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> BigBlueButton</span>';
-                                case 'teams':
-                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Teams</span>';
-                                default:
-                                    return '';
-                            }
+                        return BooklyL10n.uncategorized;
+                    }
+                });
+                break;
+            case 'image':
+                // Image is rendered inline inside the Title cell; skip its own column.
+                return;
+            case 'title':
+                columns.push({
+                    data: column,
+                    render: function (data, type, row) {
+                        const title = BooklyDatatables.escapeHtml(data);
+                        if (row.image) {
+                            return '<span class="bookly:inline-flex bookly:items-center bookly:gap-2 bookly:align-middle"><img class="bookly:datatable-thumb" src="' + row.image + '"/>' + title + '</span>';
                         }
-                    });
-                    break;
-                case 'tags':
-                    columns.push({
-                        data: 'tags',
-                        render: function (data, type, row, meta) {
-                            if (data) {
-                                let text = '';
-                                JSON.parse(data).forEach(function (tag) {
-                                    let color = '#000';
-                                    if (BooklyProL10nServiceEditDialog && BooklyProL10nServiceEditDialog.tags) {
-                                        let _tag = BooklyProL10nServiceEditDialog.tags.tagsList.find(function (t) {
-                                            return t.tag.toLowerCase() === tag.toLowerCase()
-                                        });
-                                        if (_tag) {
-                                            color = BooklyProL10nServiceEditDialog.tags.colors[_tag.color_id];
-                                        }
-                                    }
-                                    text += '<span class="badge p-2 mb-1 text-white" style="background-color: ' + color + '">' + $.fn.dataTable.render.text().display(tag) + '</span> ';
+                        return title;
+                    }
+                });
+                break;
+            case 'online_meetings':
+                columns.push({
+                    data: column,
+                    render: function (data) {
+                        switch (data) {
+                            case 'zoom':        return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Zoom</span>';
+                            case 'google_meet': return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Meet</span>';
+                            case 'jitsi':       return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Jitsi Meet</span>';
+                            case 'bbb':         return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> BigBlueButton</span>';
+                            case 'teams':       return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Microsoft Teams</span>';
+                            default:            return '';
+                        }
+                    }
+                });
+                break;
+            case 'tags':
+                columns.push({
+                    data: 'tags',
+                    render: function (data) {
+                        if (!data) return '';
+                        let text = '<div class="bookly:flex bookly:flex-wrap bookly:gap-1">';
+                        JSON.parse(data).forEach(function (tag) {
+                            let color = '#000';
+                            if (BooklyProL10nServiceEditDialog && BooklyProL10nServiceEditDialog.tags) {
+                                const _tag = BooklyProL10nServiceEditDialog.tags.tagsList.find(function (t) {
+                                    return t.tag.toLowerCase() === tag.toLowerCase();
                                 });
-                                return text;
+                                if (_tag) {
+                                    color = BooklyProL10nServiceEditDialog.tags.colors[_tag.color_id];
+                                }
                             }
-                            return '';
-                        }
-                    });
-                    break;
-                default:
-                    columns.push({data: column, render: $.fn.dataTable.render.text()});
-                    break;
-            }
+                            text += '<span class="badge p-2 text-white" style="background-color: ' + color + '">' + BooklyDatatables.escapeHtml(tag) + '</span>';
+                        });
+                        return text + '</div>';
+                    }
+                });
+                break;
+            case 'duration':
+            case 'price':
+                columns.push({
+                    data: column,
+                    searchable: false,
+                    render: function (data) { return BooklyDatatables.escapeHtml(data); }
+                });
+                break;
+            default:
+                columns.push({
+                    data: column,
+                    render: function (data) { return BooklyDatatables.escapeHtml(data); }
+                });
+                break;
         }
-    });
-    columns.push({
-        data: null,
-        responsivePriority: 2,
-        orderable: false,
-        searchable: false,
-        render: function (data, type, row, meta) {
-            return data.disabled ? '' : '<div class="d-inline-flex"><button type="button" class="btn btn-default mr-1" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button><button type="button" class="btn btn-default ladda-button" data-action="duplicate" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666"><span class="ladda-label"><i class="far fa-fw fa-clone mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.duplicate + '…</span></span></button></div>';
-        }
+        columns[columns.length - 1].title = BooklyL10n.datatables[table].titles[column] || column;
+        columns[columns.length - 1].name = column;
+        columns[columns.length - 1].show = show;
     });
 
     /**
      * Init DataTables.
      */
-    var dt = booklyDataTables.init($servicesList, BooklyL10n.datatables.services.settings, {
+    let bt = BooklyDatatables.showForm('bookly-' + table + '-datatables', {
         ajax: {
             url: ajaxurl,
             method: 'POST',
             data: function (d) {
-                let data = $.extend({
+                return $.extend({
                     action: 'bookly_get_services',
                     csrf_token: BooklyL10nGlobal.csrf_token,
-                    filter: {}
+                    filter: { category: categoryValue }
                 }, d);
-                Object.keys(filters).map(function (filter) {data.filter[filter] = filters[filter].val();});
-
-                return data;
-            }
+            },
         },
         columns: columns,
-        rowCallback: function (row, data) {
-            if (data.disabled) {
-                $(row).addClass('text-muted');
-            }
+        tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+        rowClass: function (row) {
+            return row.disabled ? 'bookly:text-gray-400' : '';
         },
-        add_checkbox_column: true
+        edit: function (row) {
+            $(document.body).trigger('service.edit', [row.id]);
+        },
+        checked: function (rows) {
+            const actions = [];
+            if (rows.length === 1) {
+                actions.push({
+                    label: BooklyL10n.duplicate,
+                    icon: 'copy',
+                    variant: 'outline',
+                    click: function (selected) {
+                        if (!confirm(BooklyL10n.are_you_sure + '\n\n' + BooklyL10n.private_warning)) return;
+                        bt.setLoading(true);
+                        $.post(
+                            ajaxurl,
+                            {
+                                action: 'bookly_duplicate_service',
+                                service_id: selected[0].id,
+                                csrf_token: BooklyL10nGlobal.csrf_token,
+                            },
+                            function (response) {
+                                if (response.success) {
+                                    bt.reload();
+                                    BooklyServiceOrderDialogL10n.services.push({ id: response.data.id, title: response.data.title });
+                                } else {
+                                    requiredBooklyPro();
+                                }
+                                bt.setLoading(false);
+                            }
+                        );
+                    }
+                });
+            }
+            actions.push({
+                label: BooklyL10n.delete,
+                icon: 'trash',
+                variant: 'destructive',
+                click: function () { $deleteModal.booklyModal('show'); }
+            });
+            return actions;
+        },
+        filters: [
+            {
+                type: 'select',
+                name: 'category',
+                label: BooklyL10n.filters.category,
+                initialValue: categoryValue,
+                searchPlaceholder: BooklyL10n.filters.searchPlaceholder,
+                options: categoryOptions,
+                onChange: function (v) { categoryValue = v; },
+            },
+        ],
+        saveSettings: function (settings) {
+            $.post(
+                ajaxurl,
+                Object.assign(
+                    {
+                        action: 'bookly_update_table_settings',
+                        table: table,
+                        csrf_token: BooklyL10nGlobal.csrf_token
+                    },
+                    settings
+                )
+            );
+        },
+        topToolbar: (function () {
+            const buttons = [];
+            buttons.push({
+                label: BooklyL10n.order,
+                icon: 'list-ordered',
+                variant: 'outline',
+                click: function () { $('#bookly-service-order-modal').booklyModal('show'); }
+            });
+            if (BooklyL10n.proEnabled) {
+                buttons.push({
+                    label: BooklyL10n.tags,
+                    icon: 'tag',
+                    variant: 'outline',
+                    click: function () { $('#bookly-service-tags-modal').booklyModal('show'); }
+                });
+            }
+            buttons.push({
+                label: BooklyL10n.manage_categories,
+                icon: 'folder',
+                variant: 'outline',
+                click: function () { $('#bookly-service-categories-modal').booklyModal('show'); }
+            });
+            buttons.push({
+                id: 'bookly-new-service',
+                label: BooklyL10n.new_service,
+                icon: 'plus',
+                variant: 'default',
+                click: function () { $('#bookly-create-service-modal').booklyModal('show'); }
+            });
+            return buttons;
+        })(),
+        searchFilter: {
+            placeholder: BooklyL10n.search,
+            name: 'filter[search]',
+        }
     });
 
     /**
-     * On filter search change.
+     * Delete confirm dialog.
      */
-    function onChangeFilter() {
-        dt.ajax.reload();
-    }
+    $('.bookly-js-delete', $deleteModal).on('click', function () {
+        const data = {
+            action: 'bookly_remove_services',
+            csrf_token: BooklyL10nGlobal.csrf_token,
+        };
+        const ladda = rangeTools.ladda(this);
+        const service_ids = bt.getCheckedRows().map(function (row) { return row.id; });
 
-    filters.search
-        .on('keyup', onChangeFilter)
-        .on('keydown', function (e) {
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                return false;
-            }
-        })
-    ;
-    filters.category
-        .on('change', onChangeFilter);
-
-    $('.bookly-js-delete', $deleteModal).on('click', function (e) {
-        e.preventDefault();
-        let data = {
-                action: 'bookly_remove_services',
-                csrf_token: BooklyL10nGlobal.csrf_token,
-            },
-            ladda = rangeTools.ladda(this),
-            service_ids = [],
-            $checkboxes = $servicesList.find('tbody input:checked');
-
-        $checkboxes.each(function () {
-            service_ids.push(dt.row($(this).closest('td')).data().id);
-        });
         data['service_ids[]'] = service_ids;
 
         $.post(ajaxurl, data, function () {
-            dt.rows($checkboxes.closest('td')).remove().draw();
             $(document.body).trigger('service.deleted', [service_ids]);
+            bt.reload();
             ladda.stop();
             $deleteModal.booklyModal('hide');
         });
@@ -203,49 +293,6 @@ jQuery(function ($) {
 
     $('.bookly-js-edit', $deleteModal).on('click', function () {
         rangeTools.ladda(this);
-        window.location.href = BooklyL10n.appointmentsUrl + '#service=' + dt.row($servicesList.find('tbody input:checked')[0].closest('td')).data().id;
+        window.location.href = BooklyL10n.appointmentsUrl + '#service=' + bt.getCheckedRows()[0].id;
     });
-
-    $deleteButton.on('click', function () {
-        $deleteModal.booklyModal('show');
-    });
-
-    $servicesList.on('click', '[data-action="duplicate"]', function () {
-        if (confirm(BooklyL10n.are_you_sure + "\n\n" + BooklyL10n.private_warning)) {
-            let ladda = rangeTools.ladda(this),
-                $tr = $(this).closest('tr'),
-                data = $servicesList.DataTable().row($tr.hasClass('child') ? $tr.prev() : $tr).data();
-            $.post(
-                ajaxurl,
-                {
-                    action: 'bookly_duplicate_service',
-                    service_id: data.id,
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                },
-                function (response) {
-                    if (response.success) {
-                        dt.ajax.reload(null, false);
-                        BooklyServiceOrderDialogL10n.services.push({id: response.data.id, title: response.data.title});
-                    } else {
-                        requiredBooklyPro();
-                    }
-                    ladda.stop();
-                }
-            );
-        }
-    });
-
-    $('.bookly-js-select')
-        .booklySelect2({
-            width: '100%',
-            theme: 'bootstrap4',
-            dropdownParent: '#bookly-tbs',
-            allowClear: true,
-            placeholder: '',
-            language: {
-                noResults: function () {
-                    return BooklyL10n.noResultFound;
-                }
-            }
-        });
 });

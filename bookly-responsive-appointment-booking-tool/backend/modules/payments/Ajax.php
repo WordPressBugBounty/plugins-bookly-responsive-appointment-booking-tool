@@ -41,8 +41,6 @@ class Ajax extends Lib\Base\Ajax
         }
         $payments = $query->fetchArray();
 
-        unset( $filter['created_at'], $filter['start_date'] );
-
         Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::PAYMENTS, null, null, $filter );
 
         $data = array();
@@ -70,6 +68,7 @@ class Ajax extends Lib\Base\Ajax
                     : ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly' ) ),
                 'paid' => $paid_title,
                 'status' => Lib\Entities\Payment::statusToString( $payment['status'] ),
+                'status_code' => $payment['status'],
                 'subtotal' => Lib\Utils\Price::format( $details['subtotal']['price'] ),
             );
 
@@ -127,6 +126,7 @@ class Ajax extends Lib\Base\Ajax
         $query
             ->leftJoin( 'Service', 's', $service_join_query )
             ->leftJoin( 'Staff', 'st', $staff_join_query )
+            ->leftJoin( 'Customer', 'pc', 'pc.id = p.customer_id' )
             ->where( 'p.parent_id', null )
             ->groupBy( 'p.id' );
 
@@ -137,12 +137,18 @@ class Ajax extends Lib\Base\Ajax
             $query->whereBetween( 'p.created_at', $start, $end );
         }
 
-        if ( $filter['id'] != '' ) {
-            $query->where( 'p.id', $filter['id'] );
+        if ( ! empty( $filter['search'] ) ) {
+            $like = '%' . $filter['search'] . '%';
+            // p.details is a JSON blob — covers cases where the service name only lives there
+            // (events, packages, gift cards) and never reaches services.title.
+            $query->whereRaw(
+                'p.id LIKE %s OR pc.full_name LIKE %s OR pc.email LIKE %s OR pc.phone LIKE %s OR c.full_name LIKE %s OR st.full_name LIKE %s OR s.title LIKE %s OR p.details LIKE %s OR p.total LIKE %s OR (p.paid + p.child_paid) LIKE %s',
+                array( $like, $like, $like, $like, $like, $like, $like, $like, $like, $like )
+            );
         }
 
-        if ( $filter['type'] != '' ) {
-            $query->where( 'p.type', $filter['type'] );
+        if ( isset( $filter['type'] ) && is_array( $filter['type'] ) && count( $filter['type'] ) !== count( Lib\Entities\Payment::getTypes() ) && count( $filter['type'] ) !== 0 ) {
+            $query->whereIn( 'p.type', $filter['type'] );
         }
 
         if ( $filter['staff'] != '' ) {
@@ -153,8 +159,14 @@ class Ajax extends Lib\Base\Ajax
             $query->where( 's.id', $filter['service'] );
         }
 
-        if ( $filter['status'] != '' ) {
-            $query->where( 'p.status', $filter['status'] );
+        $all_statuses = array(
+            Lib\Entities\Payment::STATUS_COMPLETED,
+            Lib\Entities\Payment::STATUS_PENDING,
+            Lib\Entities\Payment::STATUS_REJECTED,
+            Lib\Entities\Payment::STATUS_REFUNDED,
+        );
+        if ( isset( $filter['status'] ) && is_array( $filter['status'] ) && count( $filter['status'] ) !== count( $all_statuses ) && count( $filter['status'] ) !== 0 ) {
+            $query->whereIn( 'p.status', $filter['status'] );
         }
 
         if ( $filter['customer'] != '' ) {

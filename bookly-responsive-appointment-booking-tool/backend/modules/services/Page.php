@@ -14,6 +14,7 @@ class Page extends Lib\Base\Ajax
         self::enqueueStyles( array(
             'wp' => array( 'wp-color-picker' ),
             'alias' => array( 'bookly-backend-globals' ),
+            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
@@ -21,6 +22,7 @@ class Page extends Lib\Base\Ajax
             'backend' => array(
                 'js/range-tools.js' => array( 'bookly-backend-globals' ),
                 'js/sortable.min.js',
+                'js/bookly-datatables.js' => array( 'bookly-backend-globals' ),
             ),
             'module' => array( 'js/services-list.js' => array( 'bookly-range-tools.js' ) ),
         ) );
@@ -36,8 +38,8 @@ class Page extends Lib\Base\Ajax
             'are_you_sure' => esc_attr__( 'Are you sure?', 'bookly' ),
             'appointmentsUrl' => Lib\Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Appointments\Ajax::pageSlug() ),
             'private_warning' => esc_attr__( 'The service will be created with the visibility of Private.', 'bookly' ),
-            'edit' => esc_attr__( 'Edit', 'bookly' ),
-            'duplicate' => esc_attr__( 'Duplicate', 'bookly' ),
+            'edit' => esc_attr__( 'Edit', 'bookly' ) . '…',
+            'duplicate' => esc_attr__( 'Duplicate', 'bookly' ) . '…',
             'reorder' => esc_attr_x( 'Reorder', 'order of elements', 'bookly' ),
             'categories' => $categories,
             'uncategorized' => esc_attr__( 'Uncategorized', 'bookly' ),
@@ -45,8 +47,19 @@ class Page extends Lib\Base\Ajax
             'zeroRecords' => __( 'No matching records found', 'bookly' ),
             'processing' => esc_attr__( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'show_type' => count( Proxy\Shared::prepareServiceTypes( array() ) ) > 0,
+            'new_service' => __( 'New service', 'bookly' ) . '…',
+            'search' => __( 'Quick search by title, category', 'bookly' ) . '…',
+            'delete' => __( 'Delete', 'bookly' ) . '…',
+            'order' => _x( 'Order', 'drag to reorder', 'bookly' ) . '…',
+            'tags' => __( 'Tags', 'bookly' ) . '…',
+            'manage_categories' => __( 'Categories', 'bookly' ) . '…',
+            'filters' => array(
+                'category' => __( 'Category', 'bookly' ),
+                'searchPlaceholder' => __( 'Search', 'bookly' ) . '…',
+            ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
+            'proEnabled' => Lib\Config::proActive(),
             'datatables' => $datatables,
         ) );
 

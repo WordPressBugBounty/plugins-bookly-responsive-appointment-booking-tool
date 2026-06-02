@@ -249,10 +249,16 @@ class Ajax extends Lib\Base\Ajax
         ->order( 'DESC' );
 
         if ( Lib\Config::proActive() ) {
-            $query->addSelect( 'c.country AS client_country, c.state AS client_state, c.postcode AS client_postcode, c.city AS client_city, c.street AS client_street, c.street_number AS client_street_number, c.additional_address AS client_additional_address, gc.code AS gift_card_code' )
-                ->leftJoin( 'GiftCard', 'gc', 'gc.id = p.gift_card_id', '\BooklyPro\Lib\Entities' );
+            $query->addSelect( 'c.country AS client_country, c.state AS client_state, c.postcode AS client_postcode, c.city AS client_city, c.street AS client_street, c.street_number AS client_street_number, c.additional_address AS client_additional_address' );
         } else {
-            $query->addSelect( 'null AS client_country, null AS client_state, null AS client_postcode, null AS client_city, null AS client_street, null AS client_street_number, null AS client_additional_address, null AS gift_card_code' );
+            $query->addSelect( 'null AS client_country, null AS client_state, null AS client_postcode, null AS client_city, null AS client_street, null AS client_street_number, null AS client_additional_address' );
+        }
+
+        if ( Lib\Config::giftCardsActive() ) {
+            $query->addSelect( 'gc.code AS gift_card_code' )
+                ->leftJoin( 'GiftCard', 'gc', 'gc.id = p.gift_card_id', '\BooklyGiftCards\Lib\Entities' );
+        } else {
+            $query->addSelect( 'null AS gift_card_code' );
         }
 
         if ( Lib\Config::locationsActive() ) {

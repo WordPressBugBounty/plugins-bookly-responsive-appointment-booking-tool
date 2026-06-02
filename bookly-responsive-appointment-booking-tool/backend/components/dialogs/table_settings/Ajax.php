@@ -55,15 +55,37 @@ class Ajax extends Lib\Base\Ajax
     {
         $table = self::parameter( 'table' );
 
+        if ( ! in_array( $table, self::$tables ) ) {
+            wp_send_json_success();
+        }
+
         $meta = get_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', true ) ?: array();
+
+        // Each field is updated only when explicitly sent — lets callers persist a partial
+        // payload (e.g. only "filter") without clobbering the other keys to defaults.
         if ( self::hasParameter( 'page_length' ) ) {
             $meta['page_length'] = self::parameter( 'page_length' );
         }
-        if ( in_array( $table, self::$tables ) ) {
+        if ( self::hasParameter( 'columns' ) ) {
             $meta['columns'] = self::parameter( 'columns', array() );
             array_walk( $meta['columns'], function( &$show ) { $show = (bool) $show; } );
-            update_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', $meta );
         }
+        if ( self::hasParameter( 'appearance' ) ) {
+            $appearance = self::parameter( 'appearance', array() );
+            $meta['appearance'] = array(
+                'responsive_table' => ! empty( $appearance['responsive_table'] ),
+            );
+        }
+        if ( self::hasParameter( 'filter_json' ) ) {
+            // Sent as JSON string from Form.svelte to survive jQuery's empty-array drop;
+            // decode here back to an associative array for user_meta storage.
+            $decoded = json_decode( (string) self::parameter( 'filter_json' ), true );
+            $meta['filter'] = is_array( $decoded ) ? $decoded : array();
+        } elseif ( self::hasParameter( 'filter' ) ) {
+            $meta['filter'] = self::parameter( 'filter', array() );
+        }
+
+        update_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', $meta );
 
         wp_send_json_success();
     }

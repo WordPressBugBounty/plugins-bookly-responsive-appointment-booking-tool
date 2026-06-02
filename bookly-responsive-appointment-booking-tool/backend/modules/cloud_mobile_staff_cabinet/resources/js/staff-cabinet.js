@@ -1,165 +1,153 @@
 jQuery(function($) {
     'use strict';
 
-    let $keysList = $('#bookly-keys-list'),
-        $newToken = $('#bookly-js-new-key'),
-        $checkAllButton = $('#bookly-check-all'),
-        btn = {
-            copy_token: $('<button/>', {type: 'button',  class: 'btn btn-default', 'data-action': 'copy_token', title: BooklyL10n.copy_token }).append($('<i class="far fa-fw fa-copy mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.copy_token + '</span>').get(0).outerHTML,
-            copy_link: $('<button/>', {type: 'button',  class: 'btn btn-default mr-2 ml-2', 'data-action': 'copy_link', title: BooklyL10n.copy_link }).append($('<i class="fas fa-fw fa-link mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.copy_link + '</span>').get(0).outerHTML,
-            edit: $('<button/>', {type: 'button',  class: 'btn btn-default', 'data-action': 'edit', title: BooklyL10n.edit + '…' }).append($('<i class="far fa-fw fa-edit mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span>').get(0).outerHTML
-        },
-        $revokeButton = $('#bookly-keys-list-delete-button'),
-        columns = [],
-        app_auth_url = 'https://app.bookly.pro/?token='
-    ;
+    const cabinetTable = 'cloud_mobile_staff_cabinet';
+    const app_auth_url = 'https://app.bookly.pro/?token=';
+    let columns        = [];
 
-    $newToken
-        .on('click', function () {
-            BooklyGrantAuthDialog.showDialog({
-                id: null,
-                token: null,
-                staff_id: null,
-                wp_user_id: null
-            }, function() {
-                dt.ajax.reload(null, false);
-            });
-        });
-
-    $.each(BooklyL10n.datatables.cloud_mobile_staff_cabinet.settings.columns, function (column, show) {
-        if (show) {
-            switch (column) {
-                case 'token':
-                    columns.push({data: column, render: $.fn.dataTable.render.text(), class: 'text-monospace'});
-                    break;
-                case 'full_name':
-                    columns.push({
-                        data: column,
-                        render: function(data, type, row, meta) {
-                            if (row.wp_user_id) {
-                                return data + ' <span class="text-muted">(' + BooklyL10n.wp_user + ')</span>';
-                            }
-                            if (row.staff_id) {
-                                return data + ' <span class="text-muted">(' + BooklyL10n.staff + ')</span>';
-                            }
-                            return data;
+    $.each(BooklyL10n.datatables[cabinetTable].settings.columns, function(column, show) {
+        switch (column) {
+            case 'token':
+                columns.push({data: column, render: BooklyDatatables.escapeHtml(), class: 'bookly:font-mono'});
+                break;
+            case 'full_name':
+                columns.push({
+                    data: column,
+                    render: function(data, type, row) {
+                        let name = data ? String(data).replace(/[&<>"']/g, function(c) {
+                            return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'}[c];
+                        }) : '';
+                        if (row.wp_user_id) {
+                            return name + ' <span class="bookly:text-slate-400">(' + BooklyL10n.wp_user + ')</span>';
                         }
-                    });
-                    break;
-                default:
-                    columns.push({data: column, render: $.fn.dataTable.render.text()});
-                    break;
-            }
+                        if (row.staff_id) {
+                            return name + ' <span class="bookly:text-slate-400">(' + BooklyL10n.staff + ')</span>';
+                        }
+                        return name;
+                    }
+                });
+                break;
+            default:
+                columns.push({data: column, render: BooklyDatatables.escapeHtml()});
+                break;
         }
-    });
-    columns.push({
-        data: null,
-        responsivePriority: 1,
-        orderable: false,
-        searchable: false,
-        width: 90,
-        render: function (data, type, row, meta) {
-            return '<div class="d-flex">' + btn.copy_token + btn.copy_link + btn.edit + '</div>';
-        }
-    });
-    columns.push({
-        data: null,
-        responsivePriority: 1,
-        orderable: false,
-        searchable: false,
-        render: function (data, type, row, meta) {
-            return '<div class="custom-control custom-checkbox mt-1">' +
-                '<input value="' + row.token + '" id="bookly-dt-' + row.token + '" type="checkbox" class="custom-control-input">' +
-                '<label for="bookly-dt-' + row.token + '" class="custom-control-label"></label>' +
-                '</div>';
-        }
+        columns[columns.length - 1].title = BooklyL10n.datatables[cabinetTable].titles[column] || column;
+        columns[columns.length - 1].name  = column;
+        columns[columns.length - 1].show  = show;
     });
 
-    /**
-     * Init DataTables.
-     */
-
-    var dt = booklyDataTables.init($keysList, BooklyL10n.datatables.cloud_mobile_staff_cabinet.settings,
-        {
-            ajax: {
-                url: ajaxurl,
-                type: 'POST',
-                data: {
+    let bt = BooklyDatatables.showForm('bookly-' + cabinetTable + '-datatables', {
+        serverSide: false,
+        ajax: {
+            url: ajaxurl,
+            method: 'POST',
+            data: function(d) {
+                return $.extend({}, d, {
                     action: 'bookly_cloud_mobile_staff_cabinet_get_access_tokens',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                }
-            },
-            columns: columns
-        }).on('change', function() {
-            $keysList.find('tbody input:checkbox').prop('checked', this.checked);
-        }).on('click', '[data-action=edit]', function() {
-            let row = booklyDataTables.getRowData(this, dt);
+                    csrf_token: BooklyL10nGlobal.csrf_token
+                });
+            }
+        },
+        columns: columns,
+        tableSettings: Object.assign({}, BooklyL10n.datatables[cabinetTable], {
+            l10n: Object.assign({}, BooklyL10n.datatables.l10n, {zeroRecords: BooklyL10n.zeroRecords})
+        }),
+        saveSettings: function(settings) {
+            $.post(ajaxurl, Object.assign({
+                action: 'bookly_update_table_settings',
+                table: cabinetTable,
+                csrf_token: BooklyL10nGlobal.csrf_token
+            }, settings));
+        },
+        topToolbar: [{
+            id: 'bookly-js-new-key',
+            label: BooklyL10n.new_token,
+            icon: 'plus',
+            click: function() {
+                BooklyGrantAuthDialog.showDialog({
+                    id: null,
+                    token: null,
+                    staff_id: null,
+                    wp_user_id: null
+                }, function() {
+                    bt.reload();
+                });
+            }
+        }],
+        edit: function(row) {
             BooklyGrantAuthDialog.showDialog({
                 id: row.id,
                 token: row.token,
                 staff_id: row.staff_id || null,
                 wp_user_id: row.wp_user_id || null,
-                name: row.full_name,
+                name: row.full_name
             }, function() {
-                dt.ajax.reload(null, false);
+                bt.reload();
             });
-        }).on('click', '[data-action=copy_token]', function() {
-            let row = booklyDataTables.getRowData(this, dt);
-            booklyCopyTextToClipboard(row.token);
-        }).on('click', '[data-action=copy_link]', function() {;
-            let row = booklyDataTables.getRowData(this, dt);
-            booklyCopyTextToClipboard(app_auth_url + row.token);
-        }).on('change', 'tbody input:checkbox', function () {
-            $checkAllButton.prop('checked', $keysList.find('tbody input:not(:checked)').length == 0);
-        })
-
-    function booklyCopyTextToClipboard(text) {
-        let $temp = $('<input/>', {type: 'text', value: text});
-        $('body').append($temp);
-        $temp.select();
-        document.execCommand('copy');
-        $temp.remove();
-        booklyAlert({success: [BooklyL10n.copied]});
-    }
-
-    $checkAllButton.on('change', function () {
-        $keysList.find('tbody input:checkbox').prop('checked', this.checked);
-    });
-
-    /**
-     * Revoke keys.
-     */
-    $revokeButton.on('click', function() {
-        booklyModal(BooklyL10n.areYouSure, BooklyL10n.revokeTokensMessage, BooklyL10n.cancel, BooklyL10n.revoke)
-            .on('bs.click.main.button', function(event, modal, mainButton) {
-                let ladda = Ladda.create(mainButton),
-                    data = [],
-                    $checkboxes = $('tbody input:checked', $keysList)
-                ;
-                ladda.start();
-                $checkboxes.each(function () {
-                    data.push(this.value);
-                });
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'bookly_cloud_mobile_staff_cabinet_revoke_access_tokens',
-                        csrf_token: BooklyL10nGlobal.csrf_token,
-                        keys: data
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        ladda.stop();
-                        if (response.success) {
-                            dt.rows($checkboxes.closest('td')).remove().draw();
-                            BooklyGrantAuthDialog.setStaffMembers(response.data.staff_members);
-                            modal.booklyModal('hide');
-                        } else {
-                            alert(response.data.message);
-                        }
+        },
+        checked: function(rows) {
+            const actions = [];
+            if (rows.length === 1) {
+                actions.push({
+                    label: BooklyL10n.copy_link,
+                    icon: 'copy',
+                    variant: 'outline',
+                    click: function(selected) {
+                        booklyCopyTextToClipboard(app_auth_url + (selected[0].token || ''));
                     }
                 });
+            }
+            actions.push({
+                label: BooklyL10n.revoke,
+                icon: 'trash',
+                variant: 'destructive',
+                click: function(selected) {
+                    booklyModal(BooklyL10n.areYouSure, BooklyL10n.revokeTokensMessage, BooklyL10n.cancel, BooklyL10n.revoke_confirm)
+                        .on('bs.click.main.button', function(event, modal, mainButton) {
+                            let ladda = Ladda.create(mainButton);
+                            ladda.start();
+                            let tokens = selected.map(function(r) { return r.token; });
+                            $.ajax({
+                                url: ajaxurl,
+                                type: 'POST',
+                                data: {
+                                    action: 'bookly_cloud_mobile_staff_cabinet_revoke_access_tokens',
+                                    csrf_token: BooklyL10nGlobal.csrf_token,
+                                    keys: tokens
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    ladda.stop();
+                                    if (response.success) {
+                                        BooklyGrantAuthDialog.setStaffMembers(response.data.staff_members);
+                                        bt.reload();
+                                        modal.booklyModal('hide');
+                                    } else {
+                                        booklyAlert({error: [response.data.message]});
+                                    }
+                                }
+                            });
+                        });
+                }
             });
+            return actions;
+        }
     });
+
+    function booklyCopyTextToClipboard(text) {
+        const done = () => booklyAlert({success: [BooklyL10n.copied]});
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(() => {});
+        } else {
+            // Fallback for insecure origins (HTTP) where navigator.clipboard is undefined.
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            done();
+        }
+    }
 });

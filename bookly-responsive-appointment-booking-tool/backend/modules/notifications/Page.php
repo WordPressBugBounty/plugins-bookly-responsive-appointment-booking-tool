@@ -14,11 +14,13 @@ class Page extends Lib\Base\Component
 
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
+            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/email-notifications.js' => array( 'bookly-backend-globals' ) ),
             'bookly' => array( 'backend/modules/cloud_sms/resources/js/notifications-list.js' => array( 'bookly-backend-globals' ), ),
+            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         Proxy\Shared::enqueueAssets();
@@ -33,12 +35,18 @@ class Page extends Lib\Base\Component
             'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'zeroRecordsAlt' => __( 'No matching records found', 'bookly' ),
-            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
             'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
             'edit' => __( 'Edit', 'bookly' ),
             'gateway' => 'email',
             'tab' => $tab,
+            'new_notification' => __( 'New notification', 'bookly' ) . '…',
+            'delete' => __( 'Delete', 'bookly' ) . '…',
+            'enable' => __( 'Enable', 'bookly' ),
+            'disable' => __( 'Disable', 'bookly' ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
+            'quick_search' => __( 'Quick search by name', 'bookly' ) . '…',
+            'zeroRecords' => __( 'No matching records found', 'bookly' ),
             'datatables' => $datatables,
         ) );
 

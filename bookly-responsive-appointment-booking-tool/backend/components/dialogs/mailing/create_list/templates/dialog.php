@@ -15,7 +15,7 @@ use Bookly\Backend\Components\Controls\Buttons;
                 </div>
             </div>
             <div class="modal-footer">
-                <?php Buttons::renderSubmit() ?>
+                <?php Buttons::renderSubmit( 'bookly-save', null, __( 'Create', 'bookly' ) ) ?>
                 <?php Buttons::renderCancel() ?>
             </div>
         </div>

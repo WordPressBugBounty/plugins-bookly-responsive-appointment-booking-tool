@@ -166,7 +166,6 @@ class Ajax extends Lib\Base\Ajax
                 case Account::PRODUCT_MOLLIE:
                 case Account::PRODUCT_PAYSON:
                 case Account::PRODUCT_PAYU_LATAM:
-                case Account::PRODUCT_SQUARE:
                 case Account::PRODUCT_STRIPE:
                 case Account::PRODUCT_STRIPE_CLASSIC:
                     if ( $status === 'activated' ) {
@@ -212,13 +211,6 @@ class Ajax extends Lib\Base\Ajax
                         );
                         wp_send_json_success( $data );
                     }
-                    break;
-                case Account::PRODUCT_GIFT:
-                    $data['button'] = array(
-                        'caption' => $texts['button'],
-                        'url' => add_query_arg( array( 'page' => 'bookly-cloud-gift-cards', 'tab' => 'card-types' ), admin_url( 'admin.php' ) ),
-                    );
-                    wp_send_json_success( $data );
                     break;
                 case Account::PRODUCT_ZAPIER:
                     $data['button'] = array(

@@ -9,8 +9,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:30+0000\n"
-"PO-Revision-Date: 2026-03-30 13:17+0000\n"
-"Last-Translator: \n"
+"PO-Revision-Date: 2026-05-29 12:25+0000\n"
+"Last-Translator: support@bookly.info\n"
 "Language-Team: Chinese (Taiwan)\n"
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
@@ -25,6 +25,11 @@ msgstr "來嘗試一下！"
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
 msgstr "\"%s\" 太長 (最多%d 字)。"
+
+#, php-format
+msgid "%d country"
+msgid_plural "%d countries"
+msgstr[0] "%d國家"
 
 #, php-format
 msgid "%d day"
@@ -272,9 +277,6 @@ msgstr "訪問令牌"
 msgid "Access token link for quick authorization in the mobile app"
 msgstr "移動應用中的快速授權訪問令牌鏈接"
 
-msgid "Access tokens"
-msgstr "訪問令牌"
-
 msgid "Account ID"
 msgstr "帳戶碼"
 
@@ -387,6 +389,9 @@ msgstr "添加其他"
 
 msgid "Add field"
 msgstr "添加欄目"
+
+msgid "Add filter"
+msgstr "添加篩選"
 
 msgid "Add gift card"
 msgstr "添加禮品卡"
@@ -865,9 +870,6 @@ msgstr "已經獲批"
 
 msgid "Approved appointments"
 msgstr "批准預約"
-
-msgid "Approved at"
-msgstr "在批准"
 
 msgid "Archive"
 msgstr "存檔"
@@ -1438,9 +1440,6 @@ msgstr "更改"
 msgid "Change password"
 msgstr "修改密碼"
 
-msgid "Change the sender's name to your phone number or any other name"
-msgstr "將發件人的姓名更改為您的電話號碼或其他名稱"
-
 msgid "Changes saved."
 msgstr "已保存更改。"
 
@@ -1541,6 +1540,12 @@ msgstr "清除所有日誌"
 
 msgid "Clear field"
 msgstr "清除字段"
+
+msgid "Clear filter"
+msgstr "清除篩選"
+
+msgid "Clear search"
+msgstr "清除搜索"
 
 #, php-format
 msgid "Click \"%s\" to create your first one"
@@ -1837,6 +1842,9 @@ msgstr "您可以幫我們一個大忙，在Wordpress中給我們五星評級嗎
 msgid "Counselling"
 msgstr "輔導"
 
+msgid "Countries marked with this icon require extra steps."
+msgstr "標有此圖標的國家需要額外步驟。"
+
 msgid "Country"
 msgstr "國家"
 
@@ -1882,14 +1890,8 @@ msgstr "建立另一張優惠券"
 msgid "Create customer"
 msgstr "新增客戶"
 
-msgid "Create new access token"
-msgstr "創建新訪問令牌"
-
 msgid "Create new appointment for every recurring booking"
 msgstr "為每個定期預約建立新預約"
-
-msgid "Create notification"
-msgstr "建立通知"
 
 msgid "Create online meetings"
 msgstr "進行網上會議"
@@ -1902,12 +1904,6 @@ msgstr "創建包裹"
 
 msgid "Create payment"
 msgstr "建立付款"
-
-msgid "Create service"
-msgstr "建立服務"
-
-msgid "Create staff"
-msgstr "建立員工"
 
 msgid "Create WordPress user"
 msgstr "創建WordPress用戶"
@@ -3053,6 +3049,9 @@ msgstr "客戶日曆的描述"
 msgid "Design consultants"
 msgstr "設計顧問"
 
+msgid "Destination country"
+msgstr "目的國"
+
 msgid ""
 "Destination URL where Zoom will send the access token after the user "
 "completes the OAuth authentication"
@@ -3201,6 +3200,9 @@ msgstr "已完成"
 msgid "Download"
 msgstr "下載"
 
+msgid "Download all invoices"
+msgstr "下載所有發票"
+
 msgid "Download filtered invoices"
 msgstr "下載篩選後的發票"
 
@@ -3215,6 +3217,10 @@ msgstr "下載發票"
 
 msgid "Download selected invoices"
 msgstr "下載選定發票"
+
+msgctxt "drag to reorder"
+msgid "Order"
+msgstr "順序"
 
 msgid "Driving Instructors"
 msgstr "駕駛教練"
@@ -3257,7 +3263,6 @@ msgid ""
 "code. Once the trial ends, purchase code activation is required."
 msgstr "在試用期內，您無需輸入購買代碼即可使用附加組件。在試用期結束後，需要激活購買代碼。"
 
-#, fuzzy
 #| msgid ""
 #| "During the trial period, you will have full access to all features of "
 #| "this product  completely free of charge."
@@ -3329,10 +3334,11 @@ msgstr "編輯包裹預約"
 msgid "Edit service"
 msgstr "編輯服務"
 
-msgid "Edit sms notification"
+#| msgid "Edit sms notification"
+msgid "Edit SMS notification"
 msgstr "編輯SMS通知"
 
-msgid "Edit staff"
+msgid "Edit staff member"
 msgstr "編輯員工"
 
 msgid "Edit Status"
@@ -3576,7 +3582,6 @@ msgid ""
 "accordance with Bookly data."
 msgstr "根據Bookly資料在您的Mailchimp觀眾設定中輸入欄位的標籤。"
 
-#, fuzzy
 #| msgid "Enter the URL of the page where this forms shortcode is placed."
 msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "輸入放置此表單短代碼的頁面的URL。"
@@ -3593,12 +3598,6 @@ msgstr "輸入來自電子郵件的驗證碼"
 
 msgid "Enter verification code from SMS"
 msgstr "輸入來自SMS的驗證碼"
-
-msgid ""
-"Enter your iCloud email and the app-specific password in Edit Staff > "
-"Advanced > Apple Calendar."
-msgstr ""
-"在 編輯員工 > 高級 > Apple Calendar 中輸入您的iCloud電郵和應用專用密碼。\n"
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "輸入您的購買代碼以獲得Bookly附加組件或捆綁件"
@@ -3760,6 +3759,9 @@ msgstr "已失敗"
 msgid "Failed to create an online meeting"
 msgstr "創建線上會議失敗"
 
+msgid "Failed to load data"
+msgstr "加載資料失敗"
+
 msgid "Failed to send SMS."
 msgstr "傳送SMS短訊失敗。"
 
@@ -3798,6 +3800,9 @@ msgstr "不允許文件擴展名"
 
 msgid "Files"
 msgstr "文件"
+
+msgid "Filter"
+msgstr "篩選"
 
 msgid "Filter events"
 msgstr "篩選活動"
@@ -3948,9 +3953,6 @@ msgstr "一般設置"
 msgid "Generate"
 msgstr "生成"
 
-msgid "Generate a new app-specific password for Bookly."
-msgstr "為Bookly生成新的應用專用密碼。"
-
 #, php-format
 msgid "Generate an app-specific password at %s"
 msgstr "在%s生成一個應用專用密碼"
@@ -3998,17 +4000,11 @@ msgstr "禮品卡生效日期"
 msgid "Gift Cards"
 msgstr "禮品卡"
 
-msgid "Gift cards"
-msgstr "禮品卡"
-
 msgid "Gift cards settings"
 msgstr "禮品卡設定"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "提供的電子郵件地址已經訂閱，謝謝！"
-
-msgid "Go to appleid.apple.com and sign in with your Apple ID."
-msgstr "前往appleid.apple.com並使用您的Apple ID登入。"
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4712,6 +4708,9 @@ msgstr "隱藏留言"
 
 msgid "Hide form borders"
 msgstr "隱藏表單邊框"
+
+msgid "Hide list"
+msgstr "隱藏列表"
 
 msgid "Hide services step"
 msgstr "隱藏服務步驟"
@@ -5540,9 +5539,6 @@ msgstr "時間無效"
 msgid "Invert datepicker colors"
 msgstr "反轉日期選擇器顏色"
 
-msgid "Invite"
-msgstr "邀請"
-
 msgid "INVOICE"
 msgstr "發票"
 
@@ -5627,6 +5623,9 @@ msgstr "加入"
 msgid "Join online meeting"
 msgstr "參加網上會議"
 
+msgid "Jump to today"
+msgstr "跳到今天"
+
 msgid "Just to help us spread the word and boost our motivation."
 msgstr "這樣可以幫助我們建立口碑，並加強我們的動力。"
 
@@ -5644,6 +5643,9 @@ msgstr "過去30天"
 
 msgid "Last 7 days"
 msgstr "過去7天"
+
+msgid "Last 90 days"
+msgstr "過去90天"
 
 msgid "Last appointment"
 msgstr "最後一個預約"
@@ -5923,14 +5925,8 @@ msgstr "合併"
 msgid "Merge customers"
 msgstr "合併客戶"
 
-msgid "Merge list"
-msgstr "合併名單"
-
 msgid "Merge repeating custom fields for multiple bookings of the service"
 msgstr "合併多次預約服務重複的自定義字段"
-
-msgid "Merge with"
-msgstr "合併"
 
 msgid "Message"
 msgstr "訊息"
@@ -6054,9 +6050,6 @@ msgstr "員工分類名稱"
 msgid "Name of ticket type"
 msgstr "門票類型名稱"
 
-msgid "Navigate to Sign-In and Security > App-Specific Passwords."
-msgstr "前往 登入和安全 > 應用專用密碼。"
-
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6150,8 +6143,12 @@ msgstr "新密碼"
 msgid "New recurring booking notification"
 msgstr "新的定期預約通知"
 
-msgid "New sms notification"
-msgstr "新短信通知"
+msgid "New service"
+msgstr "新服務"
+
+#| msgid "New sms notification"
+msgid "New SMS notification"
+msgstr "新SMS通知"
 
 msgid "New staff account role"
 msgstr "新員工賬戶角色"
@@ -6237,6 +6234,12 @@ msgstr "沒有約會找到。"
 
 msgid "No appointments."
 msgstr "沒有預約。"
+
+msgid "No columns match"
+msgstr "沒有列匹配"
+
+msgid "No country found."
+msgstr "沒有找到國家。"
 
 msgid "No coupons found."
 msgstr "沒有找到優惠券。"
@@ -6650,6 +6653,12 @@ msgstr "同一天"
 
 msgid "On waiting list"
 msgstr "在候補名單"
+
+#, php-format
+#| msgid "Your Sender ID will work in %1$s and %2$d other countries."
+msgid ""
+"Once approved, your Sender ID will work in %1$s and %2$d other countries."
+msgstr "核准後，您的發件人ID將在%1$s和%2$d其他國家有效。"
 
 msgid ""
 "Once created, copy <b>Client ID</b> and <b>Secret</b> and use them in the "
@@ -7217,6 +7226,10 @@ msgid "Please select some days"
 msgstr "請選擇數天"
 
 msgid ""
+"Please select the customer from the dropdown who will remain after the merge."
+msgstr "請從下拉列表選擇合並後將保留的客戶。"
+
+msgid ""
 "Please setup and enable New customer's WordPress user login details "
 "notification"
 msgstr "請設置並啟用新客戶的WordPress用戶登入詳情通知"
@@ -7459,23 +7472,29 @@ msgstr "門票類型數量"
 msgid "Queued"
 msgstr "排列"
 
+msgid "Quick range"
+msgstr "快速範圍"
+
 msgid "Quick search"
 msgstr "快速搜索"
 
-msgid "Quick search customer"
-msgstr "快速搜索客戶"
+msgid "Quick search by ID, customer, staff, service"
+msgstr "按ID、客戶、員工、服務快速搜索"
 
-msgid "Quick search customers"
-msgstr "快速搜尋客戶"
+msgid "Quick search by name"
+msgstr "按名字快速搜索"
 
-msgid "Quick search notifications"
-msgstr "快速搜索通知"
+msgid "Quick search by name, email, phone"
+msgstr "按名字、電子郵件、電話快速搜索"
 
-msgid "Quick search services"
-msgstr "快速搜索服務"
+msgid "Quick search by no., customer, provider, service"
+msgstr "按編號、客戶、供應商、服務快速搜索"
 
-msgid "Quick search staff"
-msgstr "快速搜索員工"
+msgid "Quick search by recipient, subject"
+msgstr "按收件人、主題快速搜索"
+
+msgid "Quick search by title, category"
+msgstr "按標題、分類快速搜索"
 
 msgid "Radio Button"
 msgstr "單選按鈕"
@@ -7571,6 +7590,9 @@ msgstr "減少缺席情況，讓您的員工和客戶得到通知，發送即時
 msgid "Reference"
 msgstr "參考"
 
+msgid "Refresh"
+msgstr "刷新"
+
 msgid "Refund"
 msgstr "退款"
 
@@ -7628,6 +7650,9 @@ msgstr "删除客戶"
 msgid "Remove field"
 msgstr "刪除文字欄"
 
+msgid "Remove filter"
+msgstr "移除篩選"
+
 msgid "Remove item"
 msgstr "刪除此項目"
 
@@ -7636,9 +7661,6 @@ msgstr "移除促銷碼"
 
 msgid "Renew"
 msgstr "更新"
-
-msgid "Reorder"
-msgstr "再訂購"
 
 msgid "Repeat"
 msgstr "重覆"
@@ -7660,6 +7682,9 @@ msgstr "直接回覆客戶"
 
 msgid "Request"
 msgstr "請求"
+
+msgid "Request failed. Please try again."
+msgstr "請求失敗。請再試一次。"
 
 msgid "Request Sender ID"
 msgstr "請求發件人ID"
@@ -7694,8 +7719,12 @@ msgstr "門票類型預約"
 msgid "Reset"
 msgstr "重置"
 
-msgid "Reset to default"
+#| msgid "Reset to default"
+msgid "Reset to defaults"
 msgstr "重置為默認"
+
+msgid "Responsive table"
+msgstr "響應表"
 
 msgid "Restaurants"
 msgstr "餐館"
@@ -7754,9 +7783,6 @@ msgstr "保存活動以創建會議"
 msgid "Save invoice settings"
 msgstr "保存發票設置"
 
-msgid "Save notification"
-msgstr "保存通知"
-
 msgid "Save the appearance to apply changes."
 msgstr "保存外觀以應用更改。"
 
@@ -7780,6 +7806,12 @@ msgstr "可滾動日曆"
 
 msgid "Search"
 msgstr "搜索"
+
+msgid "Search and select country"
+msgstr "搜索並選擇國家"
+
+msgid "Search columns"
+msgstr "搜索列"
 
 msgid "Search for customer"
 msgstr "搜索客戶"
@@ -7816,6 +7848,10 @@ msgstr "安全"
 
 msgid "Secure connection"
 msgstr "安全連接"
+
+#, php-format
+msgid "See all %d countries"
+msgstr "查看所有%d國家"
 
 msgid "See details for more items"
 msgstr "查看更多項目詳情"
@@ -7877,6 +7913,9 @@ msgstr "選擇要在預訂確認前顯示在購物車摘要中的列。取消選
 msgid "Select company size"
 msgstr "選擇公司規模"
 
+msgid "Select country"
+msgstr "選擇國家"
+
 msgid "Select day"
 msgstr "選擇日期"
 
@@ -7891,10 +7930,6 @@ msgstr "選擇活動"
 
 msgid "Select file"
 msgstr "選擇文件"
-
-msgid "Select for merge"
-msgstr ""
-"選擇合併\n"
 
 msgid ""
 "Select format for displaying the time slot occupancy for group bookings."
@@ -8658,9 +8693,6 @@ msgstr "處理後標題"
 
 msgid "SMS"
 msgstr "SMS短訊"
-
-msgid "Sms"
-msgstr "Sms"
 
 msgid "SMS Details"
 msgstr "SMS 短信內容"
@@ -9492,6 +9524,9 @@ msgstr "管理員可以將此文本插入到客戶的通知中。"
 msgid "This text can be inserted into notifications with %s code"
 msgstr "該文本可使用%s代碼插入到通知"
 
+msgid "This week"
+msgstr "本週"
+
 msgid ""
 "This will permanently delete all appointments in this series. This action "
 "cannot be undone."
@@ -9504,6 +9539,9 @@ msgstr "此將永久刪除門票%s"
 #, php-format
 msgid "This WP user is already connected to another customer: %s"
 msgstr "此WP用戶已連接至另一客戶：%s"
+
+msgid "This year"
+msgstr "本年"
 
 msgid ""
 "Though, every new version is thoroughly tested to its highest quality before "
@@ -9731,9 +9769,6 @@ msgid ""
 "Bookly data upon deleting Bookly items"
 msgstr "如需保存數據，請在刪除Bookly項時，在Bookly Settings > 常規 > Bookly數據中設置\"不刪除\""
 
-msgid "To set up Apple Calendar integration:"
-msgstr "設定Apple Calendar整合："
-
 msgid "To set up Facebook integration, do the following:"
 msgstr "要連結Facebook，請執行以下操作："
 
@@ -9820,6 +9855,9 @@ msgstr "雙向 僅前端"
 
 msgid "Type"
 msgstr "類型"
+
+msgid "Type country name"
+msgstr "輸入國家名稱"
 
 msgid "Unassigned"
 msgstr "未分配"
@@ -10275,6 +10313,9 @@ msgstr "年"
 msgid "Year is required"
 msgstr "需要年份"
 
+msgid "Year to date"
+msgstr "截止年份"
+
 msgid "Yes"
 msgstr "是"
 
@@ -10299,10 +10340,10 @@ msgid ""
 msgstr "您將要改變的服務設定將也影響到每個員工的獨立服務設定。您希望同時更新員工的設定嗎？"
 
 msgid ""
-"You are about to merge customers from the merge list with the selected one. "
-"This will result in losing the merged customers and moving all their "
-"appointments to the selected customer. Are you sure you want to continue?"
-msgstr "您將用選定的客戶合併列表中的客戶。這將導致失去合併的客戶，並將他們所有的預約移至所選客戶。您確定要繼續嗎？"
+"You are about to merge the selected customers. All appointments will be "
+"transferred to the chosen customer, and the other customer records will be "
+"removed."
+msgstr "您即將合併選定客戶。所有預約將被轉移至所選客戶，而其他客戶記錄將被移除。"
 
 msgid "You are currently logged into Bookly Cloud with the account"
 msgstr "您目前已使用該賬戶登入Bookly Cloud"

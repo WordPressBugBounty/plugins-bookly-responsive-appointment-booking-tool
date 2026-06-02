@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Config;
-use Bookly\Lib\Cloud;
 /** @var \Bookly\Backend\Components\Dialogs\Sms\Dialog $self */
 ?>
 <div class="row">
@@ -19,7 +18,7 @@ use Bookly\Lib\Cloud;
                     <?php Config::packagesActive() && $self::renderOption( Notification::TYPE_PACKAGE_DELETED, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::proActive() && $self::renderOption( Notification::TYPE_CUSTOMER_NEW_WP_USER, array( 'customer' ) ) ?>
                     <?php Config::proActive() && $self::renderOption( Notification::TYPE_STAFF_NEW_WP_USER, array( 'staff' ) ) ?>
-                    <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT ) && $self::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
+                    <?php Config::giftCardsActive() && $self::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && $self::renderOption( Notification::TYPE_STAFF_WAITING_LIST, array( 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && $self::renderOption( Notification::TYPE_FREE_PLACE_WAITING_LIST, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                 </optgroup>

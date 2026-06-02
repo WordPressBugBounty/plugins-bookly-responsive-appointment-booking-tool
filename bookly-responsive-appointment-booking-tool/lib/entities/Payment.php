@@ -17,9 +17,10 @@ class Payment extends Lib\Base\Entity
     const TYPE_PAYULATAM = 'payu_latam';
     const TYPE_PAYSON = 'payson';
     const TYPE_MOLLIE = 'mollie';
+    /** @deprecated Bookly 27.5 use TYPE_SQUARE */
     const TYPE_CLOUD_SQUARE = 'cloud_square';
+    const TYPE_SQUARE = 'cloud_square';
     const TYPE_WOOCOMMERCE = 'woocommerce';
-    const TYPE_CLOUD_GIFT = 'cloud_gift';
 
     const STATUS_COMPLETED = 'completed';
     const STATUS_PENDING = 'pending';
@@ -84,7 +85,7 @@ class Payment extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'coupon_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Coupon', 'namespace' => '\BooklyCoupons\Lib\Entities', 'required' => 'bookly-addon-coupons' ) ),
-        'gift_card_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'GiftCard', 'namespace' => '\BooklyPro\Lib\Entities', 'required' => 'bookly-addon-pro' ) ),
+        'gift_card_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'GiftCard', 'namespace' => '\BooklyGiftCards\Lib\Entities', 'required' => 'bookly-addon-gift-cards' ) ),
         'type' => array( 'format' => '%s' ),
         'total' => array( 'format' => '%f' ),
         'tax' => array( 'format' => '%f' ),
@@ -121,8 +122,8 @@ class Payment extends Lib\Base\Entity
                 return 'Stripe';
             case self::TYPE_CLOUD_STRIPE:
                 return 'Stripe Cloud';
-            case self::TYPE_CLOUD_SQUARE:
-                return 'Square Cloud';
+            case self::TYPE_SQUARE:
+                return 'Square';
             case self::TYPE_AUTHORIZENET:
                 return 'Authorize.Net';
             case self::TYPE_2CHECKOUT:
@@ -171,8 +172,6 @@ class Payment extends Lib\Base\Entity
         switch ( $type ) {
             case self::TYPE_CLOUD_STRIPE:
                 return Lib\Cloud\Account::PRODUCT_STRIPE;
-            case self::TYPE_CLOUD_SQUARE:
-                return Lib\Cloud\Account::PRODUCT_SQUARE;
             default:
                 return '';
         }
@@ -196,7 +195,7 @@ class Payment extends Lib\Base\Entity
             self::TYPE_PAYULATAM,
             self::TYPE_PAYSON,
             self::TYPE_MOLLIE,
-            self::TYPE_CLOUD_SQUARE,
+            self::TYPE_SQUARE,
             self::TYPE_FREE,
             self::TYPE_WOOCOMMERCE,
         );

@@ -228,7 +228,7 @@ abstract class Gateway
 
         if ( $required_sync ) {
             if ( $payment ) {
-                Payment\Proxy\Pro::completeGiftCard( $payment );
+                Payment\Proxy\Shared::completePayment( $payment );
                 Payment\Proxy\Events::completeEventAttendee( $payment );
             }
             $order_id = $payment

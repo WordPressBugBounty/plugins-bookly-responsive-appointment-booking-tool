@@ -964,7 +964,7 @@ jQuery(function ($) {
                 'bookly_app_show_appointment_qr': Number($show_appointment_qr.prop('checked')),
                 'bookly_app_button_book_more_near_next': Number($book_more_place.prop('checked')),
                 'bookly_recurring_appointments_hide_times_input': Number($hide_times_input.prop('checked')),
-                'bookly_cloud_gift_enabled': Number($show_gift_cards.prop('checked'))
+                'bookly_gift_enabled': Number($show_gift_cards.prop('checked'))
             }
         };
         // Add data from editable elements.

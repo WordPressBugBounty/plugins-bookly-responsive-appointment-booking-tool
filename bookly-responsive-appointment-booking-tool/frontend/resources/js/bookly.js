@@ -1,4 +1,4 @@
-const booklyJsVersion="27.3";
+const booklyJsVersion="27.6";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -6953,7 +6953,7 @@ var bookly = (function ($) {
 	      booklyAjax({
 	        type: 'POST',
 	        data: {
-	          action: 'bookly_pro_apply_gift_card',
+	          action: 'bookly_gift_cards_apply_gift_card',
 	          form_id: params.form_id,
 	          gift_card: $gift_card_input.val()
 	        },
@@ -15943,7 +15943,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (159:0) {#if container === 'div'}
+	// (163:0) {#if container === 'div'}
 	function create_if_block$4(ctx) {
 	  let current_block_type_index;
 	  let if_block;
@@ -16007,7 +16007,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (212:8) {#if loading}
+	// (216:8) {#if loading}
 	function create_if_block_4$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16046,7 +16046,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (182:4) {:else}
+	// (186:4) {:else}
 	function create_else_block$1(ctx) {
 	  let div;
 	  let t;
@@ -16140,7 +16140,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (160:4) {#if !disabled}
+	// (164:4) {#if !disabled}
 	function create_if_block_1$3(ctx) {
 	  let div;
 	  let t;
@@ -16249,7 +16249,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (189:12) {#if loading}
+	// (193:12) {#if loading}
 	function create_if_block_3$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16288,7 +16288,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (173:12) {#if loading}
+	// (177:12) {#if loading}
 	function create_if_block_2$3(ctx) {
 	  let span;
 	  let spinner;
@@ -16486,6 +16486,10 @@ var bookly = (function ($) {
 	            break;
 	          case 'white':
 	            $$invalidate(7, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
+	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
+	            break;
+	          case 'light':
+	            $$invalidate(7, buttonClasses = 'bookly:text-slate-500 bookly:bg-transparent bookly:border-slate-400');
 	            $$invalidate(16, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
 	            break;
 	          case 'transparent':

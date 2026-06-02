@@ -2,6 +2,7 @@
 namespace Bookly\Backend\Modules\Appointments;
 
 use Bookly\Lib;
+use Bookly\Lib\Entities\CustomerAppointment;
 
 class Page extends Lib\Base\Component
 {
@@ -23,17 +24,36 @@ class Page extends Lib\Base\Component
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::APPOINTMENTS );
 
+        // Filter options data
+        $staff_members = Lib\Entities\Staff::query( 's' )->select( 's.id, s.full_name' )->whereNot( 'visibility', 'archive' )->fetchArray();
+        $customers = Lib\Entities\Customer::query()->count() < Lib\Entities\Customer::REMOTE_LIMIT
+            ? Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name' )->fetchArray()
+            : array();
+        $services = Lib\Entities\Service::query( 's' )->select( 's.id, s.title' )->where( 'type', Lib\Entities\Service::TYPE_SIMPLE )->fetchArray();
+
+        $locations = Proxy\Locations::getFilterOptions();
+        if ( ! is_array( $locations ) ) {
+            $locations = array();
+        }
+
+        $statuses = array();
+        foreach ( CustomerAppointment::getStatuses() as $status ) {
+            $statuses[] = array(
+                'value' => $status,
+                'label' => CustomerAppointment::statusToString( $status ),
+            );
+        }
+
         wp_localize_script( 'bookly-appointments.js', 'BooklyL10n', array(
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'anyTime' => __( 'Any time', 'bookly' ), 'createdAtAnyTime' => __( 'Created at any time', 'bookly' ), ) ),
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
+            'search' => __( 'Quick search by ID, customer, staff, service', 'bookly' ) . '…',
             'zeroRecords' => __( 'No appointments for selected period.', 'bookly' ),
             'processing' => __( 'Processing', 'bookly' ) . '…',
-            'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'loadingRecords' => __( 'Loading...', 'bookly' ),
-            'edit' => __( 'Edit', 'bookly' ),
+            'edit' => __( 'Edit', 'bookly' ) . '…',
             'no_result_found' => __( 'No results found', 'bookly' ),
-            'new_appointment' => __( 'New appointment', 'bookly' ),
+            'new_appointment' => __( 'New appointment', 'bookly' ) . '…',
             'searching' => __( 'Searching', 'bookly' ),
             'attachments' => __( 'Attachments', 'bookly' ),
             'tasks' => array(
@@ -41,7 +61,6 @@ class Page extends Lib\Base\Component
                 'title' => Proxy\Tasks::getFilterText(),
             ),
             'filters' => array(
-                'id' => __( 'ID', 'bookly' ),
                 'date' => __( 'Date', 'bookly' ),
                 'created' => __( 'Created', 'bookly' ),
                 'status' => __( 'Status', 'bookly' ),
@@ -49,27 +68,24 @@ class Page extends Lib\Base\Component
                 'staff' => __( 'Employee', 'bookly' ),
                 'service' => __( 'Service', 'bookly' ),
                 'location' => __( 'Location', 'bookly' ),
+                'searchPlaceholder' => __( 'Search', 'bookly' ). '…',
+                'noLocation' => __( 'W/o location', 'bookly' ),
             ),
-            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
-            'delete' => __( 'Delete', 'bookly' ),
-            'export' => __( 'Export', 'bookly' ),
-            'print' => __( 'Print', 'bookly' ),
-            'reorder' => __( 'Reorder', 'bookly' ),
+            'filterOptions' => array(
+                'staff' => $staff_members,
+                'customers' => $customers,
+                'services' => $services,
+                'locations' => $locations,
+                'statuses' => $statuses,
+            ),
+            'delete' => __( 'Delete', 'bookly' ) . '…',
+            'export' => __( 'Export', 'bookly' ) . '…',
+            'print' => __( 'Print', 'bookly' ) . '…',
+            'reorder' => _x( 'Reorder', 'order of elements', 'bookly' ),
             'proEnabled' => Lib\Config::proActive(),
             'datatables' => $datatables,
         ) );
 
-        // Filters data
-        $staff_members = Lib\Entities\Staff::query( 's' )->select( 's.id, s.full_name' )->whereNot( 'visibility', 'archive' )->fetchArray();
-        $customers = Lib\Entities\Customer::query()->count() < Lib\Entities\Customer::REMOTE_LIMIT
-            ? array_map( function( $row ) {
-                unset( $row['id'] );
-
-                return $row;
-            }, Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name, c.email, c.phone' )->indexBy( 'id' )->fetchArray() )
-            : false;
-        $services = Lib\Entities\Service::query( 's' )->select( 's.id, s.title' )->where( 'type', Lib\Entities\Service::TYPE_SIMPLE )->fetchArray();
-
-        self::renderTemplate( 'index', compact( 'staff_members', 'customers', 'services', 'datatables' ) );
+        self::renderTemplate( 'index', compact( 'datatables' ) );
     }
 }

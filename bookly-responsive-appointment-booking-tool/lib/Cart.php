@@ -381,7 +381,7 @@ class Cart
             case Entities\Payment::TYPE_CLOUD_STRIPE:
             case Entities\Payment::TYPE_PAYUBIZ:
             case Entities\Payment::TYPE_PAYSON:
-            case Entities\Payment::TYPE_CLOUD_SQUARE:
+            case Entities\Payment::TYPE_SQUARE:
             case Entities\Payment::TYPE_STRIPE:
             default:
                 //? $cart_info->setGatewayTaxCalculationRule( 'tax_in_the_price' );

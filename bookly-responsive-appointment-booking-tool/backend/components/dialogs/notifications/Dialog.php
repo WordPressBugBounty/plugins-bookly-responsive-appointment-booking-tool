@@ -66,8 +66,8 @@ class Dialog extends SmsDialog
                 'container' => __( 'Email', 'bookly' ),
                 'new' => __( 'New email notification', 'bookly' ),
                 'edit' => __( 'Edit email notification', 'bookly' ),
-                'create' => __( 'Create notification', 'bookly' ),
-                'save' => __( 'Save notification', 'bookly' ),
+                'create' => __( 'Create', 'bookly' ),
+                'save' => __( 'Save', 'bookly' ),
             ),
         ) );
 

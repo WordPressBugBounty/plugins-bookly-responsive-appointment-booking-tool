@@ -1,5 +1,14 @@
 jQuery(function ($) {
     window.BooklyNotificationDialog = function () {
+        // Idempotent: dialog DOM is persistent (rendered outside the tab container in index.php),
+        // so we only need to wire it up once. Without this guard, every tab switch back to
+        // "Notifications" stacked another window listener on "bookly:edit-notification" — clicking
+        // a row then fired N ajax bookly_get_notification_data requests.
+        if (window.BooklyNotificationDialog.__inited) {
+            return;
+        }
+        window.BooklyNotificationDialog.__inited = true;
+
         let $notificationList = $('#bookly-notification-list'),
             $btnNewNotification = $('#bookly-js-new-notification'),
             $modalNotification = $('#bookly-js-notification-modal'),
@@ -57,11 +66,10 @@ jQuery(function ($) {
                 containers.message.siblings('a[data-toggle=bookly-collapse]').html(BooklyNotificationDialogL10n.title.container);
                 $('.bookly-js-services', containers.settings).booklyDropdown();
                 $('.bookly-js-payment-statuses', containers.settings).booklyDropdown();
-                $('.modal-title', $modalNotification).html(BooklyNotificationDialogL10n.title.edit);
             });
 
         if (useTinyMCE) {
-            $('a[data-toggle="bookly-tab"]').on('shown.bs.tab', function (e) {
+            $('a[data-toggle="bookly-tab"]', $modalNotification).on('shown.bs.tab', function (e) {
                 if ($(e.target).data('ace') !== undefined) {
                     tinyMCE.triggerSave();
                     aceEditor.booklyAceEditor('setValue', $('[name=notification\\[message\\]]').val());
@@ -181,14 +189,9 @@ jQuery(function ($) {
         $('.bookly-js-services', $modalNotification).booklyDropdown({});
         $('.bookly-js-payment-statuses', $modalNotification).booklyDropdown({});
 
-        $btnNewNotification.off()
-            .on('click', function () {
-                showNotificationDialog(this);
-            });
-
         $btnSaveNotification.off()
             .on('click', function () {
-                if (useTinyMCE && $('a[data-toggle="bookly-tab"][data-tinymce].active').length) {
+                if (useTinyMCE && $('a[data-toggle="bookly-tab"][data-tinymce].active', $modalNotification).length) {
                     tinyMCE.triggerSave();
                 } else if (useAceEditor) {
                     $('[name=notification\\[message\\]]').val(aceEditor.booklyAceEditor('getValue'));
@@ -205,24 +208,18 @@ jQuery(function ($) {
                     success: function (response) {
                         ladda.stop();
                         if (response.success) {
-                            $notificationList.DataTable().ajax.reload();
+                            document.getElementById('bookly-' + BooklyNotificationDialogL10n.gateway + '_notifications-datatables').booklyDatatable.reload();
                             $modalNotification.booklyModal('hide');
                         }
                     }
                 });
             });
 
-        $notificationList
-            .on('click', '[data-action=edit]', function () {
-                let row = $notificationList.DataTable().row($(this).closest('td')),
-                    data = row.data();
-                showNotificationDialog(this, data.id);
-            });
+        window.addEventListener("bookly:edit-notification", function (e) {
+            showNotificationDialog(e.detail?.id);
+        });
 
-        function showNotificationDialog(button, id) {
-            let ladda = Ladda.create(button);
-            ladda.start();
-
+        function showNotificationDialog(id) {
             $('.bookly-js-loading:first-child', $modalNotification).addClass('bookly-loading').removeClass('bookly-collapse');
             $('.bookly-js-loading:last-child', $modalNotification).addClass('bookly-collapse');
 
@@ -243,7 +240,6 @@ jQuery(function ($) {
                             booklyAlert({error: [response.data.message]});
                         }
                         renderTemplatesList();
-                        ladda.stop();
                     }
                 });
             }
@@ -251,7 +247,6 @@ jQuery(function ($) {
             if (id === undefined) {
                 setNotificationData(BooklyNotificationDialogL10n.defaultNotification);
                 $modalNotification.booklyModal('show');
-                ladda.stop();
             } else {
                 $.ajax({
                     url: ajaxurl,
@@ -265,7 +260,6 @@ jQuery(function ($) {
                     success: function (response) {
                         setNotificationData(response.data);
                         $modalNotification.booklyModal('show');
-                        ladda.stop();
                     }
                 });
             }

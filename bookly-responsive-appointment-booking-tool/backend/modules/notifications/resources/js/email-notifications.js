@@ -4,7 +4,9 @@ jQuery(function ($) {
           $footer        = $('.bookly-js-notifications-footer');
 
     $('.bookly-js-notifications-tabs a').off().on('click', function (e) {
-        $footer.hide();
+        $('.bookly-js-notifications-tabs a').removeClass('bookly:active');
+        $(this).addClass('bookly:active');
+        $footer.prop('hidden', true);
         $tab_container.html('<div class=\'bookly-loading\'></div>');
         let tab = $(this).data('tab');
         $.ajax({
@@ -22,7 +24,7 @@ jQuery(function ($) {
                     $tab_container.html(response.data.html);
                     switch (tab) {
                         case 'settings':
-                            $footer.show();
+                            $footer.prop('hidden', false);
                             $('.bookly-js-save', $footer)
                             .on('click', function (e) {
                                 e.preventDefault();
@@ -48,6 +50,11 @@ jQuery(function ($) {
                             });
                             break;
                         case 'logs':
+                            // Refresh BooklyEmailLogsL10n.datatables with fresh user-meta from server,
+                            // so that saved filter (e.g. date range) is restored after a tab switch.
+                            if (response.data.datatables && typeof BooklyEmailLogsL10n !== 'undefined') {
+                                BooklyEmailLogsL10n.datatables = response.data.datatables;
+                            }
                             $(document.body).trigger('bookly.init_email_logs',);
                             break;
                         default:

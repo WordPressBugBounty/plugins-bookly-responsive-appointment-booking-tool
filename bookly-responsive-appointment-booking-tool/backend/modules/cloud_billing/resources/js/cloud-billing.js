@@ -1,113 +1,143 @@
-jQuery(function($) {
+jQuery(function ($) {
     'use strict';
 
-    const $date_range = $('#purchases_date_range');
-    const $datatable = $('#bookly-purchases');
+    const purchasesTable = 'cloud_purchases';
+    const { today, getLocalTimeZone, parseDate } = window.BooklyDatatables.calendarDate;
+    const tz = getLocalTimeZone();
+    const t = today(tz);
+    const startOfMonth = d => d.set({ day: 1 });
+    const endOfMonth = d => d.set({ day: 1 }).add({ months: 1 }).subtract({ days: 1 });
+    const ymd = d => d.year + '-' + String(d.month).padStart(2, '0') + '-' + String(d.day).padStart(2, '0');
 
     /**
-     * Date range pickers options.
+     * Serialize selected range to the backend wire format ('YYYY-MM-DD - YYYY-MM-DD' or 'any').
      */
-    var picker_ranges = {};
-    picker_ranges[BooklyL10n.dateRange.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-    picker_ranges[BooklyL10n.dateRange.today] = [moment(), moment()];
-    picker_ranges[BooklyL10n.dateRange.last_7] = [moment().subtract(7, 'days'), moment()];
-    picker_ranges[BooklyL10n.dateRange.last_30] = [moment().subtract(30, 'days'), moment()];
-    picker_ranges[BooklyL10n.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
-    picker_ranges[BooklyL10n.dateRange.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-    var locale = $.extend({}, BooklyL10n.dateRange, BooklyL10n.datePicker);
+    function serializeDate(value) {
+        if (!value || !value.start || !value.end) return 'any';
+        return ymd(value.start) + ' - ' + ymd(value.end);
+    }
 
-    $date_range.daterangepicker(
-        {
-            parentEl: $date_range.parent(),
-            startDate: moment().subtract(30, 'days'), // by default select "Last 30 days"
-            ranges: picker_ranges,
-            locale: locale,
-            showDropdowns: true,
-            linkedCalendars: false,
-        },
-        function(start, end) {
-            var format = 'YYYY-MM-DD';
-            $date_range
-                .data('date', start.format(format) + ' - ' + end.format(format))
-                .find('span')
-                .html(start.format(BooklyL10n.dateRange.format) + ' - ' + end.format(BooklyL10n.dateRange.format));
+    /**
+     * Restore previously saved range from user_meta.
+     */
+    let dateValue;
+    const savedFilter = BooklyL10n.datatables[purchasesTable].settings.filter || {};
+    if (savedFilter.range && savedFilter.range !== 'any') {
+        const parts = String(savedFilter.range).split(' - ');
+        if (parts.length === 2) {
+            try {
+                dateValue = { start: parseDate(parts[0].trim()), end: parseDate(parts[1].trim()) };
+            } catch (e) { /* invalid format — leave undefined */ }
         }
-    );
+    }
 
-    /**
-     * Init Columns.
-     */
+    const datePresets = [
+        { label: BooklyL10n.dateRange.yesterday, range: { start: t.subtract({ days: 1 }),  end: t.subtract({ days: 1 }) } },
+        { label: BooklyL10n.dateRange.today,     range: { start: t,                        end: t                       } },
+        { label: BooklyL10n.dateRange.last_7,    range: { start: t.subtract({ days: 7 }),  end: t                       } },
+        { label: BooklyL10n.dateRange.last_30,   range: { start: t.subtract({ days: 30 }), end: t                       } },
+        { label: BooklyL10n.dateRange.thisMonth, range: { start: startOfMonth(t),                                  end: endOfMonth(t)                                 } },
+        { label: BooklyL10n.dateRange.lastMonth, range: { start: startOfMonth(t.subtract({ months: 1 })),          end: endOfMonth(t.subtract({ months: 1 }))         } },
+    ];
+
+    const defaultBadgeClass = 'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200';
+    const purchaseStatusBadgeClass = {
+        'Paid':               'bookly:bg-green-100 bookly:text-green-800 bookly:border-green-200',
+        'Charged':            'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
+        'Pending':            'bookly:bg-amber-100 bookly:text-amber-800 bookly:border-amber-200',
+        'Rejected':           'bookly:bg-red-100 bookly:text-red-800 bookly:border-red-200',
+        'Refunded':           'bookly:bg-purple-100 bookly:text-purple-800 bookly:border-purple-200',
+        'Reversed':           defaultBadgeClass,
+        'Cancelled reversal': defaultBadgeClass,
+    };
+
     let columns = [];
 
-    $.each(BooklyL10n.datatables.cloud_purchases.settings.columns, function(column, show) {
-        if (show) {
-            if (column === 'amount') {
+    $.each(BooklyL10n.datatables[purchasesTable].settings.columns, function (column, show) {
+        switch (column) {
+            case 'amount':
                 columns.push({
                     data: column,
-                    render: function(data, type, row, meta) {
+                    render: function (data, type, row) {
                         const disabled = ['Pending', 'Rejected', 'Cancelled reversal'].includes(row.status);
-                        return data >= 0
-                            ? '<span class="text-' + (disabled ? 'muted' : 'success') + '">+ $' + data + '</span>'
-                            : '<span class="text-' + (disabled ? 'muted' : 'danger') + '">- $' + data.substring(1) + '</span>';
+                        if (data >= 0) {
+                            return '<span class="' + (disabled ? 'bookly:text-slate-400' : 'bookly:text-green-600') + '">+ $' + data + '</span>';
+                        }
+                        return '<span class="' + (disabled ? 'bookly:text-slate-400' : 'bookly:text-red-600') + '">- $' + data.substring(1) + '</span>';
                     }
                 });
-            } else {
-                columns.push({data: column, render: $.fn.dataTable.render.text()});
-            }
+                break;
+            case 'status':
+                columns.push({
+                    data: column,
+                    render: function (data) { return BooklyDatatables.escapeHtml(data); },
+                    badge: function (row) { return purchaseStatusBadgeClass[row.status] || defaultBadgeClass; },
+                });
+                break;
+            default:
+                columns.push({ data: column, render: BooklyDatatables.escapeHtml() });
+                break;
         }
-    });
-    columns.push({
-        data: null,
-        className: "text-right",
-        render: function(data, type, row, meta) {
-            if ((row.type === 'PayPal' || row.type === 'Card') && row.status === 'Paid') {
-                return '<button type="button" class="btn btn-default" data-action="download-invoice"><i class="far fa-fw fa-file-pdf mr-1"></i> ' + BooklyL10n.invoice.button + '</button>';
-            }
-            return '';
-        }
+        columns[columns.length - 1].title = BooklyL10n.datatables[purchasesTable].titles[column] || column;
+        columns[columns.length - 1].name = column;
+        columns[columns.length - 1].show = show;
+        columns[columns.length - 1].orderable = false;
     });
 
-    var dt = $datatable.DataTable({
-        ordering: false,
-        paging: false,
-        info: false,
-        searching: false,
-        processing: true,
-        responsive: true,
-        ajax: {
-            url: ajaxurl,
-            data: function(d) {
-                return {
-                    action: 'bookly_get_purchases_list',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                    range: $date_range.data('date')
-                };
-            },
-            dataSrc: 'list'
-        },
-        columns: columns,
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing,
-            emptyTable: BooklyL10n.emptyTable,
-            loadingRecords: BooklyL10n.loadingRecords
-        },
-        layout: {
-            bottomStart: 'paging',
-            bottomEnd: null
-        }
-    });
-    function onChangeFilter() {
-        dt.ajax.reload();
+    function rowHasInvoice(row) {
+        return (row.type === 'PayPal' || row.type === 'Card') && row.status === 'Paid';
     }
-    $date_range.on('apply.daterangepicker', onChangeFilter);
 
-    $datatable.on('click', '[data-action=download-invoice]', function() {
-        if (BooklyL10n.invoice.valid) {
-            const data = $('#bookly-purchases').DataTable().row($(this).closest('td')).data();
-            window.location = BooklyL10n.invoice.link + '/' + data.id;
-        } else {
-            booklyAlert({error: [BooklyL10n.invoice.alert]});
-        }
-    });
+    if (columns.length) {
+        let purchasesBt = BooklyDatatables.showForm('bookly-' + purchasesTable + '-datatables', {
+            datePicker: BooklyL10n.datePicker,
+            serverSide: false,
+            ajax: {
+                url: ajaxurl,
+                method: 'POST',
+                data: function (d) {
+                    return $.extend({}, d, {
+                        action: 'bookly_get_purchases_list',
+                        csrf_token: BooklyL10nGlobal.csrf_token,
+                        filter: { range: serializeDate(dateValue) },
+                    });
+                }
+            },
+            columns: columns,
+            tableSettings: Object.assign({}, BooklyL10n.datatables[purchasesTable], {
+                l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords })
+            }),
+            saveSettings: function (settings) {
+                $.post(ajaxurl, Object.assign({
+                    action: 'bookly_update_table_settings',
+                    table: purchasesTable,
+                    csrf_token: BooklyL10nGlobal.csrf_token
+                }, settings));
+            },
+            filters: [{
+                type: 'dateRange',
+                name: 'date',
+                label: BooklyL10n.filters.date,
+                initialValue: dateValue,
+                presets: datePresets,
+                onChange: function (v) { dateValue = v; },
+            }],
+            searchFilter: { placeholder: BooklyL10n.search || 'Quick search', name: 'filter[search]' },
+            checked: function (rows) {
+                if (rows.length !== 1 || !rowHasInvoice(rows[0])) return [];
+                return [{
+                    label: BooklyL10n.invoice.button,
+                    icon: 'download',
+                    variant: 'outline',
+                    click: function (selected) {
+                        if (BooklyL10n.invoice.valid) {
+                            window.location = BooklyL10n.invoice.link + '/' + selected[0].id;
+                        } else {
+                            booklyAlert({ error: [BooklyL10n.invoice.alert] });
+                        }
+                    }
+                }];
+            },
+        });
+    }
 });

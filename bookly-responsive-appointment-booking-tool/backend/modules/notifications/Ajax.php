@@ -52,6 +52,7 @@ class Ajax extends Lib\Base\Ajax
             case 'logs' :
                 $response = array(
                     'html' => Proxy\Pro::renderLogs(),
+                    'datatables' => Proxy\Pro::getLogsSettings(),
                 );
                 break;
             default:

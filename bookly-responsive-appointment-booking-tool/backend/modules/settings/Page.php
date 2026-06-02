@@ -203,7 +203,6 @@ class Page extends Lib\Base\Ajax
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
             'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'showMore' => __( 'Show more', 'bookly' ),
             'noResultsFound' => __( 'No results found', 'bookly' ),
         ) );

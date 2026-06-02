@@ -45,6 +45,7 @@ class Dialog extends Lib\Base\Component
                 'new_campaign' => __( 'New campaign', 'bookly' ),
                 'edit_campaign' => __( 'Edit campaign', 'bookly' ),
                 'save' => __( 'Save', 'bookly' ),
+                'create' => __( 'Create', 'bookly' ),
                 'cancel' => __( 'Cancel', 'bookly' ),
                 'close' => __( 'Close', 'bookly' ),
                 'name' => __( 'Name', 'bookly' ),

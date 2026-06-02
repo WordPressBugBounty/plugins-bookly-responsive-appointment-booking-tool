@@ -9,7 +9,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2026-03-30 18:25+0000\n"
+"PO-Revision-Date: 2026-05-29 11:30+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Dutch\n"
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
@@ -26,6 +26,12 @@ msgstr " Probeer het eens!"
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
 msgstr "\"%s\" is te lang (maximaal %d karakters)."
+
+#, php-format
+msgid "%d country"
+msgid_plural "%d countries"
+msgstr[0] "%d land"
+msgstr[1] "%d landen"
 
 #, php-format
 msgid "%d day"
@@ -302,9 +308,6 @@ msgstr "Toegangstoken"
 msgid "Access token link for quick authorization in the mobile app"
 msgstr "Link toegangstoken voor snelle autorisatie in de mobiele app"
 
-msgid "Access tokens"
-msgstr "Toegangstokens"
-
 msgid "Account ID"
 msgstr "Account ID"
 
@@ -419,6 +422,9 @@ msgstr "Extra's toevoegen"
 
 msgid "Add field"
 msgstr "Veld toevoegen"
+
+msgid "Add filter"
+msgstr "Filter toevoegen"
 
 msgid "Add gift card"
 msgstr "Cadeaubon toevoegen"
@@ -918,9 +924,6 @@ msgstr "Goedgekeurd"
 
 msgid "Approved appointments"
 msgstr "Goedgekeurde afspraken"
-
-msgid "Approved at"
-msgstr "Goedgekeurd op"
 
 msgid "Archive"
 msgstr "Archiveer"
@@ -1534,9 +1537,6 @@ msgstr "Wijzigen"
 msgid "Change password"
 msgstr "Verander wachtwoord"
 
-msgid "Change the sender's name to your phone number or any other name"
-msgstr "Wijzig de naam van de afzender in uw telefoonnummer of een andere naam"
-
 msgid "Changes saved."
 msgstr "Wijzigingen opgeslagen."
 
@@ -1646,6 +1646,12 @@ msgstr "Wis alle logboeken"
 
 msgid "Clear field"
 msgstr "Maak veld leeg"
+
+msgid "Clear filter"
+msgstr "Filter wissen"
+
+msgid "Clear search"
+msgstr "Zoekopdracht wissen"
 
 #, php-format
 msgid "Click \"%s\" to create your first one"
@@ -1957,6 +1963,10 @@ msgstr ""
 msgid "Counselling"
 msgstr "Raadslieden"
 
+msgid "Countries marked with this icon require extra steps."
+msgstr ""
+"Voor landen die met dit pictogram zijn gemarkeerd, zijn extra stappen nodig."
+
 msgid "Country"
 msgstr "Land"
 
@@ -2005,14 +2015,8 @@ msgstr "Maak nog een kortingsbon"
 msgid "Create customer"
 msgstr "Klant aanmaken"
 
-msgid "Create new access token"
-msgstr "Maak een nieuwe toegangstoken aan"
-
 msgid "Create new appointment for every recurring booking"
 msgstr "Maak nieuwe afspraak voor elke herhalende boeking"
-
-msgid "Create notification"
-msgstr "Melding aanmaken"
 
 msgid "Create online meetings"
 msgstr "Maak online vergaderingen"
@@ -2027,12 +2031,6 @@ msgstr "Pakket maken"
 
 msgid "Create payment"
 msgstr "Betaling aanmaken"
-
-msgid "Create service"
-msgstr "Voeg service toe"
-
-msgid "Create staff"
-msgstr "Personeel aanmaken"
 
 msgid "Create WordPress user"
 msgstr "WordPress gebruiker aanmaken"
@@ -3186,6 +3184,9 @@ msgstr "Beschrijving voor de agenda van de klant"
 msgid "Design consultants"
 msgstr "Ontwerp adviseurs"
 
+msgid "Destination country"
+msgstr "Land van bestemming"
+
 msgid ""
 "Destination URL where Zoom will send the access token after the user "
 "completes the OAuth authentication"
@@ -3340,6 +3341,9 @@ msgstr "Klaar"
 msgid "Download"
 msgstr "Download"
 
+msgid "Download all invoices"
+msgstr "Alle facturen downloaden"
+
 msgid "Download filtered invoices"
 msgstr "Gefilterde facturen downloaden"
 
@@ -3354,6 +3358,10 @@ msgstr "Facturen downloaden"
 
 msgid "Download selected invoices"
 msgstr "Geselecteerde facturen downloaden"
+
+msgctxt "drag to reorder"
+msgid "Order"
+msgstr "Volgorde"
 
 msgid "Driving Instructors"
 msgstr "Rijinstructeurs"
@@ -3399,7 +3407,6 @@ msgstr ""
 "in te voeren. Zodra de proefperiode is afgelopen, moet u de aankoopcode "
 "activeren."
 
-#, fuzzy
 #| msgid ""
 #| "During the trial period, you will have full access to all features of "
 #| "this product  completely free of charge."
@@ -3473,11 +3480,12 @@ msgstr "Wijzig pakket afspraak"
 msgid "Edit service"
 msgstr "Bewerk service"
 
-msgid "Edit sms notification"
-msgstr "Bewerk sms melding"
+#| msgid "Edit sms notification"
+msgid "Edit SMS notification"
+msgstr "SMS-melding bewerken"
 
-msgid "Edit staff"
-msgstr "Personeel bewerken"
+msgid "Edit staff member"
+msgstr "Medewerker bewerken"
 
 msgid "Edit Status"
 msgstr "Bewerk Status"
@@ -3758,7 +3766,6 @@ msgstr ""
 "Voer de tags van de velden in uw Mailchimp publiek instellingen in volgens "
 "Bookly gegevens."
 
-#, fuzzy
 #| msgid "Enter the URL of the page where this forms shortcode is placed."
 msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr ""
@@ -3778,13 +3785,6 @@ msgstr "Voer verificatiecode uit e-mail in"
 
 msgid "Enter verification code from SMS"
 msgstr "Voer verificatiecode uit SMS in"
-
-msgid ""
-"Enter your iCloud email and the app-specific password in Edit Staff > "
-"Advanced > Apple Calendar."
-msgstr ""
-"Voer je iCloud-e-mailadres en het app-specifieke wachtwoord in onder "
-"Personeel bewerken > Geavanceerd > Apple Agenda."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Voer uw aankoopcode in voor een Bookly-add-on of bundel"
@@ -3950,6 +3950,9 @@ msgstr "Mislukt"
 msgid "Failed to create an online meeting"
 msgstr "Niet gelukt om een online vergadering te maken"
 
+msgid "Failed to load data"
+msgstr "Kan gegevens niet laden"
+
 msgid "Failed to send SMS."
 msgstr "Kon SMS niet versturen."
 
@@ -3991,6 +3994,9 @@ msgstr "Bestandsextensie niet toegestaan"
 
 msgid "Files"
 msgstr "Bestanden"
+
+msgid "Filter"
+msgstr "Filter"
 
 msgid "Filter events"
 msgstr "Evenementen filteren"
@@ -4146,9 +4152,6 @@ msgstr "Algemene instellingen"
 msgid "Generate"
 msgstr "Genereer"
 
-msgid "Generate a new app-specific password for Bookly."
-msgstr "Maak een nieuw app-specifiek wachtwoord aan voor Bookly."
-
 #, php-format
 msgid "Generate an app-specific password at %s"
 msgstr "Maak een app-specifiek wachtwoord op %s"
@@ -4196,17 +4199,11 @@ msgstr "Cadeaubon geldig vanaf datum"
 msgid "Gift Cards"
 msgstr "Cadeaubonnen"
 
-msgid "Gift cards"
-msgstr "Cadeaubonnen"
-
 msgid "Gift cards settings"
 msgstr "Instellingen cadeaubonnen"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "Opgegeven e-mailadres is reeds geabonneerd, dank u wel!"
-
-msgid "Go to appleid.apple.com and sign in with your Apple ID."
-msgstr "Ga naar appleid.apple.com en log in met uw Apple ID."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4915,6 +4912,9 @@ msgstr "Verberg opmerking"
 
 msgid "Hide form borders"
 msgstr "Randen formulier verbergen"
+
+msgid "Hide list"
+msgstr "Lijst verbergen"
 
 msgid "Hide services step"
 msgstr "Verberg services stap"
@@ -5956,9 +5956,6 @@ msgstr "Ongeldige tijd"
 msgid "Invert datepicker colors"
 msgstr "Kleuren gegevenskiezer omkeren"
 
-msgid "Invite"
-msgstr "Uitnodigen"
-
 msgid "INVOICE"
 msgstr "Factuur"
 
@@ -6059,6 +6056,9 @@ msgstr "Sluit u aan"
 msgid "Join online meeting"
 msgstr "Doe mee met online vergadering"
 
+msgid "Jump to today"
+msgstr "Ga naar vandaag"
+
 msgid "Just to help us spread the word and boost our motivation."
 msgstr ""
 "Gewoon om ons te helpen de boodschap te verspreiden en onze motivatie te "
@@ -6078,6 +6078,9 @@ msgstr "Afgelopen 30 dagen"
 
 msgid "Last 7 days"
 msgstr "Afgelopen 7 dagen"
+
+msgid "Last 90 days"
+msgstr "Afgelopen 90 dagen"
 
 msgid "Last appointment"
 msgstr "Laatste afspraak"
@@ -6363,15 +6366,9 @@ msgstr "Samenvoegen"
 msgid "Merge customers"
 msgstr "Samenvoegen klanten"
 
-msgid "Merge list"
-msgstr "Samenvoeglijst"
-
 msgid "Merge repeating custom fields for multiple bookings of the service"
 msgstr ""
 "Voeg herhalende aangepaste velden samen voor meerdere boekingen van de dienst"
-
-msgid "Merge with"
-msgstr "Samenvoegen met"
 
 msgid "Message"
 msgstr "Bericht"
@@ -6498,9 +6495,6 @@ msgstr "Naam van de personeelscategorie"
 msgid "Name of ticket type"
 msgstr "Naam van typeticket"
 
-msgid "Navigate to Sign-In and Security > App-Specific Passwords."
-msgstr "Ga naar Aanmelden en Beveiliging > App-specifieke Wachtwoorden."
-
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6596,8 +6590,12 @@ msgstr "Nieuw wachtwoord"
 msgid "New recurring booking notification"
 msgstr "Nieuwe terugkerende boekingsmelding"
 
-msgid "New sms notification"
-msgstr "Nieuwe sms melding"
+msgid "New service"
+msgstr "Nieuwe service"
+
+#| msgid "New sms notification"
+msgid "New SMS notification"
+msgstr "Nieuwe SMS-melding"
 
 msgid "New staff account role"
 msgstr "Nieuwe rol personeelsaccount"
@@ -6688,6 +6686,12 @@ msgstr "Geen afspraken gevonden."
 
 msgid "No appointments."
 msgstr "Geen afspraken."
+
+msgid "No columns match"
+msgstr "Er komen geen kolommen overeen"
+
+msgid "No country found."
+msgstr "Geen land gevonden."
 
 msgid "No coupons found."
 msgstr "Geen kortingsbonnen gevonden."
@@ -7120,6 +7124,12 @@ msgstr "op dezelfde dag"
 
 msgid "On waiting list"
 msgstr "Op wachtlijst"
+
+#, php-format
+#| msgid "Your Sender ID will work in %1$s and %2$d other countries."
+msgid ""
+"Once approved, your Sender ID will work in %1$s and %2$d other countries."
+msgstr "Zodra goedgekeurd, werkt uw Afzender ID in %1$s en %2$d andere landen."
 
 msgid ""
 "Once created, copy <b>Client ID</b> and <b>Secret</b> and use them in the "
@@ -7737,6 +7747,11 @@ msgid "Please select some days"
 msgstr "Gelieve enkele dagen te selecteren"
 
 msgid ""
+"Please select the customer from the dropdown who will remain after the merge."
+msgstr ""
+"Kies in de vervolgkeuzelijst de klant die na het samenvoegen overblijft."
+
+msgid ""
 "Please setup and enable New customer's WordPress user login details "
 "notification"
 msgstr ""
@@ -8001,23 +8016,29 @@ msgstr "Hoeveelheid van type ticket"
 msgid "Queued"
 msgstr "In de wachtrij"
 
+msgid "Quick range"
+msgstr "Snel bereik"
+
 msgid "Quick search"
 msgstr "Snel zoeken"
 
-msgid "Quick search customer"
-msgstr "Snel klant zoeken"
+msgid "Quick search by ID, customer, staff, service"
+msgstr "Snel zoeken op ID, klant, medewerker, service"
 
-msgid "Quick search customers"
-msgstr "Snel zoeken naar klanten"
+msgid "Quick search by name"
+msgstr "Snel zoeken op naam"
 
-msgid "Quick search notifications"
-msgstr "Snel zoeken naar meldingen"
+msgid "Quick search by name, email, phone"
+msgstr "Snel zoeken op naam, e-mailadres of telefoonnummer"
 
-msgid "Quick search services"
-msgstr "Snel doorzoeken services"
+msgid "Quick search by no., customer, provider, service"
+msgstr "Snel zoeken op nummer, klant, dienstverlener, service"
 
-msgid "Quick search staff"
-msgstr "Snel doorzoeken personeel"
+msgid "Quick search by recipient, subject"
+msgstr "Snel zoeken op ontvanger, onderwerp"
+
+msgid "Quick search by title, category"
+msgstr "Snel zoeken op titel, categorie"
 
 msgid "Radio Button"
 msgstr "Radio Knop"
@@ -8116,6 +8137,9 @@ msgstr ""
 msgid "Reference"
 msgstr "Referentie"
 
+msgid "Refresh"
+msgstr "Verversen"
+
 msgid "Refund"
 msgstr "Terugbetaling"
 
@@ -8177,6 +8201,9 @@ msgstr "Verwijder klant"
 msgid "Remove field"
 msgstr "Verwijder veld"
 
+msgid "Remove filter"
+msgstr "Filter verwijderen"
+
 msgid "Remove item"
 msgstr "Verwijder item"
 
@@ -8185,9 +8212,6 @@ msgstr "Promotiecode verwijderen"
 
 msgid "Renew"
 msgstr "Vernieuwen"
-
-msgid "Reorder"
-msgstr "Herschikken"
 
 msgid "Repeat"
 msgstr "Herhalen"
@@ -8209,6 +8233,9 @@ msgstr "Reageer direct naar de klanten"
 
 msgid "Request"
 msgstr "Verzoeken"
+
+msgid "Request failed. Please try again."
+msgstr "Verzoek mislukt. Probeer het nog eens."
 
 msgid "Request Sender ID"
 msgstr "Verzoek de Afzender ID"
@@ -8243,8 +8270,12 @@ msgstr "Gereserveerd van type ticket"
 msgid "Reset"
 msgstr "Herstellen"
 
-msgid "Reset to default"
-msgstr "Reset naar standaard"
+#| msgid "Reset to default"
+msgid "Reset to defaults"
+msgstr "Terugzetten naar standaardinstellingen"
+
+msgid "Responsive table"
+msgstr "Responsieve tabel"
 
 msgid "Restaurants"
 msgstr "Restaurants"
@@ -8303,9 +8334,6 @@ msgstr "Evenement opslaan om een vergadering aan te maken"
 msgid "Save invoice settings"
 msgstr "Bewaar factuur instellingen"
 
-msgid "Save notification"
-msgstr "Bewaard melding"
-
 msgid "Save the appearance to apply changes."
 msgstr "Sla het uiterlijk op om de wijzigingen toe te passen."
 
@@ -8330,6 +8358,12 @@ msgstr "Scrolbare agenda"
 
 msgid "Search"
 msgstr "Zoeken"
+
+msgid "Search and select country"
+msgstr "Land zoeken en selecteren"
+
+msgid "Search columns"
+msgstr "Kolommen zoeken"
 
 msgid "Search for customer"
 msgstr "Zoek naar klanten"
@@ -8366,6 +8400,10 @@ msgstr "Beveiligd"
 
 msgid "Secure connection"
 msgstr "Beveiligde verbinding"
+
+#, php-format
+msgid "See all %d countries"
+msgstr "Bekijk alle %d landen"
 
 msgid "See details for more items"
 msgstr "Zie details voor meer onderwerpen"
@@ -8441,6 +8479,9 @@ msgstr ""
 msgid "Select company size"
 msgstr "Selecteer bedrijfsgrootte"
 
+msgid "Select country"
+msgstr "Land selecteren"
+
 msgid "Select day"
 msgstr "Selecteer dag"
 
@@ -8458,9 +8499,6 @@ msgstr "Evenement selecteren"
 
 msgid "Select file"
 msgstr "Selecteer bestand"
-
-msgid "Select for merge"
-msgstr "Selecteer om samen te voegen"
 
 msgid ""
 "Select format for displaying the time slot occupancy for group bookings."
@@ -9318,9 +9356,6 @@ msgstr "Slug"
 
 msgid "SMS"
 msgstr "SMS"
-
-msgid "Sms"
-msgstr "Sms"
 
 msgid "SMS Details"
 msgstr "SMS Details"
@@ -10264,6 +10299,9 @@ msgstr ""
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Deze tekst kan worden ingevoegd in meldingen met %s code"
 
+msgid "This week"
+msgstr "Deze week"
+
 msgid ""
 "This will permanently delete all appointments in this series. This action "
 "cannot be undone."
@@ -10278,6 +10316,9 @@ msgstr "Dit zal het ticket %s permanent verwijderen"
 #, php-format
 msgid "This WP user is already connected to another customer: %s"
 msgstr "Deze WP-gebruiker is al gekoppeld aan een andere klant: %s"
+
+msgid "This year"
+msgstr "Dit jaar"
 
 msgid ""
 "Though, every new version is thoroughly tested to its highest quality before "
@@ -10549,9 +10590,6 @@ msgstr ""
 "Instellingen > Algemeen > Bookly gegevens bij het verwijderen van Bookly "
 "items"
 
-msgid "To set up Apple Calendar integration:"
-msgstr "Om de integratie met Apple Agenda in te stellen:"
-
 msgid "To set up Facebook integration, do the following:"
 msgstr "Om Facebook integratie in te stellen, doe het volgende:"
 
@@ -10648,6 +10686,9 @@ msgstr "Tweewegs alleen front-end"
 
 msgid "Type"
 msgstr "Soort"
+
+msgid "Type country name"
+msgstr "Voer de naam van het land in"
 
 msgid "Unassigned"
 msgstr "Niet toegewezen"
@@ -11147,6 +11188,9 @@ msgstr "jaar"
 msgid "Year is required"
 msgstr "Jaar is vereist"
 
+msgid "Year to date"
+msgstr "Tot nu toe dit jaar"
+
 msgid "Yes"
 msgstr "Ja"
 
@@ -11174,13 +11218,13 @@ msgstr ""
 "doorvoeren?"
 
 msgid ""
-"You are about to merge customers from the merge list with the selected one. "
-"This will result in losing the merged customers and moving all their "
-"appointments to the selected customer. Are you sure you want to continue?"
+"You are about to merge the selected customers. All appointments will be "
+"transferred to the chosen customer, and the other customer records will be "
+"removed."
 msgstr ""
-"U staat op het punt om klanten uit de samenvoeglijst samen te voegen met de "
-"geselecteerde. Hierdoor zullen de samengevoegde klanten verloren gaan en al "
-"hun afspraken worden naar de geselecteerde klant verplaatst."
+"U staat op het punt de geselecteerde klanten samen te voegen. Alle afspraken "
+"worden overgezet naar de gekozen klant en de andere klantrecords worden "
+"verwijderd."
 
 msgid "You are currently logged into Bookly Cloud with the account"
 msgstr "U bent momenteel aangemeld bij Bookly Cloud met het account"

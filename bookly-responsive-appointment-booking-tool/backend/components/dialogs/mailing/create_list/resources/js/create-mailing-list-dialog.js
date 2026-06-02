@@ -3,9 +3,7 @@ jQuery(function ($) {
 
     let $dialog = $('#bookly-create-mailing-list-modal'),
         $name = $('#bookly-mailing-list-name', $dialog),
-        $newList = $('#bookly-js-new-mailing-list'),
-        $save = $('#bookly-save', $dialog),
-        new_category_id
+        $save = $('#bookly-save', $dialog)
     ;
 
     // Save categories
@@ -28,7 +26,7 @@ jQuery(function ($) {
             });
     });
 
-    $newList.on('click', function (e) {
+    window.addEventListener("bookly:create-mailing-list", function (e) {
         e.preventDefault();
         $dialog.booklyModal('show');
     });

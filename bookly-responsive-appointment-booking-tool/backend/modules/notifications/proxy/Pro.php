@@ -6,6 +6,7 @@ use Bookly\Lib;
 /**
  * @method static string renderLogs() Render 'Email Logs' content
  * @method static void renderLogsTab( string $tab ) Render 'Email Logs' tab
+ * @method static array|null getLogsSettings() Get fresh table settings (filter etc.) for Email Logs
  */
 abstract class Pro extends Lib\Base\Proxy
 {

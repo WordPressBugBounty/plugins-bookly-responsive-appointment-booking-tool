@@ -33,11 +33,11 @@ class Dialog extends Lib\Base\Component
             'codes' => $codes_list,
             'gateway' => 'sms',
             'title' => array(
-                'container' => __( 'Sms', 'bookly' ),
-                'new' => __( 'New sms notification', 'bookly' ),
-                'edit' => __( 'Edit sms notification', 'bookly' ),
-                'create' => __( 'Create notification', 'bookly' ),
-                'save' => __( 'Save notification', 'bookly' ),
+                'container' => __( 'SMS', 'bookly' ),
+                'new' => __( 'New SMS notification', 'bookly' ),
+                'edit' => __( 'Edit SMS notification', 'bookly' ),
+                'create' => __( 'Create', 'bookly' ),
+                'save' => __( 'Save', 'bookly' ),
             ),
         ) );
 

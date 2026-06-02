@@ -7,7 +7,7 @@ use Bookly\Lib;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php esc_html_e( 'Create service', 'bookly' ) ?></h5>
+                <h5 class="modal-title"><?php esc_html_e( 'New service', 'bookly' ) ?></h5>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>×</span></button>
             </div>
             <div class="modal-body">
@@ -27,8 +27,8 @@ use Bookly\Lib;
                 <?php endif ?>
             </div>
             <div class="modal-footer">
-                <?php Buttons::renderSubmit( null, 'bookly-js-save', __( 'Create service', 'bookly' ) ) ?>
-                <?php Buttons::renderCancel( __( 'Close', 'bookly' ) ) ?>
+                <?php Buttons::renderSubmit( null, 'bookly-js-save', __( 'Create', 'bookly' ) ) ?>
+                <?php Buttons::renderCancel() ?>
             </div>
         </div>
     </div>

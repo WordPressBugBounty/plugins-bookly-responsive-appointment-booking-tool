@@ -45,7 +45,7 @@ class CartInfo
 
     /** @var \BooklyCoupons\Lib\Entities\Coupon|null */
     private $coupon;
-    /** @var \BooklyPro\Lib\Entities\GiftCard|null */
+    /** @var \BooklyGiftCards\Lib\Entities\GiftCard|null */
     private $gift_card;
     /** @var bool */
     private $tax_included = true;
@@ -158,7 +158,7 @@ class CartInfo
     /**
      * Gets gift card.
      *
-     * @return \BooklyPro\Lib\Entities\GiftCard
+     * @return \BooklyGiftCards\Lib\Entities\GiftCard
      */
     public function getGiftCard()
     {

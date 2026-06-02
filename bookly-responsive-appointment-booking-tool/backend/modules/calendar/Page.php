@@ -80,7 +80,7 @@ class Page extends Lib\Base\Ajax
             array(
                 'calendar_version' => $calendar_version,
                 'clmn_min_width' => get_option( 'bookly_bc_clmn_min_width', '120' ),
-                'delete' => __( 'Delete', 'bookly' ),
+                'delete' => __( 'Delete', 'bookly' ) . '…',
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
                 'scrollable_calendar' => (int) get_option( 'bookly_cal_scrollable_calendar', '1' ),

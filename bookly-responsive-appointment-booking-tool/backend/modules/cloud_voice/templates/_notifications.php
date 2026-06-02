@@ -1,12 +1,9 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
-use Bookly\Lib\Utils\Common;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Notices;
-use Bookly\Lib\Utils\Tables;
-/** @var array $datatable */
 ?>
-<input type="hidden" name="form-notifications">
+    <input type="hidden" name="form-notifications">
     <div class="form-group">
         <label for="admin_phone">
             <?php esc_html_e( 'Administrator phone', 'bookly' ) ?>
@@ -31,45 +28,12 @@ use Bookly\Lib\Utils\Tables;
         <small class="form-text text-muted"><?php esc_html_e( 'Enter a phone number in international format. E.g. for the United States a valid phone number would be +17327572923.', 'bookly' ) ?></small>
     </div>
 
-<form method="post" action="<?php echo Common::escAdminUrl( $self::pageSlug() ) ?>">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group">
-                <input class="form-control" type="text" id="bookly-filter" placeholder="<?php esc_attr_e( 'Quick search notifications', 'bookly' ) ?>"/>
-            </div>
-        </div>
-        <div class="col-md-8 form-row justify-content-end pr-2">
-            <?php Dialogs\Sms\Dialog::renderNewNotificationButton() ?>
-            <?php Dialogs\TableSettings\Dialog::renderButton( Tables::VOICE_NOTIFICATIONS, 'BooklyL10n' ) ?>
-        </div>
+    <div id="bookly-voice_notifications-datatables" class="bookly:mb-4"></div>
+
+    <div class="bookly:mt-3">
+        <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly' ), array(), true ) ?>
     </div>
 
-    <table id="bookly-notification-list" class="table table-striped w-100">
-        <thead>
-        <tr>
-            <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
-                <?php if ( $show ) : ?>
-                    <?php if ( $column  === 'type' ) : ?>
-                        <th width="1"></th>
-                    <?php else : ?>
-                        <th><?php echo esc_html( $datatable['titles'][ $column ] ) ?></th>
-                    <?php endif ?>
-                <?php endif ?>
-            <?php endforeach ?>
-            <th width="75"></th>
-        </tr>
-        </thead>
-    </table>
-
-    <div class="form-row my-3">
-        <div class="col-auto">
-            <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly' ), array(), true ) ?>
-        </div>
-        <div class="ml-auto mr-1">
-            <?php Buttons::renderDelete( 'bookly-js-delete-notifications' ) ?>
-        </div>
-    </div>
-
-    <?php Notices\Cron\Notice::render() ?>
-</form>
+<?php Notices\Cron\Notice::render() ?>
 <?php Dialogs\Voice\Dialog::render() ?>
+<?php Dialogs\VoiceTest\Dialog::render() ?>

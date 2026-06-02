@@ -50,6 +50,8 @@ use Bookly\Lib\Utils\Price;
  * @method static bool specialHoursActive()            Check whether Special Hours add-on is active or not.
  * @method static bool staffCabinetActive()            Check whether Staff Cabinet add-on is active or not.
  * @method static bool stripeActive()                  Check whether Stripe add-on is active or not.
+ * @method static bool squareActive()                  Check whether Square add-on is active or not.
+ * @method static bool giftCardsActive()               Check whether Gift Cards add-on is active or not.
  * @method static bool tasksActive()                   Check whether Tasks add-on is active or not.
  * @method static bool taxesActive()                   Check whether Taxes add-on is active or not.
  * @method static bool waitingListActive()             Check whether Waiting List add-on is active or not.
@@ -382,8 +384,8 @@ abstract class Config
             || ( self::payuBizActive() && get_option( 'bookly_payu_biz_enabled' ) )
             || ( self::payuLatamActive() && get_option( 'bookly_payu_latam_enabled' ) )
             || ( self::stripeActive() && get_option( 'bookly_stripe_enabled' ) )
+            || ( self::squareActive() && get_option( 'bookly_cloud_square_enabled' ) )
             || self::stripeCloudEnabled()
-            || self::squareEnabled()
             || self::paypalEnabled()
         );
     }
@@ -417,22 +419,6 @@ abstract class Config
     public static function paypalEnabled()
     {
         return self::proActive() && get_option( 'bookly_paypal_enabled' ) != '0';
-    }
-
-    /**
-     * @return bool
-     */
-    public static function squareEnabled()
-    {
-        return self::proActive() && get_option( 'bookly_cloud_square_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_SQUARE );
-    }
-
-    /**
-     * @return bool
-     */
-    public static function giftEnabled()
-    {
-        return self::proActive() && get_option( 'bookly_cloud_gift_enabled' ) && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT );
     }
 
     /**

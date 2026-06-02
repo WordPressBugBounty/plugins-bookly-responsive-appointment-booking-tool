@@ -22,7 +22,7 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog;
                     <?php Config::eventsActive() && Dialog::renderOption( Notification::TYPE_ATTENDEE_DELETED, array( 'customer', 'staff', 'admin', 'custom', 'organizer' ) ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_CUSTOMER_NEW_WP_USER, array( 'customer' ) ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_STAFF_NEW_WP_USER, array( 'staff' ) ) ?>
-                    <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT ) && Dialog::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
+                    <?php Config::giftCardsActive() && Dialog::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && Dialog::renderOption( Notification::TYPE_STAFF_WAITING_LIST, array( 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && Dialog::renderOption( Notification::TYPE_FREE_PLACE_WAITING_LIST, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Dialog::renderOption( Notification::TYPE_VERIFY_PHONE, array( 'customer' ) ) ?>

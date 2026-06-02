@@ -4,8 +4,7 @@ jQuery(function($) {
     var $modal = $('#bookly-create-service-modal'),
         $serviceTitle = $('#bookly-new-service-title', $modal),
         $serviceType = $('#bookly-new-service-type', $modal),
-        $saveBtn = $('.bookly-js-save', $modal),
-        $servicesList = $('#bookly-services-list')
+        $saveBtn = $('.bookly-js-save', $modal)
     ;
 
     function format(option) {
@@ -33,7 +32,7 @@ jQuery(function($) {
         ladda.start();
         $.post(ajaxurl, booklySerialize.buildRequestDataFromForm('bookly_create_service', $modal), function(response) {
             if (response.success) {
-                $servicesList.DataTable().ajax.reload();
+                BooklyDatatables.getForm('bookly-services-datatables').reload();
                 $serviceTitle.val('');
                 $serviceType.val('simple').trigger('change');
                 $modal.booklyModal('hide');

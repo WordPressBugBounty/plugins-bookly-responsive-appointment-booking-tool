@@ -182,6 +182,7 @@ abstract class Backend
                 add_submenu_page( 'bookly-menu', $appearance, $appearance, $required_capability,
                     Modules\Appearance\Page::pageSlug(), function() { Modules\Appearance\Page::render(); } );
                 Lib\Proxy\Coupons::addBooklyMenuItem();
+                Lib\Proxy\GiftCards::addBooklyMenuItem();
                 Lib\Proxy\CustomFields::addBooklyMenuItem();
                 add_submenu_page(
                     'bookly-menu', $settings, $settings, $required_capability,
@@ -225,8 +226,6 @@ abstract class Backend
                                 case Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET:
                                     Modules\CloudMobileStaffCabinet\Page::addBooklyCloudMenuItem( $product );
                                     break;
-                                default:
-                                    Lib\Cloud\Proxy\Shared::renderCloudMenu( $product );
                             }
                         }
                     }

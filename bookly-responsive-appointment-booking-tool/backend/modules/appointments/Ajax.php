@@ -29,8 +29,6 @@ class Ajax extends Lib\Base\Ajax
 
         $data = self::getAppointmentsTableData( $filter, $limits, $columns, $order, false );
 
-        unset( $filter['date'] );
-
         Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::APPOINTMENTS, $columns, $order, $filter );
 
         wp_send_json( array(
@@ -176,18 +174,6 @@ class Ajax extends Lib\Base\Ajax
 
         Lib\Proxy\Locations::prepareAppointmentsQuery( $query );
 
-        if ( $filter['id'] != '' ) {
-            if ( Lib\Config::groupBookingActive() ) {
-                if ( is_numeric( $filter['id'] ) ) {
-                    $query->whereRaw( 'ca.id = %s OR a.id = %s', array( $filter['id'], $filter['id'] ) );
-                } else {
-                    $query->whereRaw( 'CONCAT(a.id, \'-\', ca.id) = %s', array( $filter['id'] ) );
-                }
-            } else {
-                $query->where( 'a.id', $filter['id'] );
-            }
-        }
-
         if ( $filter['date'] == 'any' ) {
             $query->whereNot( 'a.start_date', null );
         } elseif ( $filter['date'] == 'null' ) {
@@ -228,6 +214,14 @@ class Ajax extends Lib\Base\Ajax
             $query->whereIn( 'ca.status', $filter['status'] );
         }
 
+        if ( ! empty( $filter['search'] ) ) {
+            $like = '%' . $filter['search'] . '%';
+            $query->whereRaw(
+                'a.id LIKE %s OR ca.id LIKE %s OR c.full_name LIKE %s OR c.phone LIKE %s OR c.email LIKE %s OR st.full_name LIKE %s OR COALESCE(s.title, a.custom_service_name) LIKE %s',
+                array( $like, $like, $like, $like, $like, $like, $like )
+            );
+        }
+
         foreach ( $order as $sort_by ) {
             $column = str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] );
             if ( $column === 'no' ) {
@@ -239,7 +233,7 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $direction = $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING;
-            if ( $column !== 'id')  {
+            if ( $column !== 'id' ) {
                 $direction .= ', a.id ' . $direction;
             }
             $query->sortBy( $column )
@@ -273,28 +267,45 @@ class Ajax extends Lib\Base\Ajax
                 ? (int) ( $row['service_duration'] / MINUTE_IN_SECONDS )
                 : Lib\Utils\DateTime::secondsToInterval( $row['service_duration'] );
             $payment_title = '';
+            $payment_amount = '';
+            $payment_gateway = '';
+            $payment_status_html = '';
             $payment_raw_title = '';
             if ( $row['payment'] !== null && $row['status'] !== Lib\Entities\CustomerAppointment::STATUS_WAITLISTED ) {
-                $payment_title = Lib\Utils\Price::format( $row['payment'] );
+                $payment_amount = Lib\Utils\Price::format( $row['payment'] );
                 if ( $row['payment'] != $row['payment_total'] ) {
-                    $payment_title = sprintf( __( '%s of %s', 'bookly' ), $payment_title, Lib\Utils\Price::format( $row['payment_total'] ) );
+                    $payment_amount = sprintf( __( '%s of %s', 'bookly' ), $payment_amount, Lib\Utils\Price::format( $row['payment_total'] ) );
                 }
+
+                $payment_gateway = Lib\Entities\Payment::typeToString( $row['payment_type'] );
+                $payment_status_class_map = array(
+                    Lib\Entities\Payment::STATUS_COMPLETED => 'bookly:text-green-700',
+                    Lib\Entities\Payment::STATUS_PENDING   => 'bookly:text-amber-700',
+                    Lib\Entities\Payment::STATUS_REJECTED  => 'bookly:text-red-700',
+                    Lib\Entities\Payment::STATUS_REFUNDED  => 'bookly:text-gray-500',
+                );
+                $payment_status_class = isset( $payment_status_class_map[ $row['payment_status'] ] )
+                    ? $payment_status_class_map[ $row['payment_status'] ]
+                    : '';
+                $payment_status_html = sprintf(
+                    '<span%s>%s</span>',
+                    $payment_status_class ? ' class="' . esc_attr( $payment_status_class ) . '"' : '',
+                    Lib\Entities\Payment::statusToString( $row['payment_status'] )
+                );
 
                 $payment_raw_title = trim( sprintf(
                     '%s %s %s',
-                    $payment_title,
-                    Lib\Entities\Payment::typeToString( $row['payment_type'] ),
+                    $payment_amount,
+                    $payment_gateway,
                     Lib\Entities\Payment::statusToString( $row['payment_status'] )
                 ) );
 
-                $payment_title .= sprintf(
-                    ' %s <span%s>%s</span>',
-                    Lib\Entities\Payment::typeToString( $row['payment_type'] ),
-                    $row['payment_status'] == Lib\Entities\Payment::STATUS_PENDING ? ' class="text-danger"' : '',
-                    Lib\Entities\Payment::statusToString( $row['payment_status'] )
-                );
+                // Full title kept for back-compat (raw export, other consumers).
+                $payment_title = $payment_amount . ' ' . $payment_gateway . ' ' . $payment_status_html;
             }
-            // Appointment status.
+            // Appointment status. Keep the raw enum code so the client can map it
+            // to a badge variant; row['status'] is then replaced with the localized label.
+            $row['status_code'] = $row['status'];
             $row['status'] = Lib\Entities\CustomerAppointment::statusToString( $row['status'] );
             $customer_appointment = new Lib\Entities\CustomerAppointment();
             $customer_appointment->load( $row['ca_id'] );
@@ -333,24 +344,25 @@ class Ajax extends Lib\Base\Ajax
                 'no' => Lib\Config::groupBookingActive() && $row['ca_id'] ? $row['id'] . '-' . $row['ca_id'] : $row['ca_id'],
                 'start_date' => $row['start_date'] === null
                     ? __( 'N/A', 'bookly' )
-                    : ( $export ? $row['start_date'] : Lib\Utils\DateTime::formatDateTime( $row['start_date'] ) ),
+                    : ( $export ? $row['start_date'] : Lib\Utils\DateTime::formatDate( $row['start_date'] ) ),
+                'start_time' => $row['start_date'] === null || $export ? '' : Lib\Utils\DateTime::formatTime( $row['start_date'] ),
                 'staff' => array(
                     'name' => $row['staff_name'] . ( $row['staff_any'] ? $postfix_any : '' ) . ( $row['staff_visibility'] == 'archive' ? $postfix_archived : '' ),
                 ),
                 'customer' => array(
                     'full_name' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_full_name'] ),
-                    'phone' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_phone'] ),
-                    'email' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_email'] ),
+                    'phone' => $row['ca_id'] === null ? '' : Lib\Utils\Common::stripWpKses( $row['customer_phone'] ),
+                    'email' => $row['ca_id'] === null ? '' : Lib\Utils\Common::stripWpKses( $row['customer_email'] ),
                     'birthday' => Lib\Utils\Common::stripWpKses( $row['customer_birthday'] ? Lib\Utils\DateTime::formatDate( $row['customer_birthday'] ) : '' ),
                     'address' => Lib\Proxy\Pro::getFullAddressByCustomerData( array(
                         'country' => Lib\Utils\Common::stripWpKses( $row['customer_country'] ),
                         'state' => Lib\Utils\Common::stripWpKses( $row['customer_state'] ),
                         'postcode' => Lib\Utils\Common::stripWpKses( $row['customer_postcode'] ),
-                        'city' =>  Lib\Utils\Common::stripWpKses( $row['customer_city'] ),
-                        'street' => Lib\Utils\Common::stripWpKses(  $row['customer_street'] ),
-                        'street_number' =>  Lib\Utils\Common::stripWpKses( $row['customer_street_number'] ),
-                        'additional_address' =>  Lib\Utils\Common::stripWpKses( $row['customer_additional_address'] ),
-                        'full_address' =>  Lib\Utils\Common::stripWpKses( $row['customer_full_address'] ),
+                        'city' => Lib\Utils\Common::stripWpKses( $row['customer_city'] ),
+                        'street' => Lib\Utils\Common::stripWpKses( $row['customer_street'] ),
+                        'street_number' => Lib\Utils\Common::stripWpKses( $row['customer_street_number'] ),
+                        'additional_address' => Lib\Utils\Common::stripWpKses( $row['customer_additional_address'] ),
+                        'full_address' => Lib\Utils\Common::stripWpKses( $row['customer_full_address'] ),
                     ) ),
                 ),
                 'service' => array(
@@ -360,8 +372,12 @@ class Ajax extends Lib\Base\Ajax
                     'price' => Lib\Utils\Price::format( $row['service_price'] ),
                 ),
                 'status' => $row['status'],
+                'status_code' => $row['status_code'],
                 'location' => $locations_active ? $row['location'] : '',
                 'payment' => $payment_title,
+                'payment_amount' => $payment_amount,
+                'payment_gateway' => $payment_gateway,
+                'payment_status' => $payment_status_html,
                 'payment_raw_title' => $payment_raw_title,
                 'notes' => $row['notes'],
                 'number_of_persons' => (int) $row['number_of_persons'],
@@ -374,7 +390,8 @@ class Ajax extends Lib\Base\Ajax
                 'internal_note' => $row['internal_note'],
                 'online_meeting_provider' => $row['online_meeting_provider'],
                 'online_meeting_start_url' => $online_meeting_start_url,
-                'created_date' => $export ? $row['created_date'] : Lib\Utils\DateTime::formatDateTime( $row['created_date'] ),
+                'created_date' => $export ? $row['created_date'] : Lib\Utils\DateTime::formatDate( $row['created_date'] ),
+                'created_time' => $export ? '' : Lib\Utils\DateTime::formatTime( $row['created_date'] ),
             );
 
             $custom_fields = array_map( function() { return ''; }, $custom_fields );

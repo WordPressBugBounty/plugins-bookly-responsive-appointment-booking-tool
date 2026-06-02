@@ -36,8 +36,8 @@ class Dialog extends SmsDialog
                 'container' => __( 'Message', 'bookly' ),
                 'new' => __( 'New WhatsApp notification', 'bookly' ),
                 'edit' => __( 'Edit WhatsApp notification', 'bookly' ),
-                'create' => __( 'Create notification', 'bookly' ),
-                'save' => __( 'Save notification', 'bookly' ),
+                'create' => __( 'Create', 'bookly' ),
+                'save' => __( 'Save', 'bookly' ),
             ),
             'statuses' => array(
                 'APPROVED' => __( 'Approved', 'bookly' ),

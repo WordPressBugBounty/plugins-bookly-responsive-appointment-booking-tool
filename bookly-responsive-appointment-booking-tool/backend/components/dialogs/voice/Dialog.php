@@ -36,8 +36,8 @@ class Dialog extends SmsDialog
                 'container' => __( 'Voice', 'bookly' ),
                 'new' => __( 'New voice notification', 'bookly' ),
                 'edit' => __( 'Edit voice notification', 'bookly' ),
-                'create' => __( 'Create notification', 'bookly' ),
-                'save' => __( 'Save notification', 'bookly' ),
+                'create' => __( 'Create', 'bookly' ),
+                'save' => __( 'Save', 'bookly' ),
             ),
         ) );
 

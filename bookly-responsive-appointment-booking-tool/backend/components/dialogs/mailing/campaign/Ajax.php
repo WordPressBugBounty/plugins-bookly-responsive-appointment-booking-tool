@@ -29,15 +29,14 @@ class Ajax extends Lib\Base\Ajax
 
     public static function startCampaign()
     {
-        $campaign = new Lib\Entities\MailingCampaign();
-        $id = self::parameter( 'id' );
-        if ( $id ) {
-            $campaign->load( $id );
+        $ids = self::parameter( 'ids' );
+        if ( $ids ) {
+            Lib\Entities\MailingCampaign::query()
+                ->update()
+                ->set( 'send_at', current_time( 'mysql' ) )
+                ->whereIn( 'id', $ids )
+                ->execute();
         }
-
-        $campaign
-            ->setSendAt( current_time( 'mysql' ) )
-            ->save();
 
         Lib\Routines::mailing();
         

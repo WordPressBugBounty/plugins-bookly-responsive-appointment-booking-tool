@@ -35,8 +35,6 @@ class Account extends Base
     const PRODUCT_ZAPIER = 'zapier';
     const PRODUCT_CRON = 'cron';
     const PRODUCT_VOICE = 'voice';
-    const PRODUCT_SQUARE = 'square';
-    const PRODUCT_GIFT = 'gift';
     const PRODUCT_WHATSAPP = 'whatsapp';
     const PRODUCT_MOBILE_STAFF_CABINET = 'mobile-staff-cabinet';
 

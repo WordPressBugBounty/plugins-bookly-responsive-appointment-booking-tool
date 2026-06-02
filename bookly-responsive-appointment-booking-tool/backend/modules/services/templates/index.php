@@ -9,63 +9,14 @@ use Bookly\Backend\Components\Dialogs;
  * @var array $datatable
  */
 ?>
-<div id="bookly-tbs" class="wrap">
+<div id="bookly-tbs" class="wrap bookly-css-root">
     <div class="form-row align-items-center mb-3">
         <h4 class="col m-0"><?php esc_html_e( 'Services', 'bookly' ) ?></h4>
         <?php Support\Buttons::render( $self::pageSlug() ) ?>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="form-row justify-content-end">
-                <div class="col-12 col-sm-auto">
-                    <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Services order', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-service-order-modal', 'disabled' => 'disabled' ), true ) ?>
-                </div>
-                <?php Proxy\Shared::renderTopButtons() ?>
-                <div class="col-12 col-sm-auto">
-                    <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Categories', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-service-categories-modal', 'disabled' => 'disabled' ), true ) ?>
-                </div>
-                <div class="col-auto">
-                    <?php Controls\Buttons::renderAdd( null, 'w-100 mb-3', __( 'Add service', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-create-service-modal' ) ) ?>
-                </div>
-                <?php Dialogs\TableSettings\Dialog::renderButton( 'services' ) ?>
-            </div>
-            <div class="form-row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <input class="form-control" type="text" id="bookly-filter-search" placeholder="<?php esc_attr_e( 'Quick search services', 'bookly' ) ?>"/>
-                    </div>
-                </div>
-                <div class="col-md-3 col-lg-2">
-                    <div class="form-group">
-                        <select class="form-control bookly-js-select" id="bookly-filter-category" data-placeholder="<?php esc_attr_e( 'Categories', 'bookly' ) ?>">
-                            <?php foreach ( $categories as $category ) : ?>
-                                <option value="<?php echo esc_attr( $category['id'] ) ?>"><?php echo esc_html( $category['name'] ) ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <table id="bookly-services-list" class="table table-striped w-100">
-                <thead>
-                <tr>
-                    <?php if ( Proxy\Shared::prepareServiceTypes( array() ) ) : ?>
-                        <th width="24"></th>
-                    <?php endif ?>
-                    <th width="24"></th>
-                    <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
-                        <?php if ( $show ) : ?>
-                            <th><?php echo esc_html( $datatable['titles'][ $column ] ) ?></th>
-                        <?php endif ?>
-                    <?php endforeach ?>
-                    <th width="75"></th>
-                </tr>
-                </thead>
-            </table>
-
-            <div class="text-right mt-3">
-                <?php Controls\Buttons::renderDelete( 'bookly-services-list-delete-button' ) ?>
-            </div>
+    <div class="bookly:card">
+        <div class="bookly:card-body">
+            <div id="bookly-services-datatables"></div>
         </div>
     </div>
     <?php Dialogs\Common\CascadeDelete::render() ?>

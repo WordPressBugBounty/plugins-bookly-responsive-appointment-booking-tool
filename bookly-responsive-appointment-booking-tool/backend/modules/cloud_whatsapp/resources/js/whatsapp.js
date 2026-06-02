@@ -1,9 +1,7 @@
 jQuery(function ($) {
     'use strict';
-    let tabs = {
-            $settings: $('#settings')
-        },
-        hash = window.location.href.split('#');
+
+    const { today, getLocalTimeZone, parseDate } = window.BooklyDatatables.calendarDate;
 
     /**
      * Notifications Tab
@@ -45,110 +43,114 @@ jQuery(function ($) {
         });
 
     /**
-     * Date range pickers options.
-     */
-    var picker_ranges = {};
-    picker_ranges[BooklyL10nGlobal.dateRange.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-    picker_ranges[BooklyL10nGlobal.dateRange.today] = [moment(), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.last_7] = [moment().subtract(7, 'days'), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.last_30] = [moment().subtract(30, 'days'), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
-    picker_ranges[BooklyL10n.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
-    var locale = $.extend({}, BooklyL10nGlobal.dateRange, BooklyL10nGlobal.datePicker);
-
-    /**
      * WhatsApp Details Tab.
      */
     $('[href="#details"]').one('click', function () {
-        var $date_range = $('#whatsapp_date_range');
-        $date_range.daterangepicker(
-            {
-                parentEl: $date_range.parent(),
-                startDate: moment().subtract(30, 'days'), // by default select "Last 30 days"
-                ranges: picker_ranges,
-                locale: locale,
-                showDropdowns: true,
-                linkedCalendars: false,
-            },
-            function (start, end) {
-                var format = 'YYYY-MM-DD';
-                $date_range
-                    .data('date', start.format(format) + ' - ' + end.format(format))
-                    .find('span')
-                    .html(start.format(BooklyL10nGlobal.dateRange.format) + ' - ' + end.format(BooklyL10nGlobal.dateRange.format));
-            }
-        );
+        const detailsTable = 'whatsapp_details';
 
-        /**
-         * Init Columns.
-         */
+        const tz = getLocalTimeZone();
+        const t = today(tz);
+        const startOfMonth = d => d.set({ day: 1 });
+        const endOfMonth = d => d.set({ day: 1 }).add({ months: 1 }).subtract({ days: 1 });
+        const ymd = d => d.year + '-' + String(d.month).padStart(2, '0') + '-' + String(d.day).padStart(2, '0');
+
+        const datePresets = [
+            { label: BooklyL10n.dateRange.yesterday, range: { start: t.subtract({ days: 1 }),  end: t.subtract({ days: 1 }) } },
+            { label: BooklyL10n.dateRange.today,     range: { start: t,                        end: t                       } },
+            { label: BooklyL10n.dateRange.last_7,    range: { start: t.subtract({ days: 7 }),  end: t                       } },
+            { label: BooklyL10n.dateRange.last_30,   range: { start: t.subtract({ days: 30 }), end: t                       } },
+            { label: BooklyL10n.dateRange.thisMonth, range: { start: startOfMonth(t),                         end: endOfMonth(t)                         } },
+            { label: BooklyL10n.dateRange.lastMonth, range: { start: startOfMonth(t.subtract({ months: 1 })), end: endOfMonth(t.subtract({ months: 1 })) } },
+        ];
+
+        let dateValue;
+        const savedFilter = BooklyL10n.datatables[detailsTable].settings.filter || {};
+        if (savedFilter.range && savedFilter.range !== 'any') {
+            const parts = String(savedFilter.range).split(' - ');
+            if (parts.length === 2) {
+                try { dateValue = { start: parseDate(parts[0].trim()), end: parseDate(parts[1].trim()) }; } catch (e) { /* ignore */ }
+            }
+        }
+        function serializeDate(value) {
+            if (!value || !value.start || !value.end) return 'any';
+            return ymd(value.start) + ' - ' + ymd(value.end);
+        }
+
+        const whatsappErrorBadgeClass = 'bookly:bg-red-100 bookly:text-red-800 bookly:border-red-200';
+        const whatsappStatusBadgeClass = {
+            'sent':   'bookly:bg-green-100 bookly:text-green-800 bookly:border-green-200',
+            'failed': whatsappErrorBadgeClass,
+        };
+
         let columns = [];
-
-        $.each(BooklyL10n.datatables.whatsapp_details.settings.columns, function (column, show) {
-            if (show) {
-                switch (column) {
-                    case 'status':
-                        columns.push({
-                            data: column,
-                            render: function (data, type, row, meta) {
-                                return BooklyL10n.status.hasOwnProperty(data)
-                                    ? BooklyL10n.status[data]
-                                    : (data.charAt(0).toUpperCase() + data.slice(1)).replaceAll('-', ' ');
-                            }
-                        });
-                        break;
-                    default:
-                        columns.push({data: column, render: $.fn.dataTable.render.text()});
-                        break;
-                }
-
+        $.each(BooklyL10n.datatables[detailsTable].settings.columns, function (column, show) {
+            switch (column) {
+                case 'status':
+                    columns.push({
+                        data: column,
+                        render: function (data) {
+                            return BooklyL10n.status.hasOwnProperty(data)
+                                ? BooklyL10n.status[data]
+                                : (data.charAt(0).toUpperCase() + data.slice(1)).replaceAll('-', ' ');
+                        },
+                        badge: function (row) { return whatsappStatusBadgeClass[row.status] || whatsappErrorBadgeClass; },
+                    });
+                    break;
+                default:
+                    columns.push({data: column, render: BooklyDatatables.escapeHtml()});
+                    break;
             }
+            columns[columns.length - 1].title     = BooklyL10n.datatables[detailsTable].titles[column] || column;
+            columns[columns.length - 1].name      = column;
+            columns[columns.length - 1].show      = show;
+            columns[columns.length - 1].orderable = false;
         });
+
         if (columns.length) {
-            let dt = $('#bookly-messages').DataTable({
-                ordering: false,
-                paging: false,
-                info: false,
-                searching: false,
-                processing: true,
-                responsive: true,
+            BooklyDatatables.showForm('bookly-' + detailsTable + '-datatables', {
+                noCheckboxes: true,
+                datePicker: BooklyL10n.datePicker,
                 ajax: {
                     url: ajaxurl,
+                    method: 'POST',
                     data: function (d) {
-                        return {
+                        return $.extend({}, d, {
                             action: 'bookly_get_messages_list',
                             csrf_token: BooklyL10nGlobal.csrf_token,
-                            range: $date_range.data('date')
-                        };
+                            filter: { range: serializeDate(dateValue) }
+                        });
                     },
                     dataSrc: 'list'
                 },
                 columns: columns,
-                language: {
-                    zeroRecords: BooklyL10n.zeroRecords,
-                    processing: BooklyL10n.processing,
-                    emptyTable: BooklyL10n.emptyTable,
-                    loadingRecords: BooklyL10n.loadingRecords
+                tableSettings: Object.assign({}, BooklyL10n.datatables[detailsTable], {
+                    l10n: Object.assign({}, BooklyL10n.datatables.l10n, {zeroRecords: BooklyL10n.zeroRecords})
+                }),
+                saveSettings: function (settings) {
+                    $.post(ajaxurl, Object.assign({
+                        action: 'bookly_update_table_settings',
+                        table: detailsTable,
+                        csrf_token: BooklyL10nGlobal.csrf_token
+                    }, settings));
                 },
-                layout: {
-                    bottomStart: 'paging',
-                    bottomEnd: null
-                }
-            });
-
-            function onChangeFilter() {
-                dt.ajax.reload();
-            }
-
-            $date_range.on('apply.daterangepicker', onChangeFilter);
-            $(this).on('click', function () {
-                dt.ajax.reload(null, false);
+                filters: [{
+                    type: 'dateRange',
+                    name: 'date',
+                    label: BooklyL10n.filters.date,
+                    initialValue: dateValue,
+                    presets: datePresets,
+                    onChange: function (v) { dateValue = v; },
+                }],
             });
         }
     });
 
-    $('#bookly-save', tabs.$settings)
-        .on('click', function (e) {
+    /**
+     * Settings Tab.
+     */
+    const $settingsTab = $('#settings');
+    $('.bookly-js-whatsapp-settings-save')
+        .on('click', function () {
             let ladda = Ladda.create(this);
             ladda.start();
 
@@ -156,27 +158,48 @@ jQuery(function ($) {
                 url: ajaxurl,
                 type: 'POST',
                 data: booklySerialize.buildRequestData('bookly_cloud_whatsapp_save_settings', {
-                    access_token: $('[name=access_token]', tabs.$settings).val(),
-                    phone_id: $('[name=phone_id]', tabs.$settings).val(),
-                    business_account_id: $('[name=business_account_id]', tabs.$settings).val(),
+                    access_token: $('[name=access_token]', $settingsTab).val(),
+                    phone_id: $('[name=phone_id]', $settingsTab).val(),
+                    business_account_id: $('[name=business_account_id]', $settingsTab).val(),
                 }),
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {
                         booklyAlert({success: [BooklyL10n.settingsSaved]});
                     } else {
-                        booklyAlert({success: [response.data.message]});
+                        booklyAlert({error: [response.data.message]});
                     }
                     ladda.stop();
                 }
             });
         });
 
+    /**
+     * Tab switching.
+     */
+    const
+        $whatsapp_tabs    = $('#whatsapp_tabs'),
+        $whatsapp_content = $('#whatsapp_tabs_content'),
+        $whatsapp_footer  = $('.bookly-js-whatsapp-settings-footer');
+    $whatsapp_tabs.on('click', 'li', function (e) {
+        e.preventDefault();
+        $('li a', $whatsapp_tabs).removeClass('bookly:active');
+        $(this).find('a').addClass('bookly:active');
+        $('>', $whatsapp_content).removeClass('bookly:active');
+        const href = $(this).find('a').attr('href');
+        $whatsapp_content.find(href).addClass('bookly:active');
+        $whatsapp_footer.prop('hidden', href !== '#settings');
+    });
+
+    /**
+     * Deep-link via hash (#settings, #details).
+     */
+    let hash = window.location.href.split('#');
     if (hash.length > 1) {
         switch (hash[1]) {
             case 'settings':
             case 'details':
-                $('[href="#' + hash[1] + '"]').click()
+                $('a[href="#' + hash[1] + '"]', $whatsapp_tabs).closest('li').trigger('click');
                 window.location.href = '#';
                 break;
         }

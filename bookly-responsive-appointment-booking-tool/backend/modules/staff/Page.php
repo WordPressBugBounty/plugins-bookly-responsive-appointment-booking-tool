@@ -11,12 +11,13 @@ class Page extends Lib\Base\Component
     public static function render()
     {
         self::enqueueStyles( array(
-            'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ), ),
+            'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ), 'tailwind/tailwind.css' => array( 'bookly-backend-globals') ),
+
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/staff-list.js' => array( 'bookly-backend-globals' ) ),
-            'backend' => array( 'js/nav-scrollable.js' => array( 'bookly-backend-globals' ), ),
+            'backend' => array( 'js/nav-scrollable.js' => array( 'bookly-backend-globals' ), 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
             'frontend' => array( 'js/intlTelInput.min.js' => array( 'jquery' ) ),
         ) );
 
@@ -38,15 +39,30 @@ class Page extends Lib\Base\Component
             'areYouSure' => esc_attr__( 'Are you sure?', 'bookly' ),
             'categories' => $categories,
             'uncategorized' => esc_attr__( 'Uncategorized', 'bookly' ),
-            'edit' => esc_attr__( 'Edit', 'bookly' ),
+            'edit' => esc_attr__( 'Edit', 'bookly' ) . '…',
             'reorder' => esc_attr_x( 'Reorder', 'order of elements', 'bookly' ),
             'noResultFound' => esc_attr__( 'No results found', 'bookly' ),
             'zeroRecords' => __( 'No matching records found', 'bookly' ),
             'processing' => esc_attr__( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'errors' => $errors,
+            'new_staff' => __( 'New staff member', 'bookly' ) . '…',
+            'manage_categories' => __( 'Categories', 'bookly' ) . '…',
+            'duplicate' => __( 'Duplicate', 'bookly' ) . '…',
+            'search' => __( 'Quick search by name, email, phone', 'bookly' ) . '…',
+            'order' => _x( 'Order', 'drag to reorder', 'bookly' ) . '…',
+            'delete' => __( 'Delete', 'bookly' ) . '…',
+            'filters' => array(
+                'show_archived' => __( 'Show archived', 'bookly' ),
+                'visibility' => __( 'Visibility', 'bookly' ),
+                'category' => __( 'Category', 'bookly' ),
+            ),
+            'visibility_public' => __( 'Public', 'bookly' ),
+            'visibility_private' => __( 'Private', 'bookly' ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
             'datatables' => $datatables,
+            'proEnabled' => Lib\Config::proActive(),
+            'isAdmin' => Lib\Utils\Common::isCurrentUserAdmin(),
         ) );
 
         self::renderTemplate( 'index', compact( 'categories', 'datatables' ) );

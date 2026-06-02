@@ -34,7 +34,7 @@ class Ajax extends Lib\Base\Ajax
         );
 
         $query = Lib\Entities\Staff::query( 's' )
-            ->select( 's.id, s.full_name, s.color' )
+            ->select( 's.id, s.full_name, s.color, s.attachment_id' )
             ->tableJoin( $wpdb->users, 'wpu', 'wpu.ID = s.wp_user_id' );
 
         if ( ! Lib\Utils\Common::isCurrentUserAdmin() ) {
@@ -52,12 +52,20 @@ class Ajax extends Lib\Base\Ajax
 
         $total = $query->count();
 
+        $has_visibility_filter = isset( $filter['visibility'] )
+            && is_array( $filter['visibility'] )
+            && count( $filter['visibility'] ) > 0
+            && count( $filter['visibility'] ) < 2;
+
         if ( $filter['archived'] ) {
-            if ( isset( $filter['visibility'] ) && $filter['visibility'] != '' ) {
-                $query->whereRaw( 's.visibility = %s OR s.visibility = %s', array( $filter['visibility'], 'archive' ) );
+            if ( $has_visibility_filter ) {
+                $vis = $filter['visibility'];
+                $placeholders = implode( ',', array_fill( 0, count( $vis ), '%s' ) );
+                $params = array_merge( $vis, array( 'archive' ) );
+                $query->whereRaw( "s.visibility IN ($placeholders) OR s.visibility = %s", $params );
             }
-        } elseif ( isset( $filter['visibility'] ) && $filter['visibility'] != '' ) {
-            $query->where( 's.visibility', $filter['visibility'] );
+        } elseif ( $has_visibility_filter ) {
+            $query->whereIn( 's.visibility', $filter['visibility'] );
         } else {
             $query->whereNot( 's.visibility', 'archive' );
         }
@@ -103,6 +111,7 @@ class Ajax extends Lib\Base\Ajax
 
         foreach ( $data as &$row ) {
             $row['color'] = esc_attr( $row['color'] );
+            $row['image'] = Lib\Utils\Common::getAttachmentUrl( $row['attachment_id'] );
         }
 
         unset( $filter['search'], $row );

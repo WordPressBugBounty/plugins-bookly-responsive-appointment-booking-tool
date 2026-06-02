@@ -21,14 +21,4 @@ class Dialog extends Lib\Base\Component
 
         self::renderTemplate( 'dialog' );
     }
-
-    /**
-     * render button
-     */
-    public static function renderNewListButton()
-    {
-        print '<div class="col-auto">';
-        Buttons::renderAdd( 'bookly-js-new-mailing-list', 'btn-success', __( 'New list', 'bookly' ) );
-        print '</div>';
-    }
 }

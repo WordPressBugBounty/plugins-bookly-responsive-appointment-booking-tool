@@ -35,9 +35,7 @@ class API extends Cache
     public $cron;
     /** @var Voice */
     public $voice;
-    /** @var \BooklyPro\Lib\Cloud\Square */
     public $square;
-    /** @var \BooklyPro\Lib\Cloud\Gift */
     public $gift;
     /** @var WhatsApp */
     public $whatsapp;
@@ -106,7 +104,6 @@ class API extends Cache
 
                     return $this->productX[ $slug ];
                 }
-                return Proxy\Shared::getProduct( $slug, $this );
         }
     }
 

@@ -1,6 +1,6 @@
 jQuery(function ($) {
     'use strict';
-    let $servicesList = $('#bookly-services-list'),
+    let $servicesList = $('#bookly-services-datatables'),
         $serviceDialog = $('#bookly-edit-service-modal'),
         $containers = $('.bookly-js-service-containers .tab-pane > div'),
         $serviceLoading = $('.bookly-js-service-containers > .bookly-js-loading', $serviceDialog),
@@ -296,7 +296,7 @@ jQuery(function ($) {
                                 BooklyExtrasL10n.list = response.data.new_extras_list
                             }
                             $(document.body).trigger('service.updateResponse', [response.data]);
-                            $servicesList.DataTable().ajax.reload(null, false);
+                            BooklyDatatables.getForm('bookly-services-datatables').reload();
                             $serviceDialog.booklyModal('hide');
                         }
                     }, 'json').always(function () {
@@ -306,12 +306,6 @@ jQuery(function ($) {
             }
         });
     }
-
-    $servicesList.on('click', '[data-action="edit"]', function () {
-        let $tr = $(this).closest('tr'),
-            data = $servicesList.DataTable().row($tr.hasClass('child') ? $tr.prev() : $tr).data();
-        editService(data.id);
-    });
 
     $(document.body).on('service.edit', {}, function (event, service_id) {
         editService(service_id);

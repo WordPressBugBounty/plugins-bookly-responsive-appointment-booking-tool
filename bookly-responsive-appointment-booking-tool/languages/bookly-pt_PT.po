@@ -9,8 +9,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:30+0000\n"
-"PO-Revision-Date: 2026-03-30 23:48+0000\n"
-"Last-Translator: Isabel Andrade\n"
+"PO-Revision-Date: 2026-05-29 12:13+0000\n"
+"Last-Translator: support@bookly.info\n"
 "Language-Team: Portuguese (Portugal)\n"
 "X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
@@ -26,6 +26,12 @@ msgstr "Experimente!"
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
 msgstr "\"%s\" é muito longo (%d caracteres no máximo)."
+
+#, php-format
+msgid "%d country"
+msgid_plural "%d countries"
+msgstr[0] "%d país"
+msgstr[1] "%d países"
 
 #, php-format
 msgid "%d day"
@@ -301,9 +307,6 @@ msgstr "Aceder token"
 msgid "Access token link for quick authorization in the mobile app"
 msgstr "Link do token de acesso para autorização rápida na app móvel"
 
-msgid "Access tokens"
-msgstr "Tokens de acesso"
-
 msgid "Account ID"
 msgstr "ID da conta"
 
@@ -422,6 +425,9 @@ msgstr "Adicionar extras"
 
 msgid "Add field"
 msgstr "Adicione um campo"
+
+msgid "Add filter"
+msgstr "Adicionar filtro"
 
 msgid "Add gift card"
 msgstr "Adicionar cartão oferta"
@@ -927,9 +933,6 @@ msgstr "Aprovado"
 
 msgid "Approved appointments"
 msgstr "Reservas aprovadas"
-
-msgid "Approved at"
-msgstr "Aprovado em"
 
 msgid "Archive"
 msgstr "Arquivar"
@@ -1557,10 +1560,6 @@ msgstr ""
 msgid "Change password"
 msgstr "Alterar a palavra-passe"
 
-msgid "Change the sender's name to your phone number or any other name"
-msgstr ""
-"Altere o nome do emissor para o seu número de telefone ou outro nome qualquer"
-
 msgid "Changes saved."
 msgstr "Alterações guardadas."
 
@@ -1670,6 +1669,12 @@ msgstr "Limpar todos os registos"
 
 msgid "Clear field"
 msgstr "Limpar campo"
+
+msgid "Clear filter"
+msgstr "Limpar filtro"
+
+msgid "Clear search"
+msgstr "Limpar pesquisa"
 
 #, php-format
 msgid "Click \"%s\" to create your first one"
@@ -1984,6 +1989,9 @@ msgstr ""
 msgid "Counselling"
 msgstr "Consultoria"
 
+msgid "Countries marked with this icon require extra steps."
+msgstr "Os países assinalados com este ícone exigem passos adicionais."
+
 msgid "Country"
 msgstr "País"
 
@@ -2029,14 +2037,8 @@ msgstr "Criar outro cupão"
 msgid "Create customer"
 msgstr "Criar cliente"
 
-msgid "Create new access token"
-msgstr "Crie um novo token de acesso"
-
 msgid "Create new appointment for every recurring booking"
 msgstr "Crie uma nova reserva para cada reserva recorrente"
-
-msgid "Create notification"
-msgstr "Criar notificação"
 
 msgid "Create online meetings"
 msgstr "Criar reuniões on-line"
@@ -2050,12 +2052,6 @@ msgstr "Criar pacote"
 
 msgid "Create payment"
 msgstr "Criar pagamento"
-
-msgid "Create service"
-msgstr "Criar um serviço"
-
-msgid "Create staff"
-msgstr "Criar equipa"
 
 msgid "Create WordPress user"
 msgstr "Criar utilizador WordPress"
@@ -3215,6 +3211,9 @@ msgstr "Descrição para o calendário do cliente"
 msgid "Design consultants"
 msgstr "Consultor de design"
 
+msgid "Destination country"
+msgstr "País de destino"
+
 msgid ""
 "Destination URL where Zoom will send the access token after the user "
 "completes the OAuth authentication"
@@ -3372,6 +3371,9 @@ msgstr "Concluir"
 msgid "Download"
 msgstr "Descarregar"
 
+msgid "Download all invoices"
+msgstr "Descarregar todas as faturas"
+
 msgid "Download filtered invoices"
 msgstr "Descarregar faturas filtradas"
 
@@ -3386,6 +3388,10 @@ msgstr "Descarregar faturas "
 
 msgid "Download selected invoices"
 msgstr "Descarregar faturas selecionadas"
+
+msgctxt "drag to reorder"
+msgid "Order"
+msgstr "Ordem"
 
 msgid "Driving Instructors"
 msgstr "Instrutores de condução "
@@ -3431,7 +3437,6 @@ msgstr ""
 "um código de compra. Após o término do período de avaliação, será necessário "
 "ativar o código de compra."
 
-#, fuzzy
 #| msgid ""
 #| "During the trial period, you will have full access to all features of "
 #| "this product  completely free of charge."
@@ -3506,11 +3511,12 @@ msgstr "Editar o pacote de compromissos"
 msgid "Edit service"
 msgstr "Editar um serviço"
 
-msgid "Edit sms notification"
-msgstr "Editar notificação sms"
+#| msgid "Edit sms notification"
+msgid "Edit SMS notification"
+msgstr "Editar notificação SMS"
 
-msgid "Edit staff"
-msgstr "Editar funcionário"
+msgid "Edit staff member"
+msgstr "Editar membro do staff"
 
 msgid "Edit Status"
 msgstr "Editar Status"
@@ -3761,9 +3767,9 @@ msgid ""
 "Enter the fixed amount of discount (e.g. 10 off). To specify a percentage "
 "discount (e.g. 10% off), add '%' symbol to a numerical value."
 msgstr ""
-"Insira o valor fixo do desconto (por exemplo: 10 de desconto). Para "
-"especificar um desconto percentual (por exemplo: 10% de desconto), adicione "
-"o símbolo % ao valor numérico."
+"Digite o valor fixo do desconto (ex: 10 de desconto). Para especificar um "
+"desconto percentual (ex: 10% de desconto), adicione o símbolo '%' a um valor "
+"numérico."
 
 #, php-format
 msgid ""
@@ -3797,7 +3803,6 @@ msgstr ""
 "Introduza as etiquetas dos campos nas definições de audiência do seu "
 "Mailchimp, de acordo com os dados do Bookly."
 
-#, fuzzy
 #| msgid "Enter the URL of the page where this forms shortcode is placed."
 msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "Insira o URL da página onde este código de formulário está colocado."
@@ -3818,13 +3823,6 @@ msgstr "Introduza o código de verificação do email "
 
 msgid "Enter verification code from SMS"
 msgstr "Introduza o código de verificação da SMS"
-
-msgid ""
-"Enter your iCloud email and the app-specific password in Edit Staff > "
-"Advanced > Apple Calendar."
-msgstr ""
-"Introduza o seu endereço de e-mail do iCloud e a palavra-passe específica da "
-"aplicação em Editar pessoal > Avançado > Calendário da Apple."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Insira o seu código de compra para um add-on ou pacote Bookly."
@@ -4009,6 +4007,9 @@ msgstr "Falhou"
 msgid "Failed to create an online meeting"
 msgstr "Falhou na criação de uma reunião online"
 
+msgid "Failed to load data"
+msgstr "Não foi possível carregar os dados"
+
 msgid "Failed to send SMS."
 msgstr "Não foi possível enviar a SMS."
 
@@ -4055,6 +4056,9 @@ msgstr "A extensão do ficheiro não é permitida"
 
 msgid "Files"
 msgstr "Ficheiros"
+
+msgid "Filter"
+msgstr "Filtro"
 
 msgid "Filter events"
 msgstr "Filtrar eventos"
@@ -4217,9 +4221,6 @@ msgstr "Definições gerais"
 msgid "Generate"
 msgstr "Gerar"
 
-msgid "Generate a new app-specific password for Bookly."
-msgstr "Gerar uma nova palavra-passe específica da aplicação para o Bookly."
-
 #, php-format
 msgid "Generate an app-specific password at %s"
 msgstr "Gerar uma palavra-passe específica para a aplicação em %s"
@@ -4267,17 +4268,11 @@ msgstr "Cartão de oferta válido a partir da data"
 msgid "Gift Cards"
 msgstr "Cartões de Oferta"
 
-msgid "Gift cards"
-msgstr "Cartões de presente"
-
 msgid "Gift cards settings"
 msgstr "Definições de cartões-presente"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "O endereço e-mail digitado já se encontra registado. Obrigado! "
-
-msgid "Go to appleid.apple.com and sign in with your Apple ID."
-msgstr "Aceda a appleid.apple.com e inicie sessão com o seu Apple ID."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4985,6 +4980,9 @@ msgstr "Ocultar comentário"
 
 msgid "Hide form borders"
 msgstr "Ocultar os limites do formulário"
+
+msgid "Hide list"
+msgstr "Ocultar lista"
 
 msgid "Hide services step"
 msgstr "Esconder etapa de serviços"
@@ -6027,9 +6025,6 @@ msgstr "Hora inválida"
 msgid "Invert datepicker colors"
 msgstr "Inverter cores do datepicker"
 
-msgid "Invite"
-msgstr "Convidar"
-
 msgid "INVOICE"
 msgstr "FATURA"
 
@@ -6134,6 +6129,9 @@ msgstr "Adira já"
 msgid "Join online meeting"
 msgstr "Inscreva-se na reunião on-line"
 
+msgid "Jump to today"
+msgstr "Ir para hoje"
+
 msgid "Just to help us spread the word and boost our motivation."
 msgstr "É só para passar a palavra e incentivar-nos."
 
@@ -6151,6 +6149,9 @@ msgstr "Últimos 30 dias"
 
 msgid "Last 7 days"
 msgstr "Últimos 7 dias"
+
+msgid "Last 90 days"
+msgstr "Últimos 90 dias"
 
 msgid "Last appointment"
 msgstr "Última reserva"
@@ -6453,15 +6454,9 @@ msgstr "Combinar"
 msgid "Merge customers"
 msgstr "Combinar clientes"
 
-msgid "Merge list"
-msgstr "Combinar a lista"
-
 msgid "Merge repeating custom fields for multiple bookings of the service"
 msgstr ""
 "Combinar campos personalizados repetidos para múltiplas reservas do serviço"
-
-msgid "Merge with"
-msgstr "Combinar com"
 
 msgid "Message"
 msgstr "Mensagem"
@@ -6593,11 +6588,6 @@ msgstr "Nome da categoria do pessoal"
 msgid "Name of ticket type"
 msgstr "Nome do tipo de nota"
 
-msgid "Navigate to Sign-In and Security > App-Specific Passwords."
-msgstr ""
-"Navegue até Iniciar sessão e segurança > Palavras-passe específicas da "
-"aplicação."
-
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6695,8 +6685,12 @@ msgstr "Nova senha"
 msgid "New recurring booking notification"
 msgstr "Notificação de uma nova reserva recorrente"
 
-msgid "New sms notification"
-msgstr "Nova notificação sms"
+msgid "New service"
+msgstr "Novo serviço"
+
+#| msgid "New sms notification"
+msgid "New SMS notification"
+msgstr "Nova notificação SMS"
 
 msgid "New staff account role"
 msgstr "Nova função de conta de pessoal"
@@ -6789,6 +6783,12 @@ msgstr "Nenhum compromisso encontrado."
 
 msgid "No appointments."
 msgstr "Nenhuma reserva"
+
+msgid "No columns match"
+msgstr "Não há colunas correspondentes"
+
+msgid "No country found."
+msgstr "Não foi encontrado nenhum país."
 
 msgid "No coupons found."
 msgstr "Nenhum cupão encontrado."
@@ -7234,6 +7234,13 @@ msgstr "no mesmo dia"
 
 msgid "On waiting list"
 msgstr "Na lista de espera"
+
+#, php-format
+#| msgid "Your Sender ID will work in %1$s and %2$d other countries."
+msgid ""
+"Once approved, your Sender ID will work in %1$s and %2$d other countries."
+msgstr ""
+"Após a aprovação, o seu Sender ID funcionará em %1$s e %2$d outros países."
 
 msgid ""
 "Once created, copy <b>Client ID</b> and <b>Secret</b> and use them in the "
@@ -7895,6 +7902,10 @@ msgid "Please select some days"
 msgstr "Por favor, selecione alguns dias"
 
 msgid ""
+"Please select the customer from the dropdown who will remain after the merge."
+msgstr "Seleciona no menu suspenso o cliente que vai ficar após a fusão."
+
+msgid ""
 "Please setup and enable New customer's WordPress user login details "
 "notification"
 msgstr ""
@@ -8161,23 +8172,29 @@ msgstr "Quantidade do tipo de nota"
 msgid "Queued"
 msgstr "Na Fila"
 
+msgid "Quick range"
+msgstr "Faixa rápida"
+
 msgid "Quick search"
 msgstr "Pesquisa rápida"
 
-msgid "Quick search customer"
-msgstr "Pesquisa rápida de cliente"
+msgid "Quick search by ID, customer, staff, service"
+msgstr "Pesquisa rápida por ID, cliente, funcionário, serviço"
 
-msgid "Quick search customers"
-msgstr "Pesquisa rápida dos clientes"
+msgid "Quick search by name"
+msgstr "Pesquisa rápida por nome"
 
-msgid "Quick search notifications"
-msgstr "Notificações de pesquisa rápida"
+msgid "Quick search by name, email, phone"
+msgstr "Pesquisa rápida por nome, e-mail ou telefone"
 
-msgid "Quick search services"
-msgstr "Pesquisa rápida serviços"
+msgid "Quick search by no., customer, provider, service"
+msgstr "Pesquisa rápida por número, cliente, fornecedor, serviço"
 
-msgid "Quick search staff"
-msgstr "Pesquisa rápida dos funcionários"
+msgid "Quick search by recipient, subject"
+msgstr "Pesquisa rápida por destinatário, assunto"
+
+msgid "Quick search by title, category"
+msgstr "Pesquisa rápida por título, categoria"
 
 msgid "Radio Button"
 msgstr "Botão de opção"
@@ -8282,6 +8299,9 @@ msgid "Reference"
 msgstr ""
 "Referência\n"
 
+msgid "Refresh"
+msgstr "Atualizar"
+
 msgid "Refund"
 msgstr "Reembolsar "
 
@@ -8344,6 +8364,9 @@ msgstr "Remover cliente"
 msgid "Remove field"
 msgstr "Remover campo"
 
+msgid "Remove filter"
+msgstr "Remover filtro"
+
 msgid "Remove item"
 msgstr "Remover item"
 
@@ -8352,9 +8375,6 @@ msgstr "Remover Código Promocional"
 
 msgid "Renew"
 msgstr "Renovar"
-
-msgid "Reorder"
-msgstr "Reordenar"
 
 msgid "Repeat"
 msgstr "Repetir"
@@ -8376,6 +8396,9 @@ msgstr "Responder diretamente aos clientes"
 
 msgid "Request"
 msgstr "Solicitar"
+
+msgid "Request failed. Please try again."
+msgstr "A solicitação falhou. Tenta novamente."
 
 msgid "Request Sender ID"
 msgstr "Solicitar ID de remetente"
@@ -8410,8 +8433,12 @@ msgstr "Reservado do tipo de nota"
 msgid "Reset"
 msgstr "Recuperar"
 
-msgid "Reset to default"
+#| msgid "Reset to default"
+msgid "Reset to defaults"
 msgstr "Restaurar ao padrão"
+
+msgid "Responsive table"
+msgstr "Tabela adaptável"
 
 msgid "Restaurants"
 msgstr "Restaurantes "
@@ -8474,9 +8501,6 @@ msgstr "Salvar evento para criar uma reunião"
 msgid "Save invoice settings"
 msgstr "Salvar as definições de fatura"
 
-msgid "Save notification"
-msgstr "Salvar notificação"
-
 msgid "Save the appearance to apply changes."
 msgstr "Guardar a apresentação para aplicar alterações."
 
@@ -8501,6 +8525,12 @@ msgstr "Calendário com deslocação"
 
 msgid "Search"
 msgstr "Pesquisa"
+
+msgid "Search and select country"
+msgstr "Pesquisar e selecionar o país"
+
+msgid "Search columns"
+msgstr "Pesquisar colunas"
 
 msgid "Search for customer"
 msgstr "Pesquisar cliente"
@@ -8539,6 +8569,10 @@ msgid "Secure connection"
 msgstr ""
 "Ligação segura\n"
 "\n"
+
+#, php-format
+msgid "See all %d countries"
+msgstr "Ver todos os %d países"
 
 msgid "See details for more items"
 msgstr "Ver detalhes para mais itens"
@@ -8616,6 +8650,9 @@ msgstr ""
 msgid "Select company size"
 msgstr "Selecione tamanho da empresa"
 
+msgid "Select country"
+msgstr "Selecione o país"
+
 msgid "Select day"
 msgstr "Selecione um dia"
 
@@ -8633,9 +8670,6 @@ msgstr "Selecione o evento"
 
 msgid "Select file"
 msgstr "Selecionar o ficheiro"
-
-msgid "Select for merge"
-msgstr "Selecionar para combinar"
 
 msgid ""
 "Select format for displaying the time slot occupancy for group bookings."
@@ -9540,9 +9574,6 @@ msgstr "Indicação"
 
 msgid "SMS"
 msgstr "SMS"
-
-msgid "Sms"
-msgstr "Sms"
 
 msgid "SMS Details"
 msgstr "Detalhes SMS"
@@ -10523,6 +10554,9 @@ msgstr ""
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Este texto pode ser inserido em notificações com o código %s."
 
+msgid "This week"
+msgstr "Esta semana"
+
 msgid ""
 "This will permanently delete all appointments in this series. This action "
 "cannot be undone."
@@ -10537,6 +10571,9 @@ msgstr "Isto irá remover permanentemente a nota %s"
 #, php-format
 msgid "This WP user is already connected to another customer: %s"
 msgstr "Este utilizador WP já está ligado a outro cliente: %s"
+
+msgid "This year"
+msgstr "Este ano"
 
 msgid ""
 "Though, every new version is thoroughly tested to its highest quality before "
@@ -10808,9 +10845,6 @@ msgstr ""
 "Para guardar dados, por favor definir \"Não apagar\" em Definições do Bookly "
 "> Geral > Dados do Bookly ao apagar itens do Bookly"
 
-msgid "To set up Apple Calendar integration:"
-msgstr "Para configurar a integração com o Calendário da Apple:"
-
 msgid "To set up Facebook integration, do the following:"
 msgstr "Para configurar a integração do Facebook, faça o seguinte:"
 
@@ -10915,6 +10949,9 @@ msgstr "Duas vias exclusiva apenas do front-end"
 
 msgid "Type"
 msgstr "Tipo"
+
+msgid "Type country name"
+msgstr "Digite o nome do país"
 
 msgid "Unassigned"
 msgstr "Não atribuído"
@@ -11426,6 +11463,9 @@ msgstr "ano"
 msgid "Year is required"
 msgstr "O ano é obrigatório"
 
+msgid "Year to date"
+msgstr "Desde o início do ano"
+
 msgid "Yes"
 msgstr "Sim"
 
@@ -11453,13 +11493,13 @@ msgstr ""
 "funcionários também?"
 
 msgid ""
-"You are about to merge customers from the merge list with the selected one. "
-"This will result in losing the merged customers and moving all their "
-"appointments to the selected customer. Are you sure you want to continue?"
+"You are about to merge the selected customers. All appointments will be "
+"transferred to the chosen customer, and the other customer records will be "
+"removed."
 msgstr ""
-"Está prestes a combinar os clientes da lista de clientes com o selecionado. "
-"Isto vai resultar na perda dos clientes combinados e irá mover todos as suas "
-"reservas para o cliente selecionado. Tem certeza que quer continuar?"
+"Estás prestes a fundir os clientes selecionados. Todas as marcações serão "
+"transferidas para o cliente escolhido e os registos dos outros clientes "
+"serão eliminados."
 
 msgid "You are currently logged into Bookly Cloud with the account"
 msgstr "Está atualmente ligado à Bookly Cloud com a conta"

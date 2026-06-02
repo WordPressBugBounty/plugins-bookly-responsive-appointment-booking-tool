@@ -22,16 +22,23 @@ class Ajax extends Lib\Base\Ajax
     public static function getSmsList()
     {
         $filter = self::parameter( 'filter' );
-        $dates = explode( ' - ', $filter['range'], 2 );
-        $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
-        $end_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        $range = $filter['range'];
+        if ($range === 'any') {
+            $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '-100 year' ) ), 0 );
+            $end_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day' ) ), 0 );
+        } else {
+            $dates = explode( ' - ', $range, 2 );
+            $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
+            $end_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+        }
 
-        $filter = compact( 'start_date', 'end_date' );
         $length = self::parameter( 'length' );
         $start = self::parameter( 'start' );
 
-        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getSmsList( $start, $length, $filter );
+        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getSmsList( $start, $length, compact( 'start_date', 'end_date' ) );
         $data['draw'] = (int) self::parameter( 'draw' );
+
+        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::SMS_DETAILS, null, null, $filter );
 
         wp_send_json( $data );
     }
@@ -75,25 +82,57 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function resendSms()
     {
-        $sms = Lib\Entities\SmsLog::query()->where( 'ref_id', self::parameter( 'id' ) )->findOne();
-        if ( $sms ) {
+        $sms_list = Lib\Entities\SmsLog::query()->whereIn( 'ref_id', self::parameter( 'ids' ) )->find();
+        if ( $sms_list ) {
+            $has_errors = false;
             $cloud = Lib\Cloud\API::getInstance();
-            $response = array(
-                'success' => $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms(
-                    $sms->getPhone(),
-                    $sms->getMessage(),
-                    $sms->getImpersonalMessage(),
-                    $sms->getTypeId()
-                ),
-            );
+            foreach ( $sms_list as $sms ) {
+                $response = array(
+                    'success' => $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms(
+                        $sms->getPhone(),
+                        $sms->getMessage(),
+                        $sms->getImpersonalMessage(),
+                        $sms->getTypeId()
+                    ),
+                );
 
-            if ( $response['success'] ) {
-                $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
-            } else {
-                $response['message'] = implode( ' ', $cloud->getErrors() );
+                if ( !$response['success'] ) {
+                    $has_errors = true;
+                }
             }
+            if ( !$has_errors ) {
+                $response['success'] = false;
+                $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
+
+            } else {
+                $response['message'] = implode( '<br/>', $cloud->getErrors() );
+            }
+
             wp_send_json( $response );
         }
+    }
+
+    /**
+     * Get Sender ID countries.
+     */
+    public static function getSenderIdCountries()
+    {
+        $response = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->getSenderIdCountries();
+
+        // Pre-render the "{N} countries" label for the noreg group so the JS
+        // doesn't have to handle plural rules per locale — _n() picks the
+        // correct form for the current WP locale.
+        if ( is_array( $response ) && isset( $response['list'] ) && is_array( $response['list'] ) ) {
+            $noreg_count = 0;
+            foreach ( $response['list'] as $country ) {
+                if ( empty( $country['custom_request_procedure'] ) ) {
+                    $noreg_count++;
+                }
+            }
+            $response['noreg_label'] = sprintf( _n( '%d country', '%d countries', $noreg_count, 'bookly' ), $noreg_count );
+        }
+
+        wp_send_json( $response );
     }
 
     /**
@@ -110,7 +149,7 @@ class Ajax extends Lib\Base\Ajax
     public static function requestSenderId()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->requestSenderId( self::parameter( 'sender_id' ) );
+        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->requestSenderId( self::parameter( 'sender_id' ), self::parameter( 'country', '' ), self::parameter( 'document_code', '' ) );
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
         } else {
@@ -124,21 +163,7 @@ class Ajax extends Lib\Base\Ajax
     public static function cancelSenderId()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->cancelSenderId();
-        if ( $result === false ) {
-            wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
-        } else {
-            wp_send_json_success();
-        }
-    }
-
-    /**
-     * Reset Sender ID to default (Bookly).
-     */
-    public static function resetSenderId()
-    {
-        $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->resetSenderId();
+        $result = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->cancelSenderId( self::parameter( 'ids', array() ) );
         if ( $result === false ) {
             wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
         } else {
@@ -184,12 +209,12 @@ class Ajax extends Lib\Base\Ajax
     /**
      * Activate/Suspend notification.
      */
-    public static function setNotificationState()
+    public static function setNotificationsState()
     {
         Lib\Entities\Notification::query()
             ->update()
             ->set( 'active', (int) self::parameter( 'active' ) )
-            ->where( 'id', self::parameter( 'id' ) )
+            ->whereIn( 'id', self::parameter( 'ids' ) )
             ->execute();
 
         wp_send_json_success();
@@ -333,7 +358,7 @@ class Ajax extends Lib\Base\Ajax
                 switch ( $column['data'] ) {
                     case 'name':
                     case 'phone':
-                        $fields[] = 'name';
+                        $fields[] = $column['data'];
                         break;
                 }
             }

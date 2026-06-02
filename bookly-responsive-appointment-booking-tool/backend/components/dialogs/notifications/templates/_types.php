@@ -22,7 +22,7 @@ use Bookly\Lib\Cloud;
                     <?php Config::eventsActive() && $self::renderOption( Notification::TYPE_ATTENDEE_DELETED, array( 'customer', 'staff', 'admin', 'custom', 'organizer' ) ) ?>
                     <?php Config::proActive() && $self::renderOption( Notification::TYPE_CUSTOMER_NEW_WP_USER, array( 'customer' ) ) ?>
                     <?php Config::proActive() && $self::renderOption( Notification::TYPE_STAFF_NEW_WP_USER, array( 'staff' ) ) ?>
-                    <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT ) && $self::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
+                    <?php Config::giftCardsActive() && $self::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) && $self::renderOption( Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN, array( 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && $self::renderOption( Notification::TYPE_STAFF_WAITING_LIST, array( 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::waitingListActive() && $self::renderOption( Notification::TYPE_FREE_PLACE_WAITING_LIST, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>

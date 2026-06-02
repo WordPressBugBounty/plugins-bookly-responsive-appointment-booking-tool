@@ -11,7 +11,7 @@ use Bookly\Backend\Components\Controls\Elements;
             </div>
             <div class="modal-body">
                 <div id="bookly-services-categories"></div>
-                <?php Buttons::renderAdd( 'bookly-js-new-category', null, __( 'Add category', 'bookly' ), array(), false ) ?>
+                <?php Buttons::renderAdd( 'bookly-js-new-category', null, __( 'Add category', 'bookly' ) ) ?>
                 <small class="d-block text-muted mt-3"><?php esc_html_e( 'Adjust the order of categories in your booking form', 'bookly' ) ?></small>
             </div>
             <div class="modal-footer">

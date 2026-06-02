@@ -739,7 +739,7 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function stripWpKses( $html )
     {
-        return wp_kses( stripslashes( $html ), 'post' );
+        return wp_kses( stripslashes( (string) $html ), 'post' );
     }
 
     /**
