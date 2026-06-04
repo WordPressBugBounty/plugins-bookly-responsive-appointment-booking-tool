@@ -155,6 +155,7 @@ class Ajax extends Lib\Base\Ajax
         $max_results = self::parameter( 'max_results', 20 );
         $filter = self::parameter( 'filter' );
         $page = self::parameter( 'page' );
+        $ids = self::parameter( 'ids' );
         $query = Lib\Entities\Customer::query( 'c' );
 
         $query->select( 'SQL_CALC_FOUND_ROWS c.id, c.full_name AS text, c.email, c.phone' );
@@ -162,7 +163,10 @@ class Ajax extends Lib\Base\Ajax
             ? $query->addSelect( 'c.group_id' )
             : $query->addSelect( '0 AS group_id' );
 
-        if ( $filter != '' ) {
+        if ( $ids ) {
+            // Resolve specific customers by id (e.g. restoring a saved filter value).
+            $query->whereIn( 'c.id', array_map( 'intval', (array) $ids ) );
+        } elseif ( $filter != '' ) {
             $search_value = '%' . Lib\Query::escape( $filter ) . '%';
             $query
                 ->whereLike( 'c.full_name', $search_value )

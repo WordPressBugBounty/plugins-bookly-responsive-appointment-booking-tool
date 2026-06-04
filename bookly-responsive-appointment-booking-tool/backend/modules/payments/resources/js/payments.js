@@ -227,16 +227,54 @@ jQuery(function ($) {
         },
     ];
 
-    if (filterOpts.customers && filterOpts.customers.length > 0) {
-        filters.push({
+    {
+        const customerFilter = {
             type: 'select',
             name: 'customer',
             label: fl.customer,
             initialValue: customerValue,
             searchPlaceholder: fl.searchPlaceholder,
-            options: filterOpts.customers.map(c => ({ value: String(c.id), label: c.full_name })),
             onChange: (v) => { customerValue = v; },
-        });
+        };
+        if (filterOpts.customersRemote) {
+            // Large customer base — load options on demand via AJAX typeahead.
+            customerFilter.remote = true;
+            customerFilter.loadOptions = function (term) {
+                return $.ajax({
+                    url: ajaxurl,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'bookly_get_customers_list',
+                        filter: term || '',
+                        page: 1,
+                        csrf_token: BooklyL10nGlobal.csrf_token,
+                    },
+                }).then(resp => (resp && resp.results ? resp.results : []).map(c => ({
+                    value: String(c.id),
+                    label: c.text, // full_name only
+                })));
+            };
+            // Resolve the label for a restored saved value (filter loads the customer itself).
+            customerFilter.resolveOption = function (id) {
+                return $.ajax({
+                    url: ajaxurl,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'bookly_get_customers_list',
+                        ids: [id],
+                        csrf_token: BooklyL10nGlobal.csrf_token,
+                    },
+                }).then(resp => {
+                    const c = resp && resp.results && resp.results[0];
+                    return c ? { value: String(c.id), label: c.text } : null;
+                });
+            };
+        } else {
+            customerFilter.options = (filterOpts.customers || []).map(c => ({ value: String(c.id), label: c.full_name }));
+        }
+        filters.push(customerFilter);
     }
 
     filters.push({

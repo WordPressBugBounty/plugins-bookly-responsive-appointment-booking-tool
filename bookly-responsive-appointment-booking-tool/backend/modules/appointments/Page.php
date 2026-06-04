@@ -26,9 +26,13 @@ class Page extends Lib\Base\Component
 
         // Filter options data
         $staff_members = Lib\Entities\Staff::query( 's' )->select( 's.id, s.full_name' )->whereNot( 'visibility', 'archive' )->fetchArray();
-        $customers = Lib\Entities\Customer::query()->count() < Lib\Entities\Customer::REMOTE_LIMIT
-            ? Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name' )->fetchArray()
-            : array();
+        // When the customer base is large we don't preload the whole list into the
+        // filter dropdown — it switches to remote (typeahead) mode backed by the
+        // bookly_get_customers_list AJAX endpoint. Otherwise the static list is used.
+        $customers_remote = Lib\Entities\Customer::query()->count() >= Lib\Entities\Customer::REMOTE_LIMIT;
+        $customers = $customers_remote
+            ? array()
+            : Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name' )->fetchArray();
         $services = Lib\Entities\Service::query( 's' )->select( 's.id, s.title' )->where( 'type', Lib\Entities\Service::TYPE_SIMPLE )->fetchArray();
 
         $locations = Proxy\Locations::getFilterOptions();
@@ -74,6 +78,7 @@ class Page extends Lib\Base\Component
             'filterOptions' => array(
                 'staff' => $staff_members,
                 'customers' => $customers,
+                'customersRemote' => $customers_remote,
                 'services' => $services,
                 'locations' => $locations,
                 'statuses' => $statuses,

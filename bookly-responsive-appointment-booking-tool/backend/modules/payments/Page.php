@@ -28,14 +28,18 @@ class Page extends Lib\Base\Component
 
         $providers = Lib\Entities\Staff::query()->select( 'id, full_name' )->sortBy( 'full_name' )->whereNot( 'visibility', 'archive' )->fetchArray();
         $services = Lib\Entities\Service::query()->select( 'id, title' )->sortBy( 'title' )->fetchArray();
-        $customers = Lib\Entities\Customer::query()->count() < Lib\Entities\Customer::REMOTE_LIMIT
-            ? array_map( function( $row ) {
+        // When the customer base is large we don't preload the whole list into the
+        // filter dropdown — it switches to remote (typeahead) mode backed by the
+        // bookly_get_customers_list AJAX endpoint. Otherwise the static list is used.
+        $customers_remote = Lib\Entities\Customer::query()->count() >= Lib\Entities\Customer::REMOTE_LIMIT;
+        $customers = $customers_remote
+            ? array()
+            : array_map( function( $row ) {
                 return array(
                     'id' => $row['id'],
                     'full_name' => $row['full_name'],
                 );
-            }, Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name' )->fetchArray() )
-            : array();
+            }, Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name' )->fetchArray() );
 
         $type_options = array();
         foreach ( $types as $type ) {
@@ -81,6 +85,7 @@ class Page extends Lib\Base\Component
                 'staff' => $providers,
                 'services' => array_map( function ( $s ) { return array( 'id' => $s['id'], 'full_name' => $s['title'] ); }, $services ),
                 'customers' => $customers,
+                'customersRemote' => $customers_remote,
             ),
             'datatables' => $datatables,
             'invoice' => array(

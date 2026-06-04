@@ -50,6 +50,10 @@ class Account extends Base
     const PRODUCT_STRIPE_CLASSIC = 'stripe-classic';
     const PRODUCT_SERVICE_EXTRAS = 'service-extras';
 
+    # @deprecated
+    const PRODUCT_SQUARE = 'square';
+    const PRODUCT_GIFT = 'gift';
+
     /** @var string */
     protected $username;
     /** @var float */
