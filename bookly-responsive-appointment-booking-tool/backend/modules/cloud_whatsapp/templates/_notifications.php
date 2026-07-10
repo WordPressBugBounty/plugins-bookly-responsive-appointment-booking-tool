@@ -5,7 +5,7 @@ use Bookly\Backend\Components\Notices;
     <input type="hidden" name="form-notifications">
     <div class="form-group">
         <label for="admin_phone">
-            <?php esc_html_e( 'Administrator phone', 'bookly' ) ?>
+            <?php esc_html_e( 'Administrator phone', 'bookly-responsive-appointment-booking-tool' ) ?>
         </label>
         <div class="form-row">
             <div class="col-auto">
@@ -13,14 +13,14 @@ use Bookly\Backend\Components\Notices;
             </div>
             <div class="col-auto">
                 <div class="btn-group">
-                    <button class="btn btn-success" data-action="save-administrator-phone"><?php esc_html_e( 'Save administrator phone', 'bookly' ) ?></button>
+                    <button class="btn btn-success" data-action="save-administrator-phone"><?php esc_html_e( 'Save administrator phone', 'bookly-responsive-appointment-booking-tool' ) ?></button>
                 </div>
             </div>
         </div>
-        <small class="form-text text-muted"><?php esc_html_e( 'Enter a phone number in international format. E.g. for the United States a valid phone number would be +17327572923.', 'bookly' ) ?></small>
+        <small class="form-text text-muted"><?php esc_html_e( 'Enter a phone number in international format. E.g. for the United States a valid phone number would be +17327572923.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
     </div>
 
-    <div id="bookly-whatsapp_notifications-datatables" class="bookly:mb-4"></div>
+    <div id="bookly-whatsapp_notifications-datatables"></div>
 
 <?php Notices\Cron\Notice::render() ?>
 <?php Dialogs\Whatsapp\Dialog::render() ?>

@@ -13,11 +13,10 @@ class Page extends Lib\Base\Component
     {
         $cloud = Lib\Cloud\API::getInstance();
         if ( ! $cloud->account->loadProfile() ) {
-            Components\Cloud\LoginRequired\Page::render( __( 'Voice Notifications', 'bookly' ), self::pageSlug() );
+            Components\Cloud\LoginRequired\Page::render( __( 'Voice Notifications', 'bookly-responsive-appointment-booking-tool' ), self::pageSlug() );
         } elseif ( $cloud->account->productActive( Lib\Cloud\Account::PRODUCT_VOICE ) ) {
             self::enqueueStyles( array(
                 'frontend' => array( 'css/intlTelInput.css' => array( 'bookly-backend-globals', ) ),
-                'backend'  => array( 'tailwind/tailwind.css' ),
             ) );
 
             self::enqueueScripts( array(
@@ -28,7 +27,6 @@ class Page extends Lib\Base\Component
                 'module' => array(
                     'js/calls.js' => array( 'bookly-notifications-list.js', ),
                 ),
-                'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
             ) );
 
             // Prepare tables settings.
@@ -41,36 +39,36 @@ class Page extends Lib\Base\Component
             wp_localize_script( 'bookly-calls.js', 'BooklyL10n',
                 array(
                     'moment_format_date_time' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ) . ' ' . Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
-                    'areYouSure'     => __( 'Are you sure?', 'bookly' ),
+                    'areYouSure'     => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
                     'country'        => $cloud->account->getCountry(),
                     'intlTelInput'   => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),
                         'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
                     ),
                     'datePicker'     => Lib\Utils\DateTime::datePickerOptions(),
-                    'dateRange'      => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
-                    'zeroRecords'    => __( 'No records for selected period.', 'bookly' ),
-                    'quick_search'   => __( 'Quick search', 'bookly' ),
-                    'state'          => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
-                    'action'         => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
-                    'edit'           => __( 'Edit', 'bookly' ),
-                    'delete' => __( 'Delete', 'bookly' ) . '…',
-                    'enable'         => __( 'Enable', 'bookly' ),
-                    'disable'        => __( 'Disable', 'bookly' ),
-                    'new_notification' => __( 'New notification', 'bookly' ) . '…',
-                    'settingsSaved'  => __( 'Settings saved.', 'bookly' ),
+                    'dateRange'      => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly-responsive-appointment-booking-tool' ), ) ),
+                    'zeroRecords'    => __( 'No records for selected period.', 'bookly-responsive-appointment-booking-tool' ),
+                    'quick_search'   => __( 'Quick search', 'bookly-responsive-appointment-booking-tool' ),
+                    'state'          => array( __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ), __( 'Enabled', 'bookly-responsive-appointment-booking-tool' ) ),
+                    'action'         => array( __( 'enable', 'bookly-responsive-appointment-booking-tool' ), __( 'disable', 'bookly-responsive-appointment-booking-tool' ) ),
+                    'edit'           => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ),
+                    'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                    'enable'         => __( 'Enable', 'bookly-responsive-appointment-booking-tool' ),
+                    'disable'        => __( 'Disable', 'bookly-responsive-appointment-booking-tool' ),
+                    'new_notification' => __( 'New notification', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                    'settingsSaved'  => __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ),
                     'filters'        => array(
-                        'date' => __( 'Date', 'bookly' ),
+                        'date' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
                     ),
                     'gateway'        => 'voice',
                     'datatables'     => $datatables,
                     'status'         => array(
-                        'out-of-credit' => __( 'Out of credit', 'bookly' ),
-                        'completed'     => __( 'Completed', 'bookly' ),
-                        'busy'          => __( 'Busy', 'bookly' ),
-                        'failed'        => __( 'Failed', 'bookly' ),
-                        'no-answer'     => __( 'No answer', 'bookly' ),
-                        'pending'       => __( 'Pending', 'bookly' ),
+                        'out-of-credit' => __( 'Out of credit', 'bookly-responsive-appointment-booking-tool' ),
+                        'completed'     => __( 'Completed', 'bookly-responsive-appointment-booking-tool' ),
+                        'busy'          => __( 'Busy', 'bookly-responsive-appointment-booking-tool' ),
+                        'failed'        => __( 'Failed', 'bookly-responsive-appointment-booking-tool' ),
+                        'no-answer'     => __( 'No answer', 'bookly-responsive-appointment-booking-tool' ),
+                        'pending'       => __( 'Pending', 'bookly-responsive-appointment-booking-tool' ),
                     ),
                 )
             );

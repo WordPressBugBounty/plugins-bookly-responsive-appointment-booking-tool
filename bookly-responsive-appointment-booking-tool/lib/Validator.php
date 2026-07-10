@@ -20,7 +20,7 @@ class Validator
             $this->errors[ $field ] = Utils\Common::getTranslatedOption( 'bookly_l10n_required_email' );
         } else {
             if ( $data['email'] != '' && ! is_email( trim( $data['email'] ) ) ) {
-                $this->errors[ $field ] = __( 'Invalid email', 'bookly' );
+                $this->errors[ $field ] = __( 'Invalid email', 'bookly-responsive-appointment-booking-tool' );
             }
             // Check email for uniqueness when a new WP account is going to be created.
             if ( get_option( 'bookly_cst_create_account', 0 ) && ! get_current_user_id() ) {
@@ -123,7 +123,7 @@ class Validator
             $max_length = 255;
             if ( preg_match_all( '/./su', $name, $matches ) > $max_length ) {
                 $this->errors[ $field ] = sprintf(
-                    __( '"%s" is too long (%d characters max).', 'bookly' ),
+                    __( '"%s" is too long (%d characters max).', 'bookly-responsive-appointment-booking-tool' ),
                     $name,
                     $max_length
                 );
@@ -154,10 +154,10 @@ class Validator
     {
         if ( $number != '' ) {
             if ( ! is_numeric( $number ) ) {
-                $this->errors[ $field ] = __( 'Invalid number', 'bookly' );
+                $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
             }
         } elseif ( $required ) {
-            $this->errors[ $field ] = __( 'Required', 'bookly' );
+            $this->errors[ $field ] = __( 'Required', 'bookly-responsive-appointment-booking-tool' );
         }
     }
 
@@ -172,10 +172,10 @@ class Validator
     {
         if ( $date != '' ) {
             if ( date_create( $date ) === false ) {
-                $this->errors[ $field ] = __( 'Invalid date', 'bookly' );
+                $this->errors[ $field ] = __( 'Invalid date', 'bookly-responsive-appointment-booking-tool' );
             }
         } elseif ( $required ) {
-            $this->errors[ $field ] = __( 'Required', 'bookly' );
+            $this->errors[ $field ] = __( 'Required', 'bookly-responsive-appointment-booking-tool' );
         }
     }
 
@@ -190,10 +190,10 @@ class Validator
     {
         if ( $time != '' ) {
             if ( ! preg_match( '/^-?\d{2}:\d{2}$/', $time ) ) {
-                $this->errors[ $field ] = __( 'Invalid time', 'bookly' );
+                $this->errors[ $field ] = __( 'Invalid time', 'bookly-responsive-appointment-booking-tool' );
             }
         } elseif ( $required ) {
-            $this->errors[ $field ] = __( 'Required', 'bookly' );
+            $this->errors[ $field ] = __( 'Required', 'bookly-responsive-appointment-booking-tool' );
         }
     }
 
@@ -275,7 +275,7 @@ class Validator
                                 $this->errors['verify'] = $identifier;
                             } else {
                                 $this->errors['customer'] = sprintf(
-                                    __( 'Your %s: %s is already associated with another %s.<br/>Press Update if we should update your user data, or press Cancel to edit entered data.', 'bookly' ),
+                                    __( 'Your %s: %s is already associated with another %s.<br/>Press Update if we should update your user data, or press Cancel to edit entered data.', 'bookly-responsive-appointment-booking-tool' ),
                                     $fields[ $identifier ],
                                     $data[ $identifier ],
                                     implode( ', ', $diff )
@@ -305,7 +305,7 @@ class Validator
             // Send message with verification code
             if ( isset( $this->errors['verify'] ) ) {
                 $recipient = $this->errors['verify'] == 'phone' ? $customer->getPhone() : $customer->getEmail();
-                $this->errors['verify_text'] = $this->errors['verify'] == 'phone' ? __( 'Enter verification code from SMS', 'bookly' ) : __( 'Enter verification code from email', 'bookly' );
+                $this->errors['verify_text'] = $this->errors['verify'] == 'phone' ? __( 'Enter verification code from SMS', 'bookly-responsive-appointment-booking-tool' ) : __( 'Enter verification code from email', 'bookly-responsive-appointment-booking-tool' );
                 $this->errors['incorrect_code_text'] = $this->errors['verify'] == 'phone' ? Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_phone_verification_code' ) : Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_email_verification_code' );
                 if ( $userData->getVerificationCodeSent() !== $recipient || isset( $data['resend_verification_code'] ) ) {
                     $userData->setVerificationCode( mt_rand( 100000, 999999 ) );

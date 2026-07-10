@@ -11,7 +11,7 @@ use Bookly\Lib\Utils\Common;
         <div class="form-row">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="bookly_pmt_currency"><?php esc_html_e( 'Currency', 'bookly' ) ?></label>
+                    <label for="bookly_pmt_currency"><?php esc_html_e( 'Currency', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <select id="bookly_pmt_currency" class="form-control custom-select" name="bookly_pmt_currency">
                         <?php foreach ( Price::getCurrencies() as $code => $currency ) : ?>
                             <option value="<?php echo esc_attr( $code ) ?>" data-symbol="<?php esc_attr_e( $currency['symbol'] ) ?>" <?php selected( Config::getCurrency(), $code ) ?> ><?php echo esc_html( $code ) ?> (<?php esc_html_e( $currency['symbol'] ) ?>)</option>
@@ -21,7 +21,7 @@ use Bookly\Lib\Utils\Common;
             </div>
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label for="bookly_pmt_price_format"><?php esc_html_e( 'Price format', 'bookly' ) ?></label>
+                    <label for="bookly_pmt_price_format"><?php esc_html_e( 'Price format', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <select id="bookly_pmt_price_format" class="form-control custom-select" name="bookly_pmt_price_format">
                         <?php foreach ( Price::getFormats() as $format ) : ?>
                             <option value="<?php echo esc_attr( $format ) ?>" <?php selected( get_option( 'bookly_pmt_price_format' ), $format ) ?> ></option>

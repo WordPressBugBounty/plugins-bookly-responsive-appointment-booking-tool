@@ -19,12 +19,12 @@ use Bookly\Lib\Utils\Common;
                             echo Common::stripScripts( $promotion['texts']['info'] );
                             break;
                         case 'manual': ?>
-                            <b><?php printf( esc_html__( 'Recharge your account balance and get up to %s extra.', 'bookly' ), '$' . $promotion['amount'] ) ?></b>
-                            <?php esc_html_e( 'Take advantage of Bookly Cloud products which increase customers\' loyalty and involvement.', 'bookly' ) ?>
+                            <b><?php printf( esc_html__( 'Recharge your account balance and get up to %s extra.', 'bookly-responsive-appointment-booking-tool' ), '$' . $promotion['amount'] ) ?></b>
+                            <?php esc_html_e( 'Take advantage of Bookly Cloud products which increase customers\' loyalty and involvement.', 'bookly-responsive-appointment-booking-tool' ) ?>
                             <?php break ?>
                         <?php case 'auto': ?>
-                            <b><?php printf( esc_html__( 'Enable Auto-Recharge and get up to %s extra.', 'bookly' ), '$' . $promotion['amount'] ) ?></b>
-                            <?php esc_html_e( 'Let Bookly Cloud products continuously work without interruptions.', 'bookly' ) ?>
+                            <b><?php printf( esc_html__( 'Enable Auto-Recharge and get up to %s extra.', 'bookly-responsive-appointment-booking-tool' ), '$' . $promotion['amount'] ) ?></b>
+                            <?php esc_html_e( 'Let Bookly Cloud products continuously work without interruptions.', 'bookly-responsive-appointment-booking-tool' ) ?>
                             <?php break ?>
                     <?php endswitch ?>
                 </div>
@@ -33,10 +33,10 @@ use Bookly\Lib\Utils\Common;
                             null,
                             'btn-success bookly-js-apply-action',
                             $type == 'registration'
-                                ? __( 'Register', 'bookly' )
-                                : ( $type == 'auto' ? __( 'Enable', 'bookly' ) : __( 'Recharge', 'bookly' ) )
+                                ? __( 'Register', 'bookly-responsive-appointment-booking-tool' )
+                                : ( $type == 'auto' ? __( 'Enable', 'bookly-responsive-appointment-booking-tool' ) : __( 'Recharge', 'bookly-responsive-appointment-booking-tool' ) )
                     ) ?>
-                    <?php Buttons::renderDefault( null, 'ml-2 bookly-js-remind-me-later', __( 'Remind me later', 'bookly' ) ) ?>
+                    <?php Buttons::renderDefault( null, 'ml-2 bookly-js-remind-me-later', __( 'Remind me later', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 </div>
             </div>
         </div>

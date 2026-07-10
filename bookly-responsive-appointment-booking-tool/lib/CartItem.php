@@ -160,11 +160,11 @@ class CartItem
                 } else {
                     $service_start = 'unused'; //the price is the same for all services in day
                 }
+                $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: 0;
                 if ( isset ( $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] ) ) {
                     $service_price += $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ];
                 } else {
                     $staff_service = new Entities\StaffService();
-                    $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: 0;
                     $staff_service->loadBy( compact( 'staff_id', 'service_id', 'location_id' ) );
                     if ( ! $staff_service->isLoaded() ) {
                         $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );

@@ -249,12 +249,12 @@ class PluginsUpdater
     protected static function getPluginUpdateInfo( $plugin_class, $data )
     {
         return sprintf(
-            __( 'New version of %1$s is available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="#" %5$s %6$s>update now</a>.', 'bookly' ),
+            __( 'New version of %1$s is available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="#" %5$s %6$s>update now</a>.', 'bookly-responsive-appointment-booking-tool' ),
             $plugin_class::getTitle(),
             esc_url( self_admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin_class::getSlug() . '&section=changelog&TB_iframe=true&width=600&height=800' ) ),
             sprintf(
                 'class="thickbox open-plugin-details-modal" aria-label="%s"',
-                esc_attr( sprintf( __( 'View %1$s version %2$s details', 'bookly' ), $plugin_class::getTitle(), $data->new_version ) )
+                esc_attr( sprintf( __( 'View %1$s version %2$s details', 'bookly-responsive-appointment-booking-tool' ), $plugin_class::getTitle(), $data->new_version ) )
             ),
             esc_attr( $data->new_version ),
             'data-update-bookly-plugin="' . $plugin_class::getSlug() . '"',
@@ -273,8 +273,8 @@ class PluginsUpdater
                 <td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange">
                     <div class="update-message notice inline notice-error notice-alt">
                         <p>
-                           ' . esc_html__( 'Important', 'bookly' ) . '!<br>
-                           ' . sprintf( esc_html__( 'You haven\'t entered the purchase code which results in impossibility to see if there is a new version available. Enter your purchase code in %sAdd-ons%s section.', 'bookly' ),
+                           ' . esc_html__( 'Important', 'bookly-responsive-appointment-booking-tool' ) . '!<br>
+                           ' . sprintf( esc_html__( 'You haven\'t entered the purchase code which results in impossibility to see if there is a new version available. Enter your purchase code in %sAdd-ons%s section.', 'bookly-responsive-appointment-booking-tool' ),
                            '<a href="' . Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Shop\Page::pageSlug() ) . '">', '</a>' ) . '
                            </p>
                     </div>
@@ -297,10 +297,10 @@ class PluginsUpdater
                 <td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange">
                     <div class="update-message notice inline notice-error notice-alt">
                         <p>
-                           ' . esc_html__( 'Important', 'bookly' ) . '!<br>
-                           ' . esc_html__( 'Though, every new version is thoroughly tested to its highest quality before deploying, we can\'t guarantee that after update the plugin will work properly on all WordPress configurations and completely protect it from the influence of other plugins.', 'bookly' ) . '<br>
+                           ' . esc_html__( 'Important', 'bookly-responsive-appointment-booking-tool' ) . '!<br>
+                           ' . esc_html__( 'Though, every new version is thoroughly tested to its highest quality before deploying, we can\'t guarantee that after update the plugin will work properly on all WordPress configurations and completely protect it from the influence of other plugins.', 'bookly-responsive-appointment-booking-tool' ) . '<br>
                            ' . '<br>
-                    ' . sprintf( __( 'You can renew support %1$s here %3$s or %2$s I\'ve already renewed support. %3$s', 'bookly' ),
+                    ' . sprintf( __( 'You can renew support %1$s here %3$s or %2$s I\'ve already renewed support. %3$s', 'bookly-responsive-appointment-booking-tool' ),
                     '<a href="' . esc_url( array_key_exists( 'renew_support', $data ) ? $data['renew_support'] : 'https://codecanyon.net/user/nota-info' ) . '" target="_blank">',
                     '<a href="#" data-bookly-plugin="' . $bookly_plugin::getRootNamespace() . '">',
                     '</a>'
@@ -383,7 +383,7 @@ class PluginsUpdater
               .bookly-plugins-modal{ display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4); }
               .bookly-plugins-modal-content{ background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%; border-radius: 6px; }
               </style>
-              <div class="bookly-plugins-modal" id="bookly-js-update-plugins-modal"><div class="bookly-plugins-modal-content"><div><b>' . esc_html__( 'Bookly updater', 'bookly' ) . '</b></div><p class="bookly-js-plugins-list"></p></div></div>';
+              <div class="bookly-plugins-modal" id="bookly-js-update-plugins-modal"><div class="bookly-plugins-modal-content"><div><b>' . esc_html__( 'Bookly updater', 'bookly-responsive-appointment-booking-tool' ) . '</b></div><p class="bookly-js-plugins-list"></p></div></div>';
         /** @var \Bookly\Lib\Base\Plugin[] $bookly_plugins */
         $bookly_plugins = apply_filters( 'bookly_plugins', array() );
         unset( $bookly_plugins['bookly-responsive-appointment-booking-tool'], $bookly_plugins['bookly-addon-pro'] );
@@ -396,11 +396,11 @@ class PluginsUpdater
         wp_localize_script( 'bookly-plugins-page', 'BooklyPluginsPageL10n', array(
             'csrfToken' => Utils\Common::getCsrfToken(),
             'deleteData' => get_option( 'bookly_gen_delete_data_on_uninstall', '1' ),
-            'deletingInfo' => __( 'Please note that upon deleting this Bookly item, all data associated with it will be permanently deleted', 'bookly' ) . '. ' . __( 'To save data, please set "Don\'t delete" in Bookly Settings > General > Bookly data upon deleting Bookly items', 'bookly' ),
-            'updated' => __( '%s updated', 'bookly' ) . '!',
+            'deletingInfo' => __( 'Please note that upon deleting this Bookly item, all data associated with it will be permanently deleted', 'bookly-responsive-appointment-booking-tool' ) . '. ' . __( 'To save data, please set "Don\'t delete" in Bookly Settings > General > Bookly data upon deleting Bookly items', 'bookly-responsive-appointment-booking-tool' ),
+            'updated' => __( '%s updated', 'bookly-responsive-appointment-booking-tool' ) . '!',
             'addons' => array_keys( $bookly_plugins ),
-            'wait' => __( 'Please wait, we are checking updates for {checked}/{total} Bookly add-ons', 'bookly' ),
-            'noUpdatesAvailable' => __( 'No updates available', 'bookly' ),
+            'wait' => __( 'Please wait, we are checking updates for {checked}/{total} Bookly add-ons', 'bookly-responsive-appointment-booking-tool' ),
+            'noUpdatesAvailable' => __( 'No updates available', 'bookly-responsive-appointment-booking-tool' ),
         ) );
     }
 

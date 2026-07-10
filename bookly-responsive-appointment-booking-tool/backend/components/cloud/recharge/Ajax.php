@@ -20,7 +20,7 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json_success( array( 'paypal_preapproval' => $url ) );
         } else {
             $errors = $cloud->getErrors();
-            $message = __( 'Auto-Recharge has failed, please replenish your balance directly.', 'bookly' );
+            $message = __( 'Auto-Recharge has failed, please replenish your balance directly.', 'bookly-responsive-appointment-booking-tool' );
             if ( array_key_exists( 'ERROR_PROMOTION_NOT_AVAILABLE', $errors ) ) {
                 $message = $errors['ERROR_PROMOTION_NOT_AVAILABLE'];
             }
@@ -29,12 +29,12 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
-     * Create Stripe Checkout session
+     * Create Checkout session
      */
-    public static function createStripeCheckoutSession()
+    public static function createCheckoutSession()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $result = $cloud->account->createStripeCheckoutSession(
+        $result = $cloud->account->createCheckoutSession(
             self::parameter( 'recharge' ),
             self::parameter( 'promo_code' ),
             self::parameter( 'mode' ),
@@ -46,7 +46,7 @@ class Ajax extends Lib\Base\Ajax
             if ( array_key_exists( 'ERROR_RECHARGE_NOT_AVAILABLE', $errors ) ) {
                 wp_send_json_error( array( 'message' => $errors['ERROR_RECHARGE_NOT_AVAILABLE'] ) );
             } else {
-                wp_send_json_error( array( 'message' => __( 'Card payment has failed, please use another payment option', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Card payment has failed, please use another payment option', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
         } else {
             wp_send_json( $result );
@@ -70,7 +70,7 @@ class Ajax extends Lib\Base\Ajax
             if ( array_key_exists( 'ERROR_RECHARGE_NOT_AVAILABLE', $errors ) ) {
                 wp_send_json_error( array( 'message' => $errors['ERROR_RECHARGE_NOT_AVAILABLE'] ) );
             } else {
-                wp_send_json_error( array( 'message' => __( 'Payment has failed, please use another payment option', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Payment has failed, please use another payment option', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
         } else {
             wp_send_json_success( compact( 'order_url' ) );
@@ -85,9 +85,9 @@ class Ajax extends Lib\Base\Ajax
         $disabled = Lib\Cloud\API::getInstance()->account->disableAutoRecharge();
         if ( $disabled !== false ) {
             update_option( 'bookly_cloud_auto_recharge_gateway', '' );
-            wp_send_json_success( array( 'message' => __( 'Auto-Recharge disabled', 'bookly' ) ) );
+            wp_send_json_success( array( 'message' => __( 'Auto-Recharge disabled', 'bookly-responsive-appointment-booking-tool' ) ) );
         } else {
-            wp_send_json_error( array( 'message' => sprintf( __( 'Can\'t disable Auto-Recharge, please contact us at %s', 'bookly' ), '<a href="mailto:support@bookly.info">support@bookly.info</a>' ) ) );
+            wp_send_json_error( array( 'message' => sprintf( __( 'Can\'t disable Auto-Recharge, please contact us at %s', 'bookly-responsive-appointment-booking-tool' ), '<a href="mailto:support@bookly.info">support@bookly.info</a>' ) ) );
         }
     }
 

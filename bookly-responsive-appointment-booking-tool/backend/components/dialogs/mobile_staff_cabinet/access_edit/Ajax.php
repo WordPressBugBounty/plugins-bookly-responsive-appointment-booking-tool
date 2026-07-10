@@ -56,7 +56,7 @@ class Ajax extends Lib\Base\Ajax
                     ->setEmail( $auth_email )
                     ->setFullName( $wp_user->display_name );
             } else {
-                wp_send_json_error( array( 'message' => __( 'WordPress user required', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'WordPress user required', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
         } elseif ( $auth_data['role'] === 'staff' ) {
             if ( $auth_data['staff_id'] ) {
@@ -68,10 +68,10 @@ class Ajax extends Lib\Base\Ajax
                     ->setWpUserId( null )
                     ->setStaffId( $auth_data['staff_id'] );
             } else {
-                wp_send_json_error( array( 'message' => __( 'Staff member required', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Staff member required', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
         } else {
-            wp_send_json_error( array( 'message' => __( 'Invalid role', 'bookly' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Invalid role', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
 
         $api = Lib\Cloud\API::getInstance();

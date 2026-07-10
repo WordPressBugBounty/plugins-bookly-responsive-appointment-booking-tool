@@ -71,6 +71,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Statistic\Ajax::init();
         Backend\Components\Notices\Subscribe\Ajax::init();
         Backend\Components\Notices\Wpml\Ajax::init();
+        Backend\Components\PageHeader\Ajax::init();
         Backend\Components\Support\ButtonsAjax::init();
         Backend\Modules\Appearance\Ajax::init();
         Backend\Modules\Appointments\Ajax::init();
@@ -107,7 +108,7 @@ abstract class Plugin extends Base\Plugin
     public static function run()
     {
         // l10n.
-        load_plugin_textdomain( 'bookly', false, self::getSlug() . '/languages' );
+        load_plugin_textdomain( 'bookly-responsive-appointment-booking-tool', false, self::getSlug() . '/languages' );
 
         if ( defined( 'ELEMENTOR_VERSION' ) ) {
             if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '>' ) ) {
@@ -120,6 +121,10 @@ abstract class Plugin extends Base\Plugin
                 } );
             }
         }
+
+        add_action( 'et_builder_ready', function () {
+            new Backend\Components\Divi\BooklyForm();
+        } );
 
         parent::run();
     }

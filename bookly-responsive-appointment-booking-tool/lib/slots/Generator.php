@@ -49,6 +49,8 @@ class Generator implements \Iterator
     protected $next_slots;
     /** @var RangeCollection[] */
     protected $past_slots;
+    /** @var bool|null  Whether equal-preference staff are picked randomly for the service */
+    protected $staff_preference_random;
 
     /**
      * Constructor.
@@ -150,6 +152,8 @@ class Generator implements \Iterator
     public function current()
     {
         $result = new RangeCollection();
+        // Candidate slots grouped by timestamp; resolved into a single slot below.
+        $candidates = array();
 
         // Loop through all staff members.
         foreach ( $this->staff_members as $staff_id => $staff ) {
@@ -242,34 +246,110 @@ class Generator implements \Iterator
                         if ( $this->srv_duration_days > 1 && ( $slot = $this->_tryFindPastSlot( $slot ) ) === false ) {
                             continue;
                         }
-                        // Decide whether to add slot or skip it.
+                        // Collect candidate slot for this timestamp. The winning slot
+                        // and its alternatives are resolved after all staff members are
+                        // processed (see _resolveCandidates).
                         $timestamp = $slot->start()->value()->getTimestamp();
-                        $ex_slot = null;
-                        if ( $result->has( $timestamp ) ) {
-                            // If result already has this timestamp...
-                            if ( $slot->fullyBooked() ) {
-                                // Skip the slot if it is fully booked.
-                                continue;
-                            } else {
-                                $ex_slot = $result->get( $timestamp );
-                                if ( $ex_slot->notFullyBooked() && $slot->waitingListStarted() && $ex_slot->noWaitingListStarted() ) {
-                                    // Skip the slot if it has waiting list started but the existing one does not.
-                                    continue;
-                                }
-                            }
-                        }
-                        // Decide which slot to add.
-                        if ( $ex_slot && $ex_slot->notFullyBooked() && ( $slot->waitingListStarted() || $ex_slot->noWaitingListStarted() ) ) {
-                            $slot = $this->_findPreferableSlot( $slot, $ex_slot );
-                        }
-                        // Add slot to result.
-                        $result->put( $timestamp, $slot );
+                        $candidates[ $timestamp ][] = $slot;
                     }
                 }
             }
         }
 
+        // Resolve collected candidates into a single slot (with alternatives) per timestamp.
+        foreach ( $candidates as $timestamp => $slots ) {
+            $result->put( $timestamp, $this->_resolveCandidates( $slots ) );
+        }
+
         return $result->ksort();
+    }
+
+    /**
+     * Resolve candidate slots collected for a single timestamp into one slot.
+     *
+     * Keeps only the candidates with the best state (available/partially booked beats
+     * waiting list, which beats fully booked), then builds the preference-ordered
+     * chain of alternatives. Equally preferable staff are ordered uniformly at random
+     * when the service has the random option enabled; otherwise the order stays
+     * deterministic (collection order), which keeps behaviour identical to before
+     * for services without the random option.
+     *
+     * @param Range[] $slots
+     * @return Range
+     */
+    private function _resolveCandidates( array $slots )
+    {
+        // Group by state tier: 3 = available/partially booked, 2 = waiting list started,
+        // 1 = fully booked. Keep only the candidates of the best available tier.
+        $best = array();
+        $best_tier = 0;
+        foreach ( $slots as $slot ) {
+            $tier = $slot->fullyBooked() ? 1 : ( $slot->waitingListStarted() ? 2 : 3 );
+            if ( $tier > $best_tier ) {
+                $best_tier = $tier;
+                $best = array( $slot );
+            } elseif ( $tier == $best_tier ) {
+                $best[] = $slot;
+            }
+        }
+
+        // Single candidate, or fully booked tier (no alternatives chain) - return as is.
+        if ( count( $best ) == 1 || $best_tier == 1 ) {
+            return $best[0];
+        }
+
+        // Randomize the order of candidates when the random option is enabled. Combined
+        // with _findPreferableSlot (which keeps the given order within equal-preference
+        // ties), this yields a uniformly random pick among equally preferable staff.
+        if ( $this->_staffPreferenceRandom() ) {
+            $best = $this->_shuffle( $best );
+        }
+
+        // Build the alternatives chain ordered by staff preference.
+        $slot = array_shift( $best );
+        foreach ( $best as $candidate ) {
+            $slot = $this->_findPreferableSlot( $candidate, $slot );
+        }
+
+        return $slot;
+    }
+
+    /**
+     * Whether equally preferable staff must be ordered randomly for the current service.
+     *
+     * @return bool
+     */
+    private function _staffPreferenceRandom()
+    {
+        if ( $this->staff_preference_random === null ) {
+            $this->staff_preference_random = false;
+            $location_id = LocationsProxy::servicesPerLocationAllowed() ? $this->location_id : 0;
+            foreach ( $this->staff_members as $staff ) {
+                $settings = $staff->getService( $this->srv_id, $location_id )->getStaffPreferenceSettings();
+                $this->staff_preference_random = ! empty( $settings['random'] );
+                break;
+            }
+        }
+
+        return $this->staff_preference_random;
+    }
+
+    /**
+     * Shuffle an array uniformly using the Fisher-Yates algorithm and wp_rand.
+     *
+     * @param Range[] $items
+     * @return Range[]
+     */
+    private function _shuffle( array $items )
+    {
+        for ( $i = count( $items ) - 1; $i > 0; --$i ) {
+            $j = wp_rand( 0, $i );
+            $tmp = $items[ $i ];
+            $items[ $i ] = $items[ $j ];
+            $items[ $j ] = $tmp;
+        }
+
+        return $items;
     }
 
     /**

@@ -25,12 +25,12 @@ class ButtonsAjax extends Lib\Base\Ajax
 
         // Validation.
         if ( $email == '' || $msg == '' ) {
-            wp_send_json_error( array( 'message' => __( 'All fields marked with an asterisk (*) are required.', 'bookly' ) ) );
+            wp_send_json_error( array( 'message' => __( 'All fields marked with an asterisk (*) are required.', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
         if ( ! is_email( $email ) ) {
             wp_send_json_error( array(
                 'invalid_email' => true,
-                'message' => __( 'Invalid email.', 'bookly' ),
+                'message' => __( 'Invalid email.', 'bookly-responsive-appointment-booking-tool' ),
             ) );
         }
         $cloud = Lib\Cloud\API::getInstance();
@@ -48,9 +48,9 @@ class ButtonsAjax extends Lib\Base\Ajax
         );
 
         if ( Lib\Utils\Mail::send( 'support@bookly.info', 'Support Request ' . site_url(), $message, $headers ) ) {
-            wp_send_json_success( array( 'message' => __( 'Sent successfully.', 'bookly' ) ) );
+            wp_send_json_success( array( 'message' => __( 'Sent successfully.', 'bookly-responsive-appointment-booking-tool' ) ) );
         } else {
-            wp_send_json_error( array( 'message' => __( 'Error sending support request.', 'bookly' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Error sending support request.', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
     }
 

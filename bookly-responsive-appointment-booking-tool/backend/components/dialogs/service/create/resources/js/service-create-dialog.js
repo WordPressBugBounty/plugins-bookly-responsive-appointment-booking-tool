@@ -37,7 +37,7 @@ jQuery(function($) {
                 $serviceType.val('simple').trigger('change');
                 $modal.booklyModal('hide');
 
-                BooklyServiceOrderDialogL10n.services.push({id: response.data.id, title: response.data.title});
+                BooklyL10n.service_order.push({id: response.data.id, title: response.data.title});
                 $(document.body).trigger('service.edit', [response.data.id]);
             } else {
                 requiredBooklyPro();

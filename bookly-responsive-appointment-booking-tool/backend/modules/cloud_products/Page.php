@@ -43,12 +43,12 @@ class Page extends Lib\Base\Component
                             $product['cancel_on_renewal'] = isset( $subscription['cancel_on_renewal'] ) ? $subscription['cancel_on_renewal'] : false;
                             if ( isset( $subscription['usage'] ) ) {
                                 if ( $product['id'] === 'whatsapp' ) {
-                                    $prefix = __( 'Messages', 'bookly' );
+                                    $prefix = __( 'Messages', 'bookly-responsive-appointment-booking-tool' );
                                 } else {
-                                    $prefix = __( 'Tasks', 'bookly' );
+                                    $prefix = __( 'Tasks', 'bookly-responsive-appointment-booking-tool' );
                                 }
                                 if ( $subscription['usage']['limit'] === null ) {
-                                    $product['usage'] = sprintf( '%s: %s', $prefix, __( 'unlimited in trial', 'bookly' ) );
+                                    $product['usage'] = sprintf( '%s: %s', $prefix, __( 'unlimited in trial', 'bookly-responsive-appointment-booking-tool' ) );
                                 } else {
                                     $product['usage'] = sprintf( '%s: %d / %d', $prefix, $subscription['usage']['used'], $subscription['usage']['limit'] );
                                 }

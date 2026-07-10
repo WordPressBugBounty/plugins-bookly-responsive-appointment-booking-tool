@@ -85,6 +85,8 @@ jQuery(function ($) {
         };
         let dt_campaigns;
 
+        // Server (Ajax::getCampaignList) searches only by name and id.
+        const campaignSearchableColumns = ['name', 'id'];
         const columns = [];
         $.each(BooklyL10n.datatables[campaignsTable].settings.columns, function (column, show) {
             switch (column) {
@@ -116,6 +118,7 @@ jQuery(function ($) {
             columns[columns.length - 1].title = BooklyL10n.datatables[campaignsTable].titles[column] || column;
             columns[columns.length - 1].name = column;
             columns[columns.length - 1].show = show;
+            columns[columns.length - 1].searchable = campaignSearchableColumns.indexOf(column) !== -1;
         });
 
         dt_campaigns = BooklyDatatables.showForm('bookly-' + campaignsTable + '-datatables', {
@@ -212,6 +215,8 @@ jQuery(function ($) {
         });
 
         const ml_table = 'sms_mailing_lists';
+        // Server (Ajax::getMailingList) searches only by name and id.
+        const ml_searchableColumns = ['name', 'id'];
         $.each(BooklyL10n.datatables[ml_table].settings.columns, function (column, show) {
             ml.columns.push({
                 data: column,
@@ -220,6 +225,7 @@ jQuery(function ($) {
             ml.columns[ml.columns.length - 1].title = BooklyL10n.datatables[ml_table].titles[column] || column;
             ml.columns[ml.columns.length - 1].name = column;
             ml.columns[ml.columns.length - 1].show = show;
+            ml.columns[ml.columns.length - 1].searchable = ml_searchableColumns.indexOf(column) !== -1;
         });
 
         ml.dt = BooklyDatatables.showForm('bookly-' + ml_table + '-datatables', {
@@ -291,6 +297,8 @@ jQuery(function ($) {
          * Mailing recipients.
          */
         const mr_table = 'sms_mailing_recipients_list';
+        // Server (Ajax::getMailingRecipients) searches only by name and phone.
+        const mr_searchableColumns = ['name', 'phone'];
         $.each(BooklyL10n.datatables[mr_table].settings.columns, function (column, show) {
             mr.columns.push({
                 data: column,
@@ -299,6 +307,7 @@ jQuery(function ($) {
             mr.columns[mr.columns.length - 1].title = BooklyL10n.datatables[mr_table].titles[column] || column;
             mr.columns[mr.columns.length - 1].name = column;
             mr.columns[mr.columns.length - 1].show = show;
+            mr.columns[mr.columns.length - 1].searchable = mr_searchableColumns.indexOf(column) !== -1;
         });
 
         function switchView(view) {
@@ -393,6 +402,29 @@ jQuery(function ($) {
         const detailsTable = 'sms_details';
         let detailsBt;
 
+        function resendSms(ids) {
+            if (!ids.length) return;
+            detailsBt.setLoading(true);
+            $.ajax({
+                url: ajaxurl,
+                data: {
+                    action: 'bookly_resend_sms',
+                    csrf_token: BooklyL10nGlobal.csrf_token,
+                    ids: ids,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        booklyAlert({ success: [response.message] });
+                    } else {
+                        booklyAlert({ error: [response.message] });
+                    }
+                    detailsBt.reload();
+                },
+                error: function () { detailsBt.setLoading(false); }
+            });
+        }
+
         const tz = getLocalTimeZone();
         const t = today(tz);
         const startOfMonth = d => d.set({ day: 1 });
@@ -486,34 +518,23 @@ jQuery(function ($) {
                 },
                 columns: columns,
                 tableSettings: Object.assign({}, BooklyL10n.datatables[detailsTable], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+                rowActions: function (row) {
+                    if (!row.resend) return [];
+                    return [{
+                        label: BooklyL10n.resend,
+                        icon: 'send',
+                        variant: 'outline',
+                        click: function (r) { resendSms([r.id]); }
+                    }];
+                },
                 checked: function (rows) {
                     const resendable = rows.filter(function (row) { return row.resend; });
-                    if (resendable.length === 0) return [];
+                    if (resendable.length < 2) return [];
                     return [{
                         label: BooklyL10n.resend + ' (' + resendable.length + ')',
                         icon: 'send',
                         variant: 'outline',
-                        click: function () {
-                            detailsBt.setLoading(true);
-                            $.ajax({
-                                url: ajaxurl,
-                                data: {
-                                    action: 'bookly_resend_sms',
-                                    csrf_token: BooklyL10nGlobal.csrf_token,
-                                    ids: resendable.map(function (row) { return row.id; }),
-                                },
-                                dataType: 'json',
-                                success: function (response) {
-                                    if (response.success) {
-                                        booklyAlert({ success: [response.message] });
-                                    } else {
-                                        booklyAlert({ error: [response.message] });
-                                    }
-                                    detailsBt.reload();
-                                },
-                                error: function () { detailsBt.setLoading(false); }
-                            });
-                        }
+                        click: function () { resendSms(resendable.map(function (row) { return row.id; })); }
                     }];
                 },
                 saveSettings: function (settings) {

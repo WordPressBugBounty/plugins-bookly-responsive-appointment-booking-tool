@@ -123,25 +123,23 @@ jQuery(function ($) {
             const event = new CustomEvent('bookly:edit-staff', { detail: { id: row.id } });
             window.dispatchEvent(event);
         },
-        checked: function (rows) {
-            const actions = [];
-            if (rows.length === 1) {
-                actions.push({
-                    label: BooklyL10n.duplicate,
-                    icon: 'copy',
-                    variant: 'outline',
-                    click: function (selected) {
-                        BooklyDuplicateStaffDialog.showDialog(selected[0].id, function () { bt.reload(); });
-                    }
-                });
-            }
-            actions.push({
+        rowActions: function (row) {
+            return [{
+                label: BooklyL10n.duplicate,
+                icon: 'copy-plus',
+                variant: 'outline',
+                click: function (r) {
+                    BooklyDuplicateStaffDialog.showDialog(r.id, function () { bt.reload(); });
+                }
+            }];
+        },
+        checked: function () {
+            return [{
                 label: BooklyL10n.delete,
                 icon: 'trash',
                 variant: 'destructive',
                 click: function () { $deleteModal.booklyModal('show'); }
-            });
-            return actions;
+            }];
         },
         saveSettings: function (settings) {
             $.post(
@@ -163,7 +161,7 @@ jQuery(function ($) {
                     label: BooklyL10n.order,
                     icon: 'list-ordered',
                     variant: 'outline',
-                    click: function () { $('#bookly-staff-order-modal').booklyModal('show'); }
+                    click: openReorder
                 });
                 if (BooklyL10n.proEnabled) {
                     buttons.push({
@@ -254,4 +252,63 @@ jQuery(function ($) {
         rangeTools.ladda(this);
         window.location.href = BooklyL10n.appointmentsUrl + '#staff=' + bt.getCheckedRows()[0].id;
     });
+
+    /**
+     * Reorder dialog. The full staff collection (position order) lives in
+     * BooklyL10n.staff_order and is kept in sync below — the server-side table
+     * can't supply the whole list.
+     */
+    function openReorder() {
+        const items = BooklyL10n.staff_order.map(function (s) {
+            const archived = s.archived == 1;
+            return {
+                id: s.id,
+                label: s.full_name + (archived ? ' — ' + BooklyL10n.archived : ''),
+                muted: archived
+            };
+        });
+
+        BooklyDatatables.showReorder({
+            title: BooklyL10n.staff_order_title,
+            hint: BooklyL10n.staff_order_hint,
+            items: items,
+            saveLabel: BooklyL10n.datatables.l10n.save,
+            cancelLabel: BooklyL10n.datatables.l10n.cancel,
+            onSave: function (orderedIds) {
+                return $.post(ajaxurl, booklySerialize.buildRequestData('bookly_update_staff_positions', { staff: orderedIds }))
+                    .then(function () {
+                        // Re-sort the cached collection to match the saved order.
+                        BooklyL10n.staff_order.sort(function (a, b) {
+                            return orderedIds.indexOf(a.id) - orderedIds.indexOf(b.id);
+                        });
+                        bt.reload();
+                    });
+            }
+        });
+    }
+
+    /**
+     * Keep BooklyL10n.staff_order in sync with staff edits/deletes so the
+     * reorder dialog reflects changes without a page reload.
+     */
+    $(document.body)
+        .on('staff.saved', function (event, tab, staffData) {
+            if (tab !== 'staff-details') {
+                return;
+            }
+            const existing = BooklyL10n.staff_order.find(function (s) { return s.id == staffData.id; });
+            if (existing === undefined) {
+                BooklyL10n.staff_order.push({ id: staffData.id, full_name: staffData.full_name, archived: 0 });
+            } else {
+                existing.full_name = staffData.full_name;
+            }
+        })
+        .on('staff.deleted', function (event, staff) {
+            staff.forEach(function (id) {
+                const idx = BooklyL10n.staff_order.findIndex(function (s) { return s.id === parseInt(id); });
+                if (idx !== -1) {
+                    BooklyL10n.staff_order.splice(idx, 1);
+                }
+            });
+        });
 });

@@ -43,7 +43,7 @@ abstract class Reminder
                 get_option( 'bookly_sms_administrator_phone', '' ),
                 $notification,
                 $codes,
-                array( 'name' => __( 'Admins', 'bookly' ) ),
+                array( 'name' => __( 'Admins', 'bookly-responsive-appointment-booking-tool' ) ),
                 $queue
             );
         } elseif ( $gateway === 'email' ) {
@@ -58,7 +58,7 @@ abstract class Reminder
                     $reply_to,
                     null,
                     null,
-                    array( 'name' => __( 'Admins', 'bookly' ) ),
+                    array( 'name' => __( 'Admins', 'bookly-responsive-appointment-booking-tool' ) ),
                     $queue
                 ) ) {
                     $result = true;
@@ -72,7 +72,7 @@ abstract class Reminder
                 get_option( 'bookly_sms_administrator_phone', '' ),
                 $notification,
                 $codes,
-                array( 'name' => __( 'Admins', 'bookly' ) ),
+                array( 'name' => __( 'Admins', 'bookly-responsive-appointment-booking-tool' ) ),
                 $queue
             );
         } elseif ( $gateway === 'whatsapp' ) {
@@ -81,7 +81,7 @@ abstract class Reminder
                 get_option( 'bookly_sms_administrator_phone', '' ),
                 $notification,
                 $codes,
-                array( 'name' => __( 'Admins', 'bookly' ) ),
+                array( 'name' => __( 'Admins', 'bookly-responsive-appointment-booking-tool' ) ),
                 $queue
             );
         }
@@ -112,7 +112,7 @@ abstract class Reminder
                     $phone,
                     $notification,
                     $codes,
-                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    array( 'name' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ) ),
                     $queue
                 ) ) {
                     $result = true;
@@ -129,7 +129,7 @@ abstract class Reminder
                     $reply_to,
                     null,
                     null,
-                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    array( 'name' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ) ),
                     $queue
                 ) ) {
                     $result = true;
@@ -142,7 +142,7 @@ abstract class Reminder
                     $phone,
                     $notification,
                     $codes,
-                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    array( 'name' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ) ),
                     $queue
                 ) ) {
                     $result = true;
@@ -155,7 +155,7 @@ abstract class Reminder
                     $phone,
                     $notification,
                     $codes,
-                    array( 'name' => __( 'Custom', 'bookly' ) ),
+                    array( 'name' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ) ),
                     $queue
                 ) ) {
                     $result = true;

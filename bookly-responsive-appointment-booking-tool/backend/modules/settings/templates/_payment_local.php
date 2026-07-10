@@ -6,7 +6,7 @@ use Bookly\Backend\Components\Controls\Elements;
     <div class="card-header d-flex align-items-center">
         <?php Elements::renderReorder() ?>
         <a href="#bookly_pmt_locally" class="ml-2" role="button" data-toggle="bookly-collapse">
-            <?php esc_html_e( 'Service paid locally', 'bookly' ) ?>
+            <?php esc_html_e( 'Service paid locally', 'bookly-responsive-appointment-booking-tool' ) ?>
         </a>
     </div>
     <div id="bookly_pmt_locally" class="bookly-collapse bookly-show">

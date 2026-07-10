@@ -347,22 +347,22 @@ class DateTime extends Cache
             $parts = array();
 
             if ( $years > 0 ) {
-                $parts[] = sprintf( _n( '%d year', '%d years', $years, 'bookly' ), $years );
+                $parts[] = sprintf( _n( '%d year', '%d years', $years, 'bookly-responsive-appointment-booking-tool' ), $years );
             }
             if ( $months > 0 ) {
-                $parts[] = sprintf( _n( '%d month', '%d months', $months, 'bookly' ), $months );
+                $parts[] = sprintf( _n( '%d month', '%d months', $months, 'bookly-responsive-appointment-booking-tool' ), $months );
             }
             if ( $weeks > 0 ) {
-                $parts[] = sprintf( _n( '%d week', '%d weeks', $weeks, 'bookly' ), $weeks );
+                $parts[] = sprintf( _n( '%d week', '%d weeks', $weeks, 'bookly-responsive-appointment-booking-tool' ), $weeks );
             }
             if ( $days > 0 ) {
-                $parts[] = sprintf( _n( '%d day', '%d days', $days, 'bookly' ), $days );
+                $parts[] = sprintf( _n( '%d day', '%d days', $days, 'bookly-responsive-appointment-booking-tool' ), $days );
             }
             if ( $hours > 0 ) {
-                $parts[] = sprintf( __( '%d h', 'bookly' ), $hours );
+                $parts[] = sprintf( __( '%d h', 'bookly-responsive-appointment-booking-tool' ), $hours );
             }
             if ( $minutes > 0 ) {
-                $parts[] = sprintf( __( '%d min', 'bookly' ), $minutes );
+                $parts[] = sprintf( __( '%d min', 'bookly-responsive-appointment-booking-tool' ), $minutes );
             }
 
             self::putInCache( $key, implode( ' ', $parts ) );
@@ -469,26 +469,26 @@ class DateTime extends Cache
         return array_merge(
             array(
                 'format' => self::convertFormat( 'date', self::FORMAT_MOMENT_JS ),
-                'applyLabel' => __( 'Apply', 'bookly' ),
-                'cancelLabel' => __( 'Cancel', 'bookly' ),
-                'fromLabel' => __( 'From', 'bookly' ),
-                'toLabel' => __( 'To', 'bookly' ),
-                'customRangeLabel' => __( 'Custom range', 'bookly' ),
-                'tomorrow' => __( 'Tomorrow', 'bookly' ),
-                'today' => __( 'Today', 'bookly' ),
-                'anyTime' => __( 'Any time', 'bookly' ),
-                'yesterday' => __( 'Yesterday', 'bookly' ),
-                'last_7' => __( 'Last 7 days', 'bookly' ),
-                'last_30' => __( 'Last 30 days', 'bookly' ),
-                'last_90' => __( 'Last 90 days', 'bookly' ),
-                'next_7' => __( 'Next 7 days', 'bookly' ),
-                'next_30' => __( 'Next 30 days', 'bookly' ),
-                'thisWeek' => __( 'This week', 'bookly' ),
-                'thisMonth' => __( 'This month', 'bookly' ),
-                'nextMonth' => __( 'Next month', 'bookly' ),
-                'lastMonth' => __( 'Last month', 'bookly' ),
-                'thisYear' => __( 'This year', 'bookly' ),
-                'yearToDate' => __( 'Year to date', 'bookly' ),
+                'applyLabel' => __( 'Apply', 'bookly-responsive-appointment-booking-tool' ),
+                'cancelLabel' => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+                'fromLabel' => __( 'From', 'bookly-responsive-appointment-booking-tool' ),
+                'toLabel' => __( 'To', 'bookly-responsive-appointment-booking-tool' ),
+                'customRangeLabel' => __( 'Custom range', 'bookly-responsive-appointment-booking-tool' ),
+                'tomorrow' => __( 'Tomorrow', 'bookly-responsive-appointment-booking-tool' ),
+                'today' => __( 'Today', 'bookly-responsive-appointment-booking-tool' ),
+                'anyTime' => __( 'Any time', 'bookly-responsive-appointment-booking-tool' ),
+                'yesterday' => __( 'Yesterday', 'bookly-responsive-appointment-booking-tool' ),
+                'last_7' => __( 'Last 7 days', 'bookly-responsive-appointment-booking-tool' ),
+                'last_30' => __( 'Last 30 days', 'bookly-responsive-appointment-booking-tool' ),
+                'last_90' => __( 'Last 90 days', 'bookly-responsive-appointment-booking-tool' ),
+                'next_7' => __( 'Next 7 days', 'bookly-responsive-appointment-booking-tool' ),
+                'next_30' => __( 'Next 30 days', 'bookly-responsive-appointment-booking-tool' ),
+                'thisWeek' => __( 'This week', 'bookly-responsive-appointment-booking-tool' ),
+                'thisMonth' => __( 'This month', 'bookly-responsive-appointment-booking-tool' ),
+                'nextMonth' => __( 'Next month', 'bookly-responsive-appointment-booking-tool' ),
+                'lastMonth' => __( 'Last month', 'bookly-responsive-appointment-booking-tool' ),
+                'thisYear' => __( 'This year', 'bookly-responsive-appointment-booking-tool' ),
+                'yearToDate' => __( 'Year to date', 'bookly-responsive-appointment-booking-tool' ),
                 'firstDay' => (int) get_option( 'start_of_week' ),
             ),
             $array

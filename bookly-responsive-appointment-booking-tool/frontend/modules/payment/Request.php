@@ -247,7 +247,7 @@ class Request extends Lib\Base\Component
                     } elseif ( Entities\Order::query()->where( 'token', $this->get( 'bookly_order' ) )->fetchVar( 'id' ) !== null ) {
                         $this->gateway = new Lib\Payment\ZeroGateway( $this );
                         if ( $this->getCartInfo()->getPayNow() > 0 ) {
-                            throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
+                            throw new \Exception( __( 'Incorrect payment data', 'bookly-responsive-appointment-booking-tool' ) );
                         }
                     } elseif ( Lib\Config::wooCommerceEnabled() ) {
                         $this->gateway = new Lib\Payment\ZeroGateway( $this );
@@ -259,7 +259,7 @@ class Request extends Lib\Base\Component
                     $ci = $this->getCartInfo();
                     if ( $ci->getPayNow() > 0 ) {
                         if ( $this->gateway->getType() === Entities\Payment::TYPE_FREE ) {
-                            throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
+                            throw new \Exception( __( 'Incorrect payment data', 'bookly-responsive-appointment-booking-tool' ) );
                         }
                     } elseif ( ( $ci->getSubtotal() + $ci->getDiscount() ) > 0 ) {
                         $this->gateway = new Lib\Payment\LocalGateway( $this );

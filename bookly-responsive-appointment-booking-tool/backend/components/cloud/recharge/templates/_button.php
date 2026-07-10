@@ -10,9 +10,9 @@ $disabled = $type === Amounts::RECHARGE_TYPE_AUTO && $cloud->account->autoRechar
 <div class="bookly-js-recharge card mx-2 mb-4<?php if ( $custom_color ) : ?><?php echo esc_attr( ' border-' . $custom_color ); ?><?php endif ?>" style="border-width: 2px; min-height: 200px;<?php if ( $disabled ) : ?> opacity: 0.5<?php endif ?>">
     <div class="card-body text-center">
         <?php if ( in_array( 'best_offer', $recharge['tags'] ) ) : ?>
-            <span class="bg-bookly px-3 py-1 text-truncate text-nowrap text-uppercase text-white" style="position: absolute; top:0; right: 0; font-size: 0.7rem;"><b><?php esc_html_e( 'best offer', 'bookly' ) ?></b></span>
+            <span class="bg-bookly px-3 py-1 text-truncate text-nowrap text-uppercase text-white" style="position: absolute; top:0; right: 0; font-size: 0.7rem;"><b><?php esc_html_e( 'best offer', 'bookly-responsive-appointment-booking-tool' ) ?></b></span>
         <?php elseif ( in_array( 'users_choice', $recharge['tags'] ) ) : ?>
-            <span class="bg-success px-3 py-1 text-truncate text-nowrap text-uppercase text-white" style="position: absolute; top:0; right: 0; font-size: 0.7rem;"><b><?php esc_html_e( 'users choice', 'bookly' ) ?></b></span>
+            <span class="bg-success px-3 py-1 text-truncate text-nowrap text-uppercase text-white" style="position: absolute; top:0; right: 0; font-size: 0.7rem;"><b><?php esc_html_e( 'users choice', 'bookly-responsive-appointment-booking-tool' ) ?></b></span>
         <?php endif ?>
         <div class="text-center">
             <span style="vertical-align: bottom;line-height: 4.8rem;font-size: 2rem">$</span>
@@ -23,15 +23,15 @@ $disabled = $type === Amounts::RECHARGE_TYPE_AUTO && $cloud->account->autoRechar
             <?php if ( isset( $recharge['extend_support'] ) && $recharge['extend_support'] > 0 ) : ?>
                 <div class="text-muted mx-4 mb-3" style=" margin-top: -10px; background: #faf2cc; background: radial-gradient(circle, #faf2cc 0%, #fff 100%);">
                     <i class="fas fa-headset"></i>
-                    <b> + <?php printf( _n( '%d day', '%d days', $recharge['extend_support'], 'bookly' ),  $recharge['extend_support'] ) ?></b>
+                    <b> + <?php printf( _n( '%d day', '%d days', $recharge['extend_support'], 'bookly-responsive-appointment-booking-tool' ),  $recharge['extend_support'] ) ?></b>
                 </div>
             <?php endif ?>
         </div>
         <div class="text-center w-100">
             <?php if ( $type === Amounts::RECHARGE_TYPE_AUTO && $recharge['amount'] === $cloud->account->getAutoRechargeAmount() ) : ?>
-                <button class="btn btn-danger btn-lg btn-block text-uppercase bookly-disable-auto-recharge" style="white-space: normal;"><?php esc_html_e( 'Disable', 'bookly' ) ?></button>
+                <button class="btn btn-danger btn-lg btn-block text-uppercase bookly-disable-auto-recharge" style="white-space: normal;"><?php esc_html_e( 'Disable', 'bookly-responsive-appointment-booking-tool' ) ?></button>
             <?php else : ?>
-                <button <?php disabled( $disabled ) ?> class="btn <?php if ( $custom_color ) : ?><?php echo esc_attr( 'btn-' . $custom_color ); ?><?php else : ?>btn-primary<?php endif ?> btn-lg btn-block text-uppercase" style="white-space: normal;" data-recharge-type="<?php echo esc_attr( $type ) ?>" data-recharge=<?php echo json_encode( $recharge ) ?>><?php esc_html_e( 'Select', 'bookly' ) ?></button>
+                <button <?php disabled( $disabled ) ?> class="btn <?php if ( $custom_color ) : ?><?php echo esc_attr( 'btn-' . $custom_color ); ?><?php else : ?>btn-primary<?php endif ?> btn-lg btn-block text-uppercase" style="white-space: normal;" data-recharge-type="<?php echo esc_attr( $type ) ?>" data-recharge=<?php echo json_encode( $recharge ) ?>><?php esc_html_e( 'Select', 'bookly-responsive-appointment-booking-tool' ) ?></button>
             <?php endif; ?>
         </div>
     </div>

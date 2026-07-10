@@ -40,7 +40,7 @@ class Component extends Lib\Base\Component implements \Iterator
     {
         $this->start_select = new Select( array(
             'use_empty' => true,
-            'empty_value' => __( 'OFF', 'bookly' ),
+            'empty_value' => __( 'OFF', 'bookly-responsive-appointment-booking-tool' ),
             'type' => 'from',
             'class' => 'bookly-js-parent-range-start',
             'name' => $start_name

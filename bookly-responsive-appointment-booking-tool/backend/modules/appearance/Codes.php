@@ -15,54 +15,54 @@ class Codes
         $codes = Proxy\Shared::prepareCodes( array(
             'appointments' => array(
                 'description' => array(
-                    __( 'Loop over appointments list', 'bookly' ),
-                    __( 'Loop over appointments list with delimiter', 'bookly' ),
+                    __( 'Loop over appointments list', 'bookly-responsive-appointment-booking-tool' ),
+                    __( 'Loop over appointments list with delimiter', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'loop' => array(
                     'item' => 'appointment',
                     'codes' => array(
-                        'appointment_id' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true ),
-                        'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true ),
-                        'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly' ), 'if' => true ),
-                        'category_image' => array( 'description' => __( 'Image of category', 'bookly' ), 'if' => true ),
-                        'category_info' => array( 'description' => __( 'Service category info of appointment', 'bookly' ), 'if' => true ),
-                        'category_name' => array( 'description' => __( 'Service category name of appointment', 'bookly' ), 'if' => true ),
-                        'service_duration' => array( 'description' => __( 'Service duration of appointment', 'bookly' ) ),
-                        'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true ),
-                        'service_name' => array( 'description' => __( 'Service name of appointment', 'bookly' ) ),
-                        'service_price' => array( 'description' => __( 'Service price of appointment', 'bookly' ), 'if' => true ),
-                        'staff_name' => array( 'description' => __( 'Staff member full name in appointment', 'bookly' ) ),
-                        'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
+                        'appointment_id' => array( 'description' => __( 'Date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'category_image' => array( 'description' => __( 'Image of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'category_info' => array( 'description' => __( 'Service category info of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'category_name' => array( 'description' => __( 'Service category name of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'service_duration' => array( 'description' => __( 'Service duration of appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+                        'service_info' => array( 'description' => __( 'Info of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'service_name' => array( 'description' => __( 'Service name of appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+                        'service_price' => array( 'description' => __( 'Service price of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                        'staff_name' => array( 'description' => __( 'Staff member full name in appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+                        'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly-responsive-appointment-booking-tool' ) ),
                     ),
                 ),
                 'flags' => array( 'step' => '>1' ),
             ),
-            'appointment_id' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
-            'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
-            'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
-            'appointments_count' => array( 'description' => __( 'Total quantity of appointments in cart', 'bookly' ), 'flags' => array( 'step' => 7, 'extra_codes' => true ) ),
-            'booking_number' => array( 'description' => __( 'Booking number', 'bookly' ), 'flags' => array( 'step' => 8, 'extra_codes' => true ) ),
-            'category_image' => array( 'description' => __( 'Image of category', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
-            'category_info' => array( 'description' => __( 'Info of category', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
-            'category_name' => array( 'description' => __( 'Name of category', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
-            'client_address' => array( 'description' => __( 'Address of client', 'bookly' ), 'if' => true ),
-            'client_email' => array( 'description' => __( 'Email of client', 'bookly' ), 'if' => true ),
-            'client_first_name' => array( 'description' => __( 'First name of client', 'bookly' ), 'if' => true ),
-            'client_last_name' => array( 'description' => __( 'Last name of client', 'bookly' ), 'if' => true ),
-            'client_name' => array( 'description' => __( 'Full name of client', 'bookly' ), 'if' => true ),
-            'client_note' => array( 'description' => __( 'Note of client', 'bookly' ), 'if' => true ),
-            'client_phone' => array( 'description' => __( 'Phone of client', 'bookly' ), 'if' => true ),
-            'login_form' => array( 'description' => __( 'Login form', 'bookly' ), 'flags' => array( 'step' => 6, 'extra_codes' => true ) ),
-            'service_duration' => array( 'description' => __( 'Duration of service', 'bookly' ) ),
-            'service_image' => array( 'description' => __( 'Image of service', 'bookly' ), 'if' => true ),
-            'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true ),
-            'service_name' => array( 'description' => __( 'Name of service', 'bookly' ) ),
-            'service_price' => array( 'description' => __( 'Price of service', 'bookly' ), 'if' => true ),
-            'staff_info' => array( 'description' => __( 'Info of staff member', 'bookly' ), 'if' => true ),
-            'staff_name' => array( 'description' => __( 'Full name of staff member', 'bookly' ) ),
-            'staff_photo' => array( 'description' => __( 'Photo of staff member', 'bookly' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
-            'total_price' => array( 'description' => __( 'Total price of booking', 'bookly' ), 'if' => true ),
-            'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
+            'appointment_id' => array( 'description' => __( 'Date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
+            'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
+            'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>3' ) ),
+            'appointments_count' => array( 'description' => __( 'Total quantity of appointments in cart', 'bookly-responsive-appointment-booking-tool' ), 'flags' => array( 'step' => 7, 'extra_codes' => true ) ),
+            'booking_number' => array( 'description' => __( 'Booking number', 'bookly-responsive-appointment-booking-tool' ), 'flags' => array( 'step' => 8, 'extra_codes' => true ) ),
+            'category_image' => array( 'description' => __( 'Image of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
+            'category_info' => array( 'description' => __( 'Info of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
+            'category_name' => array( 'description' => __( 'Name of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
+            'client_address' => array( 'description' => __( 'Address of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_email' => array( 'description' => __( 'Email of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_first_name' => array( 'description' => __( 'First name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_last_name' => array( 'description' => __( 'Last name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_name' => array( 'description' => __( 'Full name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_note' => array( 'description' => __( 'Note of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'client_phone' => array( 'description' => __( 'Phone of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'login_form' => array( 'description' => __( 'Login form', 'bookly-responsive-appointment-booking-tool' ), 'flags' => array( 'step' => 6, 'extra_codes' => true ) ),
+            'service_duration' => array( 'description' => __( 'Duration of service', 'bookly-responsive-appointment-booking-tool' ) ),
+            'service_image' => array( 'description' => __( 'Image of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'service_info' => array( 'description' => __( 'Info of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'service_name' => array( 'description' => __( 'Name of service', 'bookly-responsive-appointment-booking-tool' ) ),
+            'service_price' => array( 'description' => __( 'Price of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_info' => array( 'description' => __( 'Info of staff member', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_name' => array( 'description' => __( 'Full name of staff member', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_photo' => array( 'description' => __( 'Photo of staff member', 'bookly-responsive-appointment-booking-tool' ), 'if' => true, 'flags' => array( 'step' => '>1' ) ),
+            'total_price' => array( 'description' => __( 'Total price of booking', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly-responsive-appointment-booking-tool' ) ),
         ) );
 
         $codes = self::filter( $codes, compact( 'step', 'extra_codes' ) );
@@ -93,12 +93,12 @@ class Codes
     public static function getServiceCodes()
     {
         return json_encode( array(
-            'service_duration' => array( 'description' => __( 'Duration of service', 'bookly' ) ),
-            'service_image' => array( 'description' => __( 'Image of service', 'bookly' ), 'if' => true ),
-            'service_image_url' => array( 'description' => __( 'URL of service image (to use inside img tag)', 'bookly' ), 'if' => true ),
-            'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true ),
-            'service_name' => array( 'description' => __( 'Name of service', 'bookly' ) ),
-            'service_price' => array( 'description' => __( 'Price of service', 'bookly' ), 'if' => true ),
+            'service_duration' => array( 'description' => __( 'Duration of service', 'bookly-responsive-appointment-booking-tool' ) ),
+            'service_image' => array( 'description' => __( 'Image of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'service_image_url' => array( 'description' => __( 'URL of service image (to use inside img tag)', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'service_info' => array( 'description' => __( 'Info of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'service_name' => array( 'description' => __( 'Name of service', 'bookly-responsive-appointment-booking-tool' ) ),
+            'service_price' => array( 'description' => __( 'Price of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
         ) );
     }
 
@@ -110,13 +110,13 @@ class Codes
     public static function getCategoryCodes()
     {
         return json_encode( array(
-            'category_image' => array( 'description' => __( 'Image of category', 'bookly' ), 'if' => true ),
-            'category_image_url' => array( 'description' => __( 'URL of category image (to use inside img tag)', 'bookly' ), 'if' => true ),
-            'category_info' => array( 'description' => __( 'Info of category', 'bookly' ), 'if' => true ),
-            'category_name' => array( 'description' => __( 'Name of category', 'bookly' ) ),
-            'staff_category_image' => array( 'description' => __( 'Image of staff category', 'bookly' ), 'if' => true ),
-            'staff_category_info' => array( 'description' => __( 'Info of staff category', 'bookly' ), 'if' => true ),
-            'staff_category_name' => array( 'description' => __( 'Name of staff category', 'bookly' ) ),
+            'category_image' => array( 'description' => __( 'Image of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'category_image_url' => array( 'description' => __( 'URL of category image (to use inside img tag)', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'category_info' => array( 'description' => __( 'Info of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'category_name' => array( 'description' => __( 'Name of category', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_category_image' => array( 'description' => __( 'Image of staff category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_category_info' => array( 'description' => __( 'Info of staff category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_category_name' => array( 'description' => __( 'Name of staff category', 'bookly-responsive-appointment-booking-tool' ) ),
         ) );
     }
 
@@ -128,10 +128,10 @@ class Codes
     public static function getStaffCodes()
     {
         return json_encode( array(
-            'staff_info' => array( 'description' => __( 'Info of staff member', 'bookly' ), 'if' => true ),
-            'staff_name' => array( 'description' => __( 'Full name of staff member', 'bookly' ) ),
-            'staff_photo' => array( 'description' => __( 'Photo of staff member', 'bookly' ), 'if' => true ),
-            'staff_photo_url' => array( 'description' => __( 'URL of staff photo (to use inside img tag)', 'bookly' ), 'if' => true ),
+            'staff_info' => array( 'description' => __( 'Info of staff member', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_name' => array( 'description' => __( 'Full name of staff member', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_photo' => array( 'description' => __( 'Photo of staff member', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+            'staff_photo_url' => array( 'description' => __( 'URL of staff photo (to use inside img tag)', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
         ) );
     }
 

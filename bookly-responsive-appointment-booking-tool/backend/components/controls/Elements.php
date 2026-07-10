@@ -12,7 +12,7 @@ class Elements
         printf(
             '<i class="fas fa-fw fa-bars text-muted bookly-cursor-move bookly-js-draghandle %s" title="%s"></i>',
             $class,
-            esc_attr_x( 'Reorder', 'order of elements', 'bookly' )
+            esc_attr_x( 'Reorder', 'order of elements', 'bookly-responsive-appointment-booking-tool' )
         );
     }
 }

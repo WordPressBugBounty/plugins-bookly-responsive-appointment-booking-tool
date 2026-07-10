@@ -6,7 +6,7 @@ use Bookly\Backend\Components\Notices;
     <input type="hidden" name="form-notifications">
     <div class="form-group">
         <label for="admin_phone">
-            <?php esc_html_e( 'Administrator phone', 'bookly' ) ?>
+            <?php esc_html_e( 'Administrator phone', 'bookly-responsive-appointment-booking-tool' ) ?>
         </label>
         <div class="form-row">
             <div class="col-auto">
@@ -14,24 +14,24 @@ use Bookly\Backend\Components\Notices;
             </div>
             <div class="col-auto">
                 <div class="btn-group">
-                    <button class="btn btn-success" id="test_call"><?php esc_html_e( 'Make a test call', 'bookly' ) ?></button>
+                    <button class="btn btn-success" id="test_call"><?php esc_html_e( 'Make a test call', 'bookly-responsive-appointment-booking-tool' ) ?></button>
                     <button type="button" class="btn btn-success bookly-dropdown-toggle" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <div class="bookly-dropdown-menu">
-                        <a href="#" class="bookly-dropdown-item" data-action="save-administrator-phone"><?php esc_html_e( 'Save administrator phone', 'bookly' ) ?></a>
+                        <a href="#" class="bookly-dropdown-item" data-action="save-administrator-phone"><?php esc_html_e( 'Save administrator phone', 'bookly-responsive-appointment-booking-tool' ) ?></a>
                     </div>
                 </div>
             </div>
         </div>
-        <small class="form-text text-muted"><?php esc_html_e( 'Enter a phone number in international format. E.g. for the United States a valid phone number would be +17327572923.', 'bookly' ) ?></small>
+        <small class="form-text text-muted"><?php esc_html_e( 'Enter a phone number in international format. E.g. for the United States a valid phone number would be +17327572923.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
     </div>
 
-    <div id="bookly-voice_notifications-datatables" class="bookly:mb-4"></div>
+    <div id="bookly-voice_notifications-datatables"></div>
 
     <div class="bookly:mt-3">
-        <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly' ), array(), true ) ?>
+        <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly-responsive-appointment-booking-tool' ), array(), true ) ?>
     </div>
 
 <?php Notices\Cron\Notice::render() ?>

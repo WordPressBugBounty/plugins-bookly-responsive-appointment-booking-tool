@@ -12,12 +12,12 @@ use Bookly\Backend\Components\Dialogs;
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="bookly-token"><?php esc_html_e( 'Associated staff member', 'bookly' ) ?></label>
+                    <label for="bookly-token"><?php esc_html_e( 'Associated staff member', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <select id="bookly-token" class="form-control custom-select" name="staff_id">
                     </select>
                 </div>
                 <div class="form-group">
-                    <?php Inputs::renderCheckBox( __( 'Send notifications', 'bookly' ), null, null, array( 'id' => 'bookly-send-notifications' ) ) ?>
+                    <?php Inputs::renderCheckBox( __( 'Send notifications', 'bookly-responsive-appointment-booking-tool' ), null, null, array( 'id' => 'bookly-send-notifications' ) ) ?>
                 </div>
             </div>
             <div class="modal-footer">

@@ -77,8 +77,8 @@ class ShortCode extends Lib\Base\ShortCode
             'days' => array_values( $wp_locale->weekday ),
             'daysShort' => array_values( $wp_locale->weekday_abbrev ),
             'monthsShort' => array_values( $wp_locale->month_abbrev ),
-            'show_more' => __( 'Show more', 'bookly' ),
-            'sessionHasExpired' => __( 'Your session has expired. Please press "Ok" to refresh the page', 'bookly' ),
+            'show_more' => __( 'Show more', 'bookly-responsive-appointment-booking-tool' ),
+            'sessionHasExpired' => __( 'Your session has expired. Please press "Ok" to refresh the page', 'bookly-responsive-appointment-booking-tool' ),
         ) );
     }
 
@@ -160,12 +160,12 @@ class ShortCode extends Lib\Base\ShortCode
 
         // Errors.
         $errors = array(
-            Errors::SESSION_ERROR => __( 'Session error.', 'bookly' ),
-            Errors::FORM_ID_ERROR => __( 'Form ID error.', 'bookly' ),
+            Errors::SESSION_ERROR => __( 'Session error.', 'bookly-responsive-appointment-booking-tool' ),
+            Errors::FORM_ID_ERROR => __( 'Form ID error.', 'bookly-responsive-appointment-booking-tool' ),
             Errors::CART_ITEM_NOT_AVAILABLE => Lib\Utils\Common::getTranslatedOption( Lib\Config::showStepCart() ? 'bookly_l10n_step_cart_slot_not_available' : 'bookly_l10n_step_time_slot_not_available' ),
-            Errors::PAY_LOCALLY_NOT_AVAILABLE => __( 'Pay locally is not available.', 'bookly' ),
-            Errors::INVALID_GATEWAY => __( 'Invalid gateway.', 'bookly' ),
-            Errors::PAYMENT_ERROR => __( 'Error', 'bookly' ) . '.',
+            Errors::PAY_LOCALLY_NOT_AVAILABLE => __( 'Pay locally is not available.', 'bookly-responsive-appointment-booking-tool' ),
+            Errors::INVALID_GATEWAY => __( 'Invalid gateway.', 'bookly-responsive-appointment-booking-tool' ),
+            Errors::PAYMENT_ERROR => __( 'Error', 'bookly-responsive-appointment-booking-tool' ) . '.',
             Errors::INCORRECT_USERNAME_PASSWORD => __( 'Incorrect username or password.' ),
         );
         $form_container_id = uniqid();

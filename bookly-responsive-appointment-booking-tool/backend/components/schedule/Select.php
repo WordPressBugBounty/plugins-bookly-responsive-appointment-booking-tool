@@ -59,7 +59,7 @@ class Select
         // Run the loop.
         while ( $time_start <= $time_end ) {
             $this->values[ Lib\Utils\DateTime::buildTimeString( $time_start ) ] = $time_start >= DAY_IN_SECONDS
-                ? Lib\Utils\DateTime::formatTime( $time_start ) . ' (' . esc_attr__( 'next day', 'bookly' ) . ')'
+                ? Lib\Utils\DateTime::formatTime( $time_start ) . ' (' . esc_attr__( 'next day', 'bookly-responsive-appointment-booking-tool' ) . ')'
                 : Lib\Utils\DateTime::formatTime( $time_start );
             $time_start += $ts_length;
         }

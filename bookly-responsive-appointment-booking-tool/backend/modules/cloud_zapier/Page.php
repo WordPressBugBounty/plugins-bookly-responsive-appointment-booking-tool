@@ -24,7 +24,7 @@ class Page extends Lib\Base\Component
             ) );
 
             wp_localize_script( 'bookly-zapier.js', 'BooklyL10n', array(
-                'areYouSure' => __( 'Are you sure?', 'bookly' ),
+                'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
             ) );
 
             self::renderTemplate( 'index' );

@@ -50,7 +50,7 @@ class Ajax extends Lib\Base\Ajax
 
             $paid_title = Lib\Utils\Price::format( $payment['paid'] + $payment['child_paid'] );
             if ( $payment['paid'] + $payment['child_paid'] != $payment['total'] ) {
-                $paid_title = sprintf( __( '%s of %s', 'bookly' ), $paid_title, Lib\Utils\Price::format( $payment['total'] ) );
+                $paid_title = sprintf( __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ), $paid_title, Lib\Utils\Price::format( $payment['total'] ) );
             }
 
             $data[] = array(
@@ -60,12 +60,12 @@ class Ajax extends Lib\Base\Ajax
                 'type' => Lib\Entities\Payment::typeToString( $payment['type'] ),
                 'multiple' => isset( $details['items'] ) && is_array( $details['items'] ) && count( $details['items'] ) > 1,
                 'customer' => $payment['customer'] ?: $details['customer'],
-                'provider' => $payment['provider'] ?: ( isset( $details['items'][0]['staff_name'] ) ? $details['items'][0]['staff_name'] : __( 'N/A', 'bookly' ) ),
-                'service' => $payment['service'] ?: ( isset( $details['items'][0]['service_name'] ) ? $details['items'][0]['service_name'] : __( 'N/A', 'bookly' ) ),
-                'start_date' => $payment['start_date'] ?: ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? $details['items'][0]['appointment_date'] : __( 'N/A', 'bookly' ) ),
+                'provider' => $payment['provider'] ?: ( isset( $details['items'][0]['staff_name'] ) ? $details['items'][0]['staff_name'] : __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) ),
+                'service' => $payment['service'] ?: ( isset( $details['items'][0]['service_name'] ) ? $details['items'][0]['service_name'] : __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) ),
+                'start_date' => $payment['start_date'] ?: ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? $details['items'][0]['appointment_date'] : __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) ),
                 'start_date_format' => $payment['start_date']
                     ? Lib\Utils\DateTime::formatDateTime( $payment['start_date'] )
-                    : ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly' ) ),
+                    : ( isset( $details['items'][0]['appointment_date'] ) && $details['items'][0]['appointment_date'] ? Lib\Utils\DateTime::formatDateTime( $details['items'][0]['appointment_date'] ) : __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) ),
                 'paid' => $paid_title,
                 'status' => Lib\Entities\Payment::statusToString( $payment['status'] ),
                 'status_code' => $payment['status'],

@@ -63,11 +63,11 @@ class Dialog extends SmsDialog
             'codes' => $codes_list,
             'gateway' => 'email',
             'title' => array(
-                'container' => __( 'Email', 'bookly' ),
-                'new' => __( 'New email notification', 'bookly' ),
-                'edit' => __( 'Edit email notification', 'bookly' ),
-                'create' => __( 'Create', 'bookly' ),
-                'save' => __( 'Save', 'bookly' ),
+                'container' => __( 'Email', 'bookly-responsive-appointment-booking-tool' ),
+                'new' => __( 'New email notification', 'bookly-responsive-appointment-booking-tool' ),
+                'edit' => __( 'Edit email notification', 'bookly-responsive-appointment-booking-tool' ),
+                'create' => __( 'Create', 'bookly-responsive-appointment-booking-tool' ),
+                'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
             ),
         ) );
 

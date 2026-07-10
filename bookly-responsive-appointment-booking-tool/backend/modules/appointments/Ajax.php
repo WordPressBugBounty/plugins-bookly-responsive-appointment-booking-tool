@@ -115,8 +115,11 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false, $display_tz = null )
     {
-        $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
-        $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
+        $postfix_any = sprintf( ' (%s)', __( 'Any', 'bookly-responsive-appointment-booking-tool' ) );
+        $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly-responsive-appointment-booking-tool' ) );
+
+        global $wpdb;
+        $wpdb->query( 'SET SQL_BIG_SELECTS=1' );
 
         $query = Lib\Entities\Appointment::query( 'a' )
             ->select( 'a.id,
@@ -274,7 +277,7 @@ class Ajax extends Lib\Base\Ajax
             if ( $row['payment'] !== null && $row['status'] !== Lib\Entities\CustomerAppointment::STATUS_WAITLISTED ) {
                 $payment_amount = Lib\Utils\Price::format( $row['payment'] );
                 if ( $row['payment'] != $row['payment_total'] ) {
-                    $payment_amount = sprintf( __( '%s of %s', 'bookly' ), $payment_amount, Lib\Utils\Price::format( $row['payment_total'] ) );
+                    $payment_amount = sprintf( __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ), $payment_amount, Lib\Utils\Price::format( $row['payment_total'] ) );
                 }
 
                 $payment_gateway = Lib\Entities\Payment::typeToString( $row['payment_type'] );
@@ -343,14 +346,14 @@ class Ajax extends Lib\Base\Ajax
                 'id' => $row['id'],
                 'no' => Lib\Config::groupBookingActive() && $row['ca_id'] ? $row['id'] . '-' . $row['ca_id'] : $row['ca_id'],
                 'start_date' => $row['start_date'] === null
-                    ? __( 'N/A', 'bookly' )
+                    ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' )
                     : ( $export ? $row['start_date'] : Lib\Utils\DateTime::formatDate( $row['start_date'] ) ),
                 'start_time' => $row['start_date'] === null || $export ? '' : Lib\Utils\DateTime::formatTime( $row['start_date'] ),
                 'staff' => array(
                     'name' => $row['staff_name'] . ( $row['staff_any'] ? $postfix_any : '' ) . ( $row['staff_visibility'] == 'archive' ? $postfix_archived : '' ),
                 ),
                 'customer' => array(
-                    'full_name' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_full_name'] ),
+                    'full_name' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : $row['customer_full_name'] ),
                     'phone' => $row['ca_id'] === null ? '' : Lib\Utils\Common::stripWpKses( $row['customer_phone'] ),
                     'email' => $row['ca_id'] === null ? '' : Lib\Utils\Common::stripWpKses( $row['customer_email'] ),
                     'birthday' => Lib\Utils\Common::stripWpKses( $row['customer_birthday'] ? Lib\Utils\DateTime::formatDate( $row['customer_birthday'] ) : '' ),

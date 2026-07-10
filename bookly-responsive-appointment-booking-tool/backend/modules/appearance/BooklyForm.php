@@ -41,7 +41,7 @@ class BooklyForm extends Lib\Base\Component
             'months' => array_values( $wp_locale->month ),
             'daysFull' => array_values( $wp_locale->weekday ),
             'days' => array_values( $wp_locale->weekday_abbrev ),
-            'saved' => __( 'Settings saved.', 'bookly' ),
+            'saved' => __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ),
             'intlTelInput' => array(
                 'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
                 'country' => get_option( 'bookly_cst_phone_default_country' ),
@@ -78,7 +78,7 @@ class BooklyForm extends Lib\Base\Component
         $gateways = array(
             'local' => array(
                 'label_option_name' => 'bookly_l10n_label_pay_locally',
-                'title' => __( 'Local', 'bookly' ),
+                'title' => __( 'Local', 'bookly-responsive-appointment-booking-tool' ),
                 'with_card' => false,
                 'logo_url' => null,
             ),

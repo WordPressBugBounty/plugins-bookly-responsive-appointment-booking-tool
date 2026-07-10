@@ -17,14 +17,14 @@
                                 <?php $schedule->start_select->render() ?>
                             </div>
                             <div class="col-auto bookly-js-invisible-on-off">
-                                <?php esc_html_e( 'to', 'bookly' ) ?>
+                                <?php esc_html_e( 'to', 'bookly-responsive-appointment-booking-tool' ) ?>
                             </div>
                             <div class="col bookly-js-invisible-on-off" style="max-width: 120px;">
                                 <?php $schedule->end_select->render() ?>
                             </div>
                             <?php if ( $schedule->withClone() ) : ?>
                                 <div class="col-auto bookly-js-clone-schedule">
-                                    <a class="btn btn-default" title="<?php esc_attr_e( 'Clone', 'bookly' ) ?>"><i class="far fa-fw fa-copy"></i></a>
+                                    <a class="btn btn-default" title="<?php esc_attr_e( 'Clone', 'bookly-responsive-appointment-booking-tool' ) ?>"><i class="far fa-fw fa-copy"></i></a>
                                 </div>
                             <?php endif ?>
                         </div>
@@ -34,7 +34,7 @@
             <?php if ( $schedule->withBreaks() ) : ?>
                 <div class="col-12 col-lg bookly-js-breaks-wrapper bookly-js-hide-on-off text-lg-right">
                     <button type="button" class="bookly-js-toggle-popover btn btn-default">
-                        <?php esc_html_e( 'Add break', 'bookly' ) ?>
+                        <?php esc_html_e( 'Add break', 'bookly-responsive-appointment-booking-tool' ) ?>
                     </button>
                     <div class="bookly-js-breaks-list">
                         <?php foreach ( $schedule->day_breaks as $break ) $break->render() ?>

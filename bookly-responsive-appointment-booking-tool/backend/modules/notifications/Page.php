@@ -14,13 +14,11 @@ class Page extends Lib\Base\Component
 
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
-            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/email-notifications.js' => array( 'bookly-backend-globals' ) ),
             'bookly' => array( 'backend/modules/cloud_sms/resources/js/notifications-list.js' => array( 'bookly-backend-globals' ), ),
-            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         Proxy\Shared::enqueueAssets();
@@ -28,25 +26,25 @@ class Page extends Lib\Base\Component
         $datatables = Lib\Utils\Tables::getSettings( array( Lib\Utils\Tables::EMAIL_NOTIFICATIONS, Lib\Utils\Tables::EMAIL_LOGS ) );
 
         wp_localize_script( 'bookly-email-notifications.js', 'BooklyL10n', array(
-            'sentSuccessfully' => __( 'Sent successfully.', 'bookly' ),
-            'settingsSaved' => __( 'Settings saved.', 'bookly' ),
-            'areYouSure' => __( 'Are you sure?', 'bookly' ),
-            'noResults' => __( 'No records.', 'bookly' ),
-            'processing' => __( 'Processing', 'bookly' ) . '…',
-            'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'zeroRecordsAlt' => __( 'No matching records found', 'bookly' ),
-            'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
-            'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
-            'edit' => __( 'Edit', 'bookly' ),
+            'sentSuccessfully' => __( 'Sent successfully.', 'bookly-responsive-appointment-booking-tool' ),
+            'settingsSaved' => __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ),
+            'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+            'noResults' => __( 'No records.', 'bookly-responsive-appointment-booking-tool' ),
+            'processing' => __( 'Processing', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
+            'zeroRecordsAlt' => __( 'No matching records found', 'bookly-responsive-appointment-booking-tool' ),
+            'state' => array( __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ), __( 'Enabled', 'bookly-responsive-appointment-booking-tool' ) ),
+            'action' => array( __( 'enable', 'bookly-responsive-appointment-booking-tool' ), __( 'disable', 'bookly-responsive-appointment-booking-tool' ) ),
+            'edit' => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ),
             'gateway' => 'email',
             'tab' => $tab,
-            'new_notification' => __( 'New notification', 'bookly' ) . '…',
-            'delete' => __( 'Delete', 'bookly' ) . '…',
-            'enable' => __( 'Enable', 'bookly' ),
-            'disable' => __( 'Disable', 'bookly' ),
-            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
-            'quick_search' => __( 'Quick search by name', 'bookly' ) . '…',
-            'zeroRecords' => __( 'No matching records found', 'bookly' ),
+            'new_notification' => __( 'New notification', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'enable' => __( 'Enable', 'bookly-responsive-appointment-booking-tool' ),
+            'disable' => __( 'Disable', 'bookly-responsive-appointment-booking-tool' ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly-responsive-appointment-booking-tool' ),
+            'quick_search' => __( 'Quick search by name', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'zeroRecords' => __( 'No matching records found', 'bookly-responsive-appointment-booking-tool' ),
             'datatables' => $datatables,
         ) );
 

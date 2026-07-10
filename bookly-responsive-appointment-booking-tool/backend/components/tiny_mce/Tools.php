@@ -35,11 +35,11 @@ class Tools extends Lib\Base\Component
 
         if ( $version < 3.5 ) {
             // show button for v 3.4 and below
-            echo '<a href="#TB_inline?width=640&inlineId=bookly-tinymce-popup&height=650" id="add-bookly-form" title="' . esc_attr__( 'Add Bookly booking form', 'bookly' ) . '">' . __( 'Add Bookly booking form', 'bookly' ) . '</a>';
+            echo '<a href="#TB_inline?width=640&inlineId=bookly-tinymce-popup&height=650" id="add-bookly-form" title="' . esc_attr__( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '">' . __( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '</a>';
         } else {
             // display button matching new UI
             $img = '<span class="bookly-media-icon"></span> ';
-            echo '<a href="#TB_inline?width=640&inlineId=bookly-tinymce-popup&height=650" id="add-bookly-form" class="thickbox button bookly-media-button" title="' . esc_attr__( 'Add Bookly booking form', 'bookly' ) . '">' . $img . __( 'Add Bookly booking form', 'bookly' ) . '</a>';
+            echo '<a href="#TB_inline?width=640&inlineId=bookly-tinymce-popup&height=650" id="add-bookly-form" class="thickbox button bookly-media-button" title="' . esc_attr__( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '">' . $img . __( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '</a>';
         }
         Proxy\Shared::renderMediaButtons( $version );
     }
@@ -56,7 +56,7 @@ class Tools extends Lib\Base\Component
         ) );
 
         wp_localize_script( 'bookly-bookly-form-settings.js', 'BooklyFormShortCodeL10n', array(
-            'title' => __( 'Insert Appointment Booking Form', 'bookly' ),
+            'title' => __( 'Insert Appointment Booking Form', 'bookly-responsive-appointment-booking-tool' ),
         ) );
     }
 

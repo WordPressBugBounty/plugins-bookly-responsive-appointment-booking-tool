@@ -10,8 +10,8 @@ class PluginsDirectories extends Test
 
     public function __construct()
     {
-        $this->title = __( 'Add-ons directories', 'bookly' );
-        $this->description = __( 'Since Bookly has specific add-ons directories, their renaming may cause issues.', 'bookly' );
+        $this->title = __( 'Add-ons directories', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'Since Bookly has specific add-ons directories, their renaming may cause issues.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -32,12 +32,12 @@ class PluginsDirectories extends Test
             }
 
             if ( $slug !== $plugin::getSlug() ) {
-                $errors[] = sprintf( '<br/><b>%s</b><br/>%s: <b>%s</b><br/>%s: <b>%s</b>', $plugin::getTitle(), __( 'Current directory name', 'bookly' ), $plugin::getSlug(), __( 'Expected directory name', 'bookly' ), $slug );
+                $errors[] = sprintf( '<br/><b>%s</b><br/>%s: <b>%s</b><br/>%s: <b>%s</b>', $plugin::getTitle(), __( 'Current directory name', 'bookly-responsive-appointment-booking-tool' ), $plugin::getSlug(), __( 'Expected directory name', 'bookly-responsive-appointment-booking-tool' ), $slug );
             }
         }
 
         if ( $errors ) {
-            $this->addError( __( 'Some folders were renamed. Below you can find a list with current and correct names.', 'bookly' ) );
+            $this->addError( __( 'Some folders were renamed. Below you can find a list with current and correct names.', 'bookly-responsive-appointment-booking-tool' ) );
             foreach ( $errors as $error ) {
                 $this->addError( $error );
             }

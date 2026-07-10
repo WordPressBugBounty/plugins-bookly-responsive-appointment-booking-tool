@@ -51,6 +51,7 @@ use Bookly\Lib\Utils\Price;
  * @method static bool staffCabinetActive()            Check whether Staff Cabinet add-on is active or not.
  * @method static bool stripeActive()                  Check whether Stripe add-on is active or not.
  * @method static bool squareActive()                  Check whether Square add-on is active or not.
+ * @method static bool worldpayActive()                Check whether Worldpay add-on is active or not.
  * @method static bool giftCardsActive()               Check whether Gift Cards add-on is active or not.
  * @method static bool tasksActive()                   Check whether Tasks add-on is active or not.
  * @method static bool taxesActive()                   Check whether Taxes add-on is active or not.
@@ -105,7 +106,7 @@ abstract class Config
                 'img' => Utils\Common::getAttachmentUrl( $row['attachment_id'] ),
                 'category_id' => (int) $row['category_id'] ?: -1,
                 'name' => $row['title'] == ''
-                    ? __( 'Untitled', 'bookly' )
+                    ? __( 'Untitled', 'bookly-responsive-appointment-booking-tool' )
                     : Utils\Common::getTranslatedString( 'service_' . $row['id'], $row['title'] ),
                 'duration' => Utils\DateTime::secondsToInterval( $row['duration'] ),
                 'price' => (float) $row['price'],
@@ -135,7 +136,7 @@ abstract class Config
             if ( $service['category_id'] === -1 && ! isset ( $result['categories'][ -1 ] ) ) {
                 $result['categories'][ -1 ] = array(
                     'id' => -1,
-                    'name' => __( 'Uncategorized', 'bookly' ),
+                    'name' => __( 'Uncategorized', 'bookly-responsive-appointment-booking-tool' ),
                     'pos' => 99999,
                 );
             }
@@ -780,7 +781,7 @@ abstract class Config
      */
     public static function getServiceInfoCodes( $row )
     {
-        $service_name = $row['title'] === '' ? __( 'Untitled', 'bookly' ) : Utils\Common::getTranslatedString( 'service_' . $row['id'], $row['title'] );
+        $service_name = $row['title'] === '' ? __( 'Untitled', 'bookly-responsive-appointment-booking-tool' ) : Utils\Common::getTranslatedString( 'service_' . $row['id'], $row['title'] );
         $service_info = $row['info'] === '' ? '' : Utils\Common::getTranslatedString( 'service_' . $row['id'] . '_info', $row['info'] );
         $service_image_url = Utils\Common::getAttachmentUrl( $row['attachment_id'] );
         $service_codes = array(

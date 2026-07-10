@@ -16,7 +16,7 @@ class Widget extends Base\Widget
      */
     public function get_title()
     {
-        return __( 'Booking form', 'bookly' );
+        return __( 'Booking form', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -28,7 +28,7 @@ class Widget extends Base\Widget
             'bookly_booking_section',
             array(
                 'label' => '<div class="bookly-elementor-section"><p>Bookly</p><br><p class="bookly-elementor-section-description">'
-                    . esc_html__( 'A custom block for displaying booking form', 'bookly' ) . '</p></div>',
+                    . esc_html__( 'A custom block for displaying booking form', 'bookly-responsive-appointment-booking-tool' ) . '</p></div>',
             )
         );
 
@@ -37,7 +37,7 @@ class Widget extends Base\Widget
             $this->add_control(
                 'location_id',
                 array(
-                    'label' => __( 'Location', 'bookly' ),
+                    'label' => __( 'Location', 'bookly-responsive-appointment-booking-tool' ),
                     'type' => Controls_Manager::SELECT,
                     'options' => $data['locations'],
                     'default' => '0',
@@ -46,7 +46,7 @@ class Widget extends Base\Widget
             $this->add_control(
                 'hide_locations',
                 array(
-                    'label' => __( 'hide', 'bookly' ),
+                    'label' => __( 'hide', 'bookly-responsive-appointment-booking-tool' ),
                     'type' => Controls_Manager::SWITCHER,
                     'default' => false,
                 )
@@ -56,7 +56,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'category_id',
             array(
-                'label' => __( 'Category', 'bookly' ),
+                'label' => __( 'Category', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => $data['categories'],
                 'default' => '0',
@@ -65,7 +65,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_categories',
             array(
-                'label' => __( 'hide', 'bookly' ),
+                'label' => __( 'hide', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -75,7 +75,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'service_id',
             array(
-                'label' => __( 'Service', 'bookly' ),
+                'label' => __( 'Service', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => $data['services'],
                 'default' => '0',
@@ -84,7 +84,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_services',
             array(
-                'label' => __( 'hide', 'bookly' ),
+                'label' => __( 'hide', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -94,7 +94,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'staff_member_id',
             array(
-                'label' => __( 'Employee', 'bookly' ),
+                'label' => __( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SELECT,
                 'options' => $data['staff'],
                 'default' => '0',
@@ -103,7 +103,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_staff_members',
             array(
-                'label' => __( 'hide', 'bookly' ),
+                'label' => __( 'hide', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -112,7 +112,7 @@ class Widget extends Base\Widget
         $this->add_control(
             '_heading_buttons',
             array(
-                'raw' => '<strong>' . esc_html__( 'Fields', 'bookly' ) . '</strong><span class="bookly-elementor-right">' . esc_html__( 'hide', 'bookly' ) . '</span>',
+                'raw' => '<strong>' . esc_html__( 'Fields', 'bookly-responsive-appointment-booking-tool' ) . '</strong><span class="bookly-elementor-right">' . esc_html__( 'hide', 'bookly-responsive-appointment-booking-tool' ) . '</span>',
                 'type' => Controls_Manager::RAW_HTML,
                 'separator' => 'before',
             )
@@ -121,7 +121,7 @@ class Widget extends Base\Widget
             $this->add_control(
                 'hide_service_duration',
                 array(
-                    'label' => __( 'Duration', 'bookly' ),
+                    'label' => __( 'Duration', 'bookly-responsive-appointment-booking-tool' ),
                     'type' => Controls_Manager::SWITCHER,
                     'default' => false,
                 )
@@ -131,7 +131,7 @@ class Widget extends Base\Widget
             $this->add_control(
                 'hide_nop',
                 array(
-                    'label' => __( 'Number of persons', 'bookly' ),
+                    'label' => __( 'Number of persons', 'bookly-responsive-appointment-booking-tool' ),
                     'type' => Controls_Manager::SWITCHER,
                     'default' => 'yes',
                 )
@@ -141,7 +141,7 @@ class Widget extends Base\Widget
             $this->add_control(
                 'hide_quantity',
                 array(
-                    'label' => __( 'Quantity', 'bookly' ),
+                    'label' => __( 'Quantity', 'bookly-responsive-appointment-booking-tool' ),
                     'type' => Controls_Manager::SWITCHER,
                     'default' => false,
                 )
@@ -150,7 +150,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_date',
             array(
-                'label' => __( 'Date', 'bookly' ),
+                'label' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -158,7 +158,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_week_days',
             array(
-                'label' => __( 'Week days', 'bookly' ),
+                'label' => __( 'Week days', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -166,7 +166,7 @@ class Widget extends Base\Widget
         $this->add_control(
             'hide_time_range',
             array(
-                'label' => __( 'Time range', 'bookly' ),
+                'label' => __( 'Time range', 'bookly-responsive-appointment-booking-tool' ),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => false,
             )
@@ -250,10 +250,10 @@ class Widget extends Base\Widget
     private function getControlsData()
     {
         $casest = Lib\Config::getCaSeSt();
-        $locations = array( 0 => __( 'Select location', 'bookly' ), );
-        $categories = array( 0 => __( 'Select category', 'bookly' ) );
-        $services = array( 0 => __( 'Select service', 'bookly' ) );
-        $staff = array( 0 => __( 'Any', 'bookly' ) );
+        $locations = array( 0 => __( 'Select location', 'bookly-responsive-appointment-booking-tool' ), );
+        $categories = array( 0 => __( 'Select category', 'bookly-responsive-appointment-booking-tool' ) );
+        $services = array( 0 => __( 'Select service', 'bookly-responsive-appointment-booking-tool' ) );
+        $staff = array( 0 => __( 'Any', 'bookly-responsive-appointment-booking-tool' ) );
         foreach ( $casest['locations'] as $location ) {
             $locations[ $location['id'] ] = $location['name'];
         }

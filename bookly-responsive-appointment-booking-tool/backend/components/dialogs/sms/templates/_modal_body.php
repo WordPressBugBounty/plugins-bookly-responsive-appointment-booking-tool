@@ -5,20 +5,20 @@ use Bookly\Backend\Components\Controls\Inputs;
 ?>
 <div class="bookly-js-loading" style="height: 200px;"></div>
 <div class="bookly-js-loading">
-    <?php Container::renderHeader( __( 'Notification settings', 'bookly' ), 'bookly-js-settings-container' ) ?>
+    <?php Container::renderHeader( __( 'Notification settings', 'bookly-responsive-appointment-booking-tool' ), 'bookly-js-settings-container' ) ?>
     <input type="hidden" name="notification[id]" value="0">
     <div class="row mt-3">
         <div class="col-md-12">
             <div class="form-group">
-                <label for="notification_name"><?php esc_attr_e( 'Name', 'bookly' ) ?></label>
+                <label for="notification_name"><?php esc_attr_e( 'Name', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                 <input type="text" class="form-control" id="notification_name" name="notification[name]" value=""/>
-                <small class="form-text text-muted"><?php esc_html_e( 'Enter notification name which will be displayed in the list.', 'bookly' ) ?></small>
+                <small class="form-text text-muted"><?php esc_html_e( 'Enter notification name which will be displayed in the list.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <?php Inputs::renderRadioGroup( __( 'State', 'bookly' ), __( 'Choose whether notification is enabled and sending messages or it is disabled and no messages are sent until you activate the notification.', 'bookly' ), array(), 1, array( 'name' => 'notification[active]' ) ) ?>
+            <?php Inputs::renderRadioGroup( __( 'State', 'bookly-responsive-appointment-booking-tool' ), __( 'Choose whether notification is enabled and sending messages or it is disabled and no messages are sent until you activate the notification.', 'bookly-responsive-appointment-booking-tool' ), array(), 1, array( 'name' => 'notification[active]' ) ) ?>
         </div>
     </div>
 
@@ -28,21 +28,21 @@ use Bookly\Backend\Components\Controls\Inputs;
     <div class="row bookly-js-recipient-container">
         <div class="col-md-12">
             <div class="form-group">
-                <label><?php esc_attr_e( 'Recipients', 'bookly' ) ?></label>
-                <?php Inputs::renderCheckBox( __( 'Client', 'bookly' ), 1, null, array( 'name' => 'notification[to_customer]' ) ) ?>
-                <?php Inputs::renderCheckBox( __( 'Staff', 'bookly' ), 1, null, array( 'name' => 'notification[to_staff]' ) ) ?>
-                <?php Inputs::renderCheckBox( __( 'Administrators', 'bookly' ), 1, null, array( 'name' => 'notification[to_admin]' ) ) ?>
-                <?php Inputs::renderCheckBox( __( 'Organizer', 'bookly' ), 1, null, array( 'name' => 'notification[to_organizer]' ) ) ?>
-                <?php Inputs::renderCheckBox( __( 'Custom', 'bookly' ), 1, null, array( 'name' => 'notification[to_custom]' ) ) ?>
+                <label><?php esc_attr_e( 'Recipients', 'bookly-responsive-appointment-booking-tool' ) ?></label>
+                <?php Inputs::renderCheckBox( __( 'Client', 'bookly-responsive-appointment-booking-tool' ), 1, null, array( 'name' => 'notification[to_customer]' ) ) ?>
+                <?php Inputs::renderCheckBox( __( 'Staff', 'bookly-responsive-appointment-booking-tool' ), 1, null, array( 'name' => 'notification[to_staff]' ) ) ?>
+                <?php Inputs::renderCheckBox( __( 'Administrators', 'bookly-responsive-appointment-booking-tool' ), 1, null, array( 'name' => 'notification[to_admin]' ) ) ?>
+                <?php Inputs::renderCheckBox( __( 'Organizer', 'bookly-responsive-appointment-booking-tool' ), 1, null, array( 'name' => 'notification[to_organizer]' ) ) ?>
+                <?php Inputs::renderCheckBox( __( 'Custom', 'bookly-responsive-appointment-booking-tool' ), 1, null, array( 'name' => 'notification[to_custom]' ) ) ?>
                 <div class="bookly-js-custom-recipients">
                     <textarea name="notification[custom_recipients]" rows="2" class="form-control"></textarea>
                     <?php if ( $gateway == 'email' ) : ?>
-                        <small class="form-text text-muted"><?php esc_html_e( 'You can enter multiple email addresses (one per line)', 'bookly' ) ?></small>
+                        <small class="form-text text-muted"><?php esc_html_e( 'You can enter multiple email addresses (one per line)', 'bookly-responsive-appointment-booking-tool' ) ?></small>
                     <?php else: ?>
-                        <small class="form-text text-muted"><?php esc_html_e( 'You can enter multiple phone numbers (one per line)', 'bookly' ) ?></small>
+                        <small class="form-text text-muted"><?php esc_html_e( 'You can enter multiple phone numbers (one per line)', 'bookly-responsive-appointment-booking-tool' ) ?></small>
                     <?php endif ?>
                 </div>
-                <small class="form-text text-muted"><?php esc_html_e( 'Choose who will receive this notification.', 'bookly' ) ?></small>
+                <small class="form-text text-muted"><?php esc_html_e( 'Choose who will receive this notification.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
             </div>
         </div>
     </div>

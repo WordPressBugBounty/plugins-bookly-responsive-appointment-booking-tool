@@ -101,8 +101,8 @@ abstract class Common extends Lib\Base\Cache
                 </html>',
             esc_attr( $url ),
             json_encode( $url ),
-            __( 'Page Redirection', 'bookly' ),
-            sprintf( __( 'If you are not redirected automatically, follow the <a href="%s">link</a>.', 'bookly' ), esc_attr( $url ) )
+            __( 'Page Redirection', 'bookly-responsive-appointment-booking-tool' ),
+            sprintf( __( 'If you are not redirected automatically, follow the <a href="%s">link</a>.', 'bookly-responsive-appointment-booking-tool' ), esc_attr( $url ) )
         );
         exit ( 0 );
     }
@@ -387,7 +387,7 @@ abstract class Common extends Lib\Base\Cache
             $category_id = (int) $row['category_id'];
             if ( ! isset ( $result[ $category_id ] ) ) {
                 $result[ $category_id ] = array(
-                    'name' => $category_id ? $row['name'] : __( 'Uncategorized', 'bookly' ),
+                    'name' => $category_id ? $row['name'] : __( 'Uncategorized', 'bookly-responsive-appointment-booking-tool' ),
                     'items' => array(),
                 );
             }
@@ -629,15 +629,15 @@ abstract class Common extends Lib\Base\Cache
             'mjsTimeFormat' => DateTime::convertFormat( 'time', DateTime::FORMAT_MOMENT_JS ),
             'datePicker' => DateTime::datePickerOptions(),
             'dateRange' => DateTime::dateRangeOptions(),
-            'today' => __( 'Today', 'bookly' ),
-            'week' => __( 'Week', 'bookly' ),
-            'day' => __( 'Day', 'bookly' ),
-            'month' => __( 'Month', 'bookly' ),
-            'list' => __( 'List', 'bookly' ),
-            'allDay' => __( 'All day', 'bookly' ),
-            'noEvents' => __( 'No appointments for selected period.', 'bookly' ),
-            'more' => __( '+%d more', 'bookly' ),
-            'timeline' => __( 'Timeline', 'bookly' ),
+            'today' => __( 'Today', 'bookly-responsive-appointment-booking-tool' ),
+            'week' => __( 'Week', 'bookly-responsive-appointment-booking-tool' ),
+            'day' => __( 'Day', 'bookly-responsive-appointment-booking-tool' ),
+            'month' => __( 'Month', 'bookly-responsive-appointment-booking-tool' ),
+            'list' => __( 'List', 'bookly-responsive-appointment-booking-tool' ),
+            'allDay' => __( 'All day', 'bookly-responsive-appointment-booking-tool' ),
+            'noEvents' => __( 'No appointments for selected period.', 'bookly-responsive-appointment-booking-tool' ),
+            'more' => __( '+%d more', 'bookly-responsive-appointment-booking-tool' ),
+            'timeline' => __( 'Timeline', 'bookly-responsive-appointment-booking-tool' ),
         );
     }
 
@@ -647,86 +647,86 @@ abstract class Common extends Lib\Base\Cache
     public static function getIndustries()
     {
         return array(
-            __( 'Education', 'bookly' ) => array(
-                '34' => __( 'Universities', 'bookly' ),
-                '35' => __( 'Colleges', 'bookly' ),
-                '36' => __( 'Schools', 'bookly' ),
-                '37' => __( 'Libraries', 'bookly' ),
-                '38' => __( 'Teaching', 'bookly' ),
-                '39' => __( 'Tutoring lessons', 'bookly' ),
-                '40' => __( 'Parent meetings', 'bookly' ),
-                '41' => __( 'Services', 'bookly' ),
-                '42' => __( 'Child care', 'bookly' ),
-                '43' => __( 'Driving Schools', 'bookly' ),
-                '44' => __( 'Driving Instructors', 'bookly' ),
-                '45' => __( 'Other', 'bookly' ),
+            __( 'Education', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '34' => __( 'Universities', 'bookly-responsive-appointment-booking-tool' ),
+                '35' => __( 'Colleges', 'bookly-responsive-appointment-booking-tool' ),
+                '36' => __( 'Schools', 'bookly-responsive-appointment-booking-tool' ),
+                '37' => __( 'Libraries', 'bookly-responsive-appointment-booking-tool' ),
+                '38' => __( 'Teaching', 'bookly-responsive-appointment-booking-tool' ),
+                '39' => __( 'Tutoring lessons', 'bookly-responsive-appointment-booking-tool' ),
+                '40' => __( 'Parent meetings', 'bookly-responsive-appointment-booking-tool' ),
+                '41' => __( 'Services', 'bookly-responsive-appointment-booking-tool' ),
+                '42' => __( 'Child care', 'bookly-responsive-appointment-booking-tool' ),
+                '43' => __( 'Driving Schools', 'bookly-responsive-appointment-booking-tool' ),
+                '44' => __( 'Driving Instructors', 'bookly-responsive-appointment-booking-tool' ),
+                '45' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Beauty and wellness', 'bookly' ) => array(
-                '11' => __( 'Beauty salons', 'bookly' ),
-                '12' => __( 'Hair salons', 'bookly' ),
-                '13' => __( 'Nail salons', 'bookly' ),
-                '14' => __( 'Eyelash extensions', 'bookly' ),
-                '15' => __( 'Spa', 'bookly' ),
-                '16' => __( 'Other', 'bookly' ),
+            __( 'Beauty and wellness', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '11' => __( 'Beauty salons', 'bookly-responsive-appointment-booking-tool' ),
+                '12' => __( 'Hair salons', 'bookly-responsive-appointment-booking-tool' ),
+                '13' => __( 'Nail salons', 'bookly-responsive-appointment-booking-tool' ),
+                '14' => __( 'Eyelash extensions', 'bookly-responsive-appointment-booking-tool' ),
+                '15' => __( 'Spa', 'bookly-responsive-appointment-booking-tool' ),
+                '16' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Events and entertainment', 'bookly' ) => array(
-                '46' => __( 'Events (One time and Recurring)', 'bookly' ),
-                '47' => __( 'Business events', 'bookly' ),
-                '48' => __( 'Meeting rooms', 'bookly' ),
-                '49' => __( 'Escape rooms', 'bookly' ),
-                '50' => __( 'Art classes', 'bookly' ),
-                '51' => __( 'Equipment rental', 'bookly' ),
-                '52' => __( 'Photographers', 'bookly' ),
-                '53' => __( 'Restaurants', 'bookly' ),
-                '54' => __( 'Other', 'bookly' ),
+            __( 'Events and entertainment', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '46' => __( 'Events (One time and Recurring)', 'bookly-responsive-appointment-booking-tool' ),
+                '47' => __( 'Business events', 'bookly-responsive-appointment-booking-tool' ),
+                '48' => __( 'Meeting rooms', 'bookly-responsive-appointment-booking-tool' ),
+                '49' => __( 'Escape rooms', 'bookly-responsive-appointment-booking-tool' ),
+                '50' => __( 'Art classes', 'bookly-responsive-appointment-booking-tool' ),
+                '51' => __( 'Equipment rental', 'bookly-responsive-appointment-booking-tool' ),
+                '52' => __( 'Photographers', 'bookly-responsive-appointment-booking-tool' ),
+                '53' => __( 'Restaurants', 'bookly-responsive-appointment-booking-tool' ),
+                '54' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Medical', 'bookly' ) => array(
-                '17' => __( 'Medical Clinics & Doctors', 'bookly' ),
-                '18' => __( 'Dentists', 'bookly' ),
-                '19' => __( 'Chiropractors', 'bookly' ),
-                '20' => __( 'Acupuncture', 'bookly' ),
-                '21' => __( 'Massage', 'bookly' ),
-                '22' => __( 'Physiologists', 'bookly' ),
-                '23' => __( 'Psychologists', 'bookly' ),
-                '24' => __( 'Other', 'bookly' ),
+            __( 'Medical', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '17' => __( 'Medical Clinics & Doctors', 'bookly-responsive-appointment-booking-tool' ),
+                '18' => __( 'Dentists', 'bookly-responsive-appointment-booking-tool' ),
+                '19' => __( 'Chiropractors', 'bookly-responsive-appointment-booking-tool' ),
+                '20' => __( 'Acupuncture', 'bookly-responsive-appointment-booking-tool' ),
+                '21' => __( 'Massage', 'bookly-responsive-appointment-booking-tool' ),
+                '22' => __( 'Physiologists', 'bookly-responsive-appointment-booking-tool' ),
+                '23' => __( 'Psychologists', 'bookly-responsive-appointment-booking-tool' ),
+                '24' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Officials', 'bookly' ) => array(
-                '55' => __( 'City councils', 'bookly' ),
-                '56' => __( 'Embassies and consulates', 'bookly' ),
-                '57' => __( 'Attorneys', 'bookly' ),
-                '58' => __( 'Legal services', 'bookly' ),
-                '59' => __( 'Financial services', 'bookly' ),
-                '60' => __( 'Interview scheduling', 'bookly' ),
-                '61' => __( 'Call centers', 'bookly' ),
-                '62' => __( 'Other', 'bookly' ),
+            __( 'Officials', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '55' => __( 'City councils', 'bookly-responsive-appointment-booking-tool' ),
+                '56' => __( 'Embassies and consulates', 'bookly-responsive-appointment-booking-tool' ),
+                '57' => __( 'Attorneys', 'bookly-responsive-appointment-booking-tool' ),
+                '58' => __( 'Legal services', 'bookly-responsive-appointment-booking-tool' ),
+                '59' => __( 'Financial services', 'bookly-responsive-appointment-booking-tool' ),
+                '60' => __( 'Interview scheduling', 'bookly-responsive-appointment-booking-tool' ),
+                '61' => __( 'Call centers', 'bookly-responsive-appointment-booking-tool' ),
+                '62' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Personal meetings and services', 'bookly' ) => array(
-                '25' => __( 'Consulting', 'bookly' ),
-                '26' => __( 'Counselling', 'bookly' ),
-                '27' => __( 'Coaching', 'bookly' ),
-                '28' => __( 'Spiritual services', 'bookly' ),
-                '29' => __( 'Design consultants', 'bookly' ),
-                '30' => __( 'Cleaning', 'bookly' ),
-                '31' => __( 'Household', 'bookly' ),
-                '32' => __( 'Pet services', 'bookly' ),
-                '33' => __( 'Other', 'bookly' ),
+            __( 'Personal meetings and services', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '25' => __( 'Consulting', 'bookly-responsive-appointment-booking-tool' ),
+                '26' => __( 'Counselling', 'bookly-responsive-appointment-booking-tool' ),
+                '27' => __( 'Coaching', 'bookly-responsive-appointment-booking-tool' ),
+                '28' => __( 'Spiritual services', 'bookly-responsive-appointment-booking-tool' ),
+                '29' => __( 'Design consultants', 'bookly-responsive-appointment-booking-tool' ),
+                '30' => __( 'Cleaning', 'bookly-responsive-appointment-booking-tool' ),
+                '31' => __( 'Household', 'bookly-responsive-appointment-booking-tool' ),
+                '32' => __( 'Pet services', 'bookly-responsive-appointment-booking-tool' ),
+                '33' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Retailers', 'bookly' ) => array(
-                '1' => __( 'Supermarket', 'bookly' ),
-                '2' => __( 'Retail Finance', 'bookly' ),
-                '3' => __( 'Other retailers', 'bookly' ),
+            __( 'Retailers', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '1' => __( 'Supermarket', 'bookly-responsive-appointment-booking-tool' ),
+                '2' => __( 'Retail Finance', 'bookly-responsive-appointment-booking-tool' ),
+                '3' => __( 'Other retailers', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Sport', 'bookly' ) => array(
-                '4' => __( 'Personal trainers', 'bookly' ),
-                '5' => __( 'Gyms', 'bookly' ),
-                '6' => __( 'Fitness classes', 'bookly' ),
-                '7' => __( 'Yoga classes', 'bookly' ),
-                '8' => __( 'Golf classes', 'bookly' ),
-                '9' => __( 'Sport items renting', 'bookly' ),
-                '10' => __( 'Other', 'bookly' ),
+            __( 'Sport', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '4' => __( 'Personal trainers', 'bookly-responsive-appointment-booking-tool' ),
+                '5' => __( 'Gyms', 'bookly-responsive-appointment-booking-tool' ),
+                '6' => __( 'Fitness classes', 'bookly-responsive-appointment-booking-tool' ),
+                '7' => __( 'Yoga classes', 'bookly-responsive-appointment-booking-tool' ),
+                '8' => __( 'Golf classes', 'bookly-responsive-appointment-booking-tool' ),
+                '9' => __( 'Sport items renting', 'bookly-responsive-appointment-booking-tool' ),
+                '10' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
-            __( 'Other', 'bookly' ) => array(
-                '63' => __( 'Other', 'bookly' ),
+            __( 'Other', 'bookly-responsive-appointment-booking-tool' ) => array(
+                '63' => __( 'Other', 'bookly-responsive-appointment-booking-tool' ),
             ),
         );
     }
@@ -877,6 +877,76 @@ abstract class Common extends Lib\Base\Cache
             }
 
             self::putInCache( __FUNCTION__, $statuses );
+        }
+
+        return self::getFromCache( __FUNCTION__ );
+    }
+
+    /**
+     * In-page tabs of pages that have them, keyed by admin page slug. Consumed by the
+     * fullscreen header sidebar so any page's tabs are reachable as a submenu from anywhere
+     * (navigated via ?page=<slug>&tab=<tab>). Each tab: [ 'label' => string, 'tab' => string,
+     * 'badge' => string ]. Core ships Settings and Cloud SMS; add-ons extend the map (their own
+     * pages, or extra Settings tabs) via Lib\Proxy\Shared::buildHeaderSubmenus().
+     *
+     * @return array
+     */
+    public static function getSubmenus()
+    {
+        if ( ! self::hasInCache( __FUNCTION__ ) ) {
+            $undelivered = Lib\Cloud\SMS::getUndeliveredSmsCount();
+            $submenus = array(
+                'bookly-settings' => array(
+                    array( 'label' => __( 'General', 'bookly-responsive-appointment-booking-tool' ),        'tab' => 'general',        'badge' => '' ),
+                    array( 'label' => __( 'URL Settings', 'bookly-responsive-appointment-booking-tool' ),   'tab' => 'url',            'badge' => '' ),
+                    array( 'label' => __( 'Calendar', 'bookly-responsive-appointment-booking-tool' ),       'tab' => 'calendar',       'badge' => '' ),
+                    array( 'label' => __( 'Company', 'bookly-responsive-appointment-booking-tool' ),        'tab' => 'company',        'badge' => '' ),
+                    array( 'label' => __( 'Customers', 'bookly-responsive-appointment-booking-tool' ),      'tab' => 'customers',      'badge' => '' ),
+                    array( 'label' => __( 'Appointments', 'bookly-responsive-appointment-booking-tool' ),   'tab' => 'appointments',   'badge' => '' ),
+                    array( 'label' => __( 'Payments', 'bookly-responsive-appointment-booking-tool' ),       'tab' => 'payments',       'badge' => '' ),
+                    array( 'label' => __( 'Business Hours', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'business_hours', 'badge' => '' ),
+                    array( 'label' => __( 'Holidays', 'bookly-responsive-appointment-booking-tool' ),       'tab' => 'holidays',       'badge' => '' ),
+                ),
+                'bookly-cloud-sms' => array(
+                    array( 'label' => __( 'Notifications', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'notifications', 'badge' => '' ),
+                    array( 'label' => __( 'Campaigns', 'bookly-responsive-appointment-booking-tool' ),     'tab' => 'campaigns',     'badge' => '' ),
+                    array( 'label' => __( 'Mailing lists', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'mailing',       'badge' => '' ),
+                    array( 'label' => __( 'SMS Details', 'bookly-responsive-appointment-booking-tool' ),   'tab' => 'sms_details',   'badge' => $undelivered ? (string) $undelivered : '' ),
+                    array( 'label' => __( 'Price list', 'bookly-responsive-appointment-booking-tool' ),    'tab' => 'price_list',    'badge' => '' ),
+                    array( 'label' => __( 'Sender ID', 'bookly-responsive-appointment-booking-tool' ),     'tab' => 'sender_id',     'badge' => '' ),
+                ),
+                'bookly-notifications' => array(
+                    array( 'label' => __( 'Notifications', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'notifications', 'badge' => '' ),
+                    array( 'label' => __( 'Settings', 'bookly-responsive-appointment-booking-tool' ),      'tab' => 'settings',      'badge' => '' ),
+                ),
+            );
+
+            // Add-ons extend the map (own pages / extra Settings tabs). No-op when none implement it.
+            $submenus = Lib\Proxy\Shared::buildHeaderSubmenus( $submenus );
+
+            // Order the Settings submenu to mirror the in-page Settings menu (single source of order).
+            // The page renders core/Pro tabs at fixed positions and every other add-on tab as an
+            // alphabetical-by-slug group where Proxy\Shared::renderMenuItem() sits (between Cart and
+            // Online Meetings). Add-ons just append their tab — the weight map below imposes the order,
+            // so a new add-on slots into the alphabetical group automatically.
+            if ( isset( $submenus['bookly-settings'] ) ) {
+                $weights = array(
+                    'general' => 0, 'url' => 1, 'calendar' => 2, 'company' => 3, 'customers' => 4, 'appointments' => 5,
+                    'mailchimp' => 6, 'google_calendar' => 7, 'woo_commerce' => 8, 'facebook' => 9, 'cart' => 10,
+                    // 11 — alphabetical add-on group (rendered via Proxy\Shared on the page)
+                    'online_meetings' => 12, 'user_permissions' => 13, 'payments' => 14, 'additional' => 15,
+                    'business_hours' => 16, 'holidays' => 17,
+                );
+                usort( $submenus['bookly-settings'], function ( $a, $b ) use ( $weights ) {
+                    $wa = isset( $weights[ $a['tab'] ] ) ? $weights[ $a['tab'] ] : 11;
+                    $wb = isset( $weights[ $b['tab'] ] ) ? $weights[ $b['tab'] ] : 11;
+                    // Within the add-on group sort by tab slug — the page sorts by the English
+                    // name, not the localized label, so the slug keeps both lists aligned.
+                    return $wa === $wb ? strcmp( $a['tab'], $b['tab'] ) : $wa - $wb;
+                } );
+            }
+
+            self::putInCache( __FUNCTION__, $submenus );
         }
 
         return self::getFromCache( __FUNCTION__ );

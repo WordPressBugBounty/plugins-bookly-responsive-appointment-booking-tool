@@ -153,7 +153,7 @@ class Notification extends Lib\Base\Entity
 
         return array_key_exists( $type, self::$titles )
             ? self::$titles[ $type ]
-            : __( 'Unknown', 'bookly' );
+            : __( 'Unknown', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -221,18 +221,18 @@ class Notification extends Lib\Base\Entity
     {
         if ( self::$titles === null ) {
             self::$titles = array(
-                self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED => __( 'Notification about customer\'s appointment status change', 'bookly' ),
-                self::TYPE_NEW_BOOKING                         => __( 'New booking notification', 'bookly' ),
-                self::TYPE_APPOINTMENT_REMINDER                => __( 'Appointment reminder', 'bookly' ),
-                self::TYPE_CUSTOMER_BIRTHDAY                   => __( 'Customer\'s birthday greeting', 'bookly' ),
-                self::TYPE_LAST_CUSTOMER_APPOINTMENT           => __( 'Customer\'s last appointment notification', 'bookly' ),
-                self::TYPE_STAFF_DAY_AGENDA                    => __( 'Staff full day agenda', 'bookly' ),
-                self::TYPE_VERIFY_EMAIL                        => __( 'Verify customer\'s email', 'bookly' ),
-                self::TYPE_VERIFY_PHONE                        => __( 'Verify customer\'s phone', 'bookly' ),
-                self::TYPE_MAILING                             => __( 'Mailing message', 'bookly' ),
-                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN        => __( 'New staff member\'s Staff Cabinet mobile app access token details', 'bookly' ),
+                self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED => __( 'Notification about customer\'s appointment status change', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_NEW_BOOKING                         => __( 'New booking notification', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_APPOINTMENT_REMINDER                => __( 'Appointment reminder', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_CUSTOMER_BIRTHDAY                   => __( 'Customer\'s birthday greeting', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_LAST_CUSTOMER_APPOINTMENT           => __( 'Customer\'s last appointment notification', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_STAFF_DAY_AGENDA                    => __( 'Staff full day agenda', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_VERIFY_EMAIL                        => __( 'Verify customer\'s email', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_VERIFY_PHONE                        => __( 'Verify customer\'s phone', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_MAILING                             => __( 'Mailing message', 'bookly-responsive-appointment-booking-tool' ),
+                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN        => __( 'New staff member\'s Staff Cabinet mobile app access token details', 'bookly-responsive-appointment-booking-tool' ),
                 /** @see \Bookly\Backend\Modules\CloudSms\Ajax::sendTestSms */
-                'test_message'                                 => __( 'Test message', 'bookly' ),
+                'test_message'                                 => __( 'Test message', 'bookly-responsive-appointment-booking-tool' ),
             );
 
             self::$titles = Lib\Proxy\Shared::prepareNotificationTitles( self::$titles );

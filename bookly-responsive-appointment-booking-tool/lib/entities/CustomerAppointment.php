@@ -276,19 +276,19 @@ class CustomerAppointment extends Lib\Base\Entity
     {
         switch ( $status ) {
             case self::STATUS_PENDING:
-                return __( 'Pending', 'bookly' );
+                return __( 'Pending', 'bookly-responsive-appointment-booking-tool' );
             case self::STATUS_APPROVED:
-                return __( 'Approved', 'bookly' );
+                return __( 'Approved', 'bookly-responsive-appointment-booking-tool' );
             case self::STATUS_CANCELLED:
-                return __( 'Cancelled', 'bookly' );
+                return __( 'Cancelled', 'bookly-responsive-appointment-booking-tool' );
             case self::STATUS_REJECTED:
-                return __( 'Rejected', 'bookly' );
+                return __( 'Rejected', 'bookly-responsive-appointment-booking-tool' );
             case self::STATUS_WAITLISTED:
-                return __( 'On waiting list', 'bookly' );
+                return __( 'On waiting list', 'bookly-responsive-appointment-booking-tool' );
             case self::STATUS_DONE:
-                return __( 'Done', 'bookly' );
+                return __( 'Done', 'bookly-responsive-appointment-booking-tool' );
             case 'mixed':
-                return __( 'Mixed', 'bookly' );
+                return __( 'Mixed', 'bookly-responsive-appointment-booking-tool' );
             case null:
                 return null;
             default:

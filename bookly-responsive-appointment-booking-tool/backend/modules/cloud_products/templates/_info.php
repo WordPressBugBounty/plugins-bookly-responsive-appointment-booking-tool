@@ -13,7 +13,7 @@ use Bookly\Backend\Components\Controls;
                 <div id="bookly-info-content"></div>
             </div>
             <div class="modal-footer">
-                <?php Controls\Buttons::renderCancel( __( 'Close', 'bookly' ) ) ?>
+                <?php Controls\Buttons::renderCancel( __( 'Close', 'bookly-responsive-appointment-booking-tool' ) ) ?>
             </div>
         </div>
     </div>

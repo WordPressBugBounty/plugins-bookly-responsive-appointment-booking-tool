@@ -20,6 +20,7 @@ class Payment extends Lib\Base\Entity
     /** @deprecated Bookly 27.5 use TYPE_SQUARE */
     const TYPE_CLOUD_SQUARE = 'cloud_square';
     const TYPE_SQUARE = 'cloud_square';
+    const TYPE_WORLDPAY = 'worldpay';
     const TYPE_WOOCOMMERCE = 'woocommerce';
 
     const STATUS_COMPLETED = 'completed';
@@ -117,7 +118,7 @@ class Payment extends Lib\Base\Entity
             case self::TYPE_PAYPAL:
                 return 'PayPal';
             case self::TYPE_LOCAL:
-                return __( 'Local', 'bookly' );
+                return __( 'Local', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_STRIPE:
                 return 'Stripe';
             case self::TYPE_CLOUD_STRIPE:
@@ -137,9 +138,11 @@ class Payment extends Lib\Base\Entity
             case self::TYPE_MOLLIE:
                 return 'Mollie';
             case self::TYPE_FREE:
-                return __( 'Free', 'bookly' );
+                return __( 'Free', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_WOOCOMMERCE:
                 return 'WooCommerce';
+            case self::TYPE_WORLDPAY:
+                return 'Worldpay';
             default:
                 return '';
         }
@@ -212,16 +215,16 @@ class Payment extends Lib\Base\Entity
         $caption = '';
         switch ( $status ) {
             case self::STATUS_COMPLETED:
-                $caption = __( 'Completed', 'bookly' );
+                $caption = __( 'Completed', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case self::STATUS_PENDING:
-                $caption = __( 'Pending', 'bookly' );
+                $caption = __( 'Pending', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case self::STATUS_REJECTED:
-                $caption = __( 'Rejected', 'bookly' );
+                $caption = __( 'Rejected', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case self::STATUS_REFUNDED:
-                $caption = __( 'Refunded', 'bookly' );
+                $caption = __( 'Refunded', 'bookly-responsive-appointment-booking-tool' );
                 break;
         }
 
@@ -371,7 +374,7 @@ class Payment extends Lib\Base\Entity
     {
         $result = Lib\Utils\Price::format( $paid );
         if ( $paid != $total ) {
-            $result = sprintf( __( '%s of %s', 'bookly' ), $result, Lib\Utils\Price::format( $total ) );
+            $result = sprintf( __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ), $result, Lib\Utils\Price::format( $total ) );
         }
         $result .= sprintf(
             ' %s <span%s>%s</span>',

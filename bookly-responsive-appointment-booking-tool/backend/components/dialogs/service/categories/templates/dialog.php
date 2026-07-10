@@ -6,13 +6,13 @@ use Bookly\Backend\Components\Controls\Elements;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php esc_html_e( 'Categories', 'bookly' ) ?></h5>
+                <h5 class="modal-title"><?php esc_html_e( 'Categories', 'bookly-responsive-appointment-booking-tool' ) ?></h5>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>&times;</span></button>
             </div>
             <div class="modal-body">
                 <div id="bookly-services-categories"></div>
-                <?php Buttons::renderAdd( 'bookly-js-new-category', null, __( 'Add category', 'bookly' ) ) ?>
-                <small class="d-block text-muted mt-3"><?php esc_html_e( 'Adjust the order of categories in your booking form', 'bookly' ) ?></small>
+                <?php Buttons::renderAdd( 'bookly-js-new-category', null, __( 'Add category', 'bookly-responsive-appointment-booking-tool' ) ) ?>
+                <small class="d-block text-muted mt-3"><?php esc_html_e( 'Adjust the order of categories in your booking form', 'bookly-responsive-appointment-booking-tool' ) ?></small>
             </div>
             <div class="modal-footer">
                 <?php Buttons::renderSubmit() ?>
@@ -29,7 +29,7 @@ use Bookly\Backend\Components\Controls\Elements;
                 <?php Elements::renderReorder() ?>
                 <input type="text" class="form-control ml-3 my-0" name="name"/>
                 <a href="#" class="mx-2 bookly-collapsed" role="button" data-toggle="bookly-collapse"></a>
-                <button type="button" title="<?php esc_attr_e( 'Delete', 'bookly' ) ?>" data-spinner-size="40" data-style="zoom-in" class="btn ladda-button mx-2 p-0 bookly-js-delete-category"><span class="ladda-label"><i
+                <button type="button" title="<?php esc_attr_e( 'Delete', 'bookly-responsive-appointment-booking-tool' ) ?>" data-spinner-size="40" data-style="zoom-in" class="btn ladda-button mx-2 p-0 bookly-js-delete-category"><span class="ladda-label"><i
                                 class="far fa-fw fa-trash-alt text-danger"></i></span></button>
             </div>
             <div class="bookly-collapse">
@@ -41,11 +41,11 @@ use Bookly\Backend\Components\Controls\Elements;
                                 <?php if ( current_user_can( 'upload_files' ) ) : ?>
                                     <a class="bookly-js-remove-attachment far fa-fw fa-trash-alt text-danger bookly-thumb-delete"
                                        href="javascript:void(0)"
-                                       title="<?php esc_attr_e( 'Delete', 'bookly' ) ?>"
+                                       title="<?php esc_attr_e( 'Delete', 'bookly-responsive-appointment-booking-tool' ) ?>"
                                        style="display: none">
                                     </a>
                                     <div class="bookly-thumb-edit">
-                                        <label class="bookly-thumb-edit-btn"><?php esc_html_e( 'Image', 'bookly' ) ?></label>
+                                        <label class="bookly-thumb-edit-btn"><?php esc_html_e( 'Image', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                                     </div>
                                 <?php endif ?>
                                 <input type="hidden" name="attachment_id" value="">
@@ -55,7 +55,7 @@ use Bookly\Backend\Components\Controls\Elements;
                             <input type="hidden" name="id" value=""/>
                             <textarea class="form-control" name="info" rows="2"></textarea>
                             <small class="form-text text-muted">
-                                <?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly' ), '{category_info}' ) ?>
+                                <?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly-responsive-appointment-booking-tool' ), '{category_info}' ) ?>
                             </small>
                         </div>
                     </div>

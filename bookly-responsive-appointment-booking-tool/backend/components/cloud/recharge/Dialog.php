@@ -24,15 +24,15 @@ class Dialog extends Lib\Base\Component
                 'no_card' => $recharge['no_card'],
                 'payment' => array(
                     'manual' => array(
-                        'action' => __( 'Pay using', 'bookly' ),
-                        'accepted' => __( 'Your payment has been accepted for processing', 'bookly' ),
-                        'cancelled' => __( 'Your payment has been cancelled', 'bookly' ),
+                        'action' => __( 'Pay using', 'bookly-responsive-appointment-booking-tool' ),
+                        'accepted' => __( 'Your payment has been accepted for processing', 'bookly-responsive-appointment-booking-tool' ),
+                        'cancelled' => __( 'Your payment has been cancelled', 'bookly-responsive-appointment-booking-tool' ),
                     ),
                     'auto' => array(
-                        'action' => __( 'Continue with', 'bookly' ),
-                        'cancelled' => __( 'Auto-Recharge has been cancelled', 'bookly' ),
-                        'enabled' => __( 'Auto-Recharge has been enabled', 'bookly' ),
-                        'renewed' => __( 'Auto-Recharge has been renewed', 'bookly' ),
+                        'action' => __( 'Continue with', 'bookly-responsive-appointment-booking-tool' ),
+                        'cancelled' => __( 'Auto-Recharge has been cancelled', 'bookly-responsive-appointment-booking-tool' ),
+                        'enabled' => __( 'Auto-Recharge has been enabled', 'bookly-responsive-appointment-booking-tool' ),
+                        'renewed' => __( 'Auto-Recharge has been renewed', 'bookly-responsive-appointment-booking-tool' ),
                     ),
                 ),
                 'auto_recharge' => array(
@@ -40,8 +40,8 @@ class Dialog extends Lib\Base\Component
                     'amount' => $cloud->account->getAutoRechargeAmount(),
                     'bonus' => $cloud->account->getAutoRechargeBonus(),
                 ),
-                'dont_have_auto_recharge' => __( 'You don\'t have active auto-recharge', 'bookly' ),
-                'promo_percentage_info' => __( 'You\'ll receive a %s bonus on your top-up', 'bookly' ),
+                'dont_have_auto_recharge' => __( 'You don\'t have active auto-recharge', 'bookly-responsive-appointment-booking-tool' ),
+                'promo_percentage_info' => __( 'You\'ll receive a %s bonus on your top-up', 'bookly-responsive-appointment-booking-tool' ),
             ) );
 
             self::renderTemplate( 'dialog', compact( 'cloud' ) );

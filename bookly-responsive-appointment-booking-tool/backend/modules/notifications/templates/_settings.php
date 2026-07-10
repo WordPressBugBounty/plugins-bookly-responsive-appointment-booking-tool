@@ -11,7 +11,7 @@ foreach ( range( 1, 23 ) as $hours ) {
     <?php self::renderTemplate( '_common_settings', array( 'tail' => '_gen' ) ) ?>
     <div class="row">
         <div class="col-md-12">
-            <?php Selects::renderSingle( 'bookly_ntf_processing_interval', __( 'Scheduled notifications retry period', 'bookly' ), __( 'Set period of time when system will attempt to deliver notification to user. Notification will be discarded after period expiration.', 'bookly' ), $bookly_ntf_processing_interval_values ) ?>
+            <?php Selects::renderSingle( 'bookly_ntf_processing_interval', __( 'Scheduled notifications retry period', 'bookly-responsive-appointment-booking-tool' ), __( 'Set period of time when system will attempt to deliver notification to user. Notification will be discarded after period expiration.', 'bookly-responsive-appointment-booking-tool' ), $bookly_ntf_processing_interval_values ) ?>
         </div>
     </div>
     <?php Inputs::renderCsrf() ?>

@@ -25,11 +25,11 @@ class Payments extends Lib\Base\Component
         if ( Lib\Config::taxesActive() ) {
             Selects::renderSingle(
                 'bookly_' . $gateway . '_send_tax',
-                __( 'Send tax information', 'bookly' ),
+                __( 'Send tax information', 'bookly-responsive-appointment-booking-tool' ),
                 null,
                 array(
-                    array( 0, __( 'No', 'bookly' ) ),
-                    array( 1, __( 'Yes', 'bookly' ) ),
+                    array( 0, __( 'No', 'bookly-responsive-appointment-booking-tool' ) ),
+                    array( 1, __( 'Yes', 'bookly-responsive-appointment-booking-tool' ) ),
                 )
             );
         }

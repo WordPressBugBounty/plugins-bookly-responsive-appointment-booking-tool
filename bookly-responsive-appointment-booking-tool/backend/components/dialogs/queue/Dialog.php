@@ -20,9 +20,9 @@ class Dialog extends Lib\Base\Component
 
         wp_localize_script( 'bookly-queue-dialog.js', 'BooklyL10nNotificationsQueueDialog', array(
             'l10n' => array(
-                'title' => __( 'Send notifications', 'bookly' ),
-                'send' => __( 'Send', 'bookly' ),
-                'close' => __( 'Close', 'bookly' ),
+                'title' => __( 'Send notifications', 'bookly-responsive-appointment-booking-tool' ),
+                'send' => __( 'Send', 'bookly-responsive-appointment-booking-tool' ),
+                'close' => __( 'Close', 'bookly-responsive-appointment-booking-tool' ),
             )
         ) );
     }

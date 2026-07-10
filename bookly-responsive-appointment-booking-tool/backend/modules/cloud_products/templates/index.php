@@ -1,5 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
-use Bookly\Backend\Components\Support;
+use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Components\Controls;
 use Bookly\Backend\Components\Cloud;
 use Bookly\Lib;
@@ -11,13 +11,10 @@ use Bookly\Lib;
  */
 $update_required_modal = false;
 ?>
-<div id="bookly-tbs" class="wrap">
-    <div class="form-row align-items-center mb-3">
-        <h4 class="col m-0"><?php esc_html_e( 'Bookly Cloud', 'bookly' ) ?></h4>
-        <?php Support\Buttons::render( $self::pageSlug() ) ?>
-    </div>
-    <div class="card mb-4">
-        <div class="card-body">
+<div id="bookly-tbs" class="wrap bookly-css-root bookly-main-page-wrap">
+    <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'Bookly Cloud', 'bookly-responsive-appointment-booking-tool' ) ) ?>
+    <div class="bookly:card mb-4">
+        <div class="bookly:card-body">
             <div class="row pb-3">
                 <div class="col">
                 </div>
@@ -26,7 +23,7 @@ $update_required_modal = false;
                 </div>
             </div>
             <?php foreach ( $products as $product ) : ?>
-                <div class="card bg-light p-3 mb-3 bookly-js-cloud-product" data-product="<?php echo esc_attr( $product['id'] ) ?>">
+                <div class="card bg-light p-3 bookly:mb-4 bookly:last:mb-0 bookly-js-cloud-product" data-product="<?php echo esc_attr( $product['id'] ) ?>">
                     <div class="form-row">
                         <div class="col-xl-9 col-md-8 col-xs-12">
                             <div class="d-flex">
@@ -50,7 +47,7 @@ $update_required_modal = false;
                                 <?php if ( $product['version'] > Lib\Plugin::getVersion() ) : ?>
                                     <?php $update_required_modal = true ?>
                                     <?php Controls\Buttons::render( null, 'btn-default bookly-js-bookly-update-required', $product['texts']['action-on'], array( 'data-version' => $product['version'] ) ) ?>
-                                    <div class="mt-2 text-danger"><strong><?php printf( esc_html__( 'Bookly %s required', 'bookly' ), esc_html( $product['version'] ) ) ?></strong></div>
+                                    <div class="mt-2 text-danger"><strong><?php printf( esc_html__( 'Bookly %s required', 'bookly-responsive-appointment-booking-tool' ), esc_html( $product['version'] ) ) ?></strong></div>
                                 <?php else : ?>
                                     <?php static::renderTemplate( '_action_btn', compact( 'product', 'cloud' ) ) ?>
                                 <?php endif ?>

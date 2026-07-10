@@ -12,7 +12,7 @@ use Bookly\Backend\Components\Controls\Buttons;
                 <?php $start_select->render() ?>
             </div>
             <div class="col-auto">
-                <?php esc_html_e( 'to', 'bookly' ) ?>
+                <?php esc_html_e( 'to', 'bookly-responsive-appointment-booking-tool' ) ?>
             </div>
             <div class="col">
                 <?php $end_select->render() ?>
@@ -20,8 +20,8 @@ use Bookly\Backend\Components\Controls\Buttons;
         </div>
         <hr>
         <div class="text-right">
-            <?php Buttons::render(null, 'btn-success bookly-js-save-break', __( 'Save', 'bookly' ) ) ?>
-            <?php Buttons::renderDefault( null, 'bookly-js-close', __( 'Close', 'bookly' ) ) ?>
+            <?php Buttons::render(null, 'btn-success bookly-js-save-break', __( 'Save', 'bookly-responsive-appointment-booking-tool' ) ) ?>
+            <?php Buttons::renderDefault( null, 'bookly-js-close', __( 'Close', 'bookly-responsive-appointment-booking-tool' ) ) ?>
         </div>
     </div>
 </div>

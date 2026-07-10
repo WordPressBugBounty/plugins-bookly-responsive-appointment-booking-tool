@@ -5,17 +5,17 @@ use Bookly\Backend\Components\Controls\Buttons;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php esc_html_e( 'New mailing list', 'bookly' ) ?></h5>
+                <h5 class="modal-title"><?php esc_html_e( 'New mailing list', 'bookly-responsive-appointment-booking-tool' ) ?></h5>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class=form-group>
-                    <label for='bookly-mailing-list-name'><?php esc_html_e( 'Name', 'bookly' ) ?></label>
+                    <label for='bookly-mailing-list-name'><?php esc_html_e( 'Name', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <input type="text" id="bookly-mailing-list-name" class="form-control" name="title"/>
                 </div>
             </div>
             <div class="modal-footer">
-                <?php Buttons::renderSubmit( 'bookly-save', null, __( 'Create', 'bookly' ) ) ?>
+                <?php Buttons::renderSubmit( 'bookly-save', null, __( 'Create', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 <?php Buttons::renderCancel() ?>
             </div>
         </div>

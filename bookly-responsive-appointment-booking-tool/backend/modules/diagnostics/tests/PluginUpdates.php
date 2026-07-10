@@ -9,8 +9,8 @@ class PluginUpdates extends Test
 
     public function __construct()
     {
-        $this->title = __( 'Bookly updates', 'bookly' );
-        $this->description = __( 'Bookly updates bring new useful features and bugfixes. Make sure you are using the latest version of Bookly to get more possibilities and the highest quality.', 'bookly' );
+        $this->title = __( 'Bookly updates', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'Bookly updates bring new useful features and bugfixes. Make sure you are using the latest version of Bookly to get more possibilities and the highest quality.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -24,7 +24,7 @@ class PluginUpdates extends Test
             foreach ( $plugins->response as $plugin => $data ) {
                 if ( strpos( $plugin, 'bookly-' ) === 0 ) {
                     if ( ! $errors ) {
-                        $this->addError( __( 'Some Bookly items are outdated. Please update the following items:', 'bookly' ) );
+                        $this->addError( __( 'Some Bookly items are outdated. Please update the following items:', 'bookly-responsive-appointment-booking-tool' ) );
                         $this->addError( '' );
                         $errors = true;
                     }
@@ -42,7 +42,7 @@ class PluginUpdates extends Test
         foreach ( $bookly_plugins as $slug => $plugin ) {
             if ( isset( $addons_required[ $slug ] ) && version_compare( $addons_required[ $slug ], $plugin::getVersion(), '>' ) ) {
                 if ( ! $title_shown ) {
-                    $this->addError( __( 'Please update the following add-ons for correct work of your version of Bookly:', 'bookly' ) );
+                    $this->addError( __( 'Please update the following add-ons for correct work of your version of Bookly:', 'bookly-responsive-appointment-booking-tool' ) );
                     $title_shown = true;
                 }
                 $this->addError( sprintf( '%s <b>(v%s - v%s)</b>', $plugin::getTitle(), $plugin::getVersion(), $addons_required[ $slug ] ) );

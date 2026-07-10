@@ -63,7 +63,7 @@ class Cron extends Product
     {
         switch ( $error_code ) {
             case 'ENDPOINT_ACCESS_ERROR':
-                return __( 'Bookly Cloud couldn\'t connect to your server.', 'bookly' ) . '<br>' . __( 'Please check your firewall settings.', 'bookly' ) . '<br>' . sprintf( __( 'If problem persists, please contact us at <a href="mailto:%1$s">%1$s</a>', 'bookly'), 'support@bookly.info' );
+                return __( 'Bookly Cloud couldn\'t connect to your server.', 'bookly-responsive-appointment-booking-tool' ) . '<br>' . __( 'Please check your firewall settings.', 'bookly-responsive-appointment-booking-tool' ) . '<br>' . sprintf( __( 'If problem persists, please contact us at <a href="mailto:%1$s">%1$s</a>', 'bookly-responsive-appointment-booking-tool'), 'support@bookly.info' );
             default:
                 return null;
         }

@@ -67,7 +67,7 @@ class Ajax extends Lib\Base\Ajax
         );
 
         if ( $response['success'] ) {
-            $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
+            $response['message'] = __( 'SMS has been sent successfully.', 'bookly-responsive-appointment-booking-tool' );
         } else {
             $response['message'] = implode( ' ', $cloud->getErrors() );
         }
@@ -102,7 +102,7 @@ class Ajax extends Lib\Base\Ajax
             }
             if ( !$has_errors ) {
                 $response['success'] = false;
-                $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
+                $response['message'] = __( 'SMS has been sent successfully.', 'bookly-responsive-appointment-booking-tool' );
 
             } else {
                 $response['message'] = implode( '<br/>', $cloud->getErrors() );
@@ -129,7 +129,7 @@ class Ajax extends Lib\Base\Ajax
                     $noreg_count++;
                 }
             }
-            $response['noreg_label'] = sprintf( _n( '%d country', '%d countries', $noreg_count, 'bookly' ), $noreg_count );
+            $response['noreg_label'] = sprintf( _n( '%d country', '%d countries', $noreg_count, 'bookly-responsive-appointment-booking-tool' ), $noreg_count );
         }
 
         wp_send_json( $response );

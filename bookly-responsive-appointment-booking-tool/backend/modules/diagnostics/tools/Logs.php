@@ -18,6 +18,31 @@ class Logs extends Tool
             ? $this->getLogTypes()
             : array();
 
+        $actions = array( Lib\Utils\Log::ACTION_CREATE, Lib\Utils\Log::ACTION_DELETE, Lib\Utils\Log::ACTION_UPDATE, Lib\Utils\Log::ACTION_ERROR );
+        if ( $debug ) {
+            $actions[] = Lib\Utils\Log::ACTION_DEBUG;
+        }
+        $action_options = array_map( function ( $a ) {
+            return array( 'value' => $a, 'label' => ucfirst( $a ) );
+        }, $actions );
+
+        wp_localize_script( 'bookly-diagnostics.js', 'BooklyLogsL10n', array(
+            'datatables' => $datatables,
+            'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
+            'dateRange' => Lib\Utils\DateTime::dateRangeOptions(),
+            'zeroRecords' => __( 'No logs found.', 'bookly-responsive-appointment-booking-tool' ),
+            'search' => __( 'Quick search', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'clearAll' => __( 'Clear all logs', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'restore' => __( 'Restore records', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'debug' => $debug,
+            'actionOptions' => $action_options,
+            'filters' => array(
+                'date' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                'action' => __( 'Action', 'bookly-responsive-appointment-booking-tool' ),
+                'target' => __( 'Target ID', 'bookly-responsive-appointment-booking-tool' ),
+            ),
+        ) );
+
         return self::renderTemplate( '_logs', compact( 'datatables', 'debug', 'options' ), false );
     }
 

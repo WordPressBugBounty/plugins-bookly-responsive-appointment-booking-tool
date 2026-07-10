@@ -173,22 +173,6 @@ jQuery(function ($) {
         calendar.ec.refetchEvents();
     });
 
-    $('#bookly-calendar-fullscreen').on('click', function () {
-        if (document.activeElement) {
-            document.activeElement.blur();
-        }
-        let $card = $(this).closest('.card');
-        $card.toggleClass('bookly-fullscreen');
-        setCalendarHeight(heightEC(calendar.ec.getOption('view')));
-        if ($card.hasClass('bookly-fullscreen')) {
-            $("body").css("overflow", "hidden");
-            $(this).find('i').removeClass('fa-expand').addClass('fa-compress');
-        } else {
-            $("body").css("overflow", "auto");
-            $(this).find('i').removeClass('fa-compress').addClass('fa-expand');
-        }
-    });
-
     $('input[name="bookly_calendar_refresh_rate"]').change(function () {
         $.post(
             ajaxurl,

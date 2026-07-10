@@ -12,7 +12,7 @@ class Endpoints extends Tool
 
     public function __construct()
     {
-        $this->title = __( 'End points', 'bookly' );
+        $this->title = __( 'End points', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -54,7 +54,7 @@ class Endpoints extends Tool
             wp_send_json_success();
         }
 
-        wp_send_json_error( array( 'message' => current( $api->getErrors() ) ?: __( 'Failed', 'bookly' ) ) );
+        wp_send_json_error( array( 'message' => current( $api->getErrors() ) ?: __( 'Failed', 'bookly-responsive-appointment-booking-tool' ) ) );
     }
 
     /**

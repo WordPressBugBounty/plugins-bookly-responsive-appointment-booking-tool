@@ -362,17 +362,17 @@ abstract class Routine
                     }
 
                     $columns = array(
-                        '{10_time}' => __( 'Time', 'bookly' ),
-                        '{30_service}' => __( 'Service', 'bookly' ),
-                        '{40_customer}' => __( 'Customer', 'bookly' ),
+                        '{10_time}' => __( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                        '{30_service}' => __( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                        '{40_customer}' => __( 'Customer', 'bookly-responsive-appointment-booking-tool' ),
                     );
                     if ( Lib\Config::locationsActive() ) {
-                        $columns['{20_location}'] = __( 'Location', 'bookly' );
+                        $columns['{20_location}'] = __( 'Location', 'bookly-responsive-appointment-booking-tool' );
                     }
                     $columns_extended = $columns;
                     if ( Lib\Config::customFieldsActive() ) {
-                        $columns_extended['{50_custom_fields}']  = __( 'Custom Fields', 'bookly' );
-                        $columns_extended['{60_internal_notes}'] = __( 'Internal Notes', 'bookly' );
+                        $columns_extended['{50_custom_fields}']  = __( 'Custom Fields', 'bookly-responsive-appointment-booking-tool' );
+                        $columns_extended['{60_internal_notes}'] = __( 'Internal Notes', 'bookly-responsive-appointment-booking-tool' );
                     }
                     ksort( $columns );
                     ksort( $columns_extended );
@@ -454,8 +454,8 @@ abstract class Routine
                                 $agenda .= strtr( $tr, $tr_data );
                                 $agenda_extended .= strtr( $tr_extended, $tr_data_extended );
                             } else {
-                                $agenda = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly' );
-                                $agenda_extended = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly' );
+                                $agenda = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly-responsive-appointment-booking-tool' );
+                                $agenda_extended = __( 'To view the details of these appointments, please contact your website administrator in order to verify Bookly Pro license.', 'bookly-responsive-appointment-booking-tool' );
                             }
                             $staff_email = $appointment->staff_email;
                             $staff_phone = $appointment->staff_phone;

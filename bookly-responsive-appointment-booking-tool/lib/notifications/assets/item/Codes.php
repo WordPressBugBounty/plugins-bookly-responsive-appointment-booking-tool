@@ -186,10 +186,10 @@ class Codes extends Order\Codes
         // Add replace codes.
         $replace_codes += array(
             'appointment_id' => $this->appointment_id,
-            'appointment_date' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : Utils\DateTime::formatDate( $this->appointment_start ),
-            'appointment_time' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $this->appointment_start ) : $this->appointment_start_info ),
-            'appointment_end_date' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : Utils\DateTime::formatDate( $appointment_end_date ),
-            'appointment_end_time' => $this->appointment_start === null ? __( 'N/A', 'bookly' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $appointment_end_date ) : $this->appointment_end_info ),
+            'appointment_date' => $this->appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Utils\DateTime::formatDate( $this->appointment_start ),
+            'appointment_time' => $this->appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $this->appointment_start ) : $this->appointment_start_info ),
+            'appointment_end_date' => $this->appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Utils\DateTime::formatDate( $appointment_end_date ),
+            'appointment_end_time' => $this->appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : ( $this->service_duration < DAY_IN_SECONDS ? Utils\DateTime::formatTime( $appointment_end_date ) : $this->appointment_end_info ),
             'appointment_notes' => $this->appointment_notes ? ( $format == 'html' ? nl2br( $this->appointment_notes ) : $this->appointment_notes ) : '',
             'approve_appointment_url' => $this->appointment_token ? admin_url( 'admin-ajax.php?action=bookly_approve_appointment&token=' . urlencode( Utils\Common::xorEncrypt( $this->appointment_token, 'approve' ) ) ) : '',
             'booking_number' => $this->booking_number,

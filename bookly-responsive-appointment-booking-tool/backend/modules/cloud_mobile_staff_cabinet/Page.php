@@ -13,34 +13,32 @@ class Page extends Lib\Base\Component
     {
         $cloud = Lib\Cloud\API::getInstance();
         if ( ! $cloud->account->loadProfile() ) {
-            Components\Cloud\LoginRequired\Page::render( __( 'Staff Cabinet Mobile App', 'bookly' ), self::pageSlug() );
+            Components\Cloud\LoginRequired\Page::render( __( 'Staff Cabinet Mobile App', 'bookly-responsive-appointment-booking-tool' ), self::pageSlug() );
         } elseif ( $cloud->account->productActive( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) ) {
             self::enqueueStyles( array(
                 'alias'   => array( 'bookly-backend-globals', ),
-                'backend' => array( 'tailwind/tailwind.css' ),
             ) );
 
             self::enqueueScripts( array(
                 'module'  => array( 'js/staff-cabinet.js' => array( 'bookly-backend-globals', 'bookly-grant-auth-dialog.js' ), ),
-                'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
             ) );
 
             $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CLOUD_MOBILE_STAFF_CABINET );
 
             wp_localize_script( 'bookly-staff-cabinet.js', 'BooklyL10n', array(
-                'areYouSure'           => __( 'Are you sure?', 'bookly' ),
-                'new_token'            => __( 'New access token', 'bookly' ) . '…',
-                'edit'                 => __( 'Edit', 'bookly' ) . '…',
-                'copy_token'           => __( 'Copy token', 'bookly' ),
-                'copy_link'            => __( 'Copy link', 'bookly' ),
-                'copied'               => __( 'Copied to clipboard', 'bookly' ),
-                'revokeTokensMessage'  => __( 'You are going to delete access token(s). Please note that tokens will be automatically revoked, so user(s) associated with deleted token(s) will lose access', 'bookly' ),
-                'zeroRecords'          => esc_attr__( 'No matching records found', 'bookly' ),
-                'staff'                => __( 'Staff', 'bookly' ),
-                'wp_user'              => __( 'WordPress user', 'bookly' ),
-                'revoke'               => __( 'Revoke', 'bookly' ) . '…',
-                'revoke_confirm'       => __( 'Revoke', 'bookly' ),
-                'cancel'               => __( 'Cancel', 'bookly' ),
+                'areYouSure'           => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+                'new_token'            => __( 'New access token', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'edit'                 => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'copy_token'           => __( 'Copy token', 'bookly-responsive-appointment-booking-tool' ),
+                'copy_link'            => __( 'Copy link', 'bookly-responsive-appointment-booking-tool' ),
+                'copied'               => __( 'Copied to clipboard', 'bookly-responsive-appointment-booking-tool' ),
+                'revokeTokensMessage'  => __( 'You are going to delete access token(s). Please note that tokens will be automatically revoked, so user(s) associated with deleted token(s) will lose access', 'bookly-responsive-appointment-booking-tool' ),
+                'zeroRecords'          => esc_attr__( 'No matching records found', 'bookly-responsive-appointment-booking-tool' ),
+                'staff'                => __( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
+                'wp_user'              => __( 'WordPress user', 'bookly-responsive-appointment-booking-tool' ),
+                'revoke'               => __( 'Revoke', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'revoke_confirm'       => __( 'Revoke', 'bookly-responsive-appointment-booking-tool' ),
+                'cancel'               => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
                 'datatables'           => $datatables,
             ) );
 

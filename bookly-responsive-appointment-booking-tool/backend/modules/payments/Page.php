@@ -14,12 +14,10 @@ class Page extends Lib\Base\Component
     {
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
-            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/payments.js' => array( 'bookly-backend-globals' ) ),
-            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::PAYMENTS );
@@ -58,26 +56,26 @@ class Page extends Lib\Base\Component
 
         wp_localize_script( 'bookly-payments.js', 'BooklyL10n', array(
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
-            'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), 'appAtAnyTime' => __( 'Appointment at any time', 'bookly' ), 'anyTime' => __( 'Any time', 'bookly' ), ) ),
-            'zeroRecords' => __( 'No payments for selected period and criteria.', 'bookly' ),
-            'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'areYouSure' => __( 'Are you sure?', 'bookly' ),
-            'no_result_found' => __( 'No results found', 'bookly' ),
-            'searching' => __( 'Searching', 'bookly' ),
-            'multiple' => __( 'See details for more items', 'bookly' ),
-            'delete' => __( 'Delete', 'bookly' ) . '…',
-            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
-            'search' => __( 'Quick search by no., customer, provider, service', 'bookly' ) . '…',
+            'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly-responsive-appointment-booking-tool' ), 'appAtAnyTime' => __( 'Appointment at any time', 'bookly-responsive-appointment-booking-tool' ), 'anyTime' => __( 'Any time', 'bookly-responsive-appointment-booking-tool' ), ) ),
+            'zeroRecords' => __( 'No payments for selected period and criteria.', 'bookly-responsive-appointment-booking-tool' ),
+            'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
+            'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+            'no_result_found' => __( 'No results found', 'bookly-responsive-appointment-booking-tool' ),
+            'searching' => __( 'Searching', 'bookly-responsive-appointment-booking-tool' ),
+            'multiple' => __( 'See details for more items', 'bookly-responsive-appointment-booking-tool' ),
+            'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'rowsPerPage' => __( 'Rows per page', 'bookly-responsive-appointment-booking-tool' ),
+            'search' => __( 'Quick search by no., customer, provider, service', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'filters' => array(
-                'id' => __( 'ID', 'bookly' ),
-                'date' => __( 'Date', 'bookly' ),
-                'appointment_date' => __( 'Appointment date', 'bookly' ),
-                'type' => __( 'Type', 'bookly' ),
-                'customer' => __( 'Customer', 'bookly' ),
-                'staff' => __( 'Provider', 'bookly' ),
-                'service' => __( 'Service', 'bookly' ),
-                'status' => __( 'Status', 'bookly' ),
-                'searchPlaceholder' => __( 'Search', 'bookly' ),
+                'id' => __( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                'date' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                'appointment_date' => __( 'Appointment date', 'bookly-responsive-appointment-booking-tool' ),
+                'type' => __( 'Type', 'bookly-responsive-appointment-booking-tool' ),
+                'customer' => __( 'Customer', 'bookly-responsive-appointment-booking-tool' ),
+                'staff' => __( 'Provider', 'bookly-responsive-appointment-booking-tool' ),
+                'service' => __( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                'status' => __( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                'searchPlaceholder' => __( 'Search', 'bookly-responsive-appointment-booking-tool' ),
             ),
             'filterOptions' => array(
                 'types' => $type_options,
@@ -90,9 +88,9 @@ class Page extends Lib\Base\Component
             'datatables' => $datatables,
             'invoice' => array(
                 'enabled' => (int) Lib\Config::invoicesActive(),
-                'button' => __( 'Invoice', 'bookly' ),
-                'download' => __( 'Download invoices', 'bookly' ),
-                'downloadAll' => __( 'Download all invoices', 'bookly' ),
+                'button' => __( 'Invoice', 'bookly-responsive-appointment-booking-tool' ),
+                'download' => __( 'Download invoices', 'bookly-responsive-appointment-booking-tool' ),
+                'downloadAll' => __( 'Download all invoices', 'bookly-responsive-appointment-booking-tool' ),
                 'action' => Proxy\Invoices::getDownloadUrl() ?: '',
             ),
             'tasks' => array(

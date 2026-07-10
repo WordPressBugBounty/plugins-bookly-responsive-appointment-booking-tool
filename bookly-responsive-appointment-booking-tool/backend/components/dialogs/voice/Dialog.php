@@ -33,11 +33,11 @@ class Dialog extends SmsDialog
             'codes' => $codes_list,
             'gateway' => 'voice',
             'title' => array(
-                'container' => __( 'Voice', 'bookly' ),
-                'new' => __( 'New voice notification', 'bookly' ),
-                'edit' => __( 'Edit voice notification', 'bookly' ),
-                'create' => __( 'Create', 'bookly' ),
-                'save' => __( 'Save', 'bookly' ),
+                'container' => __( 'Voice', 'bookly-responsive-appointment-booking-tool' ),
+                'new' => __( 'New voice notification', 'bookly-responsive-appointment-booking-tool' ),
+                'edit' => __( 'Edit voice notification', 'bookly-responsive-appointment-booking-tool' ),
+                'create' => __( 'Create', 'bookly-responsive-appointment-booking-tool' ),
+                'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
             ),
         ) );
 

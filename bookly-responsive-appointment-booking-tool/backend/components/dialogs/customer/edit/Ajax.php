@@ -163,7 +163,7 @@ class Ajax extends Lib\Base\Ajax
         $full_name = $query->fetchVar( 'full_name' );
         $notices = array();
         if ( $full_name ) {
-            $notices['wp_user_in_use'] = sprintf( __( 'This WP user is already connected to another customer: %s', 'bookly' ), $full_name );
+            $notices['wp_user_in_use'] = sprintf( __( 'This WP user is already connected to another customer: %s', 'bookly-responsive-appointment-booking-tool' ), $full_name );
         }
 
         wp_send_json_success( compact( 'notices' ) );

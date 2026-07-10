@@ -25,14 +25,14 @@ use Bookly\Backend\Components\Cloud\Recharge;
             <div class="bookly-dropdown-menu bookly-dropdown-menu-compact bookly-dropdown-menu-right" aria-labelledby="bookly-open-account-settings">
                 <?php if ( ! $cloud->account->getEmailConfirmed() ) : ?>
                     <a id="bookly-open-email-confirm" class="bookly-dropdown-item text-danger" href="#">
-                        <i class="fas fa-exclamation-circle mr-2"></i><?php esc_html_e( 'Confirm email', 'bookly' ) ?>
+                        <i class="fas fa-exclamation-circle mr-2"></i><?php esc_html_e( 'Confirm email', 'bookly-responsive-appointment-booking-tool' ) ?>
                     </a>
                 <?php endif ?>
                 <a class="bookly-dropdown-item bookly-js-ladda" href="<?php echo Common::escAdminUrl( Bookly\Backend\Modules\CloudSettings\Page::pageSlug() ) ?>">
-                    <i class="fas fa-cog mr-2"></i><?php esc_html_e( 'Settings', 'bookly' ) ?>
+                    <i class="fas fa-cog mr-2"></i><?php esc_html_e( 'Settings', 'bookly-responsive-appointment-booking-tool' ) ?>
                 </a>
                 <a id="bookly-logout" class="bookly-dropdown-item bookly-js-ladda" href="#">
-                    <i class="fas fa-sign-out-alt mr-2"></i><?php esc_html_e( 'Log out', 'bookly' ) ?>
+                    <i class="fas fa-sign-out-alt mr-2"></i><?php esc_html_e( 'Log out', 'bookly-responsive-appointment-booking-tool' ) ?>
                 </a>
             </div>
         </div>

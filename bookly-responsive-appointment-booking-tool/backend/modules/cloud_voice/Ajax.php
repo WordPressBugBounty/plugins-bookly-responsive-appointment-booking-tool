@@ -28,8 +28,8 @@ class Ajax extends Lib\Base\Ajax
         $cloud = Lib\Cloud\API::getInstance();
         $phone_number = self::parameter( 'phone_number' );
         $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->call( $phone_number, 'Hello, this is a test call from Bookly', 'Hello, this is a test call from Bookly' )
-            ? wp_send_json_success( array( 'message' => sprintf( __( 'Calling %s', 'bookly' ), $phone_number ) . ' …' ) )
-            : wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ?: __( 'Failed', 'bookly' ) ) );
+            ? wp_send_json_success( array( 'message' => sprintf( __( 'Calling %s', 'bookly-responsive-appointment-booking-tool' ), $phone_number ) . ' …' ) )
+            : wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ?: __( 'Failed', 'bookly-responsive-appointment-booking-tool' ) ) );
     }
 
     /**

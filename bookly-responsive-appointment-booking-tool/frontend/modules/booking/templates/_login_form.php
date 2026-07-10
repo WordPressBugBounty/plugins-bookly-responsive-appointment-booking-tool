@@ -4,7 +4,7 @@
         <div class="bookly-modal-content">
             <form>
                 <div class="bookly-modal-header">
-                    <div><?php esc_html_e( 'Login', 'bookly' ) ?></div>
+                    <div><?php esc_html_e( 'Login', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                     <button type="button" class="bookly-close bookly-js-close">×</button>
                 </div>
                 <div class="bookly-modal-body bookly-form">

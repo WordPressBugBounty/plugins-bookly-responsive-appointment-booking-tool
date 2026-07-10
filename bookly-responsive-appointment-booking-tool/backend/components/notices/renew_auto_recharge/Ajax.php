@@ -42,7 +42,7 @@ class Ajax extends Lib\Base\Ajax
         if ( $redirect_url !== false ) {
             wp_send_json_success( compact( 'redirect_url' ) );
         } else {
-            $message = __( 'Auto-Recharge has failed, please replenish your balance directly.', 'bookly' );
+            $message = __( 'Auto-Recharge has failed, please replenish your balance directly.', 'bookly-responsive-appointment-booking-tool' );
             wp_send_json_error( compact( 'message' ) );
         }
     }

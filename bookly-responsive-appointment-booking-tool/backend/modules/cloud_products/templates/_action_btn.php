@@ -21,7 +21,7 @@ $pro_required = $product['pro_required'] && ! Config::proActive();
                 <?php endif ?>
             <?php else : ?>
                 <?php if ( isset( $product['accept_pc'] ) && $product['accept_pc'] ) : ?>
-                    <?php Buttons::render( null, 'bookly-js-product-enable-pc btn-success bookly-collapse', __( 'Get started', 'bookly' ) ) ?>
+                    <?php Buttons::render( null, 'bookly-js-product-enable-pc btn-success bookly-collapse', __( 'Get started', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 <?php endif ?>
                 <?php Buttons::render( null, 'bookly-js-product-enable btn-success bookly-collapse', $product['texts']['action-on'] ) ?>
                 <?php Buttons::render( null, 'bookly-js-product-disable btn-danger bookly-collapse', $product['texts']['action-off'] ) ?>

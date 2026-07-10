@@ -10,8 +10,8 @@ class LogErrors extends Test
     
     public function __construct()
     {
-        $this->title = __( 'Critical errors', 'bookly' );
-        $this->description = __( 'This test checks for critical errors in Bookly.', 'bookly' );
+        $this->title = __( 'Critical errors', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'This test checks for critical errors in Bookly.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -26,7 +26,7 @@ class LogErrors extends Test
             ->count();
 
         if ( $errors ) {
-            $this->addError( __( 'Some critical errors in Bookly were found recently.', 'bookly' ) . ' ' . __( 'Please contact Bookly support.', 'bookly' ) );
+            $this->addError( __( 'Some critical errors in Bookly were found recently.', 'bookly-responsive-appointment-booking-tool' ) . ' ' . __( 'Please contact Bookly support.', 'bookly-responsive-appointment-booking-tool' ) );
         }
 
         return empty( $this->errors );

@@ -12,22 +12,22 @@ $amounts = Amounts::getInstance();
 
 <div class="bookly-js-auto-recharge-text">
     <?php if ( ! $cloud->account->autoRechargeEnabled() ) : ?>
-        <h4 class="text-center mt-3"><?php esc_html_e( 'Please select an amount and enable Auto-Recharge', 'bookly' ) ?></h4>
+        <h4 class="text-center mt-3"><?php esc_html_e( 'Please select an amount and enable Auto-Recharge', 'bookly-responsive-appointment-booking-tool' ) ?></h4>
     <?php endif ?>
     <div class="mb-3 mt-4">
         <div class="text-center">
             <a class="text-muted" style="text-decoration:underline dotted" data-toggle="bookly-collapse" href="#how-auto-recharge-works">
-                <?php esc_html_e( 'How it works', 'bookly' ) ?> <i class="fas fa-question-circle"></i>
+                <?php esc_html_e( 'How it works', 'bookly-responsive-appointment-booking-tool' ) ?> <i class="fas fa-question-circle"></i>
             </a>
         </div>
         <div class="bookly-collapse alert alert-info text-justify mx-5" id="how-auto-recharge-works">
-            <?php printf( __( 'Your account will be topped up with the selected amount <b>now</b> if your balance is less than %1$s, and <b>automatically later</b> when the balance falls below %1$s.', 'bookly' ), '$10' ) ?>
+            <?php printf( __( 'Your account will be topped up with the selected amount <b>now</b> if your balance is less than %1$s, and <b>automatically later</b> when the balance falls below %1$s.', 'bookly-responsive-appointment-booking-tool' ), '$10' ) ?>
         </div>
     </div>
 </div>
 
 <div class="bookly-js-manual-recharge-text">
-    <h4 class="text-center mt-3 mb-4"><?php esc_html_e( 'Please select an amount and recharge your account', 'bookly' ) ?></h4>
+    <h4 class="text-center mt-3 mb-4"><?php esc_html_e( 'Please select an amount and recharge your account', 'bookly-responsive-appointment-booking-tool' ) ?></h4>
 </div>
 
 <div class="form-row bookly-js-manual-recharges mt-4" style="display: none;">

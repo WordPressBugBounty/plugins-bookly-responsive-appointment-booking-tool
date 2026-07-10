@@ -33,11 +33,11 @@ class Dialog extends Lib\Base\Component
             'codes' => $codes_list,
             'gateway' => 'sms',
             'title' => array(
-                'container' => __( 'SMS', 'bookly' ),
-                'new' => __( 'New SMS notification', 'bookly' ),
-                'edit' => __( 'Edit SMS notification', 'bookly' ),
-                'create' => __( 'Create', 'bookly' ),
-                'save' => __( 'Save', 'bookly' ),
+                'container' => __( 'SMS', 'bookly-responsive-appointment-booking-tool' ),
+                'new' => __( 'New SMS notification', 'bookly-responsive-appointment-booking-tool' ),
+                'edit' => __( 'Edit SMS notification', 'bookly-responsive-appointment-booking-tool' ),
+                'create' => __( 'Create', 'bookly-responsive-appointment-booking-tool' ),
+                'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
             ),
         ) );
 
@@ -47,7 +47,7 @@ class Dialog extends Lib\Base\Component
     public static function renderNewNotificationButton()
     {
         print '<div class="col-auto">';
-        Buttons::renderAdd( 'bookly-js-new-notification', 'btn-success', __( 'New notification', 'bookly' ) );
+        Buttons::renderAdd( 'bookly-js-new-notification', 'btn-success', __( 'New notification', 'bookly-responsive-appointment-booking-tool' ) );
         print '</div>';
     }
 

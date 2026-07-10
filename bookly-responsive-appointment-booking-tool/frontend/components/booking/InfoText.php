@@ -135,8 +135,8 @@ class InfoText
                             $appointment_data['appointment_date'] = $service_dp->formatI18nDate();
                             $appointment_data['appointment_time'] = $duration >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime();
                         } else {
-                            $appointment_data['appointment_date'] = __( 'N/A', 'bookly' );
-                            $appointment_data['appointment_time'] = __( 'N/A', 'bookly' );
+                            $appointment_data['appointment_date'] = __( 'N/A', 'bookly-responsive-appointment-booking-tool' );
+                            $appointment_data['appointment_time'] = __( 'N/A', 'bookly-responsive-appointment-booking-tool' );
                         }
                         $data['appointment_date'][] = $appointment_data['appointment_date'];
                         $data['appointment_time'][] = $appointment_data['appointment_time'];
@@ -264,7 +264,7 @@ class InfoText
 
                     $category = $service && $service->getCategoryId() ? Lib\Entities\Category::find( $service->getCategoryId() ) : false;
                     $appointment_data['appointment_id'] = $cart_item->getAppointmentId();
-                    $appointment_data['appointment_date'] = $service_dp ? $service_dp->formatI18nDate() : __( 'N/A', 'bookly' );
+                    $appointment_data['appointment_date'] = $service_dp ? $service_dp->formatI18nDate() : __( 'N/A', 'bookly-responsive-appointment-booking-tool' );
                     $appointment_data['category_image'] = ( $category && $url = $category->getImageUrl() ) ? '<img src="' . $url . '"/>' : '';
                     $appointment_data['category_info'] = $category ? $category->getTranslatedInfo() : '';
                     $appointment_data['category_name'] = $service ? $service->getTranslatedCategoryName() : '';
@@ -294,13 +294,13 @@ class InfoText
                             }
                             $appointment_data['appointment_time'] = $service_dp
                                 ? ( $duration >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
-                                : __( 'N/A', 'bookly' );
+                                : __( 'N/A', 'bookly-responsive-appointment-booking-tool' );
                             $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration );
                             $appointment_data['total_duration'] = Lib\Utils\DateTime::secondsToInterval( $duration + $cart_item->getExtrasDuration() );
                         } else {
                             $appointment_data['appointment_time'] = $service_dp
                                 ? ( $cart_item->getUnits() * $service->getDuration() >= DAY_IN_SECONDS ? $service->getStartTimeInfo() : $service_dp->formatI18nTime() )
-                                : __( 'N/A', 'bookly' );
+                                : __( 'N/A', 'bookly-responsive-appointment-booking-tool' );
                             $appointment_data['service_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $service->getDuration() );
                             $appointment_data['total_duration'] = Lib\Utils\DateTime::secondsToInterval( $cart_item->getUnits() * $service->getDuration() + $cart_item->getExtrasDuration() );
                         }

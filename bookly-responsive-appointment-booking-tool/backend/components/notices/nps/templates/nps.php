@@ -8,21 +8,21 @@ use Bookly\Backend\Components\Controls\Buttons;
             <div class="mr-3"><i class="fas fa-info-circle fa-2x"></i></div>
             <div class="col">
                 <div id="bookly-nps-quiz" class="my-2">
-                    <label><?php esc_html_e( 'How likely is it that you would recommend Bookly to a friend or colleague?', 'bookly' ) ?></label>
+                    <label><?php esc_html_e( 'How likely is it that you would recommend Bookly to a friend or colleague?', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <div>
                         <?php for ( $i = 1; $i <= 10; ++ $i ): ?><i class="bookly-js-star bookly-cursor-pointer far fa-star fa-lg text-muted"></i><?php endfor ?>
                     </div>
                 </div>
                 <div id="bookly-nps-form" class="mt-4 bookly-collapse" style="max-width:400px;">
                     <div class="form-group">
-                        <label for="bookly-nps-msg" class="control-label"><?php esc_html_e( 'What do you think should be improved?', 'bookly' ) ?></label>
+                        <label for="bookly-nps-msg" class="control-label"><?php esc_html_e( 'What do you think should be improved?', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                         <textarea id="bookly-nps-msg" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="bookly-nps-email" class="control-label"><?php esc_html_e( 'Please enter your email (optional)', 'bookly' ) ?></label>
+                        <label for="bookly-nps-email" class="control-label"><?php esc_html_e( 'Please enter your email (optional)', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                         <input type="text" id="bookly-nps-email" class="form-control" value="<?php echo esc_attr( $current_user->user_email ) ?>"/>
                     </div>
-                    <?php Buttons::render( 'bookly-nps-btn', 'btn-success', __( 'Send', 'bookly' ) ) ?>
+                    <?php Buttons::render( 'bookly-nps-btn', 'btn-success', __( 'Send', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 </div>
             </div>
         </div>

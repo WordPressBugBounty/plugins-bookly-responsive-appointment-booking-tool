@@ -52,7 +52,7 @@ class Ajax extends Lib\Base\Ajax
             $staff_members = Staff::query()->limit( 1 )->find();
         }
 
-        $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
+        $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly-responsive-appointment-booking-tool' ) );
         $max_duration = 0;
         $has_categories = (bool) Category::query()->findOne();
         $appropriate_time_slots = get_option( 'bookly_appointments_displayed_time_slots', 'all' ) === 'appropriate';
@@ -79,7 +79,7 @@ class Ajax extends Lib\Base\Ajax
                             $service_data = array(
                                 'id' => (int) $service->getId(),
                                 'name' => sprintf( '%s (%s)', $service->getTitle(), DateTime::secondsToInterval( $service->getDuration() ) ),
-                                'category' => $category->getId() ? $category->getName() : ( $has_categories ? __( 'Uncategorized', 'bookly' ) : '' ),
+                                'category' => $category->getId() ? $category->getName() : ( $has_categories ? __( 'Uncategorized', 'bookly-responsive-appointment-booking-tool' ) : '' ),
                                 'duration' => (int) $service->getDuration(),
                                 'units_min' => (int) $service->getUnitsMin(),
                                 'units_max' => (int) $service->getUnitsMax(),

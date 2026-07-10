@@ -11,8 +11,8 @@ class Notice extends Base\Notice
     public static function create( $id )
     {
         return parent::create( $id )
-            ->addMainButton( __( 'Renew', 'bookly' ), 'bookly-js-renew-' . get_option( 'bookly_cloud_auto_recharge_gateway' ) )
-            ->addDefaultButton( __( 'Dismiss', 'bookly' ), 'bookly-js-maybe-later' )
+            ->addMainButton( __( 'Renew', 'bookly-responsive-appointment-booking-tool' ), 'bookly-js-renew-' . get_option( 'bookly_cloud_auto_recharge_gateway' ) )
+            ->addDefaultButton( __( 'Dismiss', 'bookly-responsive-appointment-booking-tool' ), 'bookly-js-maybe-later' )
             ->setDismissClass( 'bookly-js-dismiss' )
             ;
     }
@@ -38,10 +38,10 @@ class Notice extends Base\Notice
             $remaining_days = (int) ( ( get_option( 'bookly_cloud_auto_recharge_end_at_ts' ) - time() ) / DAY_IN_SECONDS );
             if ( $remaining_days > 0 ) {
                 $this->setMessage(
-                    sprintf( _n( 'Your Auto-Recharge will end in %d day.', 'Your Auto-Recharge will end in %d days.', $remaining_days, 'bookly' ), $remaining_days ) . ' ' . __( 'Please renew the connection to keep using Bookly Cloud services.', 'bookly' )
+                    sprintf( _n( 'Your Auto-Recharge will end in %d day.', 'Your Auto-Recharge will end in %d days.', $remaining_days, 'bookly-responsive-appointment-booking-tool' ), $remaining_days ) . ' ' . __( 'Please renew the connection to keep using Bookly Cloud services.', 'bookly-responsive-appointment-booking-tool' )
                 );
             } else {
-                $this->setMessage( __( 'Your Auto-Recharge will end today.', 'bookly' ) );
+                $this->setMessage( __( 'Your Auto-Recharge will end today.', 'bookly-responsive-appointment-booking-tool' ) );
             }
             parent::render();
         }

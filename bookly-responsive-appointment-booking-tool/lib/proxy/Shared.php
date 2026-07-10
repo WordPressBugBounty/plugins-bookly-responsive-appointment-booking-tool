@@ -37,6 +37,7 @@ use Bookly\Lib;
  * @method static array  prepareColorsStatuses( array $statuses ) Prepare colors for statuses.
  * @method static Lib\CartInfo prepareCartInfo( Lib\CartInfo $cart_info, Lib\CartItem $item )
  * @method static Lib\DataHolders\Booking\Order addItemsInOrder( $order, $order_id )
+ * @method static array  buildHeaderSubmenus( array $submenus ) Extend the fullscreen header sidebar submenus map (page slug => tabs) with add-on pages / tabs.
  */
 abstract class Shared extends Lib\Base\Proxy
 {

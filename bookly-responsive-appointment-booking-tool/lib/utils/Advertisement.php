@@ -11,8 +11,8 @@ abstract class Advertisement
             if ( ! $ads || ! is_array( $ads ) ) {
                 $ad_data = array(
                     'texts' => array(
-                        'content' => sprintf( __( 'To get access to more <a href="%s" target="_blank">features</a>, lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-addon-pro' ),
-                        'button' => __( 'Upgrade', 'bookly' ),
+                        'content' => sprintf( __( 'To get access to more <a href="%s" target="_blank">features</a>, lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly.', 'bookly-responsive-appointment-booking-tool' ), 'https://hub.bookly.pro/go/bookly-addon-pro' ),
+                        'button' => __( 'Upgrade', 'bookly-responsive-appointment-booking-tool' ),
                     ),
                     'button_url' => 'https://hub.bookly.pro/go/bookly-pricing',
                 );

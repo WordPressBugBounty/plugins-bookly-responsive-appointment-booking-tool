@@ -83,7 +83,7 @@ jQuery(function ($) {
                 } else {
                     $failed.show();
                     if (response.data.errors.length > 0) {
-                        $errors.html(response.data.errors.join('<br/>')).show();
+                        $errors.text(response.data.errors.join(' / ')).show();
                     }
                 }
                 runNextTest();
@@ -116,7 +116,7 @@ jQuery(function ($) {
                                 $success.show();
                             } else {
                                 $failed.show();
-                                $errors.html(response.data.errors.join('<br/>')).show();
+                                $errors.text(response.data.errors.join(' / ')).show();
                             }
                             runNextTest();
                         });
@@ -124,7 +124,7 @@ jQuery(function ($) {
                         $loading.hide();
                         $reload.show();
                         $failed.show();
-                        $errors.html(response.data.errors.join('<br/>')).show();
+                        $errors.text(response.data.errors.join(' / ')).show();
                         runNextTest();
                     }
                 })
@@ -132,29 +132,30 @@ jQuery(function ($) {
         })
     });
 
-    let $autorun_tests = $('.bookly-js-autorun-all-tests'),
-        autorun = getCookie('bookly_diagnostic_autorun_tests');
+    // Autorun is ON by default: run all tests on load unless the user stopped it.
+    let autorun = getCookie('bookly_diagnostic_autorun_tests');
     if (autorun === '0') {
-        $autorun_tests.removeClass('bookly-js-active');
-        $('i', $autorun_tests).addClass('fa-square');
         $('.bookly-js-tests').each(function () {
             $('.bookly-js-loading-test', $(this)).hide();
             $('.bookly-js-reload-test', $(this)).show();
         });
     } else {
-        $autorun_tests.addClass('bookly-js-active');
-        $('i', $autorun_tests).removeClass('fa-square');
         runAllTests();
     }
 
-    $autorun_tests.on('click', function () {
-        let active = $(this).hasClass('bookly-js-active');
-        setCookie('bookly_diagnostic_autorun_tests', active ? '0' : '1');
-        $(this).toggleClass('bookly-js-active');
-        $('i', $autorun_tests).toggleClass('fa-square');
-        if (!active) {
-            runAllTests();
-        }
+    // The autorun control lives in the async-mounted Svelte page header as two
+    // buttons (Stop / Run) that swap visibility — bind via delegation. Initial
+    // visibility is server-set from the cookie.
+    $(document).on('click', '.bookly-js-stop-autorun', function () {
+        setCookie('bookly_diagnostic_autorun_tests', '0');
+        $('.bookly-js-stop-autorun').prop('hidden', true);
+        $('.bookly-js-run-autorun').prop('hidden', false);
+    });
+    $(document).on('click', '.bookly-js-run-autorun', function () {
+        setCookie('bookly_diagnostic_autorun_tests', '1');
+        $('.bookly-js-run-autorun').prop('hidden', true);
+        $('.bookly-js-stop-autorun').prop('hidden', false);
+        runAllTests();
     });
 
     // Tools
@@ -423,250 +424,152 @@ jQuery(function ($) {
             dataType: 'json'
         });
     });
-    let $container = $('#logs'),
-        $logsDateFilter = $('#bookly-logs-date-filter', $container),
-        $logsTable = $('#bookly-logs-table', $container),
-        $logsSearch = $('#bookly-log-search', $container),
-        $logsAction = $('#bookly-filter-logs-action', $container).booklyDropdown(),
-        $logsTarget = $('#bookly-filter-logs-target-id', $container);
+    // ── Logs (Svelte 5 datatable) ─────────────────────────────────────────
+    let logsBt = null;
+    const logsTable = 'logs';
+    const ll = window.BooklyLogsL10n;
+    const lcal = window.BooklyDatatables.calendarDate;
+    const ltz = lcal.getLocalTimeZone();
+    const lt = lcal.today(ltz);
+    const lymd = (d) => d.year + '-' + String(d.month).padStart(2, '0') + '-' + String(d.day).padStart(2, '0');
+    const lStartOfMonth = (d) => d.set({ day: 1 });
+    const lEndOfMonth = (d) => d.set({ day: 1 }).add({ months: 1 }).subtract({ days: 1 });
 
-    if (url_params.hasOwnProperty('debug')) {
-        $logsAction.booklyDropdown('setSelected', ['error', 'debug']);
-    } else {
-        $logsAction.booklyDropdown('selectAll');
+    function logsSerializeDate(v) {
+        if (!v || !v.start || !v.end) return 'any';
+        return lymd(v.start) + ' ' + (v.startTime || '00:00') + ':00 - ' + lymd(v.end) + ' ' + (v.endTime || '23:59') + ':00';
     }
 
-    $('#bookly-delete-logs').on('click', function () {
-        if (confirm(BooklyL10nGlobal.l10n.areYouSure)) {
-            var ladda = Ladda.create(this);
-            ladda.start();
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'bookly_delete_logs',
-                    csrf_token: BooklyL10nGlobal.csrf_token,
-                },
-                dataType: 'json',
-                success: function () {
-                    ladda.stop();
-                    dt_logs.ajax.reload(null, false);
-                }
-            });
-        }
-    });
+    // Default: last 30 days, full days.
+    let logsDate = { start: lt.subtract({ days: 30 }), end: lt, startTime: '00:00', endTime: '23:59' };
+    let logsAction = ll.debug ? ['error', 'debug'] : [];
+    let logsTarget = '';
 
-    let pickers = {
-        dateFormat: 'YYYY-MM-DD',
-        creationDate: {
-            startDate: moment().subtract(30, 'days'),
-            endDate: moment(),
-        },
-    };
-    let picker_ranges = {};
-    picker_ranges[BooklyL10nGlobal.dateRange.anyTime] = [moment().subtract(100, 'years'), moment().add(100, 'years')];
-    picker_ranges[BooklyL10nGlobal.dateRange.yesterday] = [moment().subtract(1, 'days'), moment().subtract(1, 'days')];
-    picker_ranges[BooklyL10nGlobal.dateRange.today] = [moment(), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.last_7] = [moment().subtract(7, 'days'), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.last_30] = [moment().subtract(30, 'days'), moment()];
-    picker_ranges[BooklyL10nGlobal.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
-    picker_ranges[BooklyL10nGlobal.dateRange.lastMonth] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
+    const logsDatePresets = [
+        { label: ll.dateRange.yesterday, range: { start: lt.subtract({ days: 1 }),  end: lt.subtract({ days: 1 }) } },
+        { label: ll.dateRange.today,     range: { start: lt,                        end: lt                       } },
+        { label: ll.dateRange.last_7,    range: { start: lt.subtract({ days: 7 }),  end: lt                       } },
+        { label: ll.dateRange.last_30,   range: { start: lt.subtract({ days: 30 }), end: lt                       } },
+        { label: ll.dateRange.thisMonth, range: { start: lStartOfMonth(lt),         end: lEndOfMonth(lt)          } },
+    ];
 
-    $logsDateFilter.daterangepicker({
-            timePicker: true,
-            parentEl: $('.bookly-js-tests'),
-            startDate: pickers.creationDate.startDate,
-            endDate: pickers.creationDate.endDate,
-            ranges: picker_ranges,
-            showDropdowns: true,
-            linkedCalendars: false,
-            autoUpdateInput: false,
-            timePicker24Hour: true,
-            timePickerSeconds: true,
-        },
-        function (start, end, label) {
-            switch (label) {
-                case BooklyL10nGlobal.dateRange.anyTime:
-                    dt_logs.page.len(booklyDataTables.getPageLength());
-                    $logsDateFilter
-                        .data('date', 'any')
-                        .find('span')
-                        .html(BooklyL10nGlobal.dateRange.anyTime);
+    function clearAllLogs() {
+        if (!confirm(BooklyL10nGlobal.l10n.areYouSure)) return;
+        if (logsBt) logsBt.setLoading(true);
+        $.ajax({
+            url: ajaxurl, type: 'POST', dataType: 'json',
+            data: { action: 'bookly_delete_logs', csrf_token: BooklyL10nGlobal.csrf_token },
+            success: function () { if (logsBt) logsBt.reload(); }
+        });
+    }
+
+    function restoreLogs(ids) {
+        if (!ids.length || !confirm(BooklyL10nGlobal.l10n.areYouSure)) return;
+        if (logsBt) logsBt.setLoading(true);
+        $.ajax({
+            url: ajaxurl, method: 'POST', dataType: 'json',
+            data: { action: 'bookly_diagnostics_ajax', tool: 'Logs', ajax: 'restore', ids: ids, csrf_token: BooklyL10nGlobal.csrf_token },
+            success: function (response) { booklyAlert(response.success ? { success: ['Success'] } : { error: ['Failed'] }); },
+            error: function () { booklyAlert({ error: ['Failed'] }); }
+        }).always(function () { if (logsBt) logsBt.reload(); });
+    }
+
+    $('[href=#logs]').one('click', function () {
+        let columns = [];
+        // Backend (Ajax::getLogs) searches by target, details, target_id, ref,
+        // comment, author, id — created_at and action aren't searchable.
+        const searchableColumns = ['id', 'target', 'target_id', 'author', 'details', 'comment', 'ref'];
+        $.each(ll.datatables[logsTable].settings.columns, function (column, show) {
+            switch (column) {
+                case 'action':
+                    columns.push({
+                        data: 'action',
+                        render: function (data, type, row) {
+                            return data === 'error' && row.target && row.target.indexOf('bookly-') !== -1
+                                ? '<span class="bookly:text-red-600 bookly:font-medium">ERROR</span>'
+                                : BooklyDatatables.escapeHtml(data);
+                        }
+                    });
                     break;
-                case 'Custom Range':
-                    dt_logs.page.len(1000);
-                    $logsDateFilter
-                        .data('date', start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'))
-                        .find('span')
-                        .html(start.format(BooklyL10nGlobal.dateRange.format + ' HH:mm:ss') + ' - ' + end.format(BooklyL10nGlobal.dateRange.format + ' HH:mm:ss'));
+                case 'target':
+                    columns.push({
+                        data: 'target',
+                        render: function (data) {
+                            if (!data) return '';
+                            const text = data.indexOf('bookly-') !== -1 ? data.slice(data.indexOf('bookly-')) : data;
+                            return '<span dir="rtl" class="bookly:inline-block bookly:max-w-full bookly:overflow-hidden bookly:text-ellipsis bookly:whitespace-nowrap bookly:align-bottom">' + BooklyDatatables.escapeHtml(text) + '</span>';
+                        }
+                    });
+                    break;
+                case 'details':
+                    columns.push({
+                        data: 'details',
+                        orderable: false,
+                        render: function (data) {
+                            try {
+                                return '<pre class="bookly:m-0 bookly:whitespace-pre-wrap bookly:text-xs">' + BooklyDatatables.escapeHtml(JSON.stringify(JSON.parse(data), null, 2)) + '</pre>';
+                            } catch (e) {
+                                return BooklyDatatables.escapeHtml(data);
+                            }
+                        }
+                    });
+                    break;
+                case 'ref':
+                    columns.push({
+                        data: 'ref',
+                        orderable: false,
+                        render: function (data) { return data ? BooklyDatatables.escapeHtml(data).replace(/\n/g, '<br>') : ''; }
+                    });
                     break;
                 default:
-                    dt_logs.page.len(booklyDataTables.getPageLength());
-                    $logsDateFilter
-                        .data('date', start.format(pickers.dateFormat) + ' - ' + end.format(pickers.dateFormat))
-                        .find('span')
-                        .html(start.format(BooklyL10nGlobal.dateRange.format) + ' - ' + end.format(BooklyL10nGlobal.dateRange.format));
+                    columns.push({ data: column, render: BooklyDatatables.escapeHtml() });
+                    break;
             }
-        }
-    );
-
-    let dt_logs;
-    $('[href=#logs]').one('click', function () {
-
-        let columns = [
-            {data: 'id', width: 80, responsivePriority: 0},
-            {data: 'created_at', responsivePriority: 0},
-            {
-                data: 'action', responsivePriority: 0,
-                render: function (data, type, row, meta) {
-                    return data === 'error' && row.target.indexOf('bookly-') !== -1
-                        ? '<span class="text-danger">ERROR</span>'
-                        : data;
-                },
-            },
-            {
-                data: 'target', responsivePriority: 2,
-                render: function (data, type, row, meta) {
-                    const isBooklyError = data && (data.indexOf('bookly-') !== -1);
-                    return $('<div>', {
-                        dir: 'rtl',
-                        class: 'text-truncate',
-                        text: isBooklyError ? data.slice(data.indexOf('bookly-')) : data
-                    }).prop('outerHTML');
-                },
-            },
-            {data: 'target_id', responsivePriority: 1},
-            {data: 'author', responsivePriority: 1},
-            {
-                data: 'details',
-                render: function (data, type, row, meta) {
-                    try {
-                        return JSON.stringify(JSON.parse(data), null, 2).replace(/\n/g, '<br/>');
-                    } catch (e) {
-                        return data;
-                    }
-                },
-                className: 'none',
-                responsivePriority: 2
-            },
-            {data: 'comment', responsivePriority: 2},
-            {
-                data: 'ref', className: 'none', responsivePriority: 1,
-                render: function (data, type, row, meta) {
-                    return data && data.replace(/\n/g, '<br>');
-                }
-            },
-        ];
-
-        dt_logs = booklyDataTables.init($logsTable, {order: [{column: 'id', order: 'desc'}]},
-            {
-                ajax: {
-                    url: ajaxurl,
-                    method: 'POST',
-                    data: function (d) {
-                        return $.extend({action: 'bookly_get_logs', csrf_token: BooklyL10nGlobal.csrf_token}, {
-                            filter: {
-                                created_at: $logsDateFilter.data('date'),
-                                search: $logsSearch.val(),
-                                action: $logsAction.booklyDropdown('getSelected'),
-                                target: $logsTarget.val()
-                            }
-                        }, d);
-                    }
-                },
-                columns: columns,
-                add_checkbox_column: url_params.hasOwnProperty('debug')
-            });
-    });
-
-    $('.bookly-js-reload-log').on('click', function (e) {
-        e.preventDefault();
-        dt_logs.ajax.reload(null,false);
-    });
-
-    let $restoreButton = $('#bookly-logs-restore');
-
-    function toggleRestoreButton() {
-        let $_checkboxes = $('td input[type=checkbox]:checked');
-        if ($_checkboxes.length > 0) {
-            $_checkboxes.each(function () {
-                let _row = booklyDataTables.getRowData(this, dt_logs);
-                if (_row?.action === 'delete') {
-                    $restoreButton.show();
-                    return false;
-                }
-                $restoreButton.hide();
-            })
-        } else {
-            $restoreButton.hide();
-        }
-    }
-
-    toggleRestoreButton();
-
-    $logsTable.on('change', 'td input[type=checkbox]', function () {
-        toggleRestoreButton();
-    });
-
-    $restoreButton.on('click', function () {
-        if (confirm(BooklyL10nGlobal.l10n.areYouSure)) {
-            let ladda = Ladda.create(this),
-                $button = $(this),
-                ids = [];
-            ladda.start();
-            $('td input[type=checkbox]:checked', $logsTable).each(function () {
-                let _row = booklyDataTables.getRowData(this, dt_logs);
-                if (_row?.action === 'delete') {
-                    ids.push(_row.id);
-                }
-            });
-
-            $.ajax({
-                url: ajaxurl,
-                method: 'POST',
-                data: {
-                    action: 'bookly_diagnostics_ajax',
-                    tool: 'Logs',
-                    ajax: 'restore',
-                    ids: ids,
-                    csrf_token: BooklyL10nGlobal.csrf_token
-                },
-                dataType: 'json',
-                success: function (response) {
-                    if (response.success) {
-                        booklyAlert({success: ['Success']});
-                    } else {
-                        booklyAlert({error: ['Failed']});
-                    }
-                    ladda.stop();
-                },
-                error: function () {
-                    booklyAlert({error: ['Failed']});
-                    ladda.stop();
-                },
-            }).always(function () {
-                ladda.stop();
-                dt_logs.ajax.reload();
-            });
-        }
-    });
-
-    function onChangeFilter() {
-        dt_logs.ajax.reload();
-    }
-
-    $logsDateFilter.on('apply.daterangepicker', onChangeFilter);
-    $logsTarget.on('keyup', onChangeFilter);
-    $logsAction.on('change', function () {
-        setTimeout(onChangeFilter, 0);
-    });
-    $logsSearch.on('keyup', onChangeFilter)
-        .on('keydown', function (e) {
-            if (e.keyCode == 13) {
-                e.preventDefault();
-                return false;
-            }
+            columns[columns.length - 1].title = ll.datatables[logsTable].titles[column] || column;
+            columns[columns.length - 1].name = column;
+            columns[columns.length - 1].show = show;
+            columns[columns.length - 1].searchable = searchableColumns.indexOf(column) !== -1;
         });
+
+        logsBt = BooklyDatatables.showForm('bookly-logs-datatables', {
+            datePicker: ll.datePicker,
+            ajax: {
+                url: ajaxurl, method: 'POST',
+                data: function (d) {
+                    return $.extend({
+                        action: 'bookly_get_logs', csrf_token: BooklyL10nGlobal.csrf_token,
+                        filter: { created_at: logsSerializeDate(logsDate), action: logsAction, target: logsTarget }
+                    }, d);
+                }
+            },
+            columns: columns,
+            tableSettings: Object.assign({}, ll.datatables[logsTable], {
+                l10n: Object.assign({}, ll.datatables.l10n, { zeroRecords: ll.zeroRecords })
+            }),
+            searchFilter: { placeholder: ll.search, name: 'filter[search]' },
+            saveSettings: function (settings) {
+                $.post(ajaxurl, Object.assign({ action: 'bookly_update_table_settings', table: logsTable, csrf_token: BooklyL10nGlobal.csrf_token }, settings));
+            },
+            checked: function (rows) {
+                const actions = [];
+                if (rows.some(function (r) { return r.action === 'delete'; })) {
+                    actions.push({
+                        label: ll.restore, icon: 'arrow-left', variant: 'outline',
+                        click: function (sel) { restoreLogs(sel.filter(function (r) { return r.action === 'delete'; }).map(function (r) { return r.id; })); }
+                    });
+                }
+                return actions;
+            },
+            filters: [
+                { type: 'dateRange', name: 'created_at', label: ll.filters.date, initialValue: logsDate, withTime: true, presets: logsDatePresets, onChange: function (v) { logsDate = v; } },
+                { type: 'checkboxGroup', name: 'action', label: ll.filters.action, initialValue: logsAction, options: ll.actionOptions, onChange: function (v) { logsAction = v; } },
+                { type: 'text', name: 'target', label: ll.filters.target, initialValue: logsTarget, placeholder: ll.filters.target, onChange: function (v) { logsTarget = v; } },
+            ],
+            topToolbar: [
+                { id: 'bookly-delete-logs', label: ll.clearAll, icon: 'trash', variant: 'outline', click: clearAllLogs },
+            ],
+        });
+    });
 
     $('[data-tool]').on('click', function (e) {
         e.preventDefault();

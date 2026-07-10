@@ -433,7 +433,7 @@ class Ajax extends Lib\Base\Ajax
         $fs = Lib\Utils\Common::getFilesystem();
         if ( ! in_array( strtolower( $extension ), array( 'csv' ), false ) ) {
             $fs->delete( $_FILES['files']['tmp_name'][0], false, 'f' );
-            wp_send_json_error( array( 'error' => Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_file_type' ) ) );
+            wp_send_json_error( array( 'error' => __( 'File\'s extension is not allowed', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
         $config = json_decode( self::parameter( 'config', '[]' ), true );
         $durations = json_decode( self::parameter( 'durations', '[]' ), true );

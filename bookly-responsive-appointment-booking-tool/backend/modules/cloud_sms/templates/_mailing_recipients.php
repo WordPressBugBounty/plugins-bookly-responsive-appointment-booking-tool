@@ -5,7 +5,7 @@ use Bookly\Backend\Components\Controls\Buttons;
 ?>
 <div class='row mb-2'>
     <div class='col'>
-        <strong><?php esc_html_e( 'Current mailing list', 'bookly' ) ?>:</strong> <span id="bookly-js-mailing-list-name"></span>
+        <strong><?php esc_html_e( 'Current mailing list', 'bookly-responsive-appointment-booking-tool' ) ?>:</strong> <span id="bookly-js-mailing-list-name"></span>
     </div>
 </div>
 <div id="bookly-sms_mailing_recipients_list-datatables"></div>

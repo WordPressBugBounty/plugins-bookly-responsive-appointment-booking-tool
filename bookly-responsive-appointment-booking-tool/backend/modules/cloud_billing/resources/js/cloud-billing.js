@@ -123,15 +123,15 @@ jQuery(function ($) {
                 onChange: function (v) { dateValue = v; },
             }],
             searchFilter: { placeholder: BooklyL10n.search || 'Quick search', name: 'filter[search]' },
-            checked: function (rows) {
-                if (rows.length !== 1 || !rowHasInvoice(rows[0])) return [];
+            rowActions: function (row) {
+                if (!rowHasInvoice(row)) return [];
                 return [{
                     label: BooklyL10n.invoice.button,
                     icon: 'download',
                     variant: 'outline',
-                    click: function (selected) {
+                    click: function (r) {
                         if (BooklyL10n.invoice.valid) {
-                            window.location = BooklyL10n.invoice.link + '/' + selected[0].id;
+                            window.location = BooklyL10n.invoice.link + '/' + r.id;
                         } else {
                             booklyAlert({ error: [BooklyL10n.invoice.alert] });
                         }

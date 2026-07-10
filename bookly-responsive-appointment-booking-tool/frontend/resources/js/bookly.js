@@ -1,4 +1,4 @@
-const booklyJsVersion="27.6";
+const booklyJsVersion="27.8";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -19760,6 +19760,14 @@ var bookly = (function ($) {
 	  }
 	}
 
+	// Locale-independent weekday slugs indexed by moment's day() (0 = Sunday .. 6 = Saturday).
+	// The week-day checkboxes / monthly-week-day options carry these same English slugs (see
+	// the recurring add-on: $weekdays = array(1 => 'sun', 'mon', ...)). Day matching must use
+	// these, NOT moment.format('ddd'), which is localized — under a non-English moment locale
+	// (e.g. Polish "pon.") it never equals the slug, so no day matches and the occurrence
+	// counter runs to the +5y guard, pushing "until" five years out.
+	const WEEKDAY_SLUGS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
 	/**
 	 * Repeat step.
 	 */
@@ -20083,13 +20091,13 @@ var bookly = (function ($) {
 	        isDateMatchesSelections: function (current_date) {
 	          switch ($repeat_variant.val()) {
 	            case 'daily':
-	              if (($repeat_every_day.val() > 6 || $.inArray(current_date.format('ddd').toLowerCase(), repeat.week_days) != -1) && current_date.diff(repeat.date_from, 'days') % $repeat_every_day.val() == 0) {
+	              if (($repeat_every_day.val() > 6 || $.inArray(WEEKDAY_SLUGS[current_date.day()], repeat.week_days) != -1) && current_date.diff(repeat.date_from, 'days') % $repeat_every_day.val() == 0) {
 	                return true;
 	              }
 	              break;
 	            case 'weekly':
 	            case 'biweekly':
-	              if (($repeat_variant.val() == 'weekly' || current_date.diff(repeat.date_from.clone().startOf('isoWeek'), 'weeks') % 2 == 0) && $.inArray(current_date.format('ddd').toLowerCase(), repeat.checked_week_days) != -1) {
+	              if (($repeat_variant.val() == 'weekly' || current_date.diff(repeat.date_from.clone().startOf('isoWeek'), 'weeks') % 2 == 0) && $.inArray(WEEKDAY_SLUGS[current_date.day()], repeat.checked_week_days) != -1) {
 	                return true;
 	              }
 	              break;
@@ -20101,13 +20109,13 @@ var bookly = (function ($) {
 	                  }
 	                  break;
 	                case 'last':
-	                  if (current_date.format('ddd').toLowerCase() == $monthly_week_day.val() && current_date.clone().endOf('month').diff(current_date, 'days') < 7) {
+	                  if (WEEKDAY_SLUGS[current_date.day()] == $monthly_week_day.val() && current_date.clone().endOf('month').diff(current_date, 'days') < 7) {
 	                    return true;
 	                  }
 	                  break;
 	                default:
 	                  var month_diff = current_date.diff(current_date.clone().startOf('month'), 'days');
-	                  if (current_date.format('ddd').toLowerCase() == $monthly_week_day.val() && month_diff >= ($variant_monthly.prop('selectedIndex') - 1) * 7 && month_diff < $variant_monthly.prop('selectedIndex') * 7) {
+	                  if (WEEKDAY_SLUGS[current_date.day()] == $monthly_week_day.val() && month_diff >= ($variant_monthly.prop('selectedIndex') - 1) * 7 && month_diff < $variant_monthly.prop('selectedIndex') * 7) {
 	                    return true;
 	                  }
 	              }

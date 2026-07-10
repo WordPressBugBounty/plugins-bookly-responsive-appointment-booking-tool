@@ -25,20 +25,20 @@ class Page extends Lib\Base\Component
 
         wp_localize_script( 'bookly-addons.js', 'BooklyL10nAddonsForm', array(
             'l10n' => array(
-                'addons_subtitle' => __( 'Discover features to extend your Bookly functionality', 'bookly' ),
-                'addons_title' => __( 'Explore Bookly products', 'bookly' ),
-                'close' => __( 'Close', 'bookly' ),
-                'demo' => __( 'Demo', 'bookly' ),
-                'detach' => __( 'Detach', 'bookly' ),
-                'detach_info' => __( 'You are going to detach your purchase code from this domain', 'bookly' ),
-                'enter_purchase_code' => __( 'Enter purchase code', 'bookly' ),
-                'get_it' => __( 'Get it', 'bookly' ),
-                'installed' => __( 'Installed', 'bookly' ),
-                'installed_subtitle' => __( 'View and manage your active bundles and add-ons', 'bookly' ),
-                'installed_title' => __( 'Bundles and add-ons', 'bookly' ),
-                'lifetime' => __( 'Lifetime', 'bookly' ),
-                'new' => __( 'New', 'bookly' ),
-                'subscription' => __( 'Subscription', 'bookly' ),
+                'addons_subtitle' => __( 'Discover features to extend your Bookly functionality', 'bookly-responsive-appointment-booking-tool' ),
+                'addons_title' => __( 'Explore Bookly products', 'bookly-responsive-appointment-booking-tool' ),
+                'close' => __( 'Close', 'bookly-responsive-appointment-booking-tool' ),
+                'demo' => __( 'Demo', 'bookly-responsive-appointment-booking-tool' ),
+                'detach' => __( 'Detach', 'bookly-responsive-appointment-booking-tool' ),
+                'detach_info' => __( 'You are going to detach your purchase code from this domain', 'bookly-responsive-appointment-booking-tool' ),
+                'enter_purchase_code' => __( 'Enter purchase code', 'bookly-responsive-appointment-booking-tool' ),
+                'get_it' => __( 'Get it', 'bookly-responsive-appointment-booking-tool' ),
+                'installed' => __( 'Installed', 'bookly-responsive-appointment-booking-tool' ),
+                'installed_subtitle' => __( 'View and manage your active bundles and add-ons', 'bookly-responsive-appointment-booking-tool' ),
+                'installed_title' => __( 'Bundles and add-ons', 'bookly-responsive-appointment-booking-tool' ),
+                'lifetime' => __( 'Lifetime', 'bookly-responsive-appointment-booking-tool' ),
+                'new' => __( 'New', 'bookly-responsive-appointment-booking-tool' ),
+                'subscription' => __( 'Subscription', 'bookly-responsive-appointment-booking-tool' ),
             )
         ) );
 
@@ -64,7 +64,7 @@ class Page extends Lib\Base\Component
      */
     public static function addBooklyMenuItem()
     {
-        $title = __( 'Add-ons', 'bookly' );
+        $title = __( 'Add-ons', 'bookly-responsive-appointment-booking-tool' );
         $count = self::getNotSeenCount();
         if ( $count ) {
             add_submenu_page( 'bookly-menu', $title, sprintf( '%s <span class="update-plugins count-%d"><span class="update-count">%d</span></span>', $title, $count, $count ), Lib\Utils\Common::getRequiredCapability(),

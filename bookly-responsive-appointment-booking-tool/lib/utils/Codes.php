@@ -309,11 +309,11 @@ abstract class Codes
             'signed_up' => 0,
             'number_of_persons' => 0,
             'participants' => array(),
-            'appointment_date' => $appointment_start === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_start ),
-            'appointment_end_date' => $appointment_end === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_end_date ),
-            'appointment_end_time' => $appointment_end === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_end_date ) : $service->getEndTimeInfo() ),
+            'appointment_date' => $appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Lib\Utils\DateTime::formatDate( $appointment_start ),
+            'appointment_end_date' => $appointment_end === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Lib\Utils\DateTime::formatDate( $appointment_end_date ),
+            'appointment_end_time' => $appointment_end === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_end_date ) : $service->getEndTimeInfo() ),
             'appointment_id' => $appointment->getId(),
-            'appointment_time' => $appointment_start === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_start ) : $service->getStartTimeInfo() ),
+            'appointment_time' => $appointment_start === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_start ) : $service->getStartTimeInfo() ),
             'booking_number' => $appointment->getId(),
             'category_image' => $category_image,
             'category_info' => $category ? $category->getTranslatedInfo() : '',
@@ -396,7 +396,7 @@ abstract class Codes
             'appointment_id' => $customer_appointment->getAppointmentId(),
             'appointment_notes' => $customer_appointment->getNotes(),
             'booking_number' => Lib\Config::groupBookingActive() ? $customer_appointment->getAppointmentId() . '-' . $customer_appointment->getId() : $customer_appointment->getId(),
-            'cancel_appointment' => sprintf( '<a href="%s" target="_blank">%s</a>', $cancel_appointment_url, __( 'Cancel Appointment', 'bookly' ) ),
+            'cancel_appointment' => sprintf( '<a href="%s" target="_blank">%s</a>', $cancel_appointment_url, __( 'Cancel Appointment', 'bookly-responsive-appointment-booking-tool' ) ),
             'cancel_appointment_url' => $cancel_appointment_url,
             'client_email' => $customer->getEmail(),
             'client_first_name' => $customer->getFirstName(),
@@ -425,8 +425,8 @@ abstract class Codes
         $appointment = $item->getAppointment();
         $service = $item->getService();
         $staff = $item->getStaff();
-        $appointment_start_date = $appointment->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment->getStartDate() );
-        $appointment_start_time = $appointment->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatTime( $appointment->getStartDate() );
+        $appointment_start_date = $appointment->getStartDate() === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Lib\Utils\DateTime::formatDate( $appointment->getStartDate() );
+        $appointment_start_time = $appointment->getStartDate() === null ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' ) : Lib\Utils\DateTime::formatTime( $appointment->getStartDate() );
 
         $category = $service->getCategoryId() ? Entities\Category::find( $service->getCategoryId() ) : false;
 

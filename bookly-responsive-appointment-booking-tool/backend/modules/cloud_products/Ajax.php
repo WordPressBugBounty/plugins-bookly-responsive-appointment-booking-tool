@@ -145,7 +145,7 @@ class Ajax extends Lib\Base\Ajax
         $product = self::parameter( 'product' );
         $status = self::parameter( 'status' );
         if ( $product === Account::PRODUCT_STRIPE && $status === 'cancelled' ) {
-            wp_send_json_error( array( 'content' => __( 'Stripe activation was not completed', 'bookly' ) ) );
+            wp_send_json_error( array( 'content' => __( 'Stripe activation was not completed', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
         $api = Lib\Cloud\API::getInstance();
         $texts = $api->account->getProductActivationTexts( self::parameter( 'product' ) );

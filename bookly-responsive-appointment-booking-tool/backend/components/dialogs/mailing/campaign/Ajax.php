@@ -77,7 +77,7 @@ class Ajax extends Lib\Base\Ajax
         if ( $id ) {
             $campaign->load( $id );
         } else {
-            $mailing_lists = array_merge( array( array( 'id' => null, 'name' => __( 'Select mailing list', 'bookly' ), ), ), $mailing_lists );
+            $mailing_lists = array_merge( array( array( 'id' => null, 'name' => __( 'Select mailing list', 'bookly-responsive-appointment-booking-tool' ), ), ), $mailing_lists );
         }
 
         wp_send_json_success( array( 'campaign' => $campaign->getFields(), 'mailing_lists' => $mailing_lists, 'current_time' => current_time( 'mysql' ) ) );

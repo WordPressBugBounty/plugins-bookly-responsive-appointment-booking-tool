@@ -13,8 +13,8 @@ class IncompatiblePlugins extends Test
 
     public function __construct()
     {
-        $this->title = __( 'Incompatible plugins', 'bookly' );
-        $this->description = __( 'This test checks the plugins that may affect Bookly. For example, some caching and optimizing plugins may cause incorrect work of Bookly.', 'bookly' );
+        $this->title = __( 'Incompatible plugins', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'This test checks the plugins that may affect Bookly. For example, some caching and optimizing plugins may cause incorrect work of Bookly.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -33,7 +33,7 @@ class IncompatiblePlugins extends Test
         }
 
         if ( $errors ) {
-            $this->addError( __( 'One or several incompatible plugins were detected. Please add pages with Bookly shortcodes to cache exceptions and Javascript-code minification.', 'bookly' ) . '<br>' );
+            $this->addError( __( 'One or several incompatible plugins were detected. Please add pages with Bookly shortcodes to cache exceptions and Javascript-code minification.', 'bookly-responsive-appointment-booking-tool' ) . '<br>' );
             foreach ( $errors as $error ) {
                 $this->addError( $error );
             }

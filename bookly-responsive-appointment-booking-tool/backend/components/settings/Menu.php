@@ -11,7 +11,7 @@ class Menu
      */
     public static function renderItem( $title, $tab )
     {
-        printf( '<a class="nav-link mb-2" href="#bookly_settings_%s" data-toggle="bookly-pill">%s</a>',
+        printf( '<a class="bookly:vnav-item" href="#bookly_settings_%s" data-toggle="bookly-pill">%s</a>',
             $tab,
             esc_html( $title )
         );

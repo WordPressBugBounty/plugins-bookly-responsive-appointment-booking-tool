@@ -342,31 +342,31 @@ jQuery(function ($) {
                 done: function () { bt.reload(); }
             });
         },
+        rowActions: function (row) {
+            if (!BooklyL10n.invoice.enabled) return [];
+            return [{
+                label: BooklyL10n.invoice.button,
+                icon: 'download',
+                variant: 'outline',
+                click: function (r) {
+                    window.location = BooklyL10n.invoice.action + '&invoices=' + r.id;
+                }
+            }];
+        },
         checked: function (rows) {
             const actions = [];
-            if (BooklyL10n.invoice.enabled) {
-                if (rows.length === 1) {
-                    actions.push({
-                        label: BooklyL10n.invoice.button,
-                        icon: 'download',
-                        variant: 'outline',
-                        click: function (selected) {
-                            window.location = BooklyL10n.invoice.action + '&invoices=' + selected[0].id;
+            if (BooklyL10n.invoice.enabled && rows.length > 1) {
+                actions.push({
+                    label: BooklyL10n.invoice.download,
+                    icon: 'download',
+                    variant: 'outline',
+                    click: function (selected) {
+                        const ids = selected.map(function (row) { return row.id; });
+                        if (ids.length) {
+                            window.location = BooklyL10n.invoice.action + '&invoices=' + ids.join(',');
                         }
-                    });
-                } else {
-                    actions.push({
-                        label: BooklyL10n.invoice.download,
-                        icon: 'download',
-                        variant: 'outline',
-                        click: function (selected) {
-                            const ids = selected.map(function (row) { return row.id; });
-                            if (ids.length) {
-                                window.location = BooklyL10n.invoice.action + '&invoices=' + ids.join(',');
-                            }
-                        }
-                    });
-                }
+                    }
+                });
             }
             actions.push({
                 label: BooklyL10n.delete,

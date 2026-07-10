@@ -3,7 +3,7 @@
     <div class="bookly-modal-dialog">
         <div class="bookly-modal-content bookly-js-modal-content">
             <div class="bookly-modal-header">
-                <div><?php esc_html_e( 'Data already in use', 'bookly' ) ?></div>
+                <div><?php esc_html_e( 'Data already in use', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                 <button type="button" class="bookly-close bookly-js-close" style="margin-top: -25px; font-size: 21px; line-height: 1;">×</button>
             </div>
             <div class="bookly-modal-body bookly-js-modal-body"></div>

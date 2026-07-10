@@ -16,8 +16,8 @@ use Bookly\Backend\Components\Ace;
                 <?php Ace\Editor::render( $doc_slug ) ?>
             </div>
             <div class="modal-footer">
-                <?php Buttons::renderSubmit( 'bookly-ace-save', null, __( 'Apply', 'bookly' ) ) ?>
-                <?php Buttons::renderCancel( __( 'Close', 'bookly' ) ) ?>
+                <?php Buttons::renderSubmit( 'bookly-ace-save', null, __( 'Apply', 'bookly-responsive-appointment-booking-tool' ) ) ?>
+                <?php Buttons::renderCancel( __( 'Close', 'bookly-responsive-appointment-booking-tool' ) ) ?>
             </div>
         </div>
     </div>

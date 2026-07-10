@@ -39,7 +39,7 @@ class Ajax extends Lib\Base\Ajax
         $staff_dropdown_data = ServicesPage::getStaffDropDownData();
 
         $categories_collection = Lib\Entities\Category::query()->sortBy( 'position' )->fetchArray();
-        $service_types = ServicesProxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => __( 'Simple', 'bookly' ) ) );
+        $service_types = ServicesProxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => __( 'Simple', 'bookly-responsive-appointment-booking-tool' ) ) );
         $result = array(
             'html' => array(
                 'general' => self::renderTemplate( 'general', compact( 'service', 'service_types', 'simple_services', 'staff_dropdown_data', 'categories_collection', 'staff_ids' ), false ),
@@ -55,7 +55,7 @@ class Ajax extends Lib\Base\Ajax
             'type' => $service['type'],
             'price' => Lib\Utils\Price::format( $service['price'] ),
             'duration' => $required_sub_services && in_array( $service['type'], array( Lib\Entities\Service::TYPE_COLLABORATIVE, Lib\Entities\Service::TYPE_COMPOUND, ) )
-                ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count )
+                ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly-responsive-appointment-booking-tool' ), $sub_services_count )
                 : Lib\Utils\DateTime::secondsToInterval( $service['duration'] ),
             'staff' => $staff_dropdown_data,
         );
@@ -104,7 +104,7 @@ class Ajax extends Lib\Base\Ajax
         }
 
         // Update services in addons.
-        $alert = Proxy\Shared::updateService( array( 'success' => array( __( 'Settings saved.', 'bookly' ) ) ), $service, self::parameters() );
+        $alert = Proxy\Shared::updateService( array( 'success' => array( __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ) ) ), $service, self::parameters() );
 
         wp_send_json_success( Proxy\Shared::prepareUpdateServiceResponse( compact( 'alert' ), $service ) );
     }

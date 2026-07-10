@@ -62,7 +62,7 @@ abstract class Codes
         foreach ( $codes as $name => $code ) {
             if ( is_array( $code ) ) {
                 $impersonal_codes[ $name ] = $this->_impersonalCodes( $code );
-            } else {
+            } elseif ( ! is_object( $code ) ) {
                 $count = Utils\SMSCounter::count( (string) $code );
                 if ( $count->encoding == Utils\SMSCounter::UTF16 ) {
                     $impersonal_symbol = 'х';   // ascii 245

@@ -3,6 +3,15 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_27_8()
+    {
+        $this->alterTables( array(
+            'bookly_payments' => array(
+                'ALTER TABLE `%s` CHANGE `type` `type` ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square","worldpay") NOT NULL DEFAULT "local"',
+            ),
+        ) );
+    }
+
     function update_27_3()
     {
         add_option( 'bookly_bc_clmn_min_width', '120' );
@@ -318,8 +327,8 @@ class Updater extends Base\Updater
     function update_23_2()
     {
         $this->addL10nOptions( array(
-            'bookly_l10n_incorrect_phone_verification_code' => __( 'Incorrect verification code', 'bookly' ),
-            'bookly_l10n_incorrect_email_verification_code' => __( 'Incorrect verification code', 'bookly' ),
+            'bookly_l10n_incorrect_phone_verification_code' => __( 'Incorrect verification code', 'bookly-responsive-appointment-booking-tool' ),
+            'bookly_l10n_incorrect_email_verification_code' => __( 'Incorrect verification code', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         $this->alterTables( array(
@@ -351,9 +360,9 @@ class Updater extends Base\Updater
             array(
                 'gateway' => 'email',
                 'type' => 'mobile_sc_grant_access_token',
-                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-                'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
-                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
+                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly-responsive-appointment-booking-tool' ),
+                'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly-responsive-appointment-booking-tool' ),
+                'message' => __( 'Hello', 'bookly-responsive-appointment-booking-tool' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly-responsive-appointment-booking-tool' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly-responsive-appointment-booking-tool' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'
@@ -361,8 +370,8 @@ class Updater extends Base\Updater
             array(
                 'gateway' => 'sms',
                 'type' => 'mobile_sc_grant_access_token',
-                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
+                'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly-responsive-appointment-booking-tool' ),
+                'message' => __( 'Hello', 'bookly-responsive-appointment-booking-tool' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly-responsive-appointment-booking-tool' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly-responsive-appointment-booking-tool' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'
@@ -478,7 +487,7 @@ class Updater extends Base\Updater
         } );
 
         $this->addL10nOptions( array(
-            'bookly_l10n_info_add_to_calendar' => __( 'Add to calendar', 'bookly' )
+            'bookly_l10n_info_add_to_calendar' => __( 'Add to calendar', 'bookly-responsive-appointment-booking-tool' )
         ) );
         add_option( 'bookly_app_show_add_to_calendar', '0' );
 
@@ -645,16 +654,16 @@ class Updater extends Base\Updater
         add_option( 'bookly_gen_session_type', 'php' );
 
         $this->addL10nOptions( array(
-            'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly' ),
-            'bookly_l10n_button_time_next' => __( '&gt;', 'bookly' ),
+            'bookly_l10n_button_time_prev' => __( '&lt;', 'bookly-responsive-appointment-booking-tool' ),
+            'bookly_l10n_button_time_next' => __( '&gt;', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         $this->addNotifications( array(
             array(
                 'gateway' => 'voice',
                 'type' => 'appointment_reminder',
-                'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly' ),
-                'message' => __( "Dear {client_name}.\nWe would like to remind you that you have booked {service_name} tomorrow at {appointment_time}. We are waiting for you at {company_address}.\nThank you for choosing our company.\n{company_name}\n{company_phone}\n{company_website}", 'bookly' ),
+                'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ),
+                'message' => __( "Dear {client_name}.\nWe would like to remind you that you have booked {service_name} tomorrow at {appointment_time}. We are waiting for you at {company_address}.\nThank you for choosing our company.\n{company_name}\n{company_phone}\n{company_website}", 'bookly-responsive-appointment-booking-tool' ),
                 'to_customer' => 1,
                 'settings' => '{"status":"any","option":2,"services":{"any":"any","ids":[]},"offset_hours":1,"perform":"before","at_hour":18,"before_at_hour":18,"offset_before_hours":-24,"offset_bidirectional_hours":-24}',
             ),
@@ -857,9 +866,9 @@ class Updater extends Base\Updater
             add_option( 'bookly_co_size' );
 
             $self->addL10nOptions( array(
-                'bookly_l10n_button_download_ics' => __( 'Download ICS', 'bookly' ),
-                'bookly_l10n_label_terms' => __( 'I agree to the terms of service', 'bookly' ),
-                'bookly_l10n_error_terms' => __( 'You must accept our terms', 'bookly' ),
+                'bookly_l10n_button_download_ics' => __( 'Download ICS', 'bookly-responsive-appointment-booking-tool' ),
+                'bookly_l10n_label_terms' => __( 'I agree to the terms of service', 'bookly-responsive-appointment-booking-tool' ),
+                'bookly_l10n_error_terms' => __( 'You must accept our terms', 'bookly-responsive-appointment-booking-tool' ),
             ) );
         } );
 
@@ -998,8 +1007,8 @@ class Updater extends Base\Updater
                 array(
                     'gateway' => 'email',
                     'type' => 'verify_email',
-                    'name' => __( 'Notification to customer with verification code', 'bookly' ),
-                    'subject' => __( 'Bookly verification code', 'bookly' ),
+                    'name' => __( 'Notification to customer with verification code', 'bookly-responsive-appointment-booking-tool' ),
+                    'subject' => __( 'Bookly verification code', 'bookly-responsive-appointment-booking-tool' ),
                     'message' => '{verification_code}',
                     'active' => 1,
                     'to_customer' => 1,
@@ -1008,7 +1017,7 @@ class Updater extends Base\Updater
                 array(
                     'gateway' => 'sms',
                     'type' => 'verify_phone',
-                    'name' => __( 'Notification to customer with verification code', 'bookly' ),
+                    'name' => __( 'Notification to customer with verification code', 'bookly-responsive-appointment-booking-tool' ),
                     'message' => '{verification_code}',
                     'active' => 1,
                     'to_customer' => 1,
@@ -1021,7 +1030,7 @@ class Updater extends Base\Updater
     function update_19_8()
     {
         $this->addL10nOptions( array(
-            'bookly_l10n_email_in_use' => __( 'This email is already in use', 'bookly' ),
+            'bookly_l10n_email_in_use' => __( 'This email is already in use', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         $this->alterTables( array(
@@ -1072,7 +1081,7 @@ class Updater extends Base\Updater
             ),
         ) );
         $this->addL10nOptions( array(
-            'bookly_l10n_step_done_button_start_over' => __( 'Start over', 'bookly' ),
+            'bookly_l10n_step_done_button_start_over' => __( 'Start over', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         add_option( 'bookly_app_show_start_over', '0' );
@@ -1210,7 +1219,7 @@ class Updater extends Base\Updater
     function update_18_6()
     {
         $this->addL10nOptions( array(
-            'bookly_l10n_label_pay_cloud_stripe' => __( 'I will pay now with Credit Card', 'bookly' ),
+            'bookly_l10n_label_pay_cloud_stripe' => __( 'I will pay now with Credit Card', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         add_option( 'bookly_cloud_stripe_enabled', '0' );
@@ -1435,26 +1444,26 @@ class Updater extends Base\Updater
         $default_settings = json_decode( '{"status":"any","option":2,"services":{"any":"any","ids":[]},"offset_hours":2,"perform":"before","at_hour":9,"before_at_hour":18,"offset_before_hours":-24,"offset_bidirectional_hours":0}', true );
         $notifications_table = $this->getTableName( 'bookly_notifications' );
         $notifications = array(
-            'appointment_start_time' => array( 'type' => 'appointment_reminder', 'name' => __( 'Custom notification', 'bookly' ) . ': ' . __( 'Appointment reminder', 'bookly' ) ),
-            'ca_created' => array( 'type' => 'new_booking', 'name' => __( 'Custom notification', 'bookly' ) . ': ' . __( 'New booking', 'bookly' ) ),
-            'ca_status_changed' => array( 'type' => 'ca_status_changed', 'name' => __( 'Custom notification', 'bookly' ) . ': ' . __( 'Notification about customer\'s appointment status change', 'bookly' ) ),
-            'client_approved_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to customer about approved appointment', 'bookly' ) ),
-            'client_birthday_greeting' => array( 'type' => 'customer_birthday', 'name' => __( 'Customer birthday greeting (requires cron setup)', 'bookly' ) ),
-            'client_cancelled_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to customer about cancelled appointment', 'bookly' ) ),
-            'client_follow_up' => array( 'type' => 'appointment_reminder', 'name' => __( 'Follow-up message in the same day after appointment (requires cron setup)', 'bookly' ) ),
-            'client_pending_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to customer about pending appointment', 'bookly' ) ),
-            'client_rejected_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to customer about rejected appointment', 'bookly' ) ),
-            'client_reminder' => array( 'type' => 'appointment_reminder', 'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly' ) ),
-            'client_reminder_1st' => array( 'type' => 'appointment_reminder', 'name' => __( '1st reminder to customer about upcoming appointment (requires cron setup)', 'bookly' ) ),
-            'client_reminder_2nd' => array( 'type' => 'appointment_reminder', 'name' => __( '2nd reminder to customer about upcoming appointment (requires cron setup)', 'bookly' ) ),
-            'client_reminder_3rd' => array( 'type' => 'appointment_reminder', 'name' => __( '3rd reminder to customer about upcoming appointment (requires cron setup)', 'bookly' ) ),
-            'last_appointment' => array( 'type' => 'last_appointment', 'name' => __( 'Custom notification', 'bookly' ) . ': ' . __( 'Last client\'s appointment', 'bookly' ) ),
-            'staff_agenda' => array( 'type' => 'staff_day_agenda', 'name' => __( 'Evening notification with the next day agenda to staff member (requires cron setup)', 'bookly' ) ),
-            'staff_approved_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to staff member about approved appointment', 'bookly' ) ),
-            'staff_cancelled_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to staff member about cancelled appointment', 'bookly' ) ),
-            'staff_day_agenda' => array( 'type' => 'staff_day_agenda', 'name' => __( 'Custom notification', 'bookly' ) . ': ' . __( 'Full day agenda', 'bookly' ) ),
-            'staff_pending_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to staff member about pending appointment', 'bookly' ) ),
-            'staff_rejected_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to staff member about rejected appointment', 'bookly' ) ),
+            'appointment_start_time' => array( 'type' => 'appointment_reminder', 'name' => __( 'Custom notification', 'bookly-responsive-appointment-booking-tool' ) . ': ' . __( 'Appointment reminder', 'bookly-responsive-appointment-booking-tool' ) ),
+            'ca_created' => array( 'type' => 'new_booking', 'name' => __( 'Custom notification', 'bookly-responsive-appointment-booking-tool' ) . ': ' . __( 'New booking', 'bookly-responsive-appointment-booking-tool' ) ),
+            'ca_status_changed' => array( 'type' => 'ca_status_changed', 'name' => __( 'Custom notification', 'bookly-responsive-appointment-booking-tool' ) . ': ' . __( 'Notification about customer\'s appointment status change', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_approved_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to customer about approved appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_birthday_greeting' => array( 'type' => 'customer_birthday', 'name' => __( 'Customer birthday greeting (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_cancelled_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to customer about cancelled appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_follow_up' => array( 'type' => 'appointment_reminder', 'name' => __( 'Follow-up message in the same day after appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_pending_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to customer about pending appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_rejected_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to customer about rejected appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_reminder' => array( 'type' => 'appointment_reminder', 'name' => __( 'Evening reminder to customer about next day appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_reminder_1st' => array( 'type' => 'appointment_reminder', 'name' => __( '1st reminder to customer about upcoming appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_reminder_2nd' => array( 'type' => 'appointment_reminder', 'name' => __( '2nd reminder to customer about upcoming appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'client_reminder_3rd' => array( 'type' => 'appointment_reminder', 'name' => __( '3rd reminder to customer about upcoming appointment (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'last_appointment' => array( 'type' => 'last_appointment', 'name' => __( 'Custom notification', 'bookly-responsive-appointment-booking-tool' ) . ': ' . __( 'Last client\'s appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_agenda' => array( 'type' => 'staff_day_agenda', 'name' => __( 'Evening notification with the next day agenda to staff member (requires cron setup)', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_approved_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to staff member about approved appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_cancelled_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to staff member about cancelled appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_day_agenda' => array( 'type' => 'staff_day_agenda', 'name' => __( 'Custom notification', 'bookly-responsive-appointment-booking-tool' ) . ': ' . __( 'Full day agenda', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_pending_appointment' => array( 'type' => 'new_booking', 'name' => __( 'Notification to staff member about pending appointment', 'bookly-responsive-appointment-booking-tool' ) ),
+            'staff_rejected_appointment' => array( 'type' => 'ca_status_changed', 'name' => __( 'Notification to staff member about rejected appointment', 'bookly-responsive-appointment-booking-tool' ) ),
         );
 
         // Changes in schema
@@ -1770,8 +1779,8 @@ class Updater extends Base\Updater
         add_option( 'bookly_app_show_email_confirm', '0' );
 
         $this->addL10nOptions( array(
-            'bookly_l10n_label_email_confirm' => __( 'Confirm email', 'bookly' ),
-            'bookly_l10n_email_confirm_not_match' => __( 'Email confirmation doesn\'t match', 'bookly' ),
+            'bookly_l10n_label_email_confirm' => __( 'Confirm email', 'bookly-responsive-appointment-booking-tool' ),
+            'bookly_l10n_email_confirm_not_match' => __( 'Email confirmation doesn\'t match', 'bookly-responsive-appointment-booking-tool' ),
         ) );
     }
 

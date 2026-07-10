@@ -5,15 +5,15 @@ use Bookly\Backend\Components\Controls\Buttons;
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title h5"><?php esc_html_e( 'Are you sure?', 'bookly' ) ?></div>
+                <div class="modal-title h5"><?php esc_html_e( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <p><?php esc_html_e( 'All unsaved changes will be lost.', 'bookly' ) ?></p>
+                <p><?php esc_html_e( 'All unsaved changes will be lost.', 'bookly-responsive-appointment-booking-tool' ) ?></p>
             </div>
             <div class="modal-footer">
                 <?php Buttons::renderSubmit( null, 'bookly-js-save-changes' ) ?>
-                <?php Buttons::render( null, 'btn-danger bookly-js-ignore-changes', __( 'Don\'t save', 'bookly' ) ) ?>
+                <?php Buttons::render( null, 'btn-danger bookly-js-ignore-changes', __( 'Don\'t save', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 <?php Buttons::renderCancel() ?>
             </div>
         </div>

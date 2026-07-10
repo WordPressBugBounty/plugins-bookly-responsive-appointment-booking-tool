@@ -7,14 +7,14 @@ use Bookly\Backend\Components\Controls\Buttons;
         <div class="form-row">
             <div class="mr-3"><i class="fas fa-info-circle fa-2x"></i></div>
             <div class="col">
-                <label for="bookly-subscribe-email"><?php esc_html_e( 'Subscribe to monthly emails about Bookly improvements and new releases.', 'bookly' ) ?></label>
+                <label for="bookly-subscribe-email"><?php esc_html_e( 'Subscribe to monthly emails about Bookly improvements and new releases.', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                 <div class="input-group" style="max-width: 400px;">
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="fas fa-fw fa-envelope"></i></div>
                     </div>
                     <input type="text" id="bookly-subscribe-email" class="form-control"/>
                     <div class="input-group-append">
-                        <?php Buttons::render( 'bookly-subscribe-btn', 'btn-info', __( 'Send', 'bookly' ) ) ?>
+                        <?php Buttons::render( 'bookly-subscribe-btn', 'btn-info', __( 'Send', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                     </div>
                 </div>
             </div>

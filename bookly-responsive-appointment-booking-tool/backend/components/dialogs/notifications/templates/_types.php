@@ -7,9 +7,9 @@ use Bookly\Lib\Cloud;
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-            <label for="notification_type"><?php esc_attr_e( 'Type', 'bookly' ) ?></label>
+            <label for="notification_type"><?php esc_attr_e( 'Type', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <select class="form-control custom-select" name="notification[type]" id="notification_type">
-                <optgroup label="<?php esc_attr_e( 'Instant notifications', 'bookly' ) ?>">
+                <optgroup label="<?php esc_attr_e( 'Instant notifications', 'bookly-responsive-appointment-booking-tool' ) ?>">
                     <?php $self::renderOption( Notification::TYPE_NEW_BOOKING, array( 'customer', 'staff', 'admin', 'custom' ), 'instantly', array( 'ics', 'invoice' ) ) ?>
                     <?php Config::recurringAppointmentsActive() && $self::renderOption( Notification::TYPE_NEW_BOOKING_RECURRING, array( 'customer', 'staff', 'admin', 'custom' ), 'instantly', array( 'ics', 'invoice' ) ) ?>
                     <?php Config::proActive() && $self::renderOption( Notification::TYPE_NEW_BOOKING_COMBINED, array( 'customer', 'custom' ), 'instantly', array( 'ics', 'invoice' ) ) ?>
@@ -29,7 +29,7 @@ use Bookly\Lib\Cloud;
                     <?php $self::renderOption( Notification::TYPE_VERIFY_EMAIL, array( 'customer' ) ) ?>
                 </optgroup>
                 <?php if ( Config::proActive() ) : ?>
-                    <optgroup label="<?php esc_attr_e( 'Scheduled notifications (require cron setup)', 'bookly' ) ?>">
+                    <optgroup label="<?php esc_attr_e( 'Scheduled notifications (require cron setup)', 'bookly-responsive-appointment-booking-tool' ) ?>">
                         <?php $self::renderOption( Notification::TYPE_APPOINTMENT_REMINDER, array( 'customer', 'staff', 'admin', 'custom' ), 'bidirectional full', array( 'ics', 'invoice' ) ) ?>
                         <?php $self::renderOption( Notification::TYPE_LAST_CUSTOMER_APPOINTMENT, array( 'customer', 'staff', 'admin', 'custom' ), 'bidirectional full', array( 'ics' ) ) ?>
                         <?php $self::renderOption( Notification::TYPE_CUSTOMER_BIRTHDAY, array( 'customer', 'custom' ), 'bidirectional at-time' ) ?>
@@ -37,8 +37,8 @@ use Bookly\Lib\Cloud;
                     </optgroup>
                 <?php endif ?>
             </select>
-            <small class="form-text text-muted"><?php esc_html_e( 'Select the type of event at which the notification is sent.', 'bookly' ) ?></small>
-            <small class="form-text text-muted bookly-js-help-block <?php echo Notification::TYPE_NEW_BOOKING_COMBINED ?>"><?php esc_html_e( 'This notification is sent once for a booking made by a customer and includes all cart items.', 'bookly' ) ?></small>
+            <small class="form-text text-muted"><?php esc_html_e( 'Select the type of event at which the notification is sent.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
+            <small class="form-text text-muted bookly-js-help-block <?php echo Notification::TYPE_NEW_BOOKING_COMBINED ?>"><?php esc_html_e( 'This notification is sent once for a booking made by a customer and includes all cart items.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
         </div>
     </div>
 </div>

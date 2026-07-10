@@ -71,11 +71,11 @@ class Appointment
         // Check for errors.
         if ( ! $skip_date ) {
             if ( ! $start_date ) {
-                $response['errors']['time_interval'] = __( 'Start time must not be empty', 'bookly' );
+                $response['errors']['time_interval'] = __( 'Start time must not be empty', 'bookly-responsive-appointment-booking-tool' );
             } elseif ( ! $end_date ) {
-                $response['errors']['time_interval'] = __( 'End time must not be empty', 'bookly' );
+                $response['errors']['time_interval'] = __( 'End time must not be empty', 'bookly-responsive-appointment-booking-tool' );
             } elseif ( $start_date == $end_date ) {
-                $response['errors']['time_interval'] = __( 'End time must not be equal to start time', 'bookly' );
+                $response['errors']['time_interval'] = __( 'End time must not be equal to start time', 'bookly-responsive-appointment-booking-tool' );
             }
         }
 
@@ -434,7 +434,7 @@ class Appointment
                         'end_date' => $appointment->getEndDate(),
                     );
                 } else {
-                    $response['errors'] = array( 'db' => __( 'Could not save appointment in database.', 'bookly' ) );
+                    $response['errors'] = array( 'db' => __( 'Could not save appointment in database.', 'bookly-responsive-appointment-booking-tool' ) );
                 }
             }
         }
@@ -709,7 +709,7 @@ class Appointment
                 foreach ( $customers as $customer ) {
                     if ( $service->appointmentsLimitReached( $customer['id'], array( $start_date ) ) ) {
                         $customer_error = Customer::find( $customer['id'] );
-                        $result['customers_appointments_limit'][] = sprintf( __( '%s has reached the limit of bookings for this service', 'bookly' ), $customer_error->getFullName() );
+                        $result['customers_appointments_limit'][] = sprintf( __( '%s has reached the limit of bookings for this service', 'bookly-responsive-appointment-booking-tool' ), $customer_error->getFullName() );
                     }
                 }
                 $result['customers_appointments_limit'] = array_unique( $result['customers_appointments_limit'] );

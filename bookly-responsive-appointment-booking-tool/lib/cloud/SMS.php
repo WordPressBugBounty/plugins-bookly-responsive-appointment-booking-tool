@@ -60,14 +60,14 @@ class SMS extends Base
 
                             return true;
                         } elseif ( $response['gateway_status'] == 3 ) {
-                            $this->api->addError( __( 'You don\'t have enough Bookly Cloud credits to send this message. Please add funds to your balance and try again.', 'bookly' ) );
+                            $this->api->addError( __( 'You don\'t have enough Bookly Cloud credits to send this message. Please add funds to your balance and try again.', 'bookly-responsive-appointment-booking-tool' ) );
                         } else {
-                            $this->api->addError( __( 'Failed to send SMS.', 'bookly' ) );
+                            $this->api->addError( __( 'Failed to send SMS.', 'bookly-responsive-appointment-booking-tool' ) );
                         }
                     }
                 }
             } else {
-                $this->api->addError( __( 'Phone number is empty.', 'bookly' ) );
+                $this->api->addError( __( 'Phone number is empty.', 'bookly-responsive-appointment-booking-tool' ) );
             }
         }
 
@@ -179,50 +179,50 @@ class SMS extends Base
                     switch ( $item['status'] ) {
                         case 1:
                         case 10:
-                            $item['status'] = __( 'Queued', 'bookly' );
+                            $item['status'] = __( 'Queued', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '$' . $item['charge'];
                             break;
                         case 2:
                         case 16:
-                            $item['status'] = __( 'Error', 'bookly' );
+                            $item['status'] = __( 'Error', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '';
                             break;
                         case 3:
-                            $item['status'] = __( 'Out of credit', 'bookly' );
+                            $item['status'] = __( 'Out of credit', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '';
                             break;
                         case 4:
-                            $item['status'] = __( 'Country out of service', 'bookly' );
+                            $item['status'] = __( 'Country out of service', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '';
                             break;
                         case 5:
-                            $item['status'] = __( 'Blocked', 'bookly' );
+                            $item['status'] = __( 'Blocked', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '';
                             break;
                         case 11:
-                            $item['status'] = __( 'Sending', 'bookly' );
+                            $item['status'] = __( 'Sending', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '$' . $item['charge'];
                             break;
                         case 12:
-                            $item['status'] = __( 'Sent', 'bookly' );
+                            $item['status'] = __( 'Sent', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '$' . $item['charge'];
                             break;
                         case 13:
-                            $item['status'] = __( 'Delivered', 'bookly' );
+                            $item['status'] = __( 'Delivered', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '$' . $item['charge'];
                             break;
                         case 14:
-                            $item['status'] = __( 'Failed', 'bookly' );
+                            $item['status'] = __( 'Failed', 'bookly-responsive-appointment-booking-tool' );
                             if ( $item['charge'] != '' ) {
                                 $item['charge'] = '$' . $item['charge'];
                             }
                             break;
                         case 15:
-                            $item['status'] = __( 'Undelivered', 'bookly' );
+                            $item['status'] = __( 'Undelivered', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '$' . $item['charge'];
                             break;
                         default:
-                            $item['status'] = __( 'Error', 'bookly' );
+                            $item['status'] = __( 'Error', 'bookly-responsive-appointment-booking-tool' );
                             $item['charge'] = '';
                     }
                     $item['resend'] = in_array( $item['id'], $refs );
@@ -303,17 +303,17 @@ class SMS extends Base
                 $item['status_code'] = $item['status'];
                 switch ( $item['status'] ) {
                     case 0:
-                        $item['status'] = __( 'Pending', 'bookly' );
+                        $item['status'] = __( 'Pending', 'bookly-responsive-appointment-booking-tool' );
                         $response['pending'] = $item['name'];
                         break;
                     case 1:
-                        $item['status'] = __( 'Approved', 'bookly' );
+                        $item['status'] = __( 'Approved', 'bookly-responsive-appointment-booking-tool' );
                         break;
                     case 2:
-                        $item['status'] = __( 'Declined', 'bookly' );
+                        $item['status'] = __( 'Declined', 'bookly-responsive-appointment-booking-tool' );
                         break;
                     case 3:
-                        $item['status'] = __( 'Cancelled', 'bookly' );
+                        $item['status'] = __( 'Cancelled', 'bookly-responsive-appointment-booking-tool' );
                         break;
                 }
             }
@@ -436,7 +436,7 @@ class SMS extends Base
     {
         switch ( $error_code ) {
             case 'ERROR_INVALID_SENDER_ID':
-                return __( 'Incorrect sender ID', 'bookly' );
+                return __( 'Incorrect sender ID', 'bookly-responsive-appointment-booking-tool' );
             default:
                 return null;
         }

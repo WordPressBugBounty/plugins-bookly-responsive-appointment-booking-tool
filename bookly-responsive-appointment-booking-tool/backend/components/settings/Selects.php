@@ -56,8 +56,8 @@ class Selects
         if ( empty ( $radios ) ) {
             $radios = array(
                 //value => data
-                0 => array( 'title' => __( 'Disabled', 'bookly' ) ),
-                1 => array( 'title' => __( 'Enabled', 'bookly' ) ),
+                0 => array( 'title' => __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ) ),
+                1 => array( 'title' => __( 'Enabled', 'bookly-responsive-appointment-booking-tool' ) ),
             );
         }
 
@@ -95,8 +95,8 @@ class Selects
         if ( empty ( $options ) ) {
             $options = array(
                 //  value        title              disabled
-                array( 0, __( 'Disabled', 'bookly' ), 0 ),
-                array( 1, __( 'Enabled', 'bookly' ),  0 ),
+                array( 0, __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ), 0 ),
+                array( 1, __( 'Enabled', 'bookly-responsive-appointment-booking-tool' ),  0 ),
             );
         }
 

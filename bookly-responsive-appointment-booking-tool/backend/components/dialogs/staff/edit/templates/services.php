@@ -17,13 +17,13 @@ use Bookly\Lib\Utils\Common;
                             <div class="col-lg-5">
                                 <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input" id="bookly-check-all-entities" type="checkbox"/>
-                                    <label class="custom-control-label" for="bookly-check-all-entities"><?php esc_html_e( 'All services', 'bookly' ) ?></label>
+                                    <label class="custom-control-label" for="bookly-check-all-entities"><?php esc_html_e( 'All services', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                                 </div>
                             </div>
                             <div class="col-lg-7">
                                 <div class="form-row text-muted d-none d-lg-flex">
                                     <div class="col-lg-3 text-center">
-                                        <?php esc_html_e( 'Price', 'bookly' ) ?>
+                                        <?php esc_html_e( 'Price', 'bookly-responsive-appointment-booking-tool' ) ?>
                                     </div>
                                     <?php Proxy\Shared::renderStaffServiceLabels() ?>
                                 </div>
@@ -55,7 +55,7 @@ use Bookly\Lib\Utils\Common;
                                     <div class="col-lg-7">
                                         <div class="form-row">
                                             <div class="col-3">
-                                                <div class="d-lg-none"><?php esc_html_e( 'Price', 'bookly' ) ?></div>
+                                                <div class="d-lg-none"><?php esc_html_e( 'Price', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                                                 <input class="form-control text-right" type="text" <?php disabled( ! array_key_exists( $service->getId(), $services_data ) ) ?>
                                                        name="price[<?php echo esc_attr( $service->getId() ) ?>]"
                                                        value="<?php echo esc_attr( array_key_exists( $service->getId(), $services_data ) ? $services_data[ $service->getId() ]['price'] : $service->getPrice() ) ?>"
@@ -84,7 +84,7 @@ use Bookly\Lib\Utils\Common;
                             <div class="col-lg-7">
                                 <div class="form-row text-muted d-none d-lg-flex">
                                     <div class="col-lg-3 text-center">
-                                        <?php esc_html_e( 'Price', 'bookly' ) ?>
+                                        <?php esc_html_e( 'Price', 'bookly-responsive-appointment-booking-tool' ) ?>
                                     </div>
                                     <?php Proxy\Shared::renderStaffServiceLabels() ?>
                                 </div>
@@ -117,7 +117,7 @@ use Bookly\Lib\Utils\Common;
                                     <div class="col-lg-7">
                                         <div class="form-row">
                                             <div class="col-3">
-                                                <div class="d-lg-none"><?php esc_html_e( 'Price', 'bookly' ) ?></div>
+                                                <div class="d-lg-none"><?php esc_html_e( 'Price', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                                                 <input class="form-control text-right" type="text" <?php disabled( ! array_key_exists( $service->getId(), $services_data ) ) ?>
                                                        name="price[<?php echo esc_attr( $service->getId() ) ?>]"
                                                        value="<?php echo esc_attr( array_key_exists( $service->getId(), $services_data ) ? $services_data[ $service->getId() ]['price'] : $service->getPrice() ) ?>"
@@ -144,11 +144,11 @@ use Bookly\Lib\Utils\Common;
             </div>
         </form>
     <?php else : ?>
-        <h5 class="text-center"><?php esc_html_e( 'No services found. Please add services.', 'bookly' ) ?></h5>
+        <h5 class="text-center"><?php esc_html_e( 'No services found. Please add services.', 'bookly-responsive-appointment-booking-tool' ) ?></h5>
         <p class="text-center">
             <a class="btn btn-xlg btn-success-outline"
                href="<?php echo Common::escAdminUrl( Bookly\Backend\Modules\Services\Page::pageSlug() ) ?>">
-                <?php esc_html_e( 'Add service', 'bookly' ) ?>
+                <?php esc_html_e( 'Add service', 'bookly-responsive-appointment-booking-tool' ) ?>
             </a>
         </p>
     <?php endif ?>

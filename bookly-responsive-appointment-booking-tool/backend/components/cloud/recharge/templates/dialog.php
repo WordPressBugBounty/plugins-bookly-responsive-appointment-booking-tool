@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><?php esc_html_e( 'Account recharge', 'bookly' ) ?></h4>
+                <h4 class="modal-title"><?php esc_html_e( 'Account recharge', 'bookly-responsive-appointment-booking-tool' ) ?></h4>
                 <button type="button" class="close" data-dismiss="bookly-modal"><span>&times;</span></button>
             </div>
             <div class="modal-body">

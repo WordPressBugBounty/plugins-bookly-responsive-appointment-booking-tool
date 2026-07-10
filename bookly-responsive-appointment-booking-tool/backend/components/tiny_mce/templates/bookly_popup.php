@@ -6,7 +6,7 @@
             <tr>
                 <td></td>
                 <td class='wp-core-ui'>
-                    <button class="button button-primary bookly-js-insert-shortcode" type="button"><?php esc_html_e( 'Insert', 'bookly' ) ?></button>
+                    <button class="button button-primary bookly-js-insert-shortcode" type="button"><?php esc_html_e( 'Insert', 'bookly-responsive-appointment-booking-tool' ) ?></button>
                 </td>
             </tr>
         </table>

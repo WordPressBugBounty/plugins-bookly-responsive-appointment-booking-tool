@@ -16,13 +16,11 @@ class Page extends Lib\Base\Component
 
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
-            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/customers.js' => array( 'bookly-backend-globals' ), ),
             'frontend' => array( 'js/intlTelInput.min.js' => array( 'bookly-backend-globals' ) ),
-            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CUSTOMERS );
@@ -30,23 +28,23 @@ class Page extends Lib\Base\Component
         wp_localize_script( 'bookly-customers.js', 'BooklyL10n', array(
             'infoFields' => Lib\Proxy\CustomerInformation::getFieldsWhichMayHaveData() ?: array(),
             'tagsData' => Lib\Proxy\Pro::getTagsData( 'customer' ) ?: array(),
-            'edit' => __( 'Edit', 'bookly' ) . '…',
-            'are_you_sure' => __( 'Are you sure?', 'bookly' ),
+            'edit' => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'are_you_sure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
             'wp_users' => get_users( array( 'fields' => array( 'ID', 'display_name' ), 'orderby' => 'display_name' ) ),
-            'zeroRecords' => __( 'No customers found.', 'bookly' ),
-            'processing' => __( 'Processing', 'bookly' ) . '…',
-            'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'edit_customer' => __( 'Edit customer', 'bookly' ),
-            'new_customer' => __( 'New customer', 'bookly' ) . '…',
-            'create_customer' => __( 'Create customer', 'bookly' ),
-            'save' => __( 'Save', 'bookly' ),
-            'search' => __( 'Quick search by name, email, phone', 'bookly' ) . '…',
-            'download' => __( 'Download', 'bookly' ),
-            'delete' => __( 'Delete', 'bookly' ) . '…',
-            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
-            'merge' => __( 'Merge', 'bookly' ) . '…',
-            'export' => __( 'Export', 'bookly' ) . '…',
-            'import' => __( 'Import', 'bookly' ) . '…',
+            'zeroRecords' => __( 'No customers found.', 'bookly-responsive-appointment-booking-tool' ),
+            'processing' => __( 'Processing', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
+            'edit_customer' => __( 'Edit customer', 'bookly-responsive-appointment-booking-tool' ),
+            'new_customer' => __( 'New customer', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'create_customer' => __( 'Create customer', 'bookly-responsive-appointment-booking-tool' ),
+            'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
+            'search' => __( 'Quick search by name, email, phone', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'download' => __( 'Download', 'bookly-responsive-appointment-booking-tool' ),
+            'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'rowsPerPage' => __( 'Rows per page', 'bookly-responsive-appointment-booking-tool' ),
+            'merge' => __( 'Merge', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'export' => __( 'Export', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'import' => __( 'Import', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'datatables' => $datatables,
             'proEnabled' => Lib\Config::proActive(),
         ) );

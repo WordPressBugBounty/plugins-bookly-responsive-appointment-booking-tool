@@ -144,6 +144,6 @@ class Ajax extends Lib\Base\Ajax
     {
         update_option( 'bookly_app_custom_styles', html_entity_decode( self::parameter( 'custom_css' ) ) );
 
-        wp_send_json_success( array( 'message' => __( 'Your custom CSS was saved. Please refresh the page to see your changes.', 'bookly' ) ) );
+        wp_send_json_success( array( 'message' => __( 'Your custom CSS was saved. Please refresh the page to see your changes.', 'bookly-responsive-appointment-booking-tool' ) ) );
     }
 }

@@ -18,10 +18,10 @@ $accept_pc = isset( $product['accept_pc'] ) && $product['accept_pc'];
                     <?php foreach ( $product['prices'] as $price ) : ?>
                         <li class="bookly-dropdown-item" data-product-price-id="<?php echo esc_attr( $price['id'] ) ?>">
                             <?php if ( in_array( 'best_offer', $price['tags'] ) ) : ?>
-                                <span class="bookly-js-best-offer badge badge-warning"><small><strong><?php esc_html_e( 'best offer', 'bookly' ) ?></strong></small></span>
+                                <span class="bookly-js-best-offer badge badge-warning"><small><strong><?php esc_html_e( 'best offer', 'bookly-responsive-appointment-booking-tool' ) ?></strong></small></span>
                             <?php endif ?>
                             <?php if ( in_array( 'users_choice', $price['tags'] ) ) : ?>
-                                <span class="bookly-js-users-choice badge badge-danger"><small><strong><?php esc_html_e( 'users choice', 'bookly' ) ?></strong></small></span>
+                                <span class="bookly-js-users-choice badge badge-danger"><small><strong><?php esc_html_e( 'users choice', 'bookly-responsive-appointment-booking-tool' ) ?></strong></small></span>
                             <?php endif ?>
                             <span class="text-wrap"><?php echo Common::stripScripts( $price['caption'] ) ?></span>
                         </li>
@@ -29,19 +29,19 @@ $accept_pc = isset( $product['accept_pc'] ) && $product['accept_pc'];
                 <?php endif ?>
                 <?php if ( $accept_pc ) : ?>
                     <li class="bookly-dropdown-item" data-product-price-id="0" data-type="purchase_code">
-                        <?php esc_html_e( 'Purchase code', 'bookly' ) ?>
+                        <?php esc_html_e( 'Purchase code', 'bookly-responsive-appointment-booking-tool' ) ?>
                     </li>
                 <?php endif ?>
             </div>
         </div>
         <?php if ( $accept_pc ) : ?>
             <div class="bookly-js-product-purchase-code-wrap mt-2" style="display:none;">
-                <input type="text" class="form-control" placeholder="<?php echo esc_attr__( 'Purchase code', 'bookly' ) ?>"/>
+                <input type="text" class="form-control" placeholder="<?php echo esc_attr__( 'Purchase code', 'bookly-responsive-appointment-booking-tool' ) ?>"/>
             </div>
         <?php endif ?>
     <?php endif ?>
     <?php if ( isset ( $product['next_billing_date'] ) ) : ?>
-        <div class="mt-2"><?php echo isset ( $product['cancel_on_renewal'] ) && ! $product['cancel_on_renewal'] ? esc_html__( 'Next billing date', 'bookly' ) : esc_html__( 'Deactivation date', 'bookly' ) ?>: <?php echo Common::stripScripts( $product['next_billing_date'] ) ?></div>
+        <div class="mt-2"><?php echo isset ( $product['cancel_on_renewal'] ) && ! $product['cancel_on_renewal'] ? esc_html__( 'Next billing date', 'bookly-responsive-appointment-booking-tool' ) : esc_html__( 'Deactivation date', 'bookly-responsive-appointment-booking-tool' ) ?>: <?php echo Common::stripScripts( $product['next_billing_date'] ) ?></div>
     <?php endif ?>
     <?php if ( isset ( $product['usage'] ) ) : ?>
         <div class="small"><?php echo esc_html( $product['usage'] ) ?></div>

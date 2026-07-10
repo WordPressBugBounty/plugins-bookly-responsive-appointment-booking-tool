@@ -23,100 +23,100 @@ class Codes
         $this->type = $type;
         $this->codes = array(
             'appointment' => array(
-                'appointment_id' => array( 'description' => __( 'Appointment ID', 'bookly' ) ),
-                'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true ),
-                'appointment_end_date' => array( 'description' => __( 'End date of appointment', 'bookly' ), 'if' => true ),
-                'appointment_end_time' => array( 'description' => __( 'End time of appointment', 'bookly' ), 'if' => true ),
-                'appointment_notes' => array( 'description' => __( 'Customer notes for appointment', 'bookly' ), 'if' => true ),
-                'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly' ), 'if' => true ),
-                'booking_number' => array( 'description' => __( 'Booking number', 'bookly' ) ),
-                'internal_note' => array( 'description' => __( 'Internal note', 'bookly' ) ),
-                'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly' ) ),
+                'appointment_id' => array( 'description' => __( 'Appointment ID', 'bookly-responsive-appointment-booking-tool' ) ),
+                'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'appointment_end_date' => array( 'description' => __( 'End date of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'appointment_end_time' => array( 'description' => __( 'End time of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'appointment_notes' => array( 'description' => __( 'Customer notes for appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'appointment_time' => array( 'description' => __( 'Time of appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'booking_number' => array( 'description' => __( 'Booking number', 'bookly-responsive-appointment-booking-tool' ) ),
+                'internal_note' => array( 'description' => __( 'Internal note', 'bookly-responsive-appointment-booking-tool' ) ),
+                'total_duration' => array( 'description' => __( 'Duration of appointment', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'cart' => array(
-                'cart_info' => array( 'description' => __( 'Cart information', 'bookly' ) ),
-                'cart_info_c' => array( 'description' => __( 'Cart information with cancel', 'bookly' ) ),
-                'cancel_all_combined_appointments' => array( 'description' => __( 'Cancel all appointments in chain link', 'bookly' ) ),
-                'cancel_all_combined_appointments_url' => array( 'description' => __( 'URL of cancel all appointments link (to use inside <a> tag)', 'bookly' ) ),
-                'appointment_notes' => array( 'description' => __( 'Customer notes for appointment', 'bookly' ), 'if' => true ),
+                'cart_info' => array( 'description' => __( 'Cart information', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cart_info_c' => array( 'description' => __( 'Cart information with cancel', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancel_all_combined_appointments' => array( 'description' => __( 'Cancel all appointments in chain link', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancel_all_combined_appointments_url' => array( 'description' => __( 'URL of cancel all appointments link (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'appointment_notes' => array( 'description' => __( 'Customer notes for appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'category' => array(
-                'category_name' => array( 'description' => __( 'Name of category', 'bookly' ), 'if' => true ),
-                'category_info' => array( 'description' => __( 'Info of category', 'bookly' ), 'if' => true ),
+                'category_name' => array( 'description' => __( 'Name of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'category_info' => array( 'description' => __( 'Info of category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'company' => array(
-                'company_address' => array( 'description' => __( 'Address of company', 'bookly' ), 'if' => true ),
-                'company_name' => array( 'description' => __( 'Name of company', 'bookly' ), 'if' => true ),
-                'company_phone' => array( 'description' => __( 'Company phone', 'bookly' ), 'if' => true ),
-                'company_website' => array( 'description' => __( 'Company web-site address', 'bookly' ), 'if' => true ),
+                'company_address' => array( 'description' => __( 'Address of company', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'company_name' => array( 'description' => __( 'Name of company', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'company_phone' => array( 'description' => __( 'Company phone', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'company_website' => array( 'description' => __( 'Company web-site address', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'customer' => array(
-                'client_address' => array( 'description' => __( 'Address of client', 'bookly' ), 'if' => true ),
-                'client_email' => array( 'description' => __( 'Email of client', 'bookly' ), 'if' => true ),
-                'client_first_name' => array( 'description' => __( 'First name of client', 'bookly' ), 'if' => true ),
-                'client_last_name' => array( 'description' => __( 'Last name of client', 'bookly' ), 'if' => true ),
-                'client_name' => array( 'description' => __( 'Full name of client', 'bookly' ), 'if' => true ),
-                'client_note' => array( 'description' => __( 'Note of client', 'bookly' ), 'if' => true ),
-                'client_phone' => array( 'description' => __( 'Phone of client', 'bookly' ), 'if' => true ),
+                'client_address' => array( 'description' => __( 'Address of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_email' => array( 'description' => __( 'Email of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_first_name' => array( 'description' => __( 'First name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_last_name' => array( 'description' => __( 'Last name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_name' => array( 'description' => __( 'Full name of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_note' => array( 'description' => __( 'Note of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'client_phone' => array( 'description' => __( 'Phone of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'customer_timezone' => array(
-                'client_timezone' => array( 'description' => __( 'Time zone of client', 'bookly' ), 'if' => true ),
+                'client_timezone' => array( 'description' => __( 'Time zone of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'customer_locale' => array(
-                'client_locale' => array( 'description' => __( 'Locale of client', 'bookly' ), 'if' => true ),
+                'client_locale' => array( 'description' => __( 'Locale of client', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'customer_appointment' => array(
-                'approve_appointment_url' => array( 'description' => __( 'URL of approve appointment link (to use inside <a> tag)', 'bookly' ) ),
-                'cancel_appointment_confirm_url' => array( 'description' => __( 'URL of cancel appointment link with confirmation (to use inside <a> tag)', 'bookly' ) ),
-                'cancel_appointment_url' => array( 'description' => __( 'URL of cancel appointment link (to use inside <a> tag)', 'bookly' ) ),
-                'cancellation_reason' => array( 'description' => __( 'Reason mentioned while cancelling appointment', 'bookly' ), 'if' => true ),
-                'google_calendar_url' => array( 'description' => __( 'URL for adding event to Google Calendar (to use inside <a> tag)', 'bookly' ) ),
-                'reject_appointment_url' => array( 'description' => __( 'URL of reject appointment link (to use inside <a> tag)', 'bookly' ) ),
-                'cancellation_time_limit' => array( 'description' => __( 'Time limit to which appointments can be cancelled ', 'bookly' ) ),
+                'approve_appointment_url' => array( 'description' => __( 'URL of approve appointment link (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancel_appointment_confirm_url' => array( 'description' => __( 'URL of cancel appointment link with confirmation (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancel_appointment_url' => array( 'description' => __( 'URL of cancel appointment link (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancellation_reason' => array( 'description' => __( 'Reason mentioned while cancelling appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'google_calendar_url' => array( 'description' => __( 'URL for adding event to Google Calendar (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'reject_appointment_url' => array( 'description' => __( 'URL of reject appointment link (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancellation_time_limit' => array( 'description' => __( 'Time limit to which appointments can be cancelled ', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'payment' => array(
-                'payment_type' => array( 'description' => __( 'Payment type', 'bookly' ) ),
-                'payment_status' => array( 'description' => __( 'Payment status', 'bookly' ) ),
+                'payment_type' => array( 'description' => __( 'Payment type', 'bookly-responsive-appointment-booking-tool' ) ),
+                'payment_status' => array( 'description' => __( 'Payment status', 'bookly-responsive-appointment-booking-tool' ) ),
                 'total_price' => array( 'description' => __( 'Total price of booking (sum of all cart items after applying coupon)' ) ),
             ),
             'service' => array(
-                'service_duration' => array( 'description' => __( 'Duration of service', 'bookly' ) ),
-                'service_info' => array( 'description' => __( 'Info of service', 'bookly' ), 'if' => true ),
-                'service_name' => array( 'description' => __( 'Name of service', 'bookly' ) ),
-                'service_price' => array( 'description' => __( 'Price of service', 'bookly' ) ),
+                'service_duration' => array( 'description' => __( 'Duration of service', 'bookly-responsive-appointment-booking-tool' ) ),
+                'service_info' => array( 'description' => __( 'Info of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'service_name' => array( 'description' => __( 'Name of service', 'bookly-responsive-appointment-booking-tool' ) ),
+                'service_price' => array( 'description' => __( 'Price of service', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'staff' => array(
-                'staff_email' => array( 'description' => __( 'Email of staff', 'bookly' ), 'if' => true ),
-                'staff_info' => array( 'description' => __( 'Info of staff', 'bookly' ), 'if' => true ),
-                'staff_name' => array( 'description' => __( 'Name of staff', 'bookly' ) ),
-                'staff_phone' => array( 'description' => __( 'Phone of staff', 'bookly' ), 'if' => true ),
+                'staff_email' => array( 'description' => __( 'Email of staff', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'staff_info' => array( 'description' => __( 'Info of staff', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
+                'staff_name' => array( 'description' => __( 'Name of staff', 'bookly-responsive-appointment-booking-tool' ) ),
+                'staff_phone' => array( 'description' => __( 'Phone of staff', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
             ),
             'staff_agenda' => array(
-                'agenda_date' => array( 'description' => __( 'Agenda date', 'bookly' ) ),
-                'next_day_agenda' => array( 'description' => __( 'Staff agenda for next day', 'bookly' ) ),
-                'tomorrow_date' => array( 'description' => __( 'Date of next day', 'bookly' ) ),
+                'agenda_date' => array( 'description' => __( 'Agenda date', 'bookly-responsive-appointment-booking-tool' ) ),
+                'next_day_agenda' => array( 'description' => __( 'Staff agenda for next day', 'bookly-responsive-appointment-booking-tool' ) ),
+                'tomorrow_date' => array( 'description' => __( 'Date of next day', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'user_credentials' => array(
-                'new_password' => array( 'description' => __( 'Customer new password', 'bookly' ) ),
-                'new_username' => array( 'description' => __( 'Customer new username', 'bookly' ) ),
-                'site_address' => array( 'description' => __( 'Site address', 'bookly' ) ),
+                'new_password' => array( 'description' => __( 'Customer new password', 'bookly-responsive-appointment-booking-tool' ) ),
+                'new_username' => array( 'description' => __( 'Customer new username', 'bookly-responsive-appointment-booking-tool' ) ),
+                'site_address' => array( 'description' => __( 'Site address', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'verification_code' => array(
-                'verification_code' => array( 'description' => __( 'Verification code', 'bookly' ) ),
+                'verification_code' => array( 'description' => __( 'Verification code', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'mobile_staff_cabinet' => array(
-                'access_token' => array( 'description' => __( 'Access token', 'bookly' ) ),
-                'access_token_link' => array( 'description' => __( 'Access token link for quick authorization in the mobile app', 'bookly' ) ),
+                'access_token' => array( 'description' => __( 'Access token', 'bookly-responsive-appointment-booking-tool' ) ),
+                'access_token_link' => array( 'description' => __( 'Access token link for quick authorization in the mobile app', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'order' => array(
-                'order_id' => array( 'description' => __( 'Order ID', 'bookly' ) ),
+                'order_id' => array( 'description' => __( 'Order ID', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
         );
         $this->codes['appointments_list'] = array(
             'appointments' => array(
                 'description' => array(
-                    __( 'Loop over appointments list', 'bookly' ),
-                    __( 'Loop over appointments list with delimiter', 'bookly' ),
+                    __( 'Loop over appointments list', 'bookly-responsive-appointment-booking-tool' ),
+                    __( 'Loop over appointments list with delimiter', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'loop' => array(
                     'item' => 'appointment',
@@ -133,11 +133,11 @@ class Codes
 
         if ( $type === 'email' ) {
             // Only email.
-            $this->codes['category']['category_image'] = array( 'description' => __( 'Image of service category', 'bookly' ), 'if' => true );
-            $this->codes['company']['company_logo'] = array( 'description' => __( 'Company logo', 'bookly' ), 'if' => true );
-            $this->codes['customer_appointment']['cancel_appointment'] = array( 'description' => __( 'Cancel appointment link', 'bookly' ) );
-            $this->codes['service']['service_image'] = array( 'description' => __( 'Image of service', 'bookly' ), 'if' => true );
-            $this->codes['staff']['staff_photo'] = array( 'description' => __( 'Photo of staff', 'bookly' ), 'if' => true );
+            $this->codes['category']['category_image'] = array( 'description' => __( 'Image of service category', 'bookly-responsive-appointment-booking-tool' ), 'if' => true );
+            $this->codes['company']['company_logo'] = array( 'description' => __( 'Company logo', 'bookly-responsive-appointment-booking-tool' ), 'if' => true );
+            $this->codes['customer_appointment']['cancel_appointment'] = array( 'description' => __( 'Cancel appointment link', 'bookly-responsive-appointment-booking-tool' ) );
+            $this->codes['service']['service_image'] = array( 'description' => __( 'Image of service', 'bookly-responsive-appointment-booking-tool' ), 'if' => true );
+            $this->codes['staff']['staff_photo'] = array( 'description' => __( 'Photo of staff', 'bookly-responsive-appointment-booking-tool' ), 'if' => true );
         }
 
         // Add codes from add-ons.

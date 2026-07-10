@@ -3,7 +3,7 @@ use Bookly\Backend\Components\Ace;
 ?>
 <div class="row mt-3">
     <div class="col-md-12">
-        <div class="form-group"><label for="bookly-js-message"><?php esc_html_e( 'Body', 'bookly' ) ?></label>
+        <div class="form-group"><label for="bookly-js-message"><?php esc_html_e( 'Body', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <?php Ace\Editor::render( 'bookly-cloud-sms' ) ?>
             <input type="hidden" name="notification[message]" />
         </div>

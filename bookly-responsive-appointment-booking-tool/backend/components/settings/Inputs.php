@@ -54,7 +54,7 @@ class Inputs
 
             return str_replace( array( '-', '_' ), array( ' ', ' ' ), ucfirst( $value ) );
         };
-        $reorder = esc_attr_x( 'Reorder', 'order of elements', 'bookly' );
+        $reorder = esc_attr_x( 'Reorder', 'order of elements', 'bookly-responsive-appointment-booking-tool' );
         $getItem = function ( $value, $title ) use ( $option_name, $reorder ) {
             return strtr(
                 '<div>
@@ -196,7 +196,7 @@ class Inputs
                 '{name}' => esc_attr( $option_name ),
                 '{value}' => esc_textarea( get_option( $option_name ) ),
                 '{rows}' => $rows,
-                '{placeholder}' => esc_attr__( 'Enter a value', 'bookly' ),
+                '{placeholder}' => esc_attr__( 'Enter a value', 'bookly-responsive-appointment-booking-tool' ),
             )
         );
 
@@ -263,8 +263,8 @@ class Inputs
             array(
                 '{name}' => esc_attr( $name ),
                 '{value}' => esc_attr( $value ),
-                '{title}' => esc_attr( __( 'Copy to clipboard', 'bookly' ) ),
-                '{copied}' => esc_attr( __( 'copied', 'bookly' ) ),
+                '{title}' => esc_attr( __( 'Copy to clipboard', 'bookly-responsive-appointment-booking-tool' ) ),
+                '{copied}' => esc_attr( __( 'copied', 'bookly-responsive-appointment-booking-tool' ) ),
             )
         );
 

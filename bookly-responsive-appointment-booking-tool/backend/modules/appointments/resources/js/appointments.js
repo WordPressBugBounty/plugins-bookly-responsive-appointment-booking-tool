@@ -1,6 +1,7 @@
 jQuery(function ($) {
     'use strict';
-    const { today, getLocalTimeZone, parseDate } = window.BooklyDatatables.calendarDate;
+    const D = window.BooklyDatatables;
+    const { today, getLocalTimeZone } = D.calendarDate;
 
     let
         $appointmentsList = $('#bookly-appointments-datatables'),
@@ -32,12 +33,12 @@ jQuery(function ($) {
     const defaultBadgeClass = 'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200';
 
     /**
-     * Filter state — каждый bind через FilterRenderer обновляет соответствующую переменную
-     * через onChange; ajax.data() их сериализует в backend POST.
+     * Filter state — each FilterRenderer bind updates its variable through onChange;
+     * ajax.data() serializes them into the backend POST.
      *
-     * Date values: undefined (any), 'tasks' (special), либо { start: CalendarDate, end: CalendarDate }.
-     * Select values: '' или строковый id.
-     * Status: массив значений (пустой = "any", полный = "any" — backend трактует одинаково).
+     * Date values: undefined (any), 'tasks' (special), or { start: CalendarDate, end: CalendarDate }.
+     * Select values: '' or a string id.
+     * Status: array of values (empty = "any", full = "any" — the backend treats both the same).
      */
     let dateValue = undefined;
     let createdDateValue = undefined;
@@ -49,67 +50,29 @@ jQuery(function ($) {
 
     const tz = getLocalTimeZone();
     const t = today(tz);
-    const startOfMonth = (d) => d.set({ day: 1 });
-    const endOfMonth   = (d) => d.set({ day: 1 }).add({ months: 1 }).subtract({ days: 1 });
-    // ISO-неделя (Mon..Sun). 0=Sun → 6, 1=Mon → 0, ...
-    function startOfWeek(d) {
-        const dow = d.toDate(tz).getDay();
-        const offset = (dow + 6) % 7;
-        return d.subtract({ days: offset });
-    }
-    const endOfWeek   = (d) => startOfWeek(d).add({ days: 6 });
-    const startOfYear = (d) => d.set({ month: 1, day: 1 });
-    const endOfYear   = (d) => d.set({ month: 12, day: 31 });
 
     /**
-     * Date presets — future-leaning набор для appointment date (вперёд + past-хвост).
-     * Tasks-режим (если активен) — special preset с маркером range = { tasks: true },
-     * его перехватываем в serialize.
+     * Appointment date — future-leaning set (the shared catalogue default).
+     * Tasks mode (when enabled) is added from OUTSIDE as an extra preset carrying
+     * the marker range = { tasks: true }; intercepted in serializeDate.
      */
-    const datePresets = [
-        { label: BooklyL10n.dateRange.today,      range: { start: t,                                        end: t                                            } },
-        { label: BooklyL10n.dateRange.tomorrow,   range: { start: t.add({ days: 1 }),                       end: t.add({ days: 1 })                           } },
-        { label: BooklyL10n.dateRange.thisWeek,   range: { start: startOfWeek(t),                           end: endOfWeek(t)                                 } },
-        { label: BooklyL10n.dateRange.next_7,     range: { start: t,                                        end: t.add({ days: 7 })                           } },
-        { label: BooklyL10n.dateRange.next_30,    range: { start: t,                                        end: t.add({ days: 30 })                          } },
-        { label: BooklyL10n.dateRange.thisMonth,  range: { start: startOfMonth(t),                          end: endOfMonth(t)                                } },
-        { label: BooklyL10n.dateRange.nextMonth,  range: { start: startOfMonth(t.add({ months: 1 })),       end: endOfMonth(t.add({ months: 1 }))             } },
-        { label: BooklyL10n.dateRange.thisYear,   range: { start: startOfYear(t),                           end: endOfYear(t)                                 } },
-        // past-хвост для отчётности
-        { label: BooklyL10n.dateRange.yesterday,  range: { start: t.subtract({ days: 1 }),                  end: t.subtract({ days: 1 })                      } },
-        { label: BooklyL10n.dateRange.last_7,     range: { start: t.subtract({ days: 7 }),                  end: t                                            } },
-        { label: BooklyL10n.dateRange.last_30,    range: { start: t.subtract({ days: 30 }),                 end: t                                            } },
-        { label: BooklyL10n.dateRange.lastMonth,  range: { start: startOfMonth(t.subtract({ months: 1 })),  end: endOfMonth(t.subtract({ months: 1 }))        } },
-    ];
-    if (BooklyL10n.tasks.enabled) {
-        datePresets.push({
-            label: BooklyL10n.tasks.title,
-            range: { tasks: true, start: t, end: t.add({ days: 1 }) },
-        });
-    }
+    const datePresets = D.datePresets({
+        labels: BooklyL10n.dateRange,
+        extra: BooklyL10n.tasks.enabled
+            ? [{ label: BooklyL10n.tasks.title, range: { tasks: true, start: t, end: t.add({ days: 1 }) }, hideCalendar: true }]
+            : [],
+    });
 
-    /**
-     * Past-only набор для creation date — даты создания осмысленны только в прошлом.
-     */
-    const createdDatePresets = [
-        { label: BooklyL10n.dateRange.today,       range: { start: t,                                        end: t                                           } },
-        { label: BooklyL10n.dateRange.yesterday,   range: { start: t.subtract({ days: 1 }),                  end: t.subtract({ days: 1 })                     } },
-        { label: BooklyL10n.dateRange.last_7,      range: { start: t.subtract({ days: 7 }),                  end: t                                           } },
-        { label: BooklyL10n.dateRange.last_30,     range: { start: t.subtract({ days: 30 }),                 end: t                                           } },
-        { label: BooklyL10n.dateRange.last_90,     range: { start: t.subtract({ days: 90 }),                 end: t                                           } },
-        { label: BooklyL10n.dateRange.thisWeek,    range: { start: startOfWeek(t),                           end: endOfWeek(t)                                } },
-        { label: BooklyL10n.dateRange.thisMonth,   range: { start: startOfMonth(t),                          end: endOfMonth(t)                               } },
-        { label: BooklyL10n.dateRange.lastMonth,   range: { start: startOfMonth(t.subtract({ months: 1 })),  end: endOfMonth(t.subtract({ months: 1 }))       } },
-        { label: BooklyL10n.dateRange.yearToDate,  range: { start: startOfYear(t),                           end: t                                           } },
-    ];
+    // Creation date — past-only set (creation dates only make sense in the past).
+    const createdDatePresets = D.datePresets({
+        keys: ['today', 'yesterday', 'thisWeek', 'last_7', 'last_30', 'last_90', 'thisMonth', 'lastMonth', 'yearToDate'],
+        labels: BooklyL10n.dateRange,
+    });
 
-    const ymd = (d) => d.year + '-' + String(d.month).padStart(2, '0') + '-' + String(d.day).padStart(2, '0');
-
+    // Tasks mode serializes to the special 'null' marker; everything else is a plain range.
     function serializeDate(value) {
-        if (!value) return 'any';
-        if (value.tasks) return 'null';
-        if (value.start && value.end) return ymd(value.start) + ' - ' + ymd(value.end);
-        return 'any';
+        if (value && value.tasks) return 'null';
+        return D.serializeRange(value);
     }
 
     /**
@@ -122,23 +85,12 @@ jQuery(function ($) {
             const preset = datePresets.find(p => p.label === label);
             if (preset) return preset.range;
         }
-        if (typeof saved === 'string' && saved !== 'any' && saved !== 'null') {
-            const parts = saved.split(' - ');
-            if (parts.length === 2) {
-                try { return { start: parseDate(parts[0].trim()), end: parseDate(parts[1].trim()) }; }
-                catch (e) { return undefined; }
-            }
-            // URL-hash format from PHP: YYYY-MM-DD-YYYY-MM-DD (no spaces around dash).
-            if (saved.length === 21 && saved[10] === '-') {
-                try { return { start: parseDate(saved.slice(0, 10)), end: parseDate(saved.slice(11)) }; }
-                catch (e) { return undefined; }
-            }
-        }
         if (saved === 'null' && BooklyL10n.tasks.enabled) {
             const tasksPreset = datePresets.find(p => p.range && p.range.tasks);
             if (tasksPreset) return tasksPreset.range;
         }
-        return undefined;
+        // Plain range string ('a - b' or the URL-hash form) — delegated to the shared parser.
+        return D.parseRange(saved);
     }
 
     if (urlParts.length > 1) {
@@ -176,7 +128,7 @@ jQuery(function ($) {
         if (Array.isArray(savedFilter.status) && savedFilter.status.length > 0) {
             statusValue = savedFilter.status;
         }
-        // Default appointment date — this month, если ничего не задано.
+        // Default appointment date — this month, when nothing is set.
         if (dateValue === undefined && !savedFilter.date) {
             dateValue = datePresets.find(p => p.label === BooklyL10n.dateRange.thisMonth)?.range;
         }
@@ -188,6 +140,11 @@ jQuery(function ($) {
      * Init table columns.
      */
     const table = 'appointments';
+
+    // Backend (Ajax::getAppointments) searches only by a.id (ID) / ca.id (No.), customer
+    // full_name/phone/email, staff full_name and service title — so the quick-search
+    // highlight must be limited to those columns. All other columns are non-searchable.
+    const searchableColumns = ['id', 'no', 'customer_full_name', 'customer_phone', 'customer_email', 'staff_name', 'service_title'];
 
     $.each(BooklyL10n.datatables.appointments.settings.columns, function (column, show) {
         switch (column) {
@@ -339,6 +296,7 @@ jQuery(function ($) {
         columns[columns.length - 1].title = BooklyL10n.datatables[table].titles[column] || column;
         columns[columns.length - 1].name = column;
         columns[columns.length - 1].show = show;
+        columns[columns.length - 1].searchable = searchableColumns.indexOf(column) !== -1;
     });
 
     const filterOpts = BooklyL10n.filterOptions;
@@ -467,6 +425,7 @@ jQuery(function ($) {
     }
 
     let options = {
+        summary: true,
         ajax: {
             url: ajaxurl,
             method: 'POST',

@@ -13,7 +13,7 @@ use Bookly\Lib\Config;
 <div class="form-row mt-3">
     <div class="col-auto">
         <?php Inputs::renderCsrf() ?>
-        <?php Buttons::renderDefault( 'bookly-js-test-email-notifications', null, __( 'Test email notifications', 'bookly' ), array(), true ) ?>
+        <?php Buttons::renderDefault( 'bookly-js-test-email-notifications', null, __( 'Test email notifications', 'bookly-responsive-appointment-booking-tool' ), array(), true ) ?>
     </div>
 </div>
 <?php Config::proActive() && Notices\Cron\Notice::render() ?>

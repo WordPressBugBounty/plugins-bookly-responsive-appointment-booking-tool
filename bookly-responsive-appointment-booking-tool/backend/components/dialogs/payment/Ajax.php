@@ -135,7 +135,7 @@ class Ajax extends Lib\Base\Ajax
 
         $payment_title = Lib\Utils\Price::format( $payment->getPaid() );
         if ( $payment->getPaid() != $payment->getTotal() ) {
-            $payment_title = sprintf( __( '%s of %s', 'bookly' ), $payment_title, Lib\Utils\Price::format( $payment->getTotal() ) );
+            $payment_title = sprintf( __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ), $payment_title, Lib\Utils\Price::format( $payment->getTotal() ) );
         }
         $payment_title .= sprintf(
             ' %s <span%s>%s</span>',
@@ -185,7 +185,7 @@ class Ajax extends Lib\Base\Ajax
 
         $payment_title = Lib\Utils\Price::format( $payment->getPaid() );
         if ( $payment->getPaid() != $payment->getTotal() ) {
-            $payment_title = sprintf( __( '%s of %s', 'bookly' ), $payment_title, Lib\Utils\Price::format( $payment->getTotal() ) );
+            $payment_title = sprintf( __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ), $payment_title, Lib\Utils\Price::format( $payment->getTotal() ) );
         }
         $payment_title .= sprintf(
             ' %s <span%s>%s</span>',
@@ -218,7 +218,7 @@ class Ajax extends Lib\Base\Ajax
             return $gateway->setPayment( $payment );
         }
 
-        throw new \Exception( __( 'Unsupported action', 'bookly' ) );
+        throw new \Exception( __( 'Unsupported action', 'bookly-responsive-appointment-booking-tool' ) );
     }
 
     /**
@@ -230,7 +230,7 @@ class Ajax extends Lib\Base\Ajax
         if ( self::hasParameter( 'payment_id' ) ) {
             $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
             if ( ! $payment ) {
-                wp_send_json_error( array( 'message' => __( 'Payment is not found.', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Payment is not found.', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
             $paid = $payment->getPaid() + $payment->getChildPaid();
             $total = $payment->getTotal();

@@ -209,12 +209,16 @@ abstract class Component extends Cache
                 Component::_register( 'scripts', array(
                     'backend' => array(
                         'bootstrap/js/bootstrap.min.js' => array( 'jquery' ),
-                        'js/datatables.min.js' => array( 'jquery' ),
                         'js/moment.min.js' => array(),
                         'js/daterangepicker.js' => array( 'bookly-moment.min.js', 'jquery' ),
                         'js/dropdown.js' => array( 'jquery' ),
                         'js/common.js' => array( 'jquery' ),
                         'js/select2.min.js' => array( 'jquery' ),
+                        // Shared Svelte 5 core (runtime + bits-ui + shadcn + shared components)
+                        // and the datatables widget — bundled once, available on every Bookly
+                        // admin page via bookly-backend-globals.
+                        'js/bookly-core.js' => array(),
+                        'js/bookly-datatables.js' => array( 'bookly-bookly-core.js' ),
                     ),
                     'frontend' => array(
                         'js/spin.min.js' => array( 'jquery' ),
@@ -226,23 +230,27 @@ abstract class Component extends Cache
                         'bookly-backend-globals' => array(
                             'bookly-globals',
                             'bookly-bootstrap.min.js',
-                            'bookly-datatables.min.js',
                             'bookly-daterangepicker.js',
                             'bookly-dropdown.js',
                             'bookly-select2.min.js',
                             'bookly-common.js',
                             'bookly-spin.min.js',
                             'bookly-ladda.min.js',
+                            'bookly-bookly-core.js',
+                            'bookly-bookly-datatables.js',
                         ),
                     ),
                 ) );
 
                 Component::_register( 'styles', array(
-                    'backend' => array( 'bootstrap/css/bootstrap.min.css', ),
-                    'frontend' => array( 'css/ladda.min.css', ),
+                    'backend' => array( 'bootstrap/css/bootstrap.min.css', 'tailwind/tailwind.css', ),
+                    // frontend-reset re-emits Tailwind preflight UNLAYERED (scoped to
+                    // .bookly-css-root) so host themes don't bleed into our UI. Frontend only
+                    // — wp-admin keeps the layered preflight from tailwind.css. See the file.
+                    'frontend' => array( 'css/ladda.min.css', 'css/frontend-reset.css', ),
                     'alias' => array(
-                        'bookly-frontend-globals' => array( 'bookly-ladda.min.css' ),
-                        'bookly-backend-globals' => array( 'bookly-bootstrap.min.css', 'bookly-ladda.min.css' ),
+                        'bookly-frontend-globals' => array( 'bookly-ladda.min.css', 'bookly-frontend-reset.css' ),
+                        'bookly-backend-globals' => array( 'bookly-bootstrap.min.css', 'bookly-ladda.min.css', 'bookly-tailwind.css' ),
                     ),
                 ) );
             } else {
@@ -262,9 +270,9 @@ abstract class Component extends Cache
                 'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
                 'dateRange' => Lib\Utils\DateTime::dateRangeOptions(),
                 'l10n' => array(
-                    'apply' => __( 'Apply', 'bookly' ),
-                    'cancel' => __( 'Cancel', 'bookly' ),
-                    'areYouSure' => __( 'Are you sure?', 'bookly' ),
+                    'apply' => __( 'Apply', 'bookly-responsive-appointment-booking-tool' ),
+                    'cancel' => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+                    'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'addons' => array(),
                 'data' => (object) array(),

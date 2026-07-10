@@ -5,19 +5,19 @@ use Bookly\Lib\Utils\Common;
 ?>
 
 <div class="form-group">
-    <?php Buttons::renderDefault( null, 'mr-2', __( 'Edit custom CSS', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-custom-css-dialog' ), true ) ?>
+    <?php Buttons::renderDefault( null, 'mr-2', __( 'Edit custom CSS', 'bookly-responsive-appointment-booking-tool' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-custom-css-dialog' ), true ) ?>
 </div>
 
 <div id="bookly-custom-css-dialog" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php esc_html_e( 'Edit custom CSS', 'bookly' ) ?></h5>
+                <h5 class="modal-title"><?php esc_html_e( 'Edit custom CSS', 'bookly-responsive-appointment-booking-tool' ) ?></h5>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="bookly-custom-css" class="control-label"><?php esc_html_e( 'Set up your custom CSS styles', 'bookly' ) ?></label>
+                    <label for="bookly-custom-css" class="control-label"><?php esc_html_e( 'Set up your custom CSS styles', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <textarea id="bookly-custom-css" class="form-control" rows="10"><?php echo Common::stripScripts( $custom_css ) ?></textarea>
                 </div>
             </div>

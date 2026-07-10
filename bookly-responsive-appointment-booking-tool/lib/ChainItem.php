@@ -246,7 +246,9 @@ class ChainItem
      */
     public function setStaffIds( $staff_ids )
     {
-        $this->staff_ids = $staff_ids;
+        // Cast to int: staff ids can arrive from unsanitized front-end form_data
+        // and later flow into a raw SQL IN(...) list in the Slots Finder.
+        $this->staff_ids = array_map( 'intval', (array) $staff_ids );
 
         return $this;
     }

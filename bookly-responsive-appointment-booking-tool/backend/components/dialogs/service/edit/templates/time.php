@@ -14,7 +14,7 @@ use Bookly\Lib\Utils\Advertisement;
     <?php Advertisement::render( 'services-modal-time-tab', ! Config::proActive() ) ?>
     <div class="form-group bookly-js-service bookly-js-service-simple">
         <label for="bookly-service-duration">
-            <?php esc_html_e( 'Duration', 'bookly' ) ?>
+            <?php esc_html_e( 'Duration', 'bookly-responsive-appointment-booking-tool' ) ?>
         </label>
         <?php
         $options = Common::getDurationSelectOptions( $service['duration'] );
@@ -31,7 +31,7 @@ use Bookly\Lib\Utils\Advertisement;
     <div class="form-row border-left ml-4 pl-3 bookly-js-start-time-info"<?php if ( $service['duration'] < DAY_IN_SECONDS ) : ?> style="display:none;"<?php endif ?>>
         <div class="col">
             <div class="form-group bookly-js-service bookly-js-service-simple">
-                <label for="bookly-service-start-time-info"><?php esc_html_e( 'Start and end times of the appointment', 'bookly' ) ?></label>
+                <label for="bookly-service-start-time-info"><?php esc_html_e( 'Start and end times of the appointment', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                 <div class="form-row">
                     <div class="col-6">
                         <input id="bookly-service-start-time-info" class="form-control" type="text" name="start_time_info" value="<?php echo esc_attr( $service['start_time_info'] ) ?>"/>
@@ -40,25 +40,25 @@ use Bookly\Lib\Utils\Advertisement;
                         <input class="form-control" type="text" name="end_time_info" value="<?php echo esc_attr( $service['end_time_info'] ) ?>"/>
                     </div>
                 </div>
-                <small class="form-text text-muted"><?php esc_html_e( 'Allows to set the start and end times for an appointment for services with the duration of 1 day or longer. This time will be displayed in notifications to customers, backend calendar and codes for booking form.', 'bookly' ) ?></small>
+                <small class="form-text text-muted"><?php esc_html_e( 'Allows to set the start and end times for an appointment for services with the duration of 1 day or longer. This time will be displayed in notifications to customers, backend calendar and codes for booking form.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
             </div>
         </div>
     </div>
     <div class="bookly-js-service-slot-length">
         <div class="form-group bookly-js-service bookly-js-service-simple bookly-js-service-collaborative" <?php if ( $service['duration'] < DAY_IN_SECONDS ) : ?> style="display:none;"<?php endif ?>>
             <label for="bookly-service-slot-length">
-                <?php esc_html_e( 'Time slot length', 'bookly' ) ?>
+                <?php esc_html_e( 'Time slot length', 'bookly-responsive-appointment-booking-tool' ) ?>
             </label>
             <select id="bookly-service-slot-length" class="form-control custom-select" name="slot_length">
-                <option value="<?php echo Service::SLOT_LENGTH_DEFAULT ?>"<?php selected( $service['slot_length'], Service::SLOT_LENGTH_DEFAULT ) ?>><?php esc_html_e( 'Default', 'bookly' ) ?></option>
+                <option value="<?php echo Service::SLOT_LENGTH_DEFAULT ?>"<?php selected( $service['slot_length'], Service::SLOT_LENGTH_DEFAULT ) ?>><?php esc_html_e( 'Default', 'bookly-responsive-appointment-booking-tool' ) ?></option>
                 <?php if ( $service['type'] === Service::TYPE_SIMPLE ) : ?>
-                    <option value="<?php echo Service::SLOT_LENGTH_AS_SERVICE_DURATION ?>"<?php selected( $service['slot_length'], Service::SLOT_LENGTH_AS_SERVICE_DURATION ) ?>><?php esc_html_e( 'Slot length as service duration', 'bookly' ) ?></option>
+                    <option value="<?php echo Service::SLOT_LENGTH_AS_SERVICE_DURATION ?>"<?php selected( $service['slot_length'], Service::SLOT_LENGTH_AS_SERVICE_DURATION ) ?>><?php esc_html_e( 'Slot length as service duration', 'bookly-responsive-appointment-booking-tool' ) ?></option>
                 <?php endif ?>
                 <?php foreach ( Config::getTimeSlotLengthOptions() as $duration ): ?>
                     <option value="<?php echo esc_attr( $duration * MINUTE_IN_SECONDS ) ?>"<?php selected( $service['slot_length'], $duration * MINUTE_IN_SECONDS ) ?>><?php echo esc_html( DateTime::secondsToInterval( $duration * MINUTE_IN_SECONDS ) ) ?></option>
                 <?php endforeach ?>
             </select>
-            <small class="form-text text-muted"><?php esc_html_e( 'The time interval which is used as a step when building all time slots for the service at the Time step. The setting overrides global settings in Settings > General. Use Default to apply global settings.', 'bookly' ) ?></small>
+            <small class="form-text text-muted"><?php esc_html_e( 'The time interval which is used as a step when building all time slots for the service at the Time step. The setting overrides global settings in Settings > General. Use Default to apply global settings.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
         </div>
     </div>
     <?php Proxy\Pro::renderPadding( $service ) ?>

@@ -171,7 +171,7 @@ jQuery(function ($) {
                 }
                 break;
             case 'card':
-                stripe(this);
+                checkout(this);
                 break;
         }
     });
@@ -326,11 +326,11 @@ jQuery(function ($) {
     }
 
     /**
-     * Pay with card via Stripe
+     * Pay with card
      *
      * @param btn
      */
-    function stripe(btn) {
+    function checkout(btn) {
         const ladda = Ladda.create(btn);
         ladda.start();
 
@@ -338,7 +338,7 @@ jQuery(function ($) {
             method: 'POST',
             url: ajaxurl,
             data: {
-                action: 'bookly_create_stripe_checkout_session',
+                action: 'bookly_create_checkout_session',
                 csrf_token: BooklyL10nGlobal.csrf_token,
                 recharge: payment.recharge.id,
                 promo_code: getValidatedPromoCode(),
@@ -348,7 +348,12 @@ jQuery(function ($) {
             dataType: 'json',
             success: function (response) {
                 if (response.success) {
-                    window.location.href = response.url;
+                    if (response.url.split('#')[0] === window.location.href.split('#')[0]) {
+                        window.location.href = response.url;
+                        window.location.reload();
+                    } else {
+                        window.location.href = response.url;
+                    }
                 } else {
                     ladda.stop();
                     booklyAlert({error: [response.data.message]});

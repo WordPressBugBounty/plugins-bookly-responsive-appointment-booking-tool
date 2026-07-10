@@ -13,8 +13,8 @@ class Connections extends Test
 
     public function __construct()
     {
-        $this->title = __( 'External connections', 'bookly' );
-        $this->description = __( 'This test checks the ability to establish a connection with the Bookly Cloud external server.', 'bookly' );
+        $this->title = __( 'External connections', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'This test checks the ability to establish a connection with the Bookly Cloud external server.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -67,7 +67,7 @@ class Connections extends Test
                     $this->addError( 'GET request from Bookly Cloud is failed' );
                 }
                 if ( isset( $response['data']['raw'] ) && is_array( $response['data']['raw'] ) ) {
-                    $this->addError( sprintf( '<b>%s</b><br/>%s<br/>', parse_url( Cloud\API::API_URL, PHP_URL_HOST ), __( 'For some reason, your server blocks Bookly Cloud requests. To fix the issue, please ask your hosting provider to whitelist the Bookly Cloud server.', 'bookly' ) ) );
+                    $this->addError( sprintf( '<b>%s</b><br/>%s<br/>', parse_url( Cloud\API::API_URL, PHP_URL_HOST ), __( 'For some reason, your server blocks Bookly Cloud requests. To fix the issue, please ask your hosting provider to whitelist the Bookly Cloud server.', 'bookly-responsive-appointment-booking-tool' ) ) );
                     foreach ( $response['data']['raw'] as $i => $error_data ) {
                         $title = '';
                         if ( isset( $error_data['method'] ) ) {
@@ -100,7 +100,7 @@ class Connections extends Test
                                         <div id="accordion" class="accordion" role="tablist" aria-multiselectable="true">%3$s</div>
                                     </div>
                                 </div>
-                            </div>', $i, $title ?: __( 'Error', 'bookly' ), $message ) );
+                            </div>', $i, $title ?: __( 'Error', 'bookly-responsive-appointment-booking-tool' ), $message ) );
                         }
                     }
                 }

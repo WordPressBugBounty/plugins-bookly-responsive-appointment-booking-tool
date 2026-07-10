@@ -15,7 +15,6 @@ class Account extends Base
     const CREATE_PAYPAL_ORDER            = '/1.0/users/%token%/paypal/order';             //POST
     const CREATE_BILLING_AGREEMENT       = '/1.0/users/%token%/paypal/billing-agreement'; //POST
     const RENEW_PAYPAL_AUTO_RECHARGE     = '/1.1/users/%token%/paypal/renew/auto-recharge'; //POST
-    const CREATE_STRIPE_CHECKOUT_SESSION = '/1.0/users/%token%/stripe/checkout/sessions'; //POST
     const RENEW_STRIPE_AUTO_RECHARGE     = '/1.0/users/%token%/stripe/renew/auto-recharge'; //POST
     const DISABLE_AUTO_RECHARGE          = '/1.0/users/%token%/auto-recharge';            //DELETE
     const GET_INVOICE                    = '/1.2/users/%token%/invoice';                  //GET
@@ -29,6 +28,7 @@ class Account extends Base
     const SEND_WEEKLY_SUMMARY            = '/1.0/users/%token%/weekly-summary/send';      //POST || DELETE
     const PRODUCTS                       = '/1.0/users/%token%/products';                 //GET
     const VERIFY_PROMO_CODE              = '/1.1/users/%token%/verify-promo-code';        //POST
+    const CHECKOUT_SESSIONS              = '/1.0/users/%token%/checkout/sessions';        //POST
 
     const PRODUCT_SMS_NOTIFICATIONS = 'sms';
     const PRODUCT_STRIPE = 'stripe';
@@ -99,7 +99,7 @@ class Account extends Base
         $data = array( '_username' => $username, '_password' => $password, 'country' => $country, 'source' => $source );
 
         if ( $password !== $password_repeat && ! empty ( $password ) ) {
-            $this->api->addError( __( 'Passwords don\'t match', 'bookly' ) );
+            $this->api->addError( __( 'Passwords don\'t match', 'bookly-responsive-appointment-booking-tool' ) );
 
             return false;
         }
@@ -412,7 +412,7 @@ class Account extends Base
     }
 
     /**
-     * Create Stripe Checkout session
+     * Create Checkout session
      *
      * @param int $recharge
      * @param string $promo_code
@@ -420,10 +420,10 @@ class Account extends Base
      * @param string $url
      * @return array|false
      */
-    public function createStripeCheckoutSession( $recharge, $promo_code, $mode, $url )
+    public function createCheckoutSession( $recharge, $promo_code, $mode, $url )
     {
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendPostRequest( self::CREATE_STRIPE_CHECKOUT_SESSION, array(
+            $response = $this->api->sendPostRequest( self::CHECKOUT_SESSIONS, array(
                 'mode' => $mode,
                 'recharge' => $recharge,
                 'promo_code' => $promo_code,
@@ -697,33 +697,33 @@ class Account extends Base
     {
         switch ( $error_code ) {
             case 'ERROR_EMPTY_PASSWORD':
-                return __( 'Empty password.', 'bookly' );
+                return __( 'Empty password.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INCORRECT_PASSWORD':
-                return __( 'Incorrect password.', 'bookly' );
+                return __( 'Incorrect password.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INCORRECT_RECOVERY_CODE':
-                return __( 'Incorrect recovery code.', 'bookly' );
+                return __( 'Incorrect recovery code.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INCORRECT_USERNAME_OR_PASSWORD':
-                return __( 'Incorrect email or password.', 'bookly' );
+                return __( 'Incorrect email or password.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INVALID_USERNAME':
-                return __( 'Invalid email.', 'bookly' );
+                return __( 'Invalid email.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_LOW_BALANCE':
-                return __( 'Recharge your account with one of the standard amounts', 'bookly' );
+                return __( 'Recharge your account with one of the standard amounts', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_PENDING_SENDER_ID_ALREADY_EXISTS':
-                return __( 'Pending sender ID already exists.', 'bookly' );
+                return __( 'Pending sender ID already exists.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_PRODUCT_NOT_FOUND':
-                return __( 'Product not found.', 'bookly' );
+                return __( 'Product not found.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_RECHARGE_NOT_AVAILABLE':
-                return __( 'Recharge not available.', 'bookly' );
+                return __( 'Recharge not available.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_RECOVERY_CODE_EXPIRED':
-                return __( 'Recovery code expired.', 'bookly' );
+                return __( 'Recovery code expired.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_SENDING_EMAIL':
-                return __( 'Error sending email.', 'bookly' );
+                return __( 'Error sending email.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_SUBSCRIPTION_NOT_AVAILABLE':
-                return __( 'Subscription not available.', 'bookly' );
+                return __( 'Subscription not available.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_USER_NOT_FOUND':
-                return __( 'User not found.', 'bookly' );
+                return __( 'User not found.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_USERNAME_ALREADY_EXISTS':
-                return __( 'Email already in use.', 'bookly' );
+                return __( 'Email already in use.', 'bookly-responsive-appointment-booking-tool' );
             default:
                 return null;
         }
@@ -814,11 +814,11 @@ class Account extends Base
     protected function sendLowBalanceNotification()
     {
         $add_money_url = admin_url( 'admin.php?' . build_query( array( 'page' => Modules\CloudSms\Page::pageSlug() ) ) ) . '#recharge';
-        $message = sprintf( __( "Dear Bookly Cloud customer.\nWe would like to notify you that your Bookly Cloud balance fell below 5 USD. To use our service without interruptions please recharge your balance by visiting Bookly Cloud page <a href='%s'>here</a>.\n\nIf you want to stop receiving these notifications, please update your settings <a href='%s'>here</a>.", 'bookly' ), $add_money_url, $add_money_url );
+        $message = sprintf( __( "Dear Bookly Cloud customer.\nWe would like to notify you that your Bookly Cloud balance fell below 5 USD. To use our service without interruptions please recharge your balance by visiting Bookly Cloud page <a href='%s'>here</a>.\n\nIf you want to stop receiving these notifications, please update your settings <a href='%s'>here</a>.", 'bookly-responsive-appointment-booking-tool' ), $add_money_url, $add_money_url );
         if ( get_option( 'bookly_email_send_as' ) == 'html' ) {
             $message = wpautop( $message );
         }
-        $subject = __( 'Bookly Cloud - Low Balance', 'bookly' );
+        $subject = __( 'Bookly Cloud - Low Balance', 'bookly-responsive-appointment-booking-tool' );
 
         foreach ( Utils\Common::getAdminEmails() as $email ) {
             Utils\Mail::send( $email, $subject, $message );
@@ -831,7 +831,7 @@ class Account extends Base
     public function getAutoRechargeTitle()
     {
         $titles = array(
-            'stripe' => __( 'Card', 'bookly' ),
+            'stripe' => __( 'Card', 'bookly-responsive-appointment-booking-tool' ),
             'paypal' => 'PayPal',
         );
 

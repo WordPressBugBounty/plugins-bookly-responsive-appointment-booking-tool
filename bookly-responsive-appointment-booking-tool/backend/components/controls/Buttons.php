@@ -58,7 +58,7 @@ class Buttons
             'btn-success',
             $extra_class,
             $attrs,
-            $caption !== null ? $caption : __( 'Add', 'bookly' ),
+            $caption !== null ? $caption : __( 'Add', 'bookly-responsive-appointment-booking-tool' ),
             '{caption}' . ( $ellipsis ? '…' : '' ),
             '<i class="fas fa-fw fa-plus mr-lg-1"></i>',
             true
@@ -82,7 +82,7 @@ class Buttons
             'btn-danger',
             $extra_class,
             $attrs,
-            $caption !== null ? $caption : __( 'Delete', 'bookly' ),
+            $caption !== null ? $caption : __( 'Delete', 'bookly-responsive-appointment-booking-tool' ),
             '{caption}' . ( $ellipsis ? '…' : '' ),
             '<i class="far fa-fw fa-trash-alt mr-lg-1"></i>',
             true
@@ -106,7 +106,7 @@ class Buttons
             'btn-default',
             $extra_class,
             $attrs,
-            $caption !== null ? $caption : __( 'Reset', 'bookly' ),
+            $caption !== null ? $caption : __( 'Reset', 'bookly-responsive-appointment-booking-tool' ),
             '{caption}' . ( $ellipsis ? '…' : '' )
         );
     }
@@ -127,7 +127,7 @@ class Buttons
             'btn-default',
             '',
             $attrs,
-            $caption ?: __( 'Cancel', 'bookly' ),
+            $caption ?: __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
             '{caption}' . ( $ellipsis ? '…' : '' )
         );
     }
@@ -149,7 +149,7 @@ class Buttons
             'btn-success',
             $extra_class,
             $attrs,
-            $caption !== null ? $caption : __( 'Save', 'bookly' ),
+            $caption !== null ? $caption : __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
             '{caption}' . ( $ellipsis ? '…' : '' )
         );
     }

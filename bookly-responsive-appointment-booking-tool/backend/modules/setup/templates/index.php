@@ -1,7 +1,7 @@
-<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
-<div id="bookly-tbs" class="wrap">
-    <div class="form-row align-items-center mb-3">
-        <h4 class="col m-0"><?php esc_html_e( 'Initial setup', 'bookly' ) ?></h4>
-    </div>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
+?>
+<div id="bookly-tbs" class="wrap bookly-css-root bookly-main-page-wrap">
+    <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'Initial setup', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     <div id="bookly-setup-form"></div>
 </div>

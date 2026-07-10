@@ -14,7 +14,7 @@ use Bookly\Backend\Modules\Appearance\Proxy;
         </div>
         <?php Proxy\WaitingList::renderInfoText() ?>
         <div class="bookly-box bookly-label-error" style="padding-bottom:2px">
-            <?php Elements::renderText( 'bookly_l10n_step_time_slot_not_available', null, 'bottom', __( 'Visible when the chosen time slot has been already booked', 'bookly' ) ) ?>
+            <?php Elements::renderText( 'bookly_l10n_step_time_slot_not_available', null, 'bottom', __( 'Visible when the chosen time slot has been already booked', 'bookly-responsive-appointment-booking-tool' ) ) ?>
         </div>
         <?php Proxy\Pro::renderTimeZoneSwitcher() ?>
 

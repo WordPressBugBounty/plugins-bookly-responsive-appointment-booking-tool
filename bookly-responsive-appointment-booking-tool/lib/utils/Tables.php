@@ -5,6 +5,7 @@ use Bookly\Lib;
 
 abstract class Tables
 {
+    const ANALYTICS                     = 'analytics';
     const APPOINTMENTS                  = 'appointments';
     const CLOUD_MOBILE_STAFF_CABINET    = 'cloud_mobile_staff_cabinet';
     const CLOUD_PURCHASES               = 'cloud_purchases';
@@ -49,49 +50,64 @@ abstract class Tables
     {
         $columns = array();
         switch ( $table ) {
+            case self::ANALYTICS:
+                $columns = array(
+                    'staff'                   => esc_html__( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
+                    'service'                 => esc_html__( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_total'      => esc_html__( 'Appointments', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_approved'   => esc_html__( 'Approved', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_pending'    => esc_html__( 'Pending', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_cancelled'  => esc_html__( 'Cancelled', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_rejected'   => esc_html__( 'Rejected', 'bookly-responsive-appointment-booking-tool' ),
+                    'appointments_waitlisted' => esc_html__( 'Waitlisted', 'bookly-responsive-appointment-booking-tool' ),
+                    'customers_total'         => esc_html__( 'Customers', 'bookly-responsive-appointment-booking-tool' ),
+                    'customers_new'           => esc_html__( 'New customers', 'bookly-responsive-appointment-booking-tool' ),
+                    'revenue'                 => esc_html__( 'Revenue', 'bookly-responsive-appointment-booking-tool' ),
+                );
+                break;
             case self::APPOINTMENTS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'no' => esc_html_x( 'No.', 'number', 'bookly' ),
-                    'start_date' => esc_html__( 'Appointment date', 'bookly' ),
-                    'staff_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_employee' ) ),
-                    'customer_full_name' => esc_html__( 'Customer name', 'bookly' ),
-                    'customer_phone' => esc_html__( 'Customer phone', 'bookly' ),
-                    'customer_email' => esc_html__( 'Customer email', 'bookly' ),
-                    'service_title' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_service' ) ),
-                    'service_duration' => esc_html__( 'Duration', 'bookly' ),
-                    'service_price' => esc_html__( 'Price', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
-                    'payment' => esc_html__( 'Payment', 'bookly' ),
-                    'notes' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_notes' ) ),
-                    'created_date' => esc_html__( 'Created', 'bookly' ),
-                    'internal_note' => esc_html__( 'Internal note', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'no' => esc_html_x( 'No.', 'number', 'bookly-responsive-appointment-booking-tool' ),
+                    'start_date' => esc_html__( 'Appointment date', 'bookly-responsive-appointment-booking-tool' ),
+                    'staff_name' => esc_html__( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
+                    'customer_full_name' => esc_html__( 'Customer name', 'bookly-responsive-appointment-booking-tool' ),
+                    'customer_phone' => esc_html__( 'Customer phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'customer_email' => esc_html__( 'Customer email', 'bookly-responsive-appointment-booking-tool' ),
+                    'service_title' => esc_html__( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                    'service_duration' => esc_html__( 'Duration', 'bookly-responsive-appointment-booking-tool' ),
+                    'service_price' => esc_html__( 'Price', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                    'payment' => esc_html__( 'Payment', 'bookly-responsive-appointment-booking-tool' ),
+                    'notes' => esc_html__( 'Notes', 'bookly-responsive-appointment-booking-tool' ),
+                    'created_date' => esc_html__( 'Created', 'bookly-responsive-appointment-booking-tool' ),
+                    'internal_note' => esc_html__( 'Internal note', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::CLOUD_PURCHASES:
                 $columns = array(
-                    'date' => esc_html__( 'Date', 'bookly' ),
-                    'time' => esc_html__( 'Time', 'bookly' ),
-                    'type' => esc_html__( 'Type', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
-                    'amount' => esc_html__( 'Amount', 'bookly' ),
+                    'date' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'time' => esc_html__( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                    'type' => esc_html__( 'Type', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                    'amount' => esc_html__( 'Amount', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::CUSTOMERS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'image' => esc_html__( 'Image', 'bookly' ),
-                    'full_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_name' ) ),
-                    'first_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_first_name' ) ),
-                    'last_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_last_name' ) ),
-                    'wp_user' => esc_html__( 'User', 'bookly' ),
-                    'phone' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_phone' ) ),
-                    'email' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_email' ) ),
-                    'notes' => esc_html__( 'Notes', 'bookly' ),
-                    'last_appointment' => esc_html__( 'Last appointment', 'bookly' ),
-                    'total_appointments' => esc_html__( 'Total appointments', 'bookly' ),
-                    'payments' => esc_html__( 'Payments', 'bookly' ),
-                    'birthday' => esc_html__( 'Birthday', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'image' => esc_html__( 'Image', 'bookly-responsive-appointment-booking-tool' ),
+                    'full_name' => esc_html__( 'Full name', 'bookly-responsive-appointment-booking-tool' ),
+                    'first_name' => esc_html__( 'First name', 'bookly-responsive-appointment-booking-tool' ),
+                    'last_name' => esc_html__( 'Last name', 'bookly-responsive-appointment-booking-tool' ),
+                    'wp_user' => esc_html__( 'User', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'email' => esc_html__( 'Email', 'bookly-responsive-appointment-booking-tool' ),
+                    'notes' => esc_html__( 'Notes', 'bookly-responsive-appointment-booking-tool' ),
+                    'last_appointment' => esc_html__( 'Last appointment', 'bookly-responsive-appointment-booking-tool' ),
+                    'total_appointments' => esc_html__( 'Total appointments', 'bookly-responsive-appointment-booking-tool' ),
+                    'payments' => esc_html__( 'Payments', 'bookly-responsive-appointment-booking-tool' ),
+                    'birthday' => esc_html__( 'Birthday', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::EMAIL_NOTIFICATIONS:
@@ -99,142 +115,142 @@ abstract class Tables
             case self::VOICE_NOTIFICATIONS:
             case self::WHATSAPP_NOTIFICATIONS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'type' => esc_html__( 'Type', 'bookly' ),
-                    'name' => esc_html__( 'Name', 'bookly' ),
-                    'active' => esc_html__( 'State', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'type' => esc_html__( 'Type', 'bookly-responsive-appointment-booking-tool' ),
+                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'active' => esc_html__( 'State', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::EMAIL_LOGS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'to' => esc_html_x( 'To', 'email recipient', 'bookly' ),
-                    'subject' => esc_html__( 'Subject', 'bookly' ),
-                    'created_at' => esc_html__( 'Created', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'to' => esc_html_x( 'To', 'email recipient', 'bookly-responsive-appointment-booking-tool' ),
+                    'subject' => esc_html__( 'Subject', 'bookly-responsive-appointment-booking-tool' ),
+                    'created_at' => esc_html__( 'Created', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::PAYMENTS:
                 $columns = array(
-                    'id' => esc_html_x( 'No.', 'number', 'bookly' ),
-                    'created_at' => esc_html__( 'Date', 'bookly' ),
-                    'type' => esc_html__( 'Type', 'bookly' ),
-                    'customer' => esc_html__( 'Customer', 'bookly' ),
-                    'provider' => esc_html__( 'Provider', 'bookly' ),
-                    'service' => esc_html__( 'Service', 'bookly' ),
-                    'start_date' => esc_html__( 'Appointment date', 'bookly' ),
-                    'paid' => esc_html__( 'Amount', 'bookly' ),
-                    'subtotal' => esc_html__( 'Subtotal', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
+                    'id' => esc_html_x( 'No.', 'number', 'bookly-responsive-appointment-booking-tool' ),
+                    'created_at' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'type' => esc_html__( 'Type', 'bookly-responsive-appointment-booking-tool' ),
+                    'customer' => esc_html__( 'Customer', 'bookly-responsive-appointment-booking-tool' ),
+                    'provider' => esc_html__( 'Provider', 'bookly-responsive-appointment-booking-tool' ),
+                    'service' => esc_html__( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                    'start_date' => esc_html__( 'Appointment date', 'bookly-responsive-appointment-booking-tool' ),
+                    'paid' => esc_html__( 'Amount', 'bookly-responsive-appointment-booking-tool' ),
+                    'subtotal' => esc_html__( 'Subtotal', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SERVICES:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'image' => esc_html__( 'Image', 'bookly' ),
-                    'title' => esc_html__( 'Title', 'bookly' ),
-                    'category_name' => esc_html__( 'Category', 'bookly' ),
-                    'duration' => esc_html__( 'Duration', 'bookly' ),
-                    'price' => esc_html__( 'Price', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'image' => esc_html__( 'Image', 'bookly-responsive-appointment-booking-tool' ),
+                    'title' => esc_html__( 'Title', 'bookly-responsive-appointment-booking-tool' ),
+                    'category_name' => esc_html__( 'Category', 'bookly-responsive-appointment-booking-tool' ),
+                    'duration' => esc_html__( 'Duration', 'bookly-responsive-appointment-booking-tool' ),
+                    'price' => esc_html__( 'Price', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_MAILING_CAMPAIGNS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'name' => esc_html__( 'Name', 'bookly' ),
-                    'send_at' => esc_html__( 'Start at', 'bookly' ),
-                    'state' => esc_html__( 'State', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'send_at' => esc_html__( 'Start at', 'bookly-responsive-appointment-booking-tool' ),
+                    'state' => esc_html__( 'State', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_MAILING_LISTS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'name' => esc_html__( 'Name', 'bookly' ),
-                    'number_of_recipients' => esc_html__( 'Number of recipients', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'number_of_recipients' => esc_html__( 'Number of recipients', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_MAILING_RECIPIENTS_LIST:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'name' => esc_html__( 'Name', 'bookly' ),
-                    'phone' => esc_html__( 'Phone', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_DETAILS:
                 $columns = array(
-                    'date' => esc_html__( 'Date', 'bookly' ),
-                    'time' => esc_html__( 'Time', 'bookly' ),
-                    'message' => esc_html__( 'Text', 'bookly' ),
-                    'phone' => esc_html__( 'Phone', 'bookly' ),
-                    'sender_id' => esc_html__( 'Sender ID', 'bookly' ),
-                    'charge' => esc_html__( 'Cost', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
-                    'info' => esc_html__( 'Info', 'bookly' ),
+                    'date' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'time' => esc_html__( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                    'message' => esc_html__( 'Text', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'sender_id' => esc_html__( 'Sender ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'charge' => esc_html__( 'Cost', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                    'info' => esc_html__( 'Info', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::VOICE_DETAILS:
                 $columns = array(
-                    'date' => esc_html__( 'Date', 'bookly' ),
-                    'time' => esc_html__( 'Time', 'bookly' ),
-                    'message' => esc_html__( 'Text', 'bookly' ),
-                    'phone' => esc_html__( 'Phone', 'bookly' ),
-                    'duration' => esc_html__( 'Duration', 'bookly' ),
-                    'charge' => esc_html__( 'Cost', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
+                    'date' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'time' => esc_html__( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                    'message' => esc_html__( 'Text', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'duration' => esc_html__( 'Duration', 'bookly-responsive-appointment-booking-tool' ),
+                    'charge' => esc_html__( 'Cost', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::WHATSAPP_DETAILS:
                 $columns = array(
-                    'date' => esc_html__( 'Date', 'bookly' ),
-                    'time' => esc_html__( 'Time', 'bookly' ),
-                    'template' => esc_html__( 'Template', 'bookly' ),
-                    'language' => esc_html__( 'Language', 'bookly' ),
-                    'phone' => esc_html__( 'Phone', 'bookly' ),
-                    'charge' => esc_html__( 'Cost', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
-                    'info' => esc_html__( 'Info', 'bookly' ),
+                    'date' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'time' => esc_html__( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                    'template' => esc_html__( 'Template', 'bookly-responsive-appointment-booking-tool' ),
+                    'language' => esc_html__( 'Language', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'charge' => esc_html__( 'Cost', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                    'info' => esc_html__( 'Info', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::VOICE_PRICES:
                 $columns = array(
-                    'country_iso_code' => esc_html__( 'Flag', 'bookly' ),
-                    'country_name' => esc_html__( 'Country', 'bookly' ),
-                    'phone_code' => esc_html__( 'Code', 'bookly' ),
-                    'call_price' => esc_html__( 'Price/Minute', 'bookly' ),
+                    'country_iso_code' => esc_html__( 'Flag', 'bookly-responsive-appointment-booking-tool' ),
+                    'country_name' => esc_html__( 'Country', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone_code' => esc_html__( 'Code', 'bookly-responsive-appointment-booking-tool' ),
+                    'call_price' => esc_html__( 'Price/Minute', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_PRICES:
                 $columns = array(
-                    'country_iso_code' => esc_html__( 'Flag', 'bookly' ),
-                    'country_name' => esc_html__( 'Country', 'bookly' ),
-                    'phone_code' => esc_html__( 'Code', 'bookly' ),
-                    'price' => esc_html__( 'Regular price', 'bookly' ),
-                    'price_alt' => esc_html__( 'Price with custom Sender ID', 'bookly' ),
+                    'country_iso_code' => esc_html__( 'Flag', 'bookly-responsive-appointment-booking-tool' ),
+                    'country_name' => esc_html__( 'Country', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone_code' => esc_html__( 'Code', 'bookly-responsive-appointment-booking-tool' ),
+                    'price' => esc_html__( 'Regular price', 'bookly-responsive-appointment-booking-tool' ),
+                    'price_alt' => esc_html__( 'Price with custom Sender ID', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_SENDER:
                 $columns = array(
-                    'date' => esc_html__( 'Date', 'bookly' ),
-                    'name' => esc_html__( 'Requested ID', 'bookly' ),
-                    'country' => esc_html__( 'Country', 'bookly' ),
-                    'status' => esc_html__( 'Status', 'bookly' ),
-                    'status_date' => esc_html__( 'Status date', 'bookly' ),
+                    'date' => esc_html__( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'name' => esc_html__( 'Requested ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'country' => esc_html__( 'Country', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => esc_html__( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                    'status_date' => esc_html__( 'Status date', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::STAFF_MEMBERS:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'full_name' => esc_html__( 'Name', 'bookly' ),
-                    'email' => esc_html__( 'Email', 'bookly' ),
-                    'phone' => esc_html__( 'Phone', 'bookly' ),
-                    'wp_user' => esc_html__( 'User', 'bookly' ),
-                    'image' => esc_html__( 'Image', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'full_name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'email' => esc_html__( 'Email', 'bookly-responsive-appointment-booking-tool' ),
+                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
+                    'wp_user' => esc_html__( 'User', 'bookly-responsive-appointment-booking-tool' ),
+                    'image' => esc_html__( 'Image', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::CLOUD_MOBILE_STAFF_CABINET:
                 $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly' ),
-                    'full_name' => esc_html__( 'Name', 'bookly' ),
-                    'token' => esc_html__( 'Access token', 'bookly' ),
+                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'full_name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'token' => esc_html__( 'Access token', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::CUSTOMER_CABINET_APPOINTMENTS:
@@ -243,28 +259,28 @@ abstract class Tables
                     'service' => Common::getTranslatedOption( 'bookly_l10n_label_service' ),
                     'staff' => Common::getTranslatedOption( 'bookly_l10n_label_employee' ),
                     'location' => Common::getTranslatedOption( 'bookly_l10n_label_location' ),
-                    'duration' => __( 'Duration', 'bookly' ),
-                    'date' => __( 'Date', 'bookly' ),
-                    'time' => __( 'Time', 'bookly' ),
-                    'price' => __( 'Price', 'bookly' ),
-                    'online_meeting' => __( 'Online meeting', 'bookly' ),
-                    'join_online_meeting' => __( 'Join online meeting', 'bookly' ),
-                    'cancel' => __( 'Cancel', 'bookly' ),
-                    'reschedule' => __( 'Reschedule', 'bookly' ),
-                    'status' => __( 'Status', 'bookly' ),
+                    'duration' => __( 'Duration', 'bookly-responsive-appointment-booking-tool' ),
+                    'date' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'time' => __( 'Time', 'bookly-responsive-appointment-booking-tool' ),
+                    'price' => __( 'Price', 'bookly-responsive-appointment-booking-tool' ),
+                    'online_meeting' => __( 'Online meeting', 'bookly-responsive-appointment-booking-tool' ),
+                    'join_online_meeting' => __( 'Join online meeting', 'bookly-responsive-appointment-booking-tool' ),
+                    'cancel' => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+                    'reschedule' => __( 'Reschedule', 'bookly-responsive-appointment-booking-tool' ),
+                    'status' => __( 'Status', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::LOGS:
                 $columns = array(
-                    'id' => __( 'ID', 'bookly' ),
-                    'created_at' => __( 'Date', 'bookly' ),
-                    'action' => __( 'Action', 'bookly' ),
-                    'target' => __( 'Target', 'bookly' ),
-                    'target_id' => __( 'Target ID', 'bookly' ),
-                    'author' => __( 'Author', 'bookly' ),
-                    'details' => __( 'Details', 'bookly' ),
-                    'comment' => __( 'Comment', 'bookly' ),
-                    'ref' => __( 'Reference', 'bookly' ),
+                    'id' => __( 'ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'created_at' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                    'action' => __( 'Action', 'bookly-responsive-appointment-booking-tool' ),
+                    'target' => __( 'Target', 'bookly-responsive-appointment-booking-tool' ),
+                    'target_id' => __( 'Target ID', 'bookly-responsive-appointment-booking-tool' ),
+                    'author' => __( 'Author', 'bookly-responsive-appointment-booking-tool' ),
+                    'details' => __( 'Details', 'bookly-responsive-appointment-booking-tool' ),
+                    'comment' => __( 'Comment', 'bookly-responsive-appointment-booking-tool' ),
+                    'ref' => __( 'Reference', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
         }
@@ -285,29 +301,30 @@ abstract class Tables
         }
         $result = array();
         $l10n = array(
-            'emptyTable' => __( 'No data available in table', 'bookly' ),
-            'zeroRecords' => __( 'No matching records found', 'bookly' ),
-            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
-            'responsiveTable' => __( 'Responsive table', 'bookly' ),
-            'refresh' => __( 'Refresh', 'bookly' ),
-            'tableSettings' => __( 'Table settings', 'bookly' ),
-            'columns' => __( 'Columns', 'bookly' ),
-            'searchColumns' => __( 'Search columns', 'bookly' ) . '…',
-            'noColumnsMatch' => __( 'No columns match', 'bookly' ),
-            'resetToDefaults' => __( 'Reset to defaults', 'bookly' ),
-            'save' => __( 'Save', 'bookly' ),
-            'cancel' => __( 'Cancel', 'bookly' ),
-            'apply' => __( 'Apply', 'bookly' ),
-            'jumpToToday' => __( 'Jump to today', 'bookly' ),
-            'quickRange' => __( 'Quick range', 'bookly' ),
-            'custom' => __( 'Custom', 'bookly' ),
-            'filter' => __( 'Filter', 'bookly' ),
-            'addFilter' => __( 'Add filter', 'bookly' ),
-            'clearSearch' => __( 'Clear search', 'bookly' ),
-            'removeFilter' => __( 'Remove filter', 'bookly' ),
-            'clearFilter' => __( 'Clear filter', 'bookly' ),
-            'nOfM' => __( '%s of %s', 'bookly' ),
-            'loadError' => __( 'Failed to load data', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
+            'zeroRecords' => __( 'No matching records found', 'bookly-responsive-appointment-booking-tool' ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly-responsive-appointment-booking-tool' ),
+            'responsiveTable' => __( 'Responsive table', 'bookly-responsive-appointment-booking-tool' ),
+            'refresh' => __( 'Refresh', 'bookly-responsive-appointment-booking-tool' ),
+            'tableSettings' => __( 'Table settings', 'bookly-responsive-appointment-booking-tool' ),
+            'columns' => __( 'Columns', 'bookly-responsive-appointment-booking-tool' ),
+            'searchColumns' => __( 'Search columns', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'noColumnsMatch' => __( 'No columns match', 'bookly-responsive-appointment-booking-tool' ),
+            'resetToDefaults' => __( 'Reset to defaults', 'bookly-responsive-appointment-booking-tool' ),
+            'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
+            'cancel' => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+            'apply' => __( 'Apply', 'bookly-responsive-appointment-booking-tool' ),
+            'jumpToToday' => __( 'Jump to today', 'bookly-responsive-appointment-booking-tool' ),
+            'quickRange' => __( 'Quick range', 'bookly-responsive-appointment-booking-tool' ),
+            'custom' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ),
+            'filter' => __( 'Filter', 'bookly-responsive-appointment-booking-tool' ),
+            'addFilter' => __( 'Add filter', 'bookly-responsive-appointment-booking-tool' ),
+            'clearSearch' => __( 'Clear search', 'bookly-responsive-appointment-booking-tool' ),
+            'removeFilter' => __( 'Remove filter', 'bookly-responsive-appointment-booking-tool' ),
+            'clearFilter' => __( 'Clear filter', 'bookly-responsive-appointment-booking-tool' ),
+            'nOfM' => __( '%s of %s', 'bookly-responsive-appointment-booking-tool' ),
+            'showing' => __( 'Showing %1$s of %2$s entries', 'bookly-responsive-appointment-booking-tool' ),
+            'loadError' => __( 'Failed to load data', 'bookly-responsive-appointment-booking-tool' ),
         );
         foreach ( $tables as $table ) {
             $columns = self::getColumns( $table );
@@ -496,6 +513,10 @@ abstract class Tables
                     'internal_note' => false,
                     'service_price' => false
                 );
+                break;
+            case self::ANALYTICS:
+                // Waitlisted is addon-gated and usually empty — available but hidden by default.
+                $columns = array( 'appointments_waitlisted' => false );
                 break;
             case self::EMAIL_LOGS:
             case self::EMAIL_NOTIFICATIONS:

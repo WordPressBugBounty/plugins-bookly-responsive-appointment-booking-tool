@@ -20,7 +20,7 @@ class Ajax extends Lib\Base\Ajax
         update_user_meta( get_current_user_id(), 'bookly_dismiss_nps_notice', 1 );
         update_user_meta( get_current_user_id(), 'bookly_nps_rate', $rate );
 
-        wp_send_json_success( array( 'message' => __( 'Sent successfully.', 'bookly' ) ) );
+        wp_send_json_success( array( 'message' => __( 'Sent successfully.', 'bookly-responsive-appointment-booking-tool' ) ) );
     }
 
     /**

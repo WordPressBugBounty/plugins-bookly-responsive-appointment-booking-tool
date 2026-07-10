@@ -30,12 +30,12 @@ $service_id = $service['id'];
                         <?php if ( current_user_can( 'upload_files' ) ) : ?>
                             <a class="far fa-fw fa-trash-alt text-danger bookly-thumb-delete bookly-js-delete"
                                href="javascript:void(0)"
-                               title="<?php esc_attr_e( 'Delete', 'bookly' ) ?>"
+                               title="<?php esc_attr_e( 'Delete', 'bookly-responsive-appointment-booking-tool' ) ?>"
                                <?php if ( ! $img ) : ?>style="display: none;"<?php endif ?>>
                             </a>
                             <div class="bookly-thumb-edit">
                                 <label class="bookly-thumb-edit-btn">
-                                    <?php esc_html_e( 'Image', 'bookly' ) ?>
+                                    <?php esc_html_e( 'Image', 'bookly-responsive-appointment-booking-tool' ) ?>
                                 </label>
                             </div>
                         <?php endif ?>
@@ -45,16 +45,16 @@ $service_id = $service['id'];
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="bookly-service-title"><?php esc_html_e( 'Title', 'bookly' ) ?></label>
+                <label for="bookly-service-title"><?php esc_html_e( 'Title', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                 <input name="title" value="<?php echo esc_attr( $service['title'] ) ?>" id="bookly-service-title" class="form-control" type="text"/>
             </div>
         </div>
     </div>
     <?php if ( $service['type'] != Service::TYPE_PACKAGE ) : ?>
         <div class="form-group">
-            <label for="bookly-service-category"><?php esc_html_e( 'Category', 'bookly' ) ?></label>
+            <label for="bookly-service-category"><?php esc_html_e( 'Category', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <select id="bookly-service-category" class="form-control custom-select" name="category_id">
-                <option value="0"><?php esc_html_e( 'Uncategorized', 'bookly' ) ?></option>
+                <option value="0"><?php esc_html_e( 'Uncategorized', 'bookly-responsive-appointment-booking-tool' ) ?></option>
                 <?php foreach ( $categories_collection as $category ) : ?>
                     <option value="<?php echo esc_attr( $category['id'] ) ?>" <?php selected( $category['id'], $service['category_id'] ) ?>><?php echo esc_html( $category['name'] ) ?></option>
                 <?php endforeach ?>
@@ -64,7 +64,7 @@ $service_id = $service['id'];
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_SIMPLE ) : ?>
         <div class="form-group">
-            <label><?php esc_html_e( 'Color', 'bookly' ) ?></label>
+            <label><?php esc_html_e( 'Color', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <div class="bookly-color-picker">
                 <input name="color" value="<?php echo esc_attr( $service['color'] ) ?>" class="bookly-js-color-picker" data-last-color="<?php echo esc_attr( $service['color'] ) ?>" type="text"/>
             </div>
@@ -79,7 +79,7 @@ $service_id = $service['id'];
         <?php Proxy\CompoundServices::renderSubForm( $service, $simple_services ) ?>
     <?php endif ?>
     <div class="form-group">
-        <label for="bookly_service_price" class="bookly-js-price-label"><?php esc_html_e( 'Price', 'bookly' ) ?></label>
+        <label for="bookly_service_price" class="bookly-js-price-label"><?php esc_html_e( 'Price', 'bookly-responsive-appointment-booking-tool' ) ?></label>
         <?php Proxy\CustomDuration::renderServicePriceLabel( $service_id ) ?>
         <input id="bookly_service_price" class="form-control bookly-js-question" type="number" min="0" step="1" name="price" value="<?php echo esc_attr( $service['price'] ) ?>"/>
     </div>
@@ -92,11 +92,11 @@ $service_id = $service['id'];
     <?php if ( $service['type'] == Service::TYPE_SIMPLE || $service['type'] == Service::TYPE_PACKAGE ) : ?>
         <div id="bookly-js-service-providers">
             <div class="form-group">
-                <label><?php esc_html_e( 'Providers', 'bookly' ) ?></label><br/>
+                <label><?php esc_html_e( 'Providers', 'bookly-responsive-appointment-booking-tool' ) ?></label><br/>
                 <ul class="bookly-js-providers"
-                    data-txt-select-all="<?php esc_attr_e( 'All staff', 'bookly' ) ?>"
-                    data-txt-all-selected="<?php esc_attr_e( 'All staff', 'bookly' ) ?>"
-                    data-txt-nothing-selected="<?php esc_attr_e( 'No staff selected', 'bookly' ) ?>"
+                    data-txt-select-all="<?php esc_attr_e( 'All staff', 'bookly-responsive-appointment-booking-tool' ) ?>"
+                    data-txt-all-selected="<?php esc_attr_e( 'All staff', 'bookly-responsive-appointment-booking-tool' ) ?>"
+                    data-txt-nothing-selected="<?php esc_attr_e( 'No staff selected', 'bookly-responsive-appointment-booking-tool' ) ?>"
                 >
                     <?php foreach ( $staff_dropdown_data as $category_id => $category ) : ?>
                         <li<?php if ( ! $category_id ) : ?> data-flatten-if-single<?php endif ?>><?php echo esc_html( $category['name'] ) ?>
@@ -124,8 +124,8 @@ $service_id = $service['id'];
         <?php Proxy\Pro::renderGatewayPreference( $service ) ?>
     </div>
     <div class="form-group">
-        <label for="bookly-service-info"><?php esc_html_e( 'Info', 'bookly' ) ?></label>
+        <label for="bookly-service-info"><?php esc_html_e( 'Info', 'bookly-responsive-appointment-booking-tool' ) ?></label>
         <textarea class="form-control" id="bookly-service-info" name="info" rows="3" type="text"><?php echo $service['info'] === null ? '' : esc_textarea( $service['info'] ) ?></textarea>
-        <small class="form-text text-muted"><?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly' ), '{service_info}' ) ?></small>
+        <small class="form-text text-muted"><?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly-responsive-appointment-booking-tool' ), '{service_info}' ) ?></small>
     </div>
 </div>

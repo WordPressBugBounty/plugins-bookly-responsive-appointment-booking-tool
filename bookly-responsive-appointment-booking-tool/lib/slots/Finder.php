@@ -493,7 +493,7 @@ class Finder
                 $where[] = sprintf(
                     'ss.service_id = %d AND ss.staff_id IN (%s)',
                     $service_id,
-                    empty ( $_staff_ids ) ? 'NULL' : implode( ',', $_staff_ids )
+                    empty ( $_staff_ids ) ? 'NULL' : implode( ',', array_map( 'intval', $_staff_ids ) )
                 );
             } else {
                 // Custom service.

@@ -76,7 +76,7 @@ class WhatsApp extends Product
                     return true;
                 }
             } else {
-                $this->api->addError( __( 'Phone number is empty.', 'bookly' ) );
+                $this->api->addError( __( 'Phone number is empty.', 'bookly-responsive-appointment-booking-tool' ) );
             }
         }
 

@@ -2,7 +2,7 @@
 <div class="row mt-3">
     <div class="col-md-12">
         <div class="form-group">
-            <label for="bookly-js-notification-subject"><?php esc_attr_e( 'Subject', 'bookly' ) ?></label>
+            <label for="bookly-js-notification-subject"><?php esc_attr_e( 'Subject', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <input type="text" class="form-control" id="bookly-js-notification-subject" name="notification[subject]">
             <input type="hidden" name="notification[gateway]" value="email"/>
         </div>

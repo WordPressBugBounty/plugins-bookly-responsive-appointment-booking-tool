@@ -9,8 +9,8 @@ class TimeZone extends Test
 
     public function __construct()
     {
-        $this->title = __( 'Time settings', 'bookly' );
-        $this->description = __( 'We recommend to use timezones with geographic names (e.g., "Europe/London") instead of "UTC +1". Using numerical representation may cause errors with daylight saving time. You can modify your timezone in WP Settings > General > Timezone.', 'bookly' );
+        $this->title = __( 'Time settings', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'We recommend to use timezones with geographic names (e.g., "Europe/London") instead of "UTC +1". Using numerical representation may cause errors with daylight saving time. You can modify your timezone in WP Settings > General > Timezone.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**

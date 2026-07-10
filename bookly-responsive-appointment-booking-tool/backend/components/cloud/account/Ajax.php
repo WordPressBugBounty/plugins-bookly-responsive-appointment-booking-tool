@@ -59,7 +59,7 @@ class Ajax extends Lib\Base\Ajax
                 wp_send_json_success();
             }
         } else {
-            wp_send_json_error( array( 'message' => __( 'Please accept terms and conditions.', 'bookly' ) ) );
+            wp_send_json_error( array( 'message' => __( 'Please accept terms and conditions.', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
 
         wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );

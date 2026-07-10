@@ -9,8 +9,8 @@ class SSL extends Test
 
     public function __construct()
     {
-        $this->title = __( 'Secure connection', 'bookly' );
-        $this->description = __( 'Some Bookly integrations require HTTPS connection and won\'t work with your website if there is no valid SSL certificate installed on your web server.', 'bookly' );
+        $this->title = __( 'Secure connection', 'bookly-responsive-appointment-booking-tool' );
+        $this->description = __( 'Some Bookly integrations require HTTPS connection and won\'t work with your website if there is no valid SSL certificate installed on your web server.', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**

@@ -13,7 +13,7 @@ use Bookly\Lib\Config;
         <?php Elements::renderText( 'bookly_l10n_info_details_step', Codes::getJson( 6 ) ) ?>
     </div>
     <div class="bookly-box">
-        <?php Elements::renderText( 'bookly_l10n_info_details_step_guest', Codes::getJson( 6, true ), 'bottom', __( 'Visible to non-logged in customers only', 'bookly' ) ) ?>
+        <?php Elements::renderText( 'bookly_l10n_info_details_step_guest', Codes::getJson( 6, true ), 'bottom', __( 'Visible to non-logged in customers only', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     </div>
     <div class="bookly-box bookly-guest">
         <div class="bookly-btn" id="bookly-login-button">

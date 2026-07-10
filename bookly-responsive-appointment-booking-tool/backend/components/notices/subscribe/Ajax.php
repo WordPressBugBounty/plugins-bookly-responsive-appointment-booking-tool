@@ -18,14 +18,14 @@ class Ajax extends Lib\Base\Ajax
 
         switch ( $state ) {
             case 'success':
-                wp_send_json_success( array( 'message' => __( 'Please, check your email to confirm the subscription. Thank you!', 'bookly' ) ) );
+                wp_send_json_success( array( 'message' => __( 'Please, check your email to confirm the subscription. Thank you!', 'bookly-responsive-appointment-booking-tool' ) ) );
                 break;
             case 'exists':
-                wp_send_json_success( array( 'message' => __( 'Given email address is already subscribed, thank you!', 'bookly' ) ) );
+                wp_send_json_success( array( 'message' => __( 'Given email address is already subscribed, thank you!', 'bookly-responsive-appointment-booking-tool' ) ) );
                 break;
             case 'invalid':
             default:
-                wp_send_json_error( array( 'message' => __( 'This email address is not valid.', 'bookly' ) ) );
+                wp_send_json_error( array( 'message' => __( 'This email address is not valid.', 'bookly-responsive-appointment-booking-tool' ) ) );
                 break;
         }
     }

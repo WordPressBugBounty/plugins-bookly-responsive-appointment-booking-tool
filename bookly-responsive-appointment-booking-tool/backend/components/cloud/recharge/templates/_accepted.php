@@ -24,8 +24,8 @@
         transform: rotate(45deg)
     }
 </style>
-<h3 class="text-success text-center pb-0 mb-0"><?php esc_html_e( 'Thank you', 'bookly' ) ?>!</h3>
+<h3 class="text-success text-center pb-0 mb-0"><?php esc_html_e( 'Thank you', 'bookly-responsive-appointment-booking-tool' ) ?>!</h3>
 <div class="text-success py-5">
     <i class="mx-auto bookly-success-icon"></i>
 </div>
-<p class="text-center bookly-js-message"><?php esc_html_e( 'Your payment has been accepted for processing', 'bookly' ) ?>!</p>
+<p class="text-center bookly-js-message"><?php esc_html_e( 'Your payment has been accepted for processing', 'bookly-responsive-appointment-booking-tool' ) ?>!</p>

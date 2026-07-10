@@ -21,11 +21,11 @@ class Dialog extends Lib\Base\Component
         wp_localize_script( 'bookly-testing-voice.js', 'BooklyL10nTestingVoiceDialog', array(
             'l10n' => array(
                 'admin_phone' => get_option( 'bookly_sms_administrator_phone' ),
-                'title' => __( 'Test voice notifications', 'bookly' ),
-                'to_phone' => __( 'To phone', 'bookly' ),
-                'notification' => __( 'Notification', 'bookly' ),
-                'call' => __( 'Call', 'bookly' ),
-                'close' => __( 'Close', 'bookly' ),
+                'title' => __( 'Test voice notifications', 'bookly-responsive-appointment-booking-tool' ),
+                'to_phone' => __( 'To phone', 'bookly-responsive-appointment-booking-tool' ),
+                'notification' => __( 'Notification', 'bookly-responsive-appointment-booking-tool' ),
+                'call' => __( 'Call', 'bookly-responsive-appointment-booking-tool' ),
+                'close' => __( 'Close', 'bookly-responsive-appointment-booking-tool' ),
             ),
         ) );
     }

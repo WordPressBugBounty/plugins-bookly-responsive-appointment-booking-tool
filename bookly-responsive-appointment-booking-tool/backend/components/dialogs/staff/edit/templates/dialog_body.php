@@ -10,34 +10,34 @@ use Bookly\Lib;
             <li class="nav-item">
                 <a id="bookly-details-tab" href="#details" data-toggle="bookly-tab" class="nav-link active">
                     <i class="fas fa-cog fa-fw mr-lg-1"></i>
-                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Details', 'bookly' ) ?></span>
+                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Details', 'bookly-responsive-appointment-booking-tool' ) ?></span>
                 </a>
             </li>
             <?php if ( Lib\Config::proActive() || Lib\Utils\Advertisement::isVisible( 'staff-modal-advanced-tab' ) ) : ?>
                 <li class="nav-item">
                     <a id="bookly-advanced-tab" href="#advanced" data-toggle="bookly-tab" class="nav-link">
                         <i class="fas fa-fw fa-cogs mr-lg-1"></i>
-                        <span class="d-none d-lg-inline"><?php esc_html_e( 'Advanced', 'bookly' ) ?></span>
+                        <span class="d-none d-lg-inline"><?php esc_html_e( 'Advanced', 'bookly-responsive-appointment-booking-tool' ) ?></span>
                     </a>
                 </li>
             <?php endif ?>
             <li class="nav-item">
                 <a id="bookly-services-tab" href="#services" data-toggle="bookly-tab" class="nav-link">
                     <i class="fas fa-th fa-fw mr-lg-1"></i>
-                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Services', 'bookly' ) ?></span>
+                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Services', 'bookly-responsive-appointment-booking-tool' ) ?></span>
                 </a>
             </li>
             <li class="nav-item">
                 <a id="bookly-schedule-tab" href="#schedule" data-toggle="bookly-tab" class="nav-link">
                     <i class="far fa-fw fa-calendar-alt mr-lg-1"></i>
-                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Schedule', 'bookly' ) ?></span>
+                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Schedule', 'bookly-responsive-appointment-booking-tool' ) ?></span>
                 </a>
             </li>
             <?php Proxy\Shared::renderStaffTab() ?>
             <li class="nav-item">
                 <a id="bookly-holidays-tab" href="#days_off" data-toggle="bookly-tab" class="nav-link">
                     <i class="far fa-calendar fa-fw mr-lg-1"></i>
-                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Days Off', 'bookly' ) ?></span>
+                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Days Off', 'bookly-responsive-appointment-booking-tool' ) ?></span>
                 </a>
             </li>
         </ul>

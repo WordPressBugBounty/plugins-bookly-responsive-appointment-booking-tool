@@ -15,8 +15,8 @@ class Dialog extends Lib\Base\Component
         ) );
 
         wp_localize_script( 'bookly-smtp-test-dialog.js', 'BooklySmtpTestDialogL10n', array(
-            'success' => __( 'Success', 'bookly' ),
-            'failed' => __( 'Failed', 'bookly' ),
+            'success' => __( 'Success', 'bookly-responsive-appointment-booking-tool' ),
+            'failed' => __( 'Failed', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 
         self::renderTemplate( 'dialog' );

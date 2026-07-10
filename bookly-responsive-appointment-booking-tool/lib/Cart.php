@@ -417,7 +417,7 @@ class Cart
         $tail = '';
         $more = count( $this->items ) - 1;
         if ( $more > 0 ) {
-            $tail = sprintf( _n( ' and %d more item', ' and %d more items', $more, 'bookly' ), $more );
+            $tail = sprintf( _n( ' and %d more item', ' and %d more items', $more, 'bookly-responsive-appointment-booking-tool' ), $more );
         }
 
         if ( $multi_byte ) {

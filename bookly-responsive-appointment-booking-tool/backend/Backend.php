@@ -21,6 +21,17 @@ abstract class Backend
             add_action( 'in_admin_header', function() use ( $bookly_page ) {
                 Backend::renderNotices( $bookly_page );
             } );
+            if ( $bookly_page ) {
+                // WordPress relocates admin notices after .wp-header-end when present,
+                // otherwise after the first .wrap h1 — which is inside the Svelte page
+                // header flex row and gets squeezed together with the title. Print the
+                // marker last in the notices area, before the page wrap opens, so all
+                // relocated notices stay above the page and outside .bookly-css-root
+                // (bootstrap `#bookly-tbs a` / tailwind preflight would restyle them).
+                add_action( 'all_admin_notices', function() {
+                    echo '<hr class="wp-header-end">';
+                }, PHP_INT_MAX );
+            }
         }
 
         // for Site Health
@@ -41,6 +52,7 @@ abstract class Backend
             /** @var \Elementor\Elements_Manager $elements_manager */
             $elements_manager->add_category( 'bookly', array( 'title' => 'Bookly' ) );
         } );
+
         add_action( 'elementor/editor/before_enqueue_scripts', function() {
             wp_register_style(
                 'bookly-elementor',
@@ -49,6 +61,83 @@ abstract class Backend
                 Lib\Plugin::getVersion()
             );
         } );
+
+        // Divi
+        add_filter( 'et_builder_module_categories', function ( $categories ) {
+            $categories['bookly'] = 'Bookly';
+
+            return $categories;
+        } );
+
+        // =====================================================================
+        // Page appearance settings (per-user, persisted to user meta) for every
+        // Bookly admin page. The "Page appearance" control lives in the Svelte
+        // PageHeader (Components\PageHeader\Renderer): its switches flip a body
+        // class for instant feedback AND POST to Components\PageHeader\Ajax
+        // (bookly_save_appearance_settings) to persist. On each render we re-apply
+        // from meta server-side, so the choice survives navigation with no flash.
+        // Fullscreen mirrors WP core's own block-editor pattern
+        // (`body.js.is-fullscreen-mode` -> display:none of the known core chrome),
+        // gated on `.js` so the page degrades to a normal screen without JS.
+        // =====================================================================
+        if ( isset( $_REQUEST['page'] ) && strncmp( $_REQUEST['page'], 'bookly-', 7 ) === 0 ) {
+            add_filter( 'admin_body_class', function ( $classes ) {
+                $ap = get_user_meta( get_current_user_id(), 'bookly_appearance', true );
+                if ( ! is_array( $ap ) ) {
+                    return $classes;
+                }
+                if ( ! empty( $ap['fullscreen'] ) )  { $classes .= ' bookly-fullscreen-active'; }
+                if ( ! empty( $ap['fixed_width'] ) ) { $classes .= ' bookly-fixed-width'; }
+                return $classes;
+            } );
+            add_action( 'admin_head', function () {
+                // Rules only bite when the matching body class is present (added
+                // from meta above, or toggled at runtime by the appearance panel).
+                echo '<style id="bookly-appearance-css">'
+                    // Fullscreen: hide the known WP core chrome (display:none — immune
+                    // to z-index/stacking/timing) + overlay our page as a backstop for
+                    // anything unknown. `.js`-gated, matching WP's own fullscreen.
+                    . 'body.js.bookly-fullscreen-active #wpadminbar,'
+                    . 'body.js.bookly-fullscreen-active #adminmenumain,'
+                    . 'body.js.bookly-fullscreen-active #wpfooter{display:none!important;}'
+                    // Lock the document scroll so only the fixed overlay scrolls
+                    // (otherwise html/body scroll behind it = a second scrollbar).
+                    . 'html:has(body.js.bookly-fullscreen-active){padding-top:0!important;overflow:hidden!important;}'
+                    . 'body.js.bookly-fullscreen-active{overflow:hidden!important;}'
+                    . 'body.js.bookly-fullscreen-active #wpcontent{margin-left:0!important;}'
+                    // background uses !important: bootstrap resets #bookly-tbs to
+                    // background-color:transparent (ID specificity) — a class can never
+                    // out-specify an ID. Drop the !important once #bookly-tbs is gone.
+                    . 'body.js.bookly-fullscreen-active .bookly-main-page-wrap{position:fixed;inset:0;z-index:100049;margin:0;padding:10px 20px;overflow:auto;background:#f0f0f1!important;}'
+                    // Fixed page width: cap the content column and centre it.
+                    . 'body.js.bookly-fixed-width .bookly-main-page-wrap{max-width:1180px;margin-inline:auto;}'
+                    // ...and the Bookly admin notices, which WP renders as .wrap
+                    // siblings directly under #wpcontent (via in_admin_header) — so
+                    // they line up with the centred content instead of spanning full.
+                    . 'body.js.bookly-fixed-width #wpcontent>.wrap{max-width:1180px;margin-inline:auto;}'
+                    // When also fullscreen, the wrap is a full-width fixed scroller
+                    // (inset:0) — max-width + auto margins fight it, so centre via padding.
+                    . 'body.js.bookly-fullscreen-active.bookly-fixed-width .bookly-main-page-wrap{max-width:none;margin-inline:0;padding-inline:max(20px,calc((100% - 1180px) / 2));}'
+                    // Fullscreen left sidebar (the Svelte nav, w-60 = 240px) is shown only at >=md
+                    // and pinned to the viewport — offset the page content right by it (240 + 20
+                    // gutter). Below md the sidebar is an off-canvas drawer, so no offset there.
+                    . '@media(min-width:768px){body.js.bookly-fullscreen-active .bookly-main-page-wrap{padding-left:260px;}}'
+                    // ...and with fixed width too: centre the 1180px column within the space to the
+                    // RIGHT of the sidebar (left = sidebar + gutter, right = matching gutter).
+                    . '@media(min-width:768px){body.js.bookly-fullscreen-active.bookly-fixed-width .bookly-main-page-wrap{padding-left:calc(240px + max(20px,(100% - 240px - 1180px) / 2));padding-right:max(20px,(100% - 240px - 1180px) / 2);}}'
+                    // Loading-window placeholder: a blank panel matching the sidebar footprint
+                    // (240px, card bg, right border), shown only in fullscreen >= md and sitting
+                    // one z-index below the real Svelte <aside> (z-40), which covers it on mount.
+                    . '.bookly-fs-sidebar-placeholder{display:none;}'
+                    . '@media(min-width:768px){body.js.bookly-fullscreen-active .bookly-fs-sidebar-placeholder{display:block;position:fixed;left:0;top:0;bottom:0;width:240px;z-index:39;background:#fff;border-right:1px solid #e5e7eb;}}'
+                    // Sidebar nav scroller: hide the (ugly) scrollbar and fade whichever edges have
+                    // more content beyond them. The header JS feeds the edge sizes via --bookly-fade-*
+                    // (0px = no fade); a single mask covers top + bottom in any combination.
+                    . '.bookly-fs-nav-scroll{scrollbar-width:none;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 var(--bookly-fade-top,0px),#000 calc(100% - var(--bookly-fade-bottom,0px)),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 var(--bookly-fade-top,0px),#000 calc(100% - var(--bookly-fade-bottom,0px)),transparent 100%);}'
+                    . '.bookly-fs-nav-scroll::-webkit-scrollbar{width:0;height:0;display:none;}'
+                    . '</style>';
+            } );
+        }
     }
 
     /**
@@ -120,7 +209,7 @@ abstract class Backend
                     plugins_url( 'resources/images/menu.png', __FILE__ ), $dynamic_position );
             }
             if ( Lib\Config::setupMode() ) {
-                $setup = __( 'Initial setup', 'bookly' );
+                $setup = __( 'Initial setup', 'bookly-responsive-appointment-booking-tool' );
                 add_submenu_page( 'bookly-menu', $setup, $setup, $required_capability, Modules\Setup\Page::pageSlug(), function() { Modules\Setup\Page::render(); } );
             } elseif ( Lib\Proxy\Pro::graceExpired() ) {
                 Lib\Proxy\Pro::addLicenseBooklyMenuItem();
@@ -129,17 +218,17 @@ abstract class Backend
                 }
             } else {
                 // Translated submenu pages.
-                $dashboard = __( 'Dashboard', 'bookly' );
-                $appointments = __( 'Appointments', 'bookly' );
-                $staff_members = __( 'Staff Members', 'bookly' );
-                $services = __( 'Services', 'bookly' );
-                $notifications = __( 'Email Notifications', 'bookly' );
-                $customers = __( 'Customers', 'bookly' );
-                $payments = __( 'Payments', 'bookly' );
-                $appearance = __( 'Appearance', 'bookly' );
-                $settings = __( 'Settings', 'bookly' );
-                $products = __( 'Products', 'bookly' );
-                $billing = __( 'Billing', 'bookly' );
+                $dashboard = __( 'Dashboard', 'bookly-responsive-appointment-booking-tool' );
+                $appointments = __( 'Appointments', 'bookly-responsive-appointment-booking-tool' );
+                $staff_members = __( 'Staff Members', 'bookly-responsive-appointment-booking-tool' );
+                $services = __( 'Services', 'bookly-responsive-appointment-booking-tool' );
+                $notifications = __( 'Email Notifications', 'bookly-responsive-appointment-booking-tool' );
+                $customers = __( 'Customers', 'bookly-responsive-appointment-booking-tool' );
+                $payments = __( 'Payments', 'bookly-responsive-appointment-booking-tool' );
+                $appearance = __( 'Appearance', 'bookly-responsive-appointment-booking-tool' );
+                $settings = __( 'Settings', 'bookly-responsive-appointment-booking-tool' );
+                $products = __( 'Products', 'bookly-responsive-appointment-booking-tool' );
+                $billing = __( 'Billing', 'bookly-responsive-appointment-booking-tool' );
 
                 add_submenu_page( 'bookly-menu', $dashboard, $dashboard, $required_capability,
                     Modules\Dashboard\Page::pageSlug(), function() { Modules\Dashboard\Page::render(); } );
@@ -158,7 +247,7 @@ abstract class Backend
                         Modules\Staff\Page::pageSlug(), function() { Modules\Staff\Page::render(); } );
                 } elseif ( $is_staff ) {
                     if ( get_option( 'bookly_gen_allow_staff_edit_profile' ) == 1 ) {
-                        add_submenu_page( 'bookly-menu', __( 'Profile', 'bookly' ), __( 'Profile', 'bookly' ), 'read',
+                        add_submenu_page( 'bookly-menu', __( 'Profile', 'bookly-responsive-appointment-booking-tool' ), __( 'Profile', 'bookly-responsive-appointment-booking-tool' ), 'read',
                             Modules\Staff\Page::pageSlug(), function() { Modules\Staff\Page::render(); } );
                     }
                 }
@@ -193,7 +282,7 @@ abstract class Backend
                 Modules\Shop\Page::addBooklyMenuItem();
 
                 if ( ! Lib\Config::proActive() ) {
-                    $submenu['bookly-menu'][] = array( esc_attr__( 'Get Bookly Pro', 'bookly' ) . ' <i class="fas fa-fw fa-certificate" style="color: #f4662f"></i>', 'read', Lib\Utils\Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'admin_menu' ), );
+                    $submenu['bookly-menu'][] = array( esc_attr__( 'Get Bookly Pro', 'bookly-responsive-appointment-booking-tool' ) . ' <i class="fas fa-fw fa-certificate" style="color: #f4662f"></i>', 'read', Lib\Utils\Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'admin_menu' ), );
                 }
 
                 // Bookly Cloud menu

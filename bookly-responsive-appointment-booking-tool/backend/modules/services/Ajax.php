@@ -84,7 +84,7 @@ class Ajax extends Page
                 'disabled' => ! isset( $type_icons[ $service['type'] ] ),
                 'price' => Lib\Utils\Price::format( $service['price'] ),
                 'duration' => in_array( $service['type'], array( Lib\Entities\Service::TYPE_COLLABORATIVE, Lib\Entities\Service::TYPE_COMPOUND ) )
-                    ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count )
+                    ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly-responsive-appointment-booking-tool' ), $sub_services_count )
                     : Lib\Utils\DateTime::secondsToInterval( $service['duration'] ),
                 'image' => Lib\Utils\Common::getAttachmentUrl( $service['attachment_id'] ),
                 'online_meetings' => $service['online_meetings'],
@@ -211,7 +211,7 @@ class Ajax extends Page
             $new_service = new Lib\Entities\Service( $service->getFields() );
             $new_service
                 ->setId( null )
-                ->setTitle( sprintf( __( 'Copy of %s', 'bookly' ), $new_service->getTitle() ) )
+                ->setTitle( sprintf( __( 'Copy of %s', 'bookly-responsive-appointment-booking-tool' ), $new_service->getTitle() ) )
                 ->setVisibility( Lib\Entities\Service::VISIBILITY_PRIVATE )
                 ->save();
 

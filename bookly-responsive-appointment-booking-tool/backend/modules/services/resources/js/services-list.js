@@ -36,6 +36,10 @@ jQuery(function ($) {
      */
     let columns = [];
 
+    // Backend (Ajax::getServices) searches by s.id, s.title, s.tags (Pro), c.name (category) —
+    // every other column must opt out of the quick-search highlight.
+    const searchableColumns = ['id', 'title', 'tags', 'category_name'];
+
     if (BooklyL10n.show_type) {
         columns.push({
             data: null,
@@ -44,6 +48,7 @@ jQuery(function ($) {
             class: 'bookly:w-8',
             show: true,
             orderable: false,
+            searchable: false,
             render: function (data, type, row) {
                 return '<i class="' + row.type_icon + ' fa-fw" title="' + row.type + '"></i>';
             },
@@ -56,6 +61,7 @@ jQuery(function ($) {
         class: 'bookly:w-8',
         show: true,
         orderable: false,
+        searchable: false,
         render: function (data, type, row) {
             return '<i class="fas fa-fw fa-circle" style="color:' + row.color + ';">';
         }
@@ -63,16 +69,12 @@ jQuery(function ($) {
 
     $.each(BooklyL10n.datatables[table].settings.columns, function (column, show) {
         switch (column) {
-            case 'category_id':
+            case 'category_name':
                 columns.push({
-                    data: column,
-                    render: function (data, type, row) {
-                        if (row.category != null) {
-                            return BooklyL10n.categories.find(function (category) {
-                                return category.id === row.category;
-                            }).name;
-                        }
-                        return BooklyL10n.uncategorized;
+                    data: 'category_name',
+                    render: function (data) {
+                        // Server provides the joined category name (c.name) or null.
+                        return data != null ? BooklyDatatables.escapeHtml(data) : BooklyL10n.uncategorized;
                     }
                 });
                 break;
@@ -132,7 +134,6 @@ jQuery(function ($) {
             case 'price':
                 columns.push({
                     data: column,
-                    searchable: false,
                     render: function (data) { return BooklyDatatables.escapeHtml(data); }
                 });
                 break;
@@ -146,6 +147,7 @@ jQuery(function ($) {
         columns[columns.length - 1].title = BooklyL10n.datatables[table].titles[column] || column;
         columns[columns.length - 1].name = column;
         columns[columns.length - 1].show = show;
+        columns[columns.length - 1].searchable = searchableColumns.indexOf(column) !== -1;
     });
 
     /**
@@ -171,43 +173,41 @@ jQuery(function ($) {
         edit: function (row) {
             $(document.body).trigger('service.edit', [row.id]);
         },
-        checked: function (rows) {
-            const actions = [];
-            if (rows.length === 1) {
-                actions.push({
-                    label: BooklyL10n.duplicate,
-                    icon: 'copy',
-                    variant: 'outline',
-                    click: function (selected) {
-                        if (!confirm(BooklyL10n.are_you_sure + '\n\n' + BooklyL10n.private_warning)) return;
-                        bt.setLoading(true);
-                        $.post(
-                            ajaxurl,
-                            {
-                                action: 'bookly_duplicate_service',
-                                service_id: selected[0].id,
-                                csrf_token: BooklyL10nGlobal.csrf_token,
-                            },
-                            function (response) {
-                                if (response.success) {
-                                    bt.reload();
-                                    BooklyServiceOrderDialogL10n.services.push({ id: response.data.id, title: response.data.title });
-                                } else {
-                                    requiredBooklyPro();
-                                }
-                                bt.setLoading(false);
+        rowActions: function (row) {
+            return [{
+                label: BooklyL10n.duplicate,
+                icon: 'copy-plus',
+                variant: 'outline',
+                click: function (r) {
+                    if (!confirm(BooklyL10n.are_you_sure + '\n\n' + BooklyL10n.private_warning)) return;
+                    bt.setLoading(true);
+                    $.post(
+                        ajaxurl,
+                        {
+                            action: 'bookly_duplicate_service',
+                            service_id: r.id,
+                            csrf_token: BooklyL10nGlobal.csrf_token,
+                        },
+                        function (response) {
+                            if (response.success) {
+                                bt.reload();
+                                BooklyL10n.service_order.push({ id: response.data.id, title: response.data.title });
+                            } else {
+                                requiredBooklyPro();
                             }
-                        );
-                    }
-                });
-            }
-            actions.push({
+                            bt.setLoading(false);
+                        }
+                    );
+                }
+            }];
+        },
+        checked: function () {
+            return [{
                 label: BooklyL10n.delete,
                 icon: 'trash',
                 variant: 'destructive',
                 click: function () { $deleteModal.booklyModal('show'); }
-            });
-            return actions;
+            }];
         },
         filters: [
             {
@@ -239,7 +239,7 @@ jQuery(function ($) {
                 label: BooklyL10n.order,
                 icon: 'list-ordered',
                 variant: 'outline',
-                click: function () { $('#bookly-service-order-modal').booklyModal('show'); }
+                click: openReorder
             });
             if (BooklyL10n.proEnabled) {
                 buttons.push({
@@ -295,4 +295,50 @@ jQuery(function ($) {
         rangeTools.ladda(this);
         window.location.href = BooklyL10n.appointmentsUrl + '#service=' + bt.getCheckedRows()[0].id;
     });
+
+    /**
+     * Reorder dialog. The full simple-service collection (position order) lives
+     * in BooklyL10n.service_order and is kept in sync below — the server-side
+     * table can't supply the whole list.
+     */
+    function openReorder() {
+        const items = BooklyL10n.service_order.map(function (s) {
+            return { id: s.id, label: s.title || '' };
+        });
+
+        BooklyDatatables.showReorder({
+            title: BooklyL10n.service_order_title,
+            hint: BooklyL10n.service_order_hint,
+            items: items,
+            saveLabel: BooklyL10n.datatables.l10n.save,
+            cancelLabel: BooklyL10n.datatables.l10n.cancel,
+            onSave: function (orderedIds) {
+                return $.post(ajaxurl, booklySerialize.buildRequestData('bookly_update_service_positions', { services: orderedIds }))
+                    .then(function () {
+                        BooklyL10n.service_order.sort(function (a, b) {
+                            return orderedIds.indexOf(a.id) - orderedIds.indexOf(b.id);
+                        });
+                        bt.reload();
+                    });
+            }
+        });
+    }
+
+    /**
+     * Keep BooklyL10n.service_order in sync with service edits/deletes so the
+     * reorder dialog reflects changes without a page reload.
+     */
+    $(document.body)
+        .on('service.submitForm', function (event, $panel, data) {
+            const svc = BooklyL10n.service_order.find(function (s) { return s.id == data.id; });
+            if (svc) {
+                svc.title = data.title;
+            }
+        })
+        .on('service.deleted', function (event, services) {
+            const ids = services.map(Number);
+            BooklyL10n.service_order = BooklyL10n.service_order.filter(function (s) {
+                return ids.indexOf(Number(s.id)) === -1;
+            });
+        });
 });

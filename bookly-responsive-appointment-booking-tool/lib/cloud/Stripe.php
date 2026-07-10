@@ -137,13 +137,13 @@ class Stripe extends Base
         $translated = null;
         switch ( $error_code ) {
             case 'ERROR_STRIPE_NOT_CONNECTED':
-                $translated = __( 'Stripe not connected', 'bookly' );
+                $translated = __( 'Stripe not connected', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case 'ERROR_STRIPE_ACCOUNT_NOT_FOUND':
-                $translated = __( 'Stripe account not found', 'bookly' );
+                $translated = __( 'Stripe account not found', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case 'ERROR_STRIPE_REFUND_FAILED':
-                $translated = __( 'Refund cannot be processed. Try again later or process it manually in your payment system', 'bookly' );
+                $translated = __( 'Refund cannot be processed. Try again later or process it manually in your payment system', 'bookly-responsive-appointment-booking-tool' );
                 break;
         }
 

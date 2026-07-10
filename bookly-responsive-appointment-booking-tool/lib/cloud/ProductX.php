@@ -17,13 +17,13 @@ class ProductX extends Product
         $translated = null;
         switch ( $error_code ) {
             case 'ERROR_PURCHASE_CODE_INVALID':
-                $translated = __( 'Purchase code is not valid', 'bookly' );
+                $translated = __( 'Purchase code is not valid', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case 'ERROR_PURCHASE_CODE_IN_USE':
-                $translated = __( 'Purchase code is used on another account', 'bookly' );
+                $translated = __( 'Purchase code is used on another account', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case 'ERROR_PURCHASE_CODE_UNKNOWN':
-                $translated = __( 'Purchase code verification is temporarily unavailable. Please try again later.', 'bookly' );
+                $translated = __( 'Purchase code verification is temporarily unavailable. Please try again later.', 'bookly-responsive-appointment-booking-tool' );
                 break;
         }
 

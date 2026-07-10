@@ -7,17 +7,17 @@ use Bookly\Lib;
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><?php esc_html_e( 'New service', 'bookly' ) ?></h5>
+                <h5 class="modal-title"><?php esc_html_e( 'New service', 'bookly-responsive-appointment-booking-tool' ) ?></h5>
                 <button type="button" class="close" data-dismiss="bookly-modal" aria-label="Close"><span>×</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="bookly-new-service-title"><?php esc_html_e( 'Title', 'bookly' ) ?></label>
+                    <label for="bookly-new-service-title"><?php esc_html_e( 'Title', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                     <input class="form-control bookly-js-new-service-title" id="bookly-new-service-title" name="title" type="text" />
                 </div>
                 <?php if ( count( $service_types = Proxy\Shared::prepareServiceTypes( array( Lib\Entities\Service::TYPE_SIMPLE => ucfirst( Lib\Entities\Service::TYPE_SIMPLE ) ) ) ) > 1 ) : ?>
                     <div class="form-group">
-                        <label for="bookly-new-service-type"><?php esc_html_e( 'Type', 'bookly' ) ?></label>
+                        <label for="bookly-new-service-type"><?php esc_html_e( 'Type', 'bookly-responsive-appointment-booking-tool' ) ?></label>
                         <select class="form-control bookly-js-new-service-type" id="bookly-new-service-type" name="type">
                             <?php foreach ( $service_types as $type => $title ): ?>
                                 <option data-icon="<?php echo esc_attr( $type_icons[ $type ] ) ?>" value="<?php echo esc_attr( $type ) ?>"><?php echo esc_html( $title ) ?></option>
@@ -27,7 +27,7 @@ use Bookly\Lib;
                 <?php endif ?>
             </div>
             <div class="modal-footer">
-                <?php Buttons::renderSubmit( null, 'bookly-js-save', __( 'Create', 'bookly' ) ) ?>
+                <?php Buttons::renderSubmit( null, 'bookly-js-save', __( 'Create', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                 <?php Buttons::renderCancel() ?>
             </div>
         </div>

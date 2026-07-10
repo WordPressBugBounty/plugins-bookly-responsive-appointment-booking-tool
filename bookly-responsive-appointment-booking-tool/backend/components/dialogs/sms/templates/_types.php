@@ -7,9 +7,9 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog;
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-            <label for="notification_type"><?php esc_attr_e( 'Type', 'bookly' ) ?></label>
+            <label for="notification_type"><?php esc_attr_e( 'Type', 'bookly-responsive-appointment-booking-tool' ) ?></label>
             <select class="form-control custom-select" name="notification[type]" id="notification_type">
-                <optgroup label="<?php esc_attr_e( 'Instant notifications', 'bookly' ) ?>">
+                <optgroup label="<?php esc_attr_e( 'Instant notifications', 'bookly-responsive-appointment-booking-tool' ) ?>">
                     <?php Dialog::renderOption( Notification::TYPE_NEW_BOOKING, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::recurringAppointmentsActive() && Dialog::renderOption( Notification::TYPE_NEW_BOOKING_RECURRING, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_NEW_BOOKING_COMBINED, array( 'customer', 'custom' ) ) ?>
@@ -28,15 +28,15 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog;
                     <?php Dialog::renderOption( Notification::TYPE_VERIFY_PHONE, array( 'customer' ) ) ?>
                     <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) && Dialog::renderOption( Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN, array( 'staff', 'admin', 'custom' ) ) ?>
                 </optgroup>
-                <optgroup label="<?php esc_attr_e( 'Scheduled notifications (require cron setup)', 'bookly' ) ?>">
+                <optgroup label="<?php esc_attr_e( 'Scheduled notifications (require cron setup)', 'bookly-responsive-appointment-booking-tool' ) ?>">
                     <?php Dialog::renderOption( Notification::TYPE_APPOINTMENT_REMINDER, array( 'customer', 'staff', 'admin', 'custom' ), 'bidirectional full' ) ?>
                     <?php Dialog::renderOption( Notification::TYPE_LAST_CUSTOMER_APPOINTMENT, array( 'customer', 'staff', 'admin', 'custom' ), 'bidirectional full' ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_CUSTOMER_BIRTHDAY, array( 'customer', 'custom' ), 'bidirectional at-time' ) ?>
                     <?php Dialog::renderOption( Notification::TYPE_STAFF_DAY_AGENDA, array( 'staff', 'admin', 'custom' ), 'before' ) ?>
                 </optgroup>
             </select>
-            <small class="form-text text-muted"><?php esc_html_e( 'Select the type of event at which the notification is sent.', 'bookly' ) ?></small>
-            <small class="form-text text-muted bookly-js-help-block mt-2 <?php echo Notification::TYPE_NEW_BOOKING_COMBINED ?>"><?php esc_html_e( 'This notification is sent once for a booking made by a customer and includes all cart items.', 'bookly' ) ?></small>
+            <small class="form-text text-muted"><?php esc_html_e( 'Select the type of event at which the notification is sent.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
+            <small class="form-text text-muted bookly-js-help-block mt-2 <?php echo Notification::TYPE_NEW_BOOKING_COMBINED ?>"><?php esc_html_e( 'This notification is sent once for a booking made by a customer and includes all cart items.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
         </div>
     </div>
 </div>

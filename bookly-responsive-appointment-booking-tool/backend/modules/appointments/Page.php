@@ -13,13 +13,11 @@ class Page extends Lib\Base\Component
     {
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
-            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/appointments.js' => array( 'bookly-backend-globals' ) ),
             'frontend' => array( 'js/intlTelInput.min.js' => array( 'bookly-backend-globals' ) ),
-            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::APPOINTMENTS );
@@ -50,30 +48,30 @@ class Page extends Lib\Base\Component
 
         wp_localize_script( 'bookly-appointments.js', 'BooklyL10n', array(
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
-            'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'anyTime' => __( 'Any time', 'bookly' ), 'createdAtAnyTime' => __( 'Created at any time', 'bookly' ), ) ),
-            'are_you_sure' => __( 'Are you sure?', 'bookly' ),
-            'search' => __( 'Quick search by ID, customer, staff, service', 'bookly' ) . '…',
-            'zeroRecords' => __( 'No appointments for selected period.', 'bookly' ),
-            'processing' => __( 'Processing', 'bookly' ) . '…',
-            'edit' => __( 'Edit', 'bookly' ) . '…',
-            'no_result_found' => __( 'No results found', 'bookly' ),
-            'new_appointment' => __( 'New appointment', 'bookly' ) . '…',
-            'searching' => __( 'Searching', 'bookly' ),
-            'attachments' => __( 'Attachments', 'bookly' ),
+            'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'anyTime' => __( 'Any time', 'bookly-responsive-appointment-booking-tool' ), 'createdAtAnyTime' => __( 'Created at any time', 'bookly-responsive-appointment-booking-tool' ), ) ),
+            'are_you_sure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+            'search' => __( 'Quick search by ID, customer, staff, service', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'zeroRecords' => __( 'No appointments for selected period.', 'bookly-responsive-appointment-booking-tool' ),
+            'processing' => __( 'Processing', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'edit' => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'no_result_found' => __( 'No results found', 'bookly-responsive-appointment-booking-tool' ),
+            'new_appointment' => __( 'New appointment', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'searching' => __( 'Searching', 'bookly-responsive-appointment-booking-tool' ),
+            'attachments' => __( 'Attachments', 'bookly-responsive-appointment-booking-tool' ),
             'tasks' => array(
                 'enabled' => Lib\Config::tasksActive(),
                 'title' => Proxy\Tasks::getFilterText(),
             ),
             'filters' => array(
-                'date' => __( 'Date', 'bookly' ),
-                'created' => __( 'Created', 'bookly' ),
-                'status' => __( 'Status', 'bookly' ),
-                'customer' => __( 'Customer', 'bookly' ),
-                'staff' => __( 'Employee', 'bookly' ),
-                'service' => __( 'Service', 'bookly' ),
-                'location' => __( 'Location', 'bookly' ),
-                'searchPlaceholder' => __( 'Search', 'bookly' ). '…',
-                'noLocation' => __( 'W/o location', 'bookly' ),
+                'date' => __( 'Date', 'bookly-responsive-appointment-booking-tool' ),
+                'created' => __( 'Created', 'bookly-responsive-appointment-booking-tool' ),
+                'status' => __( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+                'customer' => __( 'Customer', 'bookly-responsive-appointment-booking-tool' ),
+                'staff' => __( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
+                'service' => __( 'Service', 'bookly-responsive-appointment-booking-tool' ),
+                'location' => __( 'Location', 'bookly-responsive-appointment-booking-tool' ),
+                'searchPlaceholder' => __( 'Search', 'bookly-responsive-appointment-booking-tool' ). '…',
+                'noLocation' => __( 'W/o location', 'bookly-responsive-appointment-booking-tool' ),
             ),
             'filterOptions' => array(
                 'staff' => $staff_members,
@@ -83,10 +81,10 @@ class Page extends Lib\Base\Component
                 'locations' => $locations,
                 'statuses' => $statuses,
             ),
-            'delete' => __( 'Delete', 'bookly' ) . '…',
-            'export' => __( 'Export', 'bookly' ) . '…',
-            'print' => __( 'Print', 'bookly' ) . '…',
-            'reorder' => _x( 'Reorder', 'order of elements', 'bookly' ),
+            'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'export' => __( 'Export', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'print' => __( 'Print', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'reorder' => _x( 'Reorder', 'order of elements', 'bookly-responsive-appointment-booking-tool' ),
             'proEnabled' => Lib\Config::proActive(),
             'datatables' => $datatables,
         ) );

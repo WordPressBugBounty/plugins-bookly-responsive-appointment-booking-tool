@@ -247,7 +247,7 @@ class Ajax extends Lib\Base\Ajax
         $break_id = self::parameter( 'id', 0 );
 
         if ( Lib\Utils\DateTime::timeToSeconds( $start_time ) >= Lib\Utils\DateTime::timeToSeconds( $end_time ) ) {
-            wp_send_json_error( array( 'message' => __( 'The start time must be less than the end one', 'bookly' ), ) );
+            wp_send_json_error( array( 'message' => __( 'The start time must be less than the end one', 'bookly-responsive-appointment-booking-tool' ), ) );
         }
 
         $schedule_item = new Lib\Entities\StaffScheduleItem();
@@ -256,7 +256,7 @@ class Ajax extends Lib\Base\Ajax
         $in_working_time = $working_start <= $start_time && $start_time <= $working_end
             && $working_start <= $end_time && $end_time <= $working_end;
         if ( ! $in_working_time || ! $schedule_item->isBreakIntervalAvailable( $start_time, $end_time, $break_id ) ) {
-            wp_send_json_error( array( 'message' => __( 'The requested interval is not available', 'bookly' ), ) );
+            wp_send_json_error( array( 'message' => __( 'The requested interval is not available', 'bookly-responsive-appointment-booking-tool' ), ) );
         }
 
         $schedule_item_break = new Lib\Entities\ScheduleItemBreak();
@@ -275,7 +275,7 @@ class Ajax extends Lib\Base\Ajax
                 'interval' => $break->getFormattedInterval(),
             ) );
         } else {
-            wp_send_json_error( array( 'message' => __( 'Error adding the break interval', 'bookly' ), ) );
+            wp_send_json_error( array( 'message' => __( 'Error adding the break interval', 'bookly-responsive-appointment-booking-tool' ), ) );
         }
     }
 

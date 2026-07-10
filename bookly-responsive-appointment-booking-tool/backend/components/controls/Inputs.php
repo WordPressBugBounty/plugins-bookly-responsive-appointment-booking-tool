@@ -49,8 +49,8 @@ class Inputs
         if ( empty( $radios ) ) {
             $radios = array(
                 //value => data
-                0 => array( 'title' => __( 'Disabled', 'bookly' ) ),
-                1 => array( 'title' => __( 'Enabled', 'bookly' ) ),
+                0 => array( 'title' => __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ) ),
+                1 => array( 'title' => __( 'Enabled', 'bookly-responsive-appointment-booking-tool' ) ),
             );
         }
 

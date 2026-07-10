@@ -7,6 +7,6 @@ use Bookly\Backend\Components\Settings\Selects;
 ?>
 <div class="row">
     <div class="col-md-12">
-        <?php Selects::renderSingleValue( 'bookly_cloud_voice_language', $voice->language, __( 'Language', 'bookly' ), __( 'Select the language of your notifications', 'bookly' ), $self::getLanguages() ) ?>
+        <?php Selects::renderSingleValue( 'bookly_cloud_voice_language', $voice->language, __( 'Language', 'bookly-responsive-appointment-booking-tool' ), __( 'Select the language of your notifications', 'bookly-responsive-appointment-booking-tool' ), $self::getLanguages() ) ?>
     </div>
 </div>

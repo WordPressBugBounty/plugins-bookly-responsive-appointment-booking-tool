@@ -80,20 +80,20 @@ class Dialog extends Lib\Base\Component
             'staff_members' => $staff_members,
             'users_list' => $users_list,
             'l10n' => array(
-                'associate_token_with' => __( 'Associate token with', 'bookly' ),
-                'associate_token_with_info' => __( 'By associating a token with a WordPress user, you can provide administrative access to Bookly from the mobile app. The level of access is determined by the user\'s role', 'bookly' ),
-                'close' => __( 'Close', 'bookly' ),
-                'edit_item' => __( 'Edit access token', 'bookly' ),
-                'new_item' => __( 'New access token', 'bookly' ),
-                'save' => __( 'Save', 'bookly' ),
-                'create' => __( 'Create', 'bookly' ),
-                'select_wp_user' => __( 'Select WordPress user', 'bookly' ),
-                'send_notifications' => __( 'Send notification with access data', 'bookly' ),
-                'settings_saved' => __( 'Settings saved.', 'bookly' ),
-                'staff' => __( 'Staff', 'bookly' ),
-                'with_access' => __( 'With access to Bookly', 'bookly' ),
-                'without_access' => __( 'Without access to Bookly', 'bookly' ),
-                'wp_user' => __( 'WordPress user', 'bookly' ),
+                'associate_token_with' => __( 'Associate token with', 'bookly-responsive-appointment-booking-tool' ),
+                'associate_token_with_info' => __( 'By associating a token with a WordPress user, you can provide administrative access to Bookly from the mobile app. The level of access is determined by the user\'s role', 'bookly-responsive-appointment-booking-tool' ),
+                'close' => __( 'Close', 'bookly-responsive-appointment-booking-tool' ),
+                'edit_item' => __( 'Edit access token', 'bookly-responsive-appointment-booking-tool' ),
+                'new_item' => __( 'New access token', 'bookly-responsive-appointment-booking-tool' ),
+                'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
+                'create' => __( 'Create', 'bookly-responsive-appointment-booking-tool' ),
+                'select_wp_user' => __( 'Select WordPress user', 'bookly-responsive-appointment-booking-tool' ),
+                'send_notifications' => __( 'Send notification with access data', 'bookly-responsive-appointment-booking-tool' ),
+                'settings_saved' => __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ),
+                'staff' => __( 'Staff', 'bookly-responsive-appointment-booking-tool' ),
+                'with_access' => __( 'With access to Bookly', 'bookly-responsive-appointment-booking-tool' ),
+                'without_access' => __( 'Without access to Bookly', 'bookly-responsive-appointment-booking-tool' ),
+                'wp_user' => __( 'WordPress user', 'bookly-responsive-appointment-booking-tool' ),
             )
         ) );
     }
@@ -104,7 +104,7 @@ class Dialog extends Lib\Base\Component
     public static function renderNewToken()
     {
         print '<div class="col-auto">';
-        Buttons::renderAdd( 'bookly-js-new-key', 'btn-success', __( 'New access token', 'bookly' ) );
+        Buttons::renderAdd( 'bookly-js-new-key', 'btn-success', __( 'New access token', 'bookly-responsive-appointment-booking-tool' ) );
         print '</div>';
     }
 }

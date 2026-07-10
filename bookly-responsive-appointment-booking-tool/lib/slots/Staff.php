@@ -276,13 +276,18 @@ class Staff
     }
 
     /**
-     * Check whether this staff if more preferable than the given one for given time slot.
+     * Compare this staff with the given one for given time slot by preference.
+     *
+     * Returns a negative value when this staff is more preferable, a positive value
+     * when less preferable, and 0 when both are equally preferable. Resolving equal
+     * preference (e.g. picking a random staff member) is left to the caller
+     * (see Generator::_resolveCandidates).
      *
      * @param Staff $staff
      * @param Range $slot
-     * @return bool
+     * @return int
      */
-    public function morePreferableThan( Staff $staff, Range $slot )
+    public function comparePreference( Staff $staff, Range $slot )
     {
         $service_id = $slot->serviceId();
         $location_id = Proxy\Locations::servicesPerLocationAllowed() ? $slot->locationId() : 0;
@@ -327,6 +332,25 @@ class Staff
                 break;
         }
 
-        return ( $value1 == $value2 && isset ( $settings['random'] ) && $settings['random'] ) ? rand( 0, 1 ) == 1 : $value1 < $value2;
+        if ( $value1 == $value2 ) {
+            return 0;
+        }
+
+        return $value1 < $value2 ? -1 : 1;
+    }
+
+    /**
+     * Check whether this staff is more preferable than the given one for given time slot.
+     *
+     * Equal preference resolves to false here; the random/stable tie-break is applied
+     * by the caller (see Generator::_resolveCandidates).
+     *
+     * @param Staff $staff
+     * @param Range $slot
+     * @return bool
+     */
+    public function morePreferableThan( Staff $staff, Range $slot )
+    {
+        return $this->comparePreference( $staff, $slot ) < 0;
     }
 }

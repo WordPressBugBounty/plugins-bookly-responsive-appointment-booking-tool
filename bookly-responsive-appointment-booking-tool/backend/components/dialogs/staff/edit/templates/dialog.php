@@ -20,7 +20,7 @@ use Bookly\Lib\Utils\Common;
                     <?php if ( Common::isCurrentUserAdmin() ) : ?>
                         <?php Buttons::renderDelete( 'bookly-staff-delete', 'bookly-js-hide-on-loading' ) ?>
                         <?php if ( Config::proActive() ) : ?>
-                            <?php Buttons::render( null, 'btn-danger ladda-button bookly-js-staff-archive bookly-js-hide-on-loading', __( 'Archive', 'bookly' ) . '…', array(), '<i class="fas fa-fw fa-archive mr-1"></i>{caption}' ) ?>
+                            <?php Buttons::render( null, 'btn-danger ladda-button bookly-js-staff-archive bookly-js-hide-on-loading', __( 'Archive', 'bookly-responsive-appointment-booking-tool' ) . '…', array(), '<i class="fas fa-fw fa-archive mr-1"></i>{caption}' ) ?>
                         <?php endif ?>
                     <?php endif ?>
                 </div>

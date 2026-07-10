@@ -27,8 +27,8 @@
         transform: rotate(-45deg)
     }
 </style>
-<h3 class="text-danger text-center pb-0 mb-0"><?php esc_html_e( 'Oops', 'bookly' ) ?>!</h3>
+<h3 class="text-danger text-center pb-0 mb-0"><?php esc_html_e( 'Oops', 'bookly-responsive-appointment-booking-tool' ) ?>!</h3>
 <div class="text-danger py-5">
     <i class="mx-auto bookly-fail-icon"></i>
 </div>
-<p class="text-center bookly-js-message"><?php esc_html_e( 'Your payment has been cancelled', 'bookly' ) ?>!</p>
+<p class="text-center bookly-js-message"><?php esc_html_e( 'Your payment has been cancelled', 'bookly-responsive-appointment-booking-tool' ) ?>!</p>

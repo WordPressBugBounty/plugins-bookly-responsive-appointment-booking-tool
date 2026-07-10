@@ -13,9 +13,9 @@ class Ajax extends Lib\Base\Ajax
         $phone = self::parameter( 'phone' );
         if ( $phone ) {
             Lib\Notifications\Test\Sender::call( $phone, self::parameter( 'notification_id' ) )
-                ? wp_send_json_success( array( 'message' => sprintf( __( 'Calling %s', 'bookly' ), $phone ) . ' …' ) )
-                : wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ?: __( 'Failed', 'bookly' ) ) );
+                ? wp_send_json_success( array( 'message' => sprintf( __( 'Calling %s', 'bookly-responsive-appointment-booking-tool' ), $phone ) . ' …' ) )
+                : wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ?: __( 'Failed', 'bookly-responsive-appointment-booking-tool' ) ) );
         }
-        wp_send_json_error( array( 'message' => __( 'Phone number is empty.', 'bookly' ) ) );
+        wp_send_json_error( array( 'message' => __( 'Phone number is empty.', 'bookly-responsive-appointment-booking-tool' ) ) );
     }
 }

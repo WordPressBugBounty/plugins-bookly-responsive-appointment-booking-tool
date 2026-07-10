@@ -181,7 +181,7 @@ class Service extends Lib\Base\Entity
     {
         return $this->getTitle() != ''
             ? Lib\Utils\Common::getTranslatedString( 'service_' . $this->getId(), $this->getTitle(), $locale )
-            : __( 'Untitled', 'bookly' );
+            : __( 'Untitled', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**
@@ -196,7 +196,7 @@ class Service extends Lib\Base\Entity
             return Category::find( $this->getCategoryId() )->getTranslatedName( $locale );
         }
 
-        return __( 'Uncategorized', 'bookly' );
+        return __( 'Uncategorized', 'bookly-responsive-appointment-booking-tool' );
     }
 
     /**

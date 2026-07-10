@@ -354,10 +354,10 @@ class API extends Cache
                     $this->errors[] = $this->_translateError( $response['message'] );
                 }
             } else {
-                $this->errors[] = __( 'Error', 'bookly' );
+                $this->errors[] = __( 'Error', 'bookly-responsive-appointment-booking-tool' );
             }
         } else {
-            $this->errors[] = __( 'Error connecting to server.', 'bookly' );
+            $this->errors[] = __( 'Error connecting to server.', 'bookly-responsive-appointment-booking-tool' );
         }
 
         return false;
@@ -383,6 +383,6 @@ class API extends Cache
             $error_code = substr( $error_code, 6 );
         }
 
-        return __( ucfirst( strtolower( str_replace( '_', ' ', $error_code ) ) ), 'bookly' );
+        return __( ucfirst( strtolower( str_replace( '_', ' ', $error_code ) ) ), 'bookly-responsive-appointment-booking-tool' );
     }
 }

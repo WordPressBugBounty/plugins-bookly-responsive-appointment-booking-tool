@@ -108,7 +108,7 @@ class Ajax extends Lib\Base\Ajax
                         $staff->load( $staff_data['id'] );
                     }
                     $staff
-                        ->setFullName( $staff_data['name'] ?: __( 'Staff', 'bookly' ) )
+                        ->setFullName( $staff_data['name'] ?: __( 'Staff', 'bookly-responsive-appointment-booking-tool' ) )
                         ->setPhone( $staff_data['phone'] )
                         ->setEmail( $staff_data['email'] )
                         ->save();
@@ -134,7 +134,7 @@ class Ajax extends Lib\Base\Ajax
                         $service->load( $service_data['id'] );
                     }
                     $service
-                        ->setTitle( $service_data['title'] ?: __( 'Service', 'bookly' ) )
+                        ->setTitle( $service_data['title'] ?: __( 'Service', 'bookly-responsive-appointment-booking-tool' ) )
                         ->setDuration( $service_data['duration'] )
                         ->save();
                     Proxy\Shared::serviceCreated( $service );

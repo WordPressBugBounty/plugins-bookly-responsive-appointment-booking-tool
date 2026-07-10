@@ -85,18 +85,18 @@ jQuery(function($) {
                 bt.reload();
             });
         },
+        rowActions: function(row) {
+            return [{
+                label: BooklyL10n.copy_link,
+                icon: 'copy',
+                variant: 'outline',
+                click: function(r) {
+                    booklyCopyTextToClipboard(app_auth_url + (r.token || ''));
+                }
+            }];
+        },
         checked: function(rows) {
             const actions = [];
-            if (rows.length === 1) {
-                actions.push({
-                    label: BooklyL10n.copy_link,
-                    icon: 'copy',
-                    variant: 'outline',
-                    click: function(selected) {
-                        booklyCopyTextToClipboard(app_auth_url + (selected[0].token || ''));
-                    }
-                });
-            }
             actions.push({
                 label: BooklyL10n.revoke,
                 icon: 'trash',

@@ -353,10 +353,11 @@ jQuery(function ($) {
         });
     });
 
-    // Change link to Help page according to activated tab.
-    let help_link = $helpBtn.attr('href');
+    // Point the header's Documentation link at the activated settings tab. The link lives in the
+    // Svelte PageHeader (Help dropdown) now, so we hand it the tab via an event and it builds the URL.
     $('#bookly-sidebar a[data-toggle="bookly-pill"]').on('shown.bs.tab', function (e) {
-        $helpBtn.attr('href', help_link + e.target.getAttribute('href').substring(1).replace(/_/g, '-'));
+        var tab = e.target.getAttribute('href').replace('#bookly_settings_', '');
+        window.dispatchEvent(new CustomEvent('bookly:settings-doc-tab', { detail: tab }));
     });
 
     // Tab calendar
@@ -396,194 +397,45 @@ jQuery(function ($) {
     // Activate tab.
     $('a[href="#bookly_settings_' + BooklyL10n.current_tab + '"]').click();
 
-    // Settings search.
-    var $searchInput = $('#bookly-settings-search'),
-        $dropdown = $('#bookly-search-dropdown'),
-        searchIndex = [],
-        debounceTimer = null,
-        maxVisible = 10
-    ;
-
-    // Build search index from DOM.
-    $('#bookly_settings_controls .tab-pane').each(function () {
-        var $pane = $(this),
-            paneId = $pane.attr('id'),
-            $navLink = $('#bookly-sidebar a[href="#' + paneId + '"]'),
-            tabName = $navLink.length ? $navLink.text().trim() : paneId.replace('bookly_settings_', '')
-        ;
-
-        $pane.find('.form-group').each(function () {
-            var $group = $(this),
-                $label = $group.find('> label').first(),
-                $help = $group.find('> small.form-text').first(),
-                labelText = $label.length ? $label.text().trim() : '',
-                helpText = $help.length ? $help.text().trim() : ''
-            ;
-
-            if (!labelText) return;
-
-            searchIndex.push({
-                label: labelText,
-                help: helpText,
-                searchText: (labelText + ' ' + helpText).toLowerCase(),
-                tabName: tabName,
-                paneId: paneId,
-                $group: $group,
-                $navLink: $navLink
-            });
-        });
-    });
-
-    function escapeHtml(text) {
-        return $('<span>').text(text).html();
-    }
-
-    function highlightMatch(text, query) {
-        var idx = text.toLowerCase().indexOf(query.toLowerCase());
-        if (idx === -1) return escapeHtml(text);
-        return escapeHtml(text.substring(0, idx))
-            + '<mark>' + escapeHtml(text.substring(idx, idx + query.length)) + '</mark>'
-            + escapeHtml(text.substring(idx + query.length));
-    }
-
-    function helpSnippet(helpText, query, maxLen) {
-        maxLen = maxLen || 80;
-        var idx = helpText.toLowerCase().indexOf(query.toLowerCase());
-        if (idx === -1) return '';
-        var start = Math.max(0, idx - 20),
-            end = Math.min(helpText.length, idx + query.length + (maxLen - 20)),
-            snippet = helpText.substring(start, end);
-        if (start > 0) snippet = '…' + snippet;
-        if (end < helpText.length) snippet = snippet + '…';
-        return highlightMatch(snippet, query);
-    }
-
-    function doSearch(query) {
-        query = query.trim();
-        $dropdown.empty();
-
-        if (!query) {
-            $dropdown.hide();
-            return;
-        }
-
-        var q = query.toLowerCase(),
-            results = [];
-
-        for (var i = 0; i < searchIndex.length; i++) {
-            if (searchIndex[i].searchText.indexOf(q) !== -1) {
-                results.push(searchIndex[i]);
+    // Deep-link highlight from the global ⌘K search (?highlight=<id>). The id is either a setting
+    // input id (label result) or a gateway/provider collapse id. Scroll the matching row/card into
+    // view and flash it; if it sits inside a collapsed payment/provider panel, expand it first.
+    var highlightId = new URLSearchParams(window.location.search).get('highlight');
+    if (highlightId) {
+        var target = document.getElementById(highlightId);
+        if (target) {
+            var collapse = target.classList.contains('bookly-collapse') ? target : target.closest('.bookly-collapse');
+            if (collapse && !collapse.classList.contains('bookly-show')) {
+                var toggle = document.querySelector('[data-toggle="bookly-collapse"][href="#' + collapse.id + '"]');
+                toggle ? toggle.click() : $(collapse).booklyCollapse('show');
             }
-        }
-
-        if (results.length === 0) {
-            $dropdown.html('<div class="bookly-search-no-results">' + BooklyL10n.noResultsFound + '</div>').show();
-            return;
-        }
-
-        var showCount = Math.min(results.length, maxVisible),
-            hasMore = results.length > maxVisible
-        ;
-
-        for (var j = 0; j < showCount; j++) {
-            var item = results[j];
-            var $item = $('<div class="bookly-search-item">')
-                .data('index', j)
-                .append('<span class="bookly-search-item-label bookly-search-highlight">' + highlightMatch(item.label, query) + '</span>');
-            // Show help snippet if match is in help text
-            if (item.help && item.help.toLowerCase().indexOf(q) !== -1) {
-                $item.append('<span class="bookly-search-item-help bookly-search-highlight">' + helpSnippet(item.help, query) + '</span>');
-            }
-            $item.append('<span class="bookly-search-item-tab">' + escapeHtml(item.tabName) + '</span>');
-            $dropdown.append($item);
-        }
-
-        if (hasMore) {
-            var $more = $('<div class="bookly-search-show-more">' + BooklyL10n.showMore + ' (' + (results.length - maxVisible) + ')</div>');
-            $more.on('click', function (e) {
-                e.stopPropagation();
-                $(this).remove();
-                for (var k = maxVisible; k < results.length; k++) {
-                    var mItem = results[k];
-                    var $mItem = $('<div class="bookly-search-item">')
-                        .data('index', k)
-                        .append('<span class="bookly-search-item-label bookly-search-highlight">' + highlightMatch(mItem.label, query) + '</span>');
-                    if (mItem.help && mItem.help.toLowerCase().indexOf(q) !== -1) {
-                        $mItem.append('<span class="bookly-search-item-help bookly-search-highlight">' + helpSnippet(mItem.help, query) + '</span>');
+            var box = target.closest('.form-group') || target.closest('.card') || target;
+            // The element to flash: the field's <label>, or the gateway/provider panel title.
+            var flash = document.querySelector('label[for="' + highlightId + '"]')
+                || document.querySelector('[data-toggle="bookly-collapse"][href="#' + highlightId + '"]')
+                || box;
+            // Defer so the activated tab pane and any expand animation have laid out.
+            setTimeout(function () {
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Match the datatables search highlight: yellow-200 background, rounded, small inset.
+                flash.style.transition = 'opacity .35s ease';
+                flash.style.backgroundColor = '#fef08a';
+                flash.style.borderRadius = '2px';
+                flash.style.padding = '0 2px';
+                var visible = true, ticks = 0;
+                var blink = setInterval(function () {
+                    visible = !visible;
+                    flash.style.opacity = visible ? '1' : '.45';
+                    if (++ticks >= 4) {
+                        clearInterval(blink);
+                        // Settle: keep the highlight so the matched setting stays easy to spot.
+                        flash.style.opacity = '1';
                     }
-                    $mItem.append('<span class="bookly-search-item-tab">' + escapeHtml(mItem.tabName) + '</span>');
-                    $dropdown.append($mItem);
-                }
-                bindItemClicks(results);
-            });
-            $dropdown.append($more);
+                }, 360);
+            }, 150);
         }
-
-        bindItemClicks(results);
-        $dropdown.show();
     }
 
-    function bindItemClicks(results) {
-        $dropdown.find('.bookly-search-item').off('click').on('click', function () {
-            var idx = $(this).data('index'),
-                item = results[idx];
-            navigateToSetting(item);
-        });
-    }
-
-    function navigateToSetting(item) {
-        $dropdown.hide();
-        $searchInput.val('');
-
-        // Activate the tab.
-        if (item.$navLink.length) {
-            item.$navLink.click();
-        }
-
-        // Scroll and highlight after tab switch.
-        setTimeout(function () {
-            var $group = item.$group;
-
-            // Expand any parent bookly-collapse containers that hide this setting.
-            $group.parents('.bookly-collapse').each(function () {
-                var $collapseEl = $(this);
-                if (!$collapseEl.hasClass('bookly-show')) {
-                    $collapseEl.booklyCollapse('show');
-                }
-            });
-
-            $('html, body').animate({
-                scrollTop: $group.offset().top - 100
-            }, 300);
-
-            $group.removeClass('bookly-setting-highlight-fade').addClass('bookly-setting-highlight-active');
-            setTimeout(function () {
-                $group.addClass('bookly-setting-highlight-fade').removeClass('bookly-setting-highlight-active');
-            }, 1500);
-            setTimeout(function () {
-                $group.removeClass('bookly-setting-highlight-fade');
-            }, 3100);
-        }, 100);
-    }
-
-    $searchInput.on('input', function () {
-        clearTimeout(debounceTimer);
-        var val = this.value;
-        debounceTimer = setTimeout(function () {
-            doSearch(val);
-        }, 200);
-    });
-
-    $searchInput.on('keydown', function (e) {
-        if (e.key === 'Escape') {
-            $dropdown.hide();
-            $searchInput.val('');
-        }
-    });
-
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.bookly-settings-search-wrap').length) {
-            $dropdown.hide();
-        }
-    });
+    // (The legacy in-page settings search was removed — replaced by the global ⌘K command palette
+    //  in the page header, which searches all admin pages and add-on features.)
 });

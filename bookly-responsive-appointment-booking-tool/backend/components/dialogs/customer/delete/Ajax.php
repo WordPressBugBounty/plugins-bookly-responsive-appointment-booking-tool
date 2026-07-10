@@ -46,7 +46,7 @@ class Ajax extends Lib\Base\Ajax
 
                 $info = sprintf( '%s, %s: ',
                     Lib\Utils\DateTime::formatDateTime( Lib\Slots\DatePoint::now()->format( 'Y-m-d H:i:s' ) ),
-                    __( 'Deleted Customer', 'bookly' ) );
+                    __( 'Deleted Customer', 'bookly-responsive-appointment-booking-tool' ) );
                 foreach ( $appointments as $appointment ) {
                     $note = Lib\Query::escape( $info . $customers[ $appointment['customer_id'] ]->getFullName() );
                     Lib\Entities\Appointment::query( 'a' )

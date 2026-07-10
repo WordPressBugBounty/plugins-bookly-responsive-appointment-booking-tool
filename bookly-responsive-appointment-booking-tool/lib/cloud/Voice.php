@@ -45,7 +45,7 @@ class Voice extends Product
                     return true;
                 }
             } else {
-                $this->api->addError( __( 'Phone number is empty.', 'bookly' ) );
+                $this->api->addError( __( 'Phone number is empty.', 'bookly-responsive-appointment-booking-tool' ) );
             }
         }
 
@@ -76,7 +76,7 @@ class Voice extends Product
                     switch ( $item['status'] ) {
                         case 'completed':
                             $item['charge'] = '$' . $item['charge'];
-                            $item['duration'] = sprintf( __( '%d min', 'bookly' ), $item['duration'] );
+                            $item['duration'] = sprintf( __( '%d min', 'bookly-responsive-appointment-booking-tool' ), $item['duration'] );
                             break;
                     }
                 } );
@@ -111,10 +111,10 @@ class Voice extends Product
         $translated = null;
         switch ( $error_code ) {
             case 'ERROR_OUT_OF_CREDIT':
-                $translated = __( 'Out of credit', 'bookly' );
+                $translated = __( 'Out of credit', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case 'ERROR_COUNTRY_OUT_OF_SERVICE':
-                $translated = __( 'Country out of service', 'bookly' );
+                $translated = __( 'Country out of service', 'bookly-responsive-appointment-booking-tool' );
                 break;
         }
 

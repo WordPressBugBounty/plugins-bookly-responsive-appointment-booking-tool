@@ -80,24 +80,24 @@ class Page extends Lib\Base\Ajax
             array(
                 'calendar_version' => $calendar_version,
                 'clmn_min_width' => get_option( 'bookly_bc_clmn_min_width', '120' ),
-                'delete' => __( 'Delete', 'bookly' ) . '…',
-                'are_you_sure' => __( 'Are you sure?', 'bookly' ),
+                'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'are_you_sure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
                 'scrollable_calendar' => (int) get_option( 'bookly_cal_scrollable_calendar', '1' ),
                 'recurring_appointments' => array(
                     'active' => (int) Config::recurringAppointmentsActive(),
-                    'title' => __( 'Recurring appointments', 'bookly' ),
+                    'title' => __( 'Recurring appointments', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'waiting_list' => array(
                     'active' => (int) Config::waitingListActive(),
-                    'title' => __( 'On waiting list', 'bookly' ),
+                    'title' => __( 'On waiting list', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'packages' => array(
                     'active' => (int) Config::packagesActive(),
-                    'title' => __( 'Package', 'bookly' ),
+                    'title' => __( 'Package', 'bookly-responsive-appointment-booking-tool' ),
                 ),
                 'events' => array(
-                    'attendees' => __( 'Attendees', 'bookly' ),
+                    'attendees' => __( 'Attendees', 'bookly-responsive-appointment-booking-tool' ),
                 )
             ) ) );
 
@@ -118,6 +118,10 @@ class Page extends Lib\Base\Ajax
             Lib\Entities\CustomerAppointment::STATUS_APPROVED,
         ) );
         $busy_statuses_list = "'" . implode( "', '", $busy_statuses ) . "'";
+
+        global $wpdb;
+        $wpdb->query( 'SET SQL_BIG_SELECTS=1' );
+
         $query
             ->addSelect(
                 'a.id, ca.id as ca_id, ca.series_id, a.staff_any, a.location_id, a.internal_note, a.start_date, DATE_ADD(a.end_date, INTERVAL a.extras_duration SECOND) AS end_date,
@@ -188,7 +192,7 @@ class Page extends Lib\Base\Ajax
         $many_participants = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_many_participants' ) ) . '</div>' );
         $tooltip = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
         $tooltip_all_day = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
-        $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
+        $postfix_any = sprintf( ' (%s)', __( 'Any', 'bookly-responsive-appointment-booking-tool' ) );
         $coloring_mode = get_option( 'bookly_cal_coloring_mode' );
         $default_codes = array(
             'amount_due' => '',
@@ -302,7 +306,7 @@ class Page extends Lib\Base\Ajax
             $codes['booking_number'] = Config::groupBookingActive() ? $appointment['id'] . '-' . $appointment['ca_id'] : $appointment['ca_id'];
             $codes['internal_note'] = esc_html( $appointment['internal_note'] );
             $codes['on_waiting_list'] = $appointment['on_waiting_list'];
-            $codes['service_name'] = $appointment['service_name'] ? esc_html( $appointment['service_name'] ) : __( 'Untitled', 'bookly' );
+            $codes['service_name'] = $appointment['service_name'] ? esc_html( $appointment['service_name'] ) : __( 'Untitled', 'bookly-responsive-appointment-booking-tool' );
             $codes['service_price'] = Price::format( $appointment['service_price'] * $appointment['units'] );
             $codes['service_duration'] = DateTime::secondsToInterval( $appointment['duration'] * $appointment['units'] );
             $codes['signed_up'] = (int) $appointment['signed_up'];
@@ -430,7 +434,7 @@ class Page extends Lib\Base\Ajax
      */
     public static function addBooklyMenuItem( $calendar_badge )
     {
-        $calendar = __( 'Calendar', 'bookly' );
+        $calendar = __( 'Calendar', 'bookly-responsive-appointment-booking-tool' );
         if ( $calendar_badge ) {
             add_submenu_page( 'bookly-menu', $calendar, sprintf( '%s <span class="update-plugins count-%d"><span class="update-count">%d</span></span>', $calendar, $calendar_badge, $calendar_badge ), 'read',
                 self::pageSlug(), function() { Page::render(); } );

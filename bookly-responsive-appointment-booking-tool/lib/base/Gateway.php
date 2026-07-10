@@ -360,7 +360,7 @@ abstract class Gateway
      */
     protected function refundPayment()
     {
-        throw new \Exception( __( 'Unsupported action', 'bookly' ) );
+        throw new \Exception( __( 'Unsupported action', 'bookly-responsive-appointment-booking-tool' ) );
     }
 
     /**
