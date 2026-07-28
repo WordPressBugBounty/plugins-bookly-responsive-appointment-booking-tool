@@ -18,6 +18,7 @@ class Page extends Lib\Base\Ajax
         wp_enqueue_media();
         self::enqueueStyles( array(
             'wp' => array( 'wp-color-picker' ),
+            'backend' => array( 'css/fontawesome-all.min.css' ),
             'alias' => array( 'bookly-backend-globals', ),
         ) );
 

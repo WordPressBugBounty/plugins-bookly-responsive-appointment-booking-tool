@@ -24,8 +24,8 @@ class Ajax extends Lib\Base\Ajax
         $filter = self::parameter( 'filter' );
         $range = $filter['range'];
         if ($range === 'any') {
-            $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '-100 year' ) ), 0 );
-            $end_date = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day' ) ), 0 );
+            $start_date = null;
+            $end_date = null;
         } else {
             $dates = explode( ' - ', $range, 2 );
             $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );

@@ -155,8 +155,21 @@ class Generator implements \Iterator
         // Candidate slots grouped by timestamp; resolved into a single slot below.
         $candidates = array();
 
+        // Order staff by preference once per day: the preference rank depends only on
+        // (service, location, slot date) — see Staff::comparePreference — so it is the
+        // same for every timestamp of the day. With staff iterated in preference order
+        // the candidates arrive to _resolveCandidates already sorted, and the
+        // alternatives chain is built in one linear pass there.
+        $staff_order = $this->staff_members;
+        if ( count( $staff_order ) > 1 ) {
+            $probe = new Range( $this->dp, $this->dp, new RangeData( $this->srv_id, 0, $this->location_id ) );
+            uasort( $staff_order, function ( $a, $b ) use ( $probe ) {
+                return $a->comparePreference( $b, $probe );
+            } );
+        }
+
         // Loop through all staff members.
-        foreach ( $this->staff_members as $staff_id => $staff ) {
+        foreach ( $staff_order as $staff_id => $staff ) {
             $schedule = $this->staff_schedule[ $staff_id ];
             // Check that staff is not off.
             if ( ! $schedule->isDayOff( $this->dp ) ) {
@@ -260,7 +273,6 @@ class Generator implements \Iterator
         foreach ( $candidates as $timestamp => $slots ) {
             $result->put( $timestamp, $this->_resolveCandidates( $slots ) );
         }
-
         return $result->ksort();
     }
 
@@ -298,20 +310,52 @@ class Generator implements \Iterator
             return $best[0];
         }
 
-        // Randomize the order of candidates when the random option is enabled. Combined
-        // with _findPreferableSlot (which keeps the given order within equal-preference
-        // ties), this yields a uniformly random pick among equally preferable staff.
+        // Candidates arrive already ordered by staff preference (see the per-day staff
+        // sort in current()), so the alternatives chain is built in one linear pass from
+        // the tail. Sorting here per timestamp would re-create O(N²) Range copies and
+        // dominate search time for services with many staff.
         if ( $this->_staffPreferenceRandom() ) {
-            $best = $this->_shuffle( $best );
+            $best = $this->_shuffleEqualPreference( $best );
         }
 
-        // Build the alternatives chain ordered by staff preference.
-        $slot = array_shift( $best );
-        foreach ( $best as $candidate ) {
-            $slot = $this->_findPreferableSlot( $candidate, $slot );
+        $slot = array_pop( $best );
+        while ( ! empty( $best ) ) {
+            $prev = array_pop( $best );
+            $slot = $prev->replaceAltSlot( $slot->replacePrevAltSlot( $prev ) );
         }
 
         return $slot;
+    }
+
+    /**
+     * Shuffle candidates within groups of equal staff preference, keeping the group
+     * order intact — a uniformly random pick among equally preferable staff, same
+     * semantics the former shuffle + insertion sort produced.
+     *
+     * @param Range[] $slots Candidates ordered by staff preference
+     * @return Range[]
+     */
+    private function _shuffleEqualPreference( array $slots )
+    {
+        $result = array();
+        $group = array( array_shift( $slots ) );
+        foreach ( $slots as $slot ) {
+            $staff = $this->staff_members[ $slot->staffId() ];
+            $group_staff = $this->staff_members[ $group[0]->staffId() ];
+            if ( $staff->comparePreference( $group_staff, $slot ) == 0 ) {
+                $group[] = $slot;
+            } else {
+                foreach ( $this->_shuffle( $group ) as $s ) {
+                    $result[] = $s;
+                }
+                $group = array( $slot );
+            }
+        }
+        foreach ( $this->_shuffle( $group ) as $s ) {
+            $result[] = $s;
+        }
+
+        return $result;
     }
 
     /**
@@ -416,7 +460,7 @@ class Generator implements \Iterator
                         foreach ( $removed->all() as $range ) {
                             // Find range which contains booking start point.
                             if ( $range->contains( $booking_range->start() ) ) {
-                                $data = $range->data()->replaceState( Range::PARTIALLY_BOOKED )->replaceNop( $booking->nop() );
+                                $data = $range->data()->replaceState( Range::PARTIALLY_BOOKED )->replaceNop( $booking->nop() - ( $waiting_list_despite_capacity ? 0 : $booking->onWaitingList() ) );
                                 // Create partially booked range and add it to collection.
                                 $ranges->push( $booking_range->resize( $this->slot_length )->replaceData( $data ) );
                                 break;
@@ -586,30 +630,6 @@ class Generator implements \Iterator
         }
 
         return $this->next_slots->get( $start->value()->getTimestamp() );
-    }
-
-    /**
-     * Find more preferable slot and store the other one as alternative.
-     *
-     * @param Range $slot
-     * @param Range $ex_slot
-     * @return Range
-     */
-    private function _findPreferableSlot( $slot, $ex_slot )
-    {
-        // Find which staff is more preferable.
-        $staff = $this->staff_members[ $slot->staffId() ];
-        $ex_staff = $this->staff_members[ $ex_slot->staffId() ];
-        if ( $staff->morePreferableThan( $ex_staff, $slot ) ) {
-            $slot = $slot->replaceAltSlot( $ex_slot->replacePrevAltSlot( $slot ) );
-        } else {
-            if ( $ex_slot->hasAltSlot() ) {
-                $slot = $this->_findPreferableSlot( $slot, $ex_slot->altSlot() );
-            }
-            $slot = $ex_slot->replaceAltSlot( $slot->replacePrevAltSlot( $ex_slot ) );
-        }
-
-        return $slot;
     }
 
     /**

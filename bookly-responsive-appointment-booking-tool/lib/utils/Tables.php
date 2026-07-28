@@ -61,7 +61,6 @@ abstract class Tables
                     'appointments_rejected'   => esc_html__( 'Rejected', 'bookly-responsive-appointment-booking-tool' ),
                     'appointments_waitlisted' => esc_html__( 'Waitlisted', 'bookly-responsive-appointment-booking-tool' ),
                     'customers_total'         => esc_html__( 'Customers', 'bookly-responsive-appointment-booking-tool' ),
-                    'customers_new'           => esc_html__( 'New customers', 'bookly-responsive-appointment-booking-tool' ),
                     'revenue'                 => esc_html__( 'Revenue', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;

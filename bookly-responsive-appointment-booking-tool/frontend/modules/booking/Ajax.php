@@ -61,6 +61,13 @@ class Ajax extends Lib\Base\Ajax
             $userData = new Lib\UserBookingData( $form_id );
             if ( ! self::parameter( 'reset_form' ) ) {
                 $userData->load();
+            } else {
+                // Carry the already-verified recipient across a form reset (book more) so the
+                // same phone/email is not asked to verify again in the new booking.
+                $previous = new Lib\UserBookingData( $form_id );
+                if ( $previous->load() ) {
+                    $userData->setVerifiedRecipient( $previous->getVerifiedRecipient() );
+                }
             }
 
             self::_handleTimeZone( $userData );

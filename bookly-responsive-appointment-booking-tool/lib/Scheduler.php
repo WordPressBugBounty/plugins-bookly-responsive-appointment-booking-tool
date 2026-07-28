@@ -108,6 +108,10 @@ class Scheduler
                 ->setEditCartKeys( array() );
         }
 
+        // resetChain() sets date_from based on the global minimum time prior booking,
+        // services in the chain may allow earlier dates; existing bookings must be loaded from the actual schedule start
+        $this->userData->setDateFrom( DatePoint::fromStr( $datetime )->toClientTz()->format( 'Y-m-d' ) );
+
         // Set up Finder.
         $this->finder = new Lib\Slots\Finder(
             $this->userData,

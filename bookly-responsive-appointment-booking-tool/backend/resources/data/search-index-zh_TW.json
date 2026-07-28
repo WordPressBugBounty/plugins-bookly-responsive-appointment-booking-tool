@@ -6,7 +6,8 @@
         "title": "儀表板",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Dashboard"
     },
     {
         "type": "page",
@@ -15,7 +16,8 @@
         "title": "日曆",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Calendar"
     },
     {
         "type": "page",
@@ -24,7 +26,8 @@
         "title": "預約",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appointments"
     },
     {
         "type": "page",
@@ -33,7 +36,8 @@
         "title": "地點",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 100
+        "weight": 100,
+        "alt": "Locations"
     },
     {
         "type": "page",
@@ -42,7 +46,8 @@
         "title": "活動",
         "anchor": null,
         "addon": "bookly-addon-events",
-        "weight": 100
+        "weight": 100,
+        "alt": "Events"
     },
     {
         "type": "page",
@@ -51,7 +56,8 @@
         "title": "包裹",
         "anchor": null,
         "addon": "bookly-addon-packages",
-        "weight": 100
+        "weight": 100,
+        "alt": "Packages"
     },
     {
         "type": "page",
@@ -60,7 +66,8 @@
         "title": "員工",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Members"
     },
     {
         "type": "page",
@@ -69,7 +76,8 @@
         "title": "服務",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Services"
     },
     {
         "type": "page",
@@ -78,7 +86,8 @@
         "title": "稅",
         "anchor": null,
         "addon": "bookly-addon-taxes",
-        "weight": 100
+        "weight": 100,
+        "alt": "Taxes"
     },
     {
         "type": "page",
@@ -87,7 +96,8 @@
         "title": "客戶",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customers"
     },
     {
         "type": "page",
@@ -96,7 +106,8 @@
         "title": "客戶資料",
         "anchor": null,
         "addon": "bookly-addon-customer-information",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Information"
     },
     {
         "type": "page",
@@ -105,7 +116,8 @@
         "title": "客戶群",
         "anchor": null,
         "addon": "bookly-addon-customer-groups",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Groups"
     },
     {
         "type": "page",
@@ -114,7 +126,8 @@
         "title": "折扣",
         "anchor": null,
         "addon": "bookly-addon-discounts",
-        "weight": 100
+        "weight": 100,
+        "alt": "Discounts"
     },
     {
         "type": "page",
@@ -123,7 +136,8 @@
         "title": "電郵通知",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -132,7 +146,8 @@
         "title": "付款",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Payments"
     },
     {
         "type": "page",
@@ -141,7 +156,8 @@
         "title": "外觀",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appearance"
     },
     {
         "type": "page",
@@ -150,7 +166,8 @@
         "title": "優惠券",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 100
+        "weight": 100,
+        "alt": "Coupons"
     },
     {
         "type": "page",
@@ -159,7 +176,8 @@
         "title": "禮品卡",
         "anchor": null,
         "addon": "bookly-addon-gift-cards",
-        "weight": 100
+        "weight": 100,
+        "alt": "Gift Cards"
     },
     {
         "type": "page",
@@ -168,7 +186,8 @@
         "title": "自定欄位",
         "anchor": null,
         "addon": "bookly-addon-custom-fields",
-        "weight": 100
+        "weight": 100,
+        "alt": "Custom Fields"
     },
     {
         "type": "page",
@@ -177,7 +196,8 @@
         "title": "設定",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -186,7 +206,8 @@
         "title": "診斷",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Diagnostics"
     },
     {
         "type": "page",
@@ -195,7 +216,8 @@
         "title": "新聞",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "News"
     },
     {
         "type": "page",
@@ -204,7 +226,8 @@
         "title": "附加組件",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Add-ons"
     },
     {
         "type": "page",
@@ -213,7 +236,8 @@
         "title": "產品",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Products"
     },
     {
         "type": "page",
@@ -222,7 +246,8 @@
         "title": "SMS 短信通知",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 100
+        "weight": 100,
+        "alt": "SMS Notifications"
     },
     {
         "type": "page",
@@ -231,7 +256,8 @@
         "title": "語音通知",
         "anchor": null,
         "addon": "cloud:voice",
-        "weight": 100
+        "weight": 100,
+        "alt": "Voice Notifications"
     },
     {
         "type": "page",
@@ -240,7 +266,8 @@
         "title": "WhatsApp通知",
         "anchor": null,
         "addon": "cloud:whatsapp",
-        "weight": 100
+        "weight": 100,
+        "alt": "WhatsApp Notifications"
     },
     {
         "type": "page",
@@ -249,7 +276,8 @@
         "title": "Staff Cabinet移動應用程式",
         "anchor": null,
         "addon": "cloud:mobile-staff-cabinet",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Cabinet Mobile App"
     },
     {
         "type": "page",
@@ -267,7 +295,8 @@
         "title": "收費",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Billing"
     },
     {
         "type": "page",
@@ -276,7 +305,8 @@
         "title": "設定",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "product",
@@ -297,13 +327,102 @@
         "weight": 70
     },
     {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "搜索表單",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "search-form",
+        "weight": 80,
+        "alt": "Search form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "標簽表單",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "tags-form",
+        "weight": 80,
+        "alt": "Tags form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "服務表單",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "services-form",
+        "weight": 80,
+        "alt": "Services form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "員工表單",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "staff-form",
+        "weight": 80,
+        "alt": "Staff form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "分步表單",
+        "anchor": null,
+        "addon": "core",
+        "arg": "bookly-form",
+        "weight": 80,
+        "alt": "Step by step form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "結算表單",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80,
+        "alt": "Checkout form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "取消表格",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "cancellation-confirmation",
+        "weight": 80,
+        "alt": "Cancellation form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "活動表單",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80,
+        "alt": "Events form"
+    },
+    {
         "type": "tab",
         "page": "bookly-settings",
         "tab": "general",
         "title": "通用",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "General"
     },
     {
         "type": "tab",
@@ -312,7 +431,8 @@
         "title": "URL 設定",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "URL Settings"
     },
     {
         "type": "tab",
@@ -321,7 +441,8 @@
         "title": "日曆",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Calendar"
     },
     {
         "type": "tab",
@@ -330,7 +451,8 @@
         "title": "公司",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Company"
     },
     {
         "type": "tab",
@@ -339,7 +461,8 @@
         "title": "客戶",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Customers"
     },
     {
         "type": "tab",
@@ -348,7 +471,8 @@
         "title": "預約",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Appointments"
     },
     {
         "type": "tab",
@@ -357,7 +481,8 @@
         "title": "Google日曆",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Calendar"
     },
     {
         "type": "tab",
@@ -384,7 +509,8 @@
         "title": "購物車",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Cart"
     },
     {
         "type": "tab",
@@ -402,7 +528,8 @@
         "title": "優惠券",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 60
+        "weight": 60,
+        "alt": "Coupons"
     },
     {
         "type": "tab",
@@ -411,7 +538,8 @@
         "title": "自定狀態",
         "anchor": null,
         "addon": "bookly-addon-custom-statuses",
-        "weight": 60
+        "weight": 60,
+        "alt": "Custom Statuses"
     },
     {
         "type": "tab",
@@ -420,7 +548,8 @@
         "title": "文件",
         "anchor": null,
         "addon": "bookly-addon-files",
-        "weight": 60
+        "weight": 60,
+        "alt": "Files"
     },
     {
         "type": "tab",
@@ -429,7 +558,8 @@
         "title": "Google地圖",
         "anchor": null,
         "addon": "bookly-addon-google-maps-address",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Maps"
     },
     {
         "type": "tab",
@@ -438,7 +568,8 @@
         "title": "發票",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 60
+        "weight": 60,
+        "alt": "Invoices"
     },
     {
         "type": "tab",
@@ -447,7 +578,8 @@
         "title": "地點",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 60
+        "weight": 60,
+        "alt": "Locations"
     },
     {
         "type": "tab",
@@ -456,7 +588,8 @@
         "title": "Outlook日曆",
         "anchor": null,
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 60
+        "weight": 60,
+        "alt": "Outlook Calendar"
     },
     {
         "type": "tab",
@@ -465,7 +598,8 @@
         "title": "評分",
         "anchor": null,
         "addon": "bookly-addon-ratings",
-        "weight": 60
+        "weight": 60,
+        "alt": "Ratings"
     },
     {
         "type": "tab",
@@ -474,7 +608,8 @@
         "title": "定期預約",
         "anchor": null,
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 60
+        "weight": 60,
+        "alt": "Recurring Appointments"
     },
     {
         "type": "tab",
@@ -483,7 +618,8 @@
         "title": "額外服務",
         "anchor": null,
         "addon": "bookly-addon-service-extras",
-        "weight": 60
+        "weight": 60,
+        "alt": "Service Extras"
     },
     {
         "type": "tab",
@@ -492,7 +628,8 @@
         "title": "網上會議",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Online Meetings"
     },
     {
         "type": "tab",
@@ -501,7 +638,8 @@
         "title": "用戶權限",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "User Permissions"
     },
     {
         "type": "tab",
@@ -510,7 +648,8 @@
         "title": "付款",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Payments"
     },
     {
         "type": "tab",
@@ -519,7 +658,8 @@
         "title": "額外",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Additional"
     },
     {
         "type": "tab",
@@ -528,7 +668,8 @@
         "title": "營業時間",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Business Hours"
     },
     {
         "type": "tab",
@@ -537,7 +678,8 @@
         "title": "假期",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Holidays"
     },
     {
         "type": "label",
@@ -546,7 +688,8 @@
         "title": "刪除Bookly項目時的數據",
         "anchor": "bookly_gen_delete_data_on_uninstall",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Bookly data upon deleting Bookly items"
     },
     {
         "type": "label",
@@ -555,7 +698,8 @@
         "title": "時間間隔長度",
         "anchor": "bookly_gen_time_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Time slot length"
     },
     {
         "type": "label",
@@ -564,7 +708,8 @@
         "title": "將時段長度設置為服務持續時間",
         "anchor": "bookly_gen_service_duration_as_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Set slot length as service duration"
     },
     {
         "type": "label",
@@ -572,8 +717,9 @@
         "tab": "general",
         "title": "最短提早預約時間",
         "anchor": "bookly_gen_min_time_prior_booking",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to booking"
     },
     {
         "type": "label",
@@ -581,8 +727,9 @@
         "tab": "general",
         "title": "最遲要求取消預約時間",
         "anchor": "bookly_gen_min_time_prior_cancel",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to canceling"
     },
     {
         "type": "label",
@@ -591,7 +738,8 @@
         "title": "可供預訂的天數",
         "anchor": "bookly_gen_max_days_for_booking",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Number of days available for booking"
     },
     {
         "type": "label",
@@ -600,7 +748,8 @@
         "title": "以客戶所在的時區顯示可預約時段",
         "anchor": "bookly_gen_use_client_time_zone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display available time slots in client's time zone"
     },
     {
         "type": "label",
@@ -609,7 +758,8 @@
         "title": "容許員工編輯他們自己的資料",
         "anchor": "bookly_gen_allow_staff_edit_profile",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow staff members to edit their profiles"
     },
     {
         "type": "label",
@@ -618,7 +768,8 @@
         "title": "方法包括Bookly JavaScript和網頁CSS文件",
         "anchor": "bookly_gen_link_assets_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Method to include Bookly JavaScript and CSS files on the page"
     },
     {
         "type": "label",
@@ -627,7 +778,8 @@
         "title": "通過發送匿名使用統計信息幫助我們改進Bookly",
         "anchor": "bookly_gen_collect_stats",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Help us improve Bookly by sending anonymous usage stats"
     },
     {
         "type": "label",
@@ -645,7 +797,8 @@
         "title": "防止緩存預約表格頁面",
         "anchor": "bookly_gen_prevent_caching",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Prevent caching of pages with booking form"
     },
     {
         "type": "label",
@@ -654,7 +807,8 @@
         "title": "顯示新聞通知",
         "anchor": "bookly_gen_badge_consider_news",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show news notifications"
     },
     {
         "type": "label",
@@ -663,7 +817,8 @@
         "title": "郵件網關",
         "anchor": "bookly_email_gateway",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Mail gateway"
     },
     {
         "type": "label",
@@ -672,7 +827,8 @@
         "title": "託管名稱",
         "anchor": "bookly_smtp_host",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Hostname"
     },
     {
         "type": "label",
@@ -681,7 +837,8 @@
         "title": "端口",
         "anchor": "bookly_smtp_port",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Port"
     },
     {
         "type": "label",
@@ -690,7 +847,8 @@
         "title": "使用者名稱",
         "anchor": "bookly_smtp_user",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Username"
     },
     {
         "type": "label",
@@ -699,7 +857,8 @@
         "title": "密碼",
         "anchor": "bookly_smtp_password",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Password"
     },
     {
         "type": "label",
@@ -708,7 +867,8 @@
         "title": "安全",
         "anchor": "bookly_smtp_secure",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Secure"
     },
     {
         "type": "label",
@@ -717,7 +877,8 @@
         "title": "收件人電子郵箱",
         "anchor": "bookly-smtp-to",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Recipient email"
     },
     {
         "type": "label",
@@ -726,7 +887,8 @@
         "title": "批准預約URL（成功）",
         "anchor": "bookly_url_approve_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (success)"
     },
     {
         "type": "label",
@@ -735,7 +897,8 @@
         "title": "批准預約URL（拒絕）",
         "anchor": "bookly_url_approve_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (denied)"
     },
     {
         "type": "label",
@@ -744,7 +907,8 @@
         "title": "取消預約URL（成功）",
         "anchor": "bookly_url_cancel_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (success)"
     },
     {
         "type": "label",
@@ -753,7 +917,8 @@
         "title": "取消預約的URL網址 (拒絕)",
         "anchor": "bookly_url_cancel_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (denied)"
     },
     {
         "type": "label",
@@ -761,8 +926,9 @@
         "tab": "url",
         "title": "確認取消預約URL",
         "anchor": "bookly_url_cancel_confirm_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Appointment cancellation confirmation URL"
     },
     {
         "type": "label",
@@ -771,7 +937,8 @@
         "title": "拒絕預約URL（成功)",
         "anchor": "bookly_url_reject_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (success)"
     },
     {
         "type": "label",
@@ -780,7 +947,8 @@
         "title": "拒絕預約URL（被拒絕)",
         "anchor": "bookly_url_reject_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (denied)"
     },
     {
         "type": "label",
@@ -788,8 +956,9 @@
         "tab": "url",
         "title": "最後一步URL",
         "anchor": "bookly_settings_final_step_url_mode",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Final step URL"
     },
     {
         "type": "label",
@@ -797,8 +966,9 @@
         "tab": "url",
         "title": "輸入一個URL",
         "anchor": "bookly_url_final_step_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Enter a URL"
     },
     {
         "type": "label",
@@ -806,8 +976,9 @@
         "tab": "url",
         "title": "評分頁面網址",
         "anchor": "bookly_ratings_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-ratings",
+        "weight": 30,
+        "alt": "Rating page URL"
     },
     {
         "type": "label",
@@ -815,8 +986,9 @@
         "tab": "url",
         "title": "批准定期預約URL（成功）",
         "anchor": "bookly_recurring_appointments_approve_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (success)"
     },
     {
         "type": "label",
@@ -824,8 +996,9 @@
         "tab": "url",
         "title": "批准定期預約URL（拒絕）",
         "anchor": "bookly_recurring_appointments_approve_denied_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (denied)"
     },
     {
         "type": "label",
@@ -833,8 +1006,9 @@
         "tab": "url",
         "title": "從候補名單設置預約（成功）",
         "anchor": "bookly_url_confirm_from_waitlisted_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "weight": 30,
+        "alt": "Set appointment from waiting list (success)"
     },
     {
         "type": "label",
@@ -842,8 +1016,9 @@
         "tab": "url",
         "title": "從候補名單設置預約（已拒絕）",
         "anchor": "bookly_url_confirm_from_waitlisted_denied_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "weight": 30,
+        "alt": "Set appointment from waiting list (denied)"
     },
     {
         "type": "label",
@@ -852,7 +1027,8 @@
         "title": "僅顯示日曆中的工作日",
         "anchor": "bookly_cal_show_only_business_days",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only business days in the calendar"
     },
     {
         "type": "label",
@@ -861,7 +1037,8 @@
         "title": "僅顯示日曆中的工作時間",
         "anchor": "bookly_cal_show_only_business_hours",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only business hours in the calendar"
     },
     {
         "type": "label",
@@ -870,7 +1047,8 @@
         "title": "在“天”的形式顯示擁有預約的工作人員",
         "anchor": "bookly_cal_show_only_staff_with_appointments",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only staff members with appointments in Day view"
     },
     {
         "type": "label",
@@ -879,7 +1057,8 @@
         "title": "顯示新預約通知",
         "anchor": "bookly_cal_show_new_appointments_badge",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show new appointments notifications"
     },
     {
         "type": "label",
@@ -888,7 +1067,8 @@
         "title": "兼容模式",
         "anchor": "bookly_legacy_calendar",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Legacy mode"
     },
     {
         "type": "label",
@@ -897,7 +1077,8 @@
         "title": "可滾動日曆",
         "anchor": "bookly_cal_scrollable_calendar",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Scrollable calendar"
     },
     {
         "type": "label",
@@ -906,7 +1087,8 @@
         "title": "月視圖樣式",
         "anchor": "bookly_cal_month_view_style",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Month view style"
     },
     {
         "type": "label",
@@ -915,7 +1097,8 @@
         "title": "上色模式",
         "anchor": "bookly_cal_coloring_mode",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Coloring mode"
     },
     {
         "type": "label",
@@ -924,7 +1107,8 @@
         "title": "日曆",
         "anchor": "bookly_appointment_participants",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Calendar"
     },
     {
         "type": "label",
@@ -933,7 +1117,8 @@
         "title": "公司名稱",
         "anchor": "bookly_co_name",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company name"
     },
     {
         "type": "label",
@@ -942,7 +1127,8 @@
         "title": "地址",
         "anchor": "bookly_co_address",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Address"
     },
     {
         "type": "label",
@@ -951,7 +1137,8 @@
         "title": "電話號碼",
         "anchor": "bookly_co_phone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone"
     },
     {
         "type": "label",
@@ -960,7 +1147,8 @@
         "title": "網站",
         "anchor": "bookly_co_website",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Website"
     },
     {
         "type": "label",
@@ -969,7 +1157,8 @@
         "title": "行業",
         "anchor": "bookly_co_industry",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Industry"
     },
     {
         "type": "label",
@@ -978,7 +1167,8 @@
         "title": "公司規模",
         "anchor": "bookly_co_size",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company size"
     },
     {
         "type": "label",
@@ -987,7 +1177,8 @@
         "title": "電郵地址",
         "anchor": "bookly_co_email",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Email"
     },
     {
         "type": "label",
@@ -995,8 +1186,9 @@
         "tab": "customers",
         "title": "為客戶建立WordPress的用戶帳戶",
         "anchor": "bookly_cst_create_account",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Create WordPress user account for customers"
     },
     {
         "type": "label",
@@ -1004,8 +1196,9 @@
         "tab": "customers",
         "title": "新用戶帳戶角色",
         "anchor": "bookly_cst_new_account_role",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "New user account role"
     },
     {
         "type": "label",
@@ -1014,7 +1207,8 @@
         "title": "電話號碼默認國家",
         "anchor": "bookly_cst_phone_default_country",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone field default country"
     },
     {
         "type": "label",
@@ -1023,7 +1217,8 @@
         "title": "預設國家號碼",
         "anchor": "bookly_cst_default_country_code",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default country code"
     },
     {
         "type": "label",
@@ -1031,8 +1226,9 @@
         "tab": "customers",
         "title": "將生日日期設為必填項",
         "anchor": "bookly_cst_required_birthday",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make birthday mandatory"
     },
     {
         "type": "label",
@@ -1040,8 +1236,9 @@
         "tab": "customers",
         "title": "將地址設為必填項",
         "anchor": "bookly_cst_required_address",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make address mandatory"
     },
     {
         "type": "label",
@@ -1049,8 +1246,9 @@
         "tab": "customers",
         "title": "客戶的地址欄",
         "anchor": "bookly_cst_address_show_fields",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer's address fields"
     },
     {
         "type": "label",
@@ -1058,8 +1256,9 @@
         "tab": "customers",
         "title": "自定地址",
         "anchor": "bookly-settings-customers-editor",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer address"
     },
     {
         "type": "label",
@@ -1068,7 +1267,8 @@
         "title": "記住cookies中的個人信息",
         "anchor": "bookly_cst_remember_in_cookie",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Remember personal information in cookies"
     },
     {
         "type": "label",
@@ -1077,7 +1277,8 @@
         "title": "允許重複的客戶",
         "anchor": "bookly_cst_allow_duplicates",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow duplicate customers"
     },
     {
         "type": "label",
@@ -1086,7 +1287,8 @@
         "title": "在更新客戶資料之前顯示確認對話框",
         "anchor": "bookly_cst_show_update_details_dialog",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show confirmation dialog before updating customer's data"
     },
     {
         "type": "label",
@@ -1095,7 +1297,8 @@
         "title": "在詳情步驟中驗證客戶的聯繫信息",
         "anchor": "bookly_cst_verify_customer_details",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Verify customer's contact information at Details step"
     },
     {
         "type": "label",
@@ -1104,7 +1307,8 @@
         "title": "預設預約狀態",
         "anchor": "bookly_appointment_default_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default appointment status"
     },
     {
         "type": "label",
@@ -1113,7 +1317,8 @@
         "title": "付款預約成功狀態",
         "anchor": "bookly_successful_payment_appointment_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Successful payment appointment status"
     },
     {
         "type": "label",
@@ -1121,8 +1326,9 @@
         "tab": "appointments",
         "title": "通過後端新創建預約的第一個值",
         "anchor": "bookly_appointments_main_value",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "First value for newly created appointments via backend"
     },
     {
         "type": "label",
@@ -1130,8 +1336,9 @@
         "tab": "appointments",
         "title": "顯示的時段",
         "anchor": "bookly_appointments_displayed_time_slots",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Displayed time slots"
     },
     {
         "type": "label",
@@ -1139,8 +1346,9 @@
         "tab": "appointments",
         "title": "時間定界符",
         "anchor": "bookly_appointments_time_delimiter",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Time delimiter"
     },
     {
         "type": "label",
@@ -1148,8 +1356,9 @@
         "tab": "appointments",
         "title": "取消預約行動",
         "anchor": "bookly_appointment_cancel_action",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Cancel appointment action"
     },
     {
         "type": "label",
@@ -1157,8 +1366,9 @@
         "tab": "appointments",
         "title": "自動更改預約狀態",
         "anchor": "bookly_auto_change_status",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Automatically change status of appointment"
     },
     {
         "type": "label",
@@ -1166,8 +1376,9 @@
         "tab": "appointments",
         "title": "初始狀態",
         "anchor": "bookly_auto_change_status_from",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Initial status"
     },
     {
         "type": "label",
@@ -1175,8 +1386,9 @@
         "tab": "appointments",
         "title": "待設置狀態",
         "anchor": "bookly_auto_change_status_to",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Status to be set"
     },
     {
         "type": "label",
@@ -1185,7 +1397,8 @@
         "title": "客戶日曆的描述",
         "anchor": "bookly-ics-customer-editor",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Description for customer's calendar"
     },
     {
         "type": "label",
@@ -1194,7 +1407,8 @@
         "title": "員工ICS描述",
         "anchor": "bookly-ics-staff-editor",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "ICS description for staff"
     },
     {
         "type": "label",
@@ -1203,7 +1417,8 @@
         "title": "{appointment_end_date}佔位符返回值",
         "anchor": "bookly_appointment_end_date_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "The value returned by {appointment_end_date} placeholder"
     },
     {
         "type": "label",
@@ -1221,7 +1436,8 @@
         "title": "預約產品",
         "anchor": "bookly_wc_product",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Booking product"
     },
     {
         "type": "label",
@@ -1230,7 +1446,8 @@
         "title": "從後端創建一個 WooCommerce 訂單",
         "anchor": "bookly_wc_create_order_via_backend",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Create a WooCommerce order from backend"
     },
     {
         "type": "label",
@@ -1239,7 +1456,8 @@
         "title": "如果服務成本為零，則創建一個WooCommerce訂單",
         "anchor": "bookly_wc_create_order_at_zero_cost",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Create a WooCommerce order if the cost of the service is zero"
     },
     {
         "type": "label",
@@ -1248,7 +1466,8 @@
         "title": "購物車內項目的資料",
         "anchor": "bookly_l10n_wc_cart_info_name",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cart item data"
     },
     {
         "type": "label",
@@ -1257,7 +1476,8 @@
         "title": "應用程式號",
         "anchor": "bookly_fb_app_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "App ID"
     },
     {
         "type": "label",
@@ -1266,7 +1486,68 @@
         "title": "列",
         "anchor": "bookly_cart_show_columns",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Columns"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "協作服務",
+        "anchor": "bookly_add-collaborative_services",
+        "addon": "bookly-addon-collaborative-services",
+        "weight": 50,
+        "alt": "Collaborative services"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "活動",
+        "anchor": "bookly_add-events",
+        "addon": "bookly-addon-events",
+        "weight": 50,
+        "alt": "Events"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "組別預約",
+        "anchor": "bookly_add-group-booking",
+        "addon": "bookly-addon-group-booking",
+        "weight": 50,
+        "alt": "Group Booking"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "乘以預約",
+        "anchor": "bookly_add-multiply-appointments",
+        "addon": "bookly-addon-multiply-appointments",
+        "weight": 50,
+        "alt": "Multiply Appointments"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "包裹",
+        "anchor": "bookly_add-pkg",
+        "addon": "bookly-addon-packages",
+        "weight": 50,
+        "alt": "Packages"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "候補名單",
+        "anchor": "bookly_add-waiting-list",
+        "addon": "bookly-addon-waiting-list",
+        "weight": 50,
+        "alt": "Waiting List"
     },
     {
         "type": "label",
@@ -1275,7 +1556,8 @@
         "title": "顯示前端日曆",
         "anchor": "bookly_cal_frontend_enabled",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display front-end calendar"
     },
     {
         "type": "label",
@@ -1284,7 +1566,8 @@
         "title": "僅顯示繁忙時段",
         "anchor": "bookly_cal_frontend_display_only_busy_slots",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display only busy slots"
     },
     {
         "type": "label",
@@ -1293,7 +1576,8 @@
         "title": "合併服務的價格計算方法",
         "anchor": "bookly_combined_price_method",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price calculation method for combined services"
     },
     {
         "type": "label",
@@ -1301,8 +1585,10 @@
         "tab": "additional",
         "title": "不允許選擇某個員工",
         "anchor": "bookly_collaborative_hide_staff",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-collaborative-services",
+        "group": "協作服務",
+        "weight": 30,
+        "alt": "Do not allow to select a specific staff member"
     },
     {
         "type": "label",
@@ -1310,8 +1596,10 @@
         "tab": "additional",
         "title": "默認門票掩碼",
         "anchor": "bookly_event_ticked_default_code_mask",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-events",
+        "group": "活動",
+        "weight": 30,
+        "alt": "Default ticket mask"
     },
     {
         "type": "label",
@@ -1319,8 +1607,10 @@
         "tab": "additional",
         "title": "組別預約信息格式",
         "anchor": "bookly_group_booking_nop_format",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-group-booking",
+        "group": "組別預約",
+        "weight": 30,
+        "alt": "Group bookings information format"
     },
     {
         "type": "label",
@@ -1328,17 +1618,21 @@
         "tab": "additional",
         "title": "最大數量",
         "anchor": "bookly_multiply_appointments_quantity_max",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-multiply-appointments",
+        "group": "乘以預約",
+        "weight": 30,
+        "alt": "Max quantity"
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "additional",
-        "title": "在包裹列表中顯示不帶款項的包裹\n",
+        "title": "在包裹列表中顯示不帶款項的包裹",
         "anchor": "bookly_packages_show_without_payments",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-packages",
+        "group": "包裹",
+        "weight": 30,
+        "alt": "Show packages without payments in a packages list"
     },
     {
         "type": "label",
@@ -1346,8 +1640,10 @@
         "tab": "additional",
         "title": "顯示帶款項的包裹",
         "anchor": "bookly_packages_show_with_payments",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-packages",
+        "group": "包裹",
+        "weight": 30,
+        "alt": "Show packages with payments"
     },
     {
         "type": "label",
@@ -1355,8 +1651,10 @@
         "tab": "additional",
         "title": "添加客戶到候補名單，不考慮容量值",
         "anchor": "bookly_waiting_list_despite_capacity",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "group": "候補名單",
+        "weight": 30,
+        "alt": "Add customers to the waiting list despite the capacity value"
     },
     {
         "type": "provider",
@@ -1392,7 +1690,8 @@
         "title": "選擇可管理Bookly預約的人",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Select who can manage Bookly appointments"
     },
     {
         "type": "label",
@@ -1401,7 +1700,8 @@
         "title": "選擇可管理Bookly的人",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Select who can administrate Bookly"
     },
     {
         "type": "label",
@@ -1410,7 +1710,8 @@
         "title": "新員工賬戶角色",
         "anchor": "bookly_staff_new_account_role",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "New staff account role"
     },
     {
         "type": "label",
@@ -1419,7 +1720,8 @@
         "title": "客戶ID",
         "anchor": "bookly_gc_client_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Client ID"
     },
     {
         "type": "label",
@@ -1428,7 +1730,8 @@
         "title": "客戶密匙",
         "anchor": "bookly_gc_client_secret",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Client secret"
     },
     {
         "type": "label",
@@ -1437,7 +1740,8 @@
         "title": "轉向連接URI",
         "anchor": "bookly-redirect-uri",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Redirect URI"
     },
     {
         "type": "label",
@@ -1445,8 +1749,9 @@
         "tab": "google_calendar",
         "title": "同步模式",
         "anchor": "bookly_gc_sync_mode",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1454,8 +1759,9 @@
         "tab": "google_calendar",
         "title": "同步約會的歷史（過去和將來）",
         "anchor": "bookly_gc_full_sync_offset_days_before",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1463,8 +1769,9 @@
         "tab": "google_calendar",
         "title": "複製Google日曆活動標題",
         "anchor": "bookly_gc_full_sync_titles",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Copy Google Calendar event titles"
     },
     {
         "type": "label",
@@ -1472,8 +1779,9 @@
         "tab": "google_calendar",
         "title": "覆蓋原先Google日曆活動的描述",
         "anchor": "bookly_gc_force_update_description",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Overwrite the description of the original Google Calendar events"
     },
     {
         "type": "label",
@@ -1482,7 +1790,8 @@
         "title": "獲取事件的數量限制",
         "anchor": "bookly_gc_limit_events",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1491,7 +1800,8 @@
         "title": "預約標題的模板",
         "anchor": "bookly_gc_event_title",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1500,7 +1810,8 @@
         "title": "事件描述樣板",
         "anchor": "bookly_gc_event_description",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1509,7 +1820,8 @@
         "title": "同步模式",
         "anchor": "bookly_ac_sync_mode",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1518,7 +1830,8 @@
         "title": "同步約會的歷史（過去和將來）",
         "anchor": "bookly_ac_full_sync_offset_days_before",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1527,7 +1840,8 @@
         "title": "複製Apple Calendar事件標題",
         "anchor": "bookly_ac_full_sync_titles",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Copy Apple Calendar event titles"
     },
     {
         "type": "label",
@@ -1536,7 +1850,8 @@
         "title": "獲取事件的數量限制",
         "anchor": "bookly_ac_limit_events",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1545,7 +1860,8 @@
         "title": "預約標題的模板",
         "anchor": "bookly_ac_event_title",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1554,7 +1870,8 @@
         "title": "事件描述樣板",
         "anchor": "bookly_ac_event_description",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1563,7 +1880,8 @@
         "title": "預設代碼掩碼",
         "anchor": "bookly_coupons_default_code_mask",
         "addon": "bookly-addon-coupons",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default code mask"
     },
     {
         "type": "label",
@@ -1572,7 +1890,8 @@
         "title": "上傳目錄",
         "anchor": "bookly_files_directory",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Upload directory"
     },
     {
         "type": "label",
@@ -1581,7 +1900,8 @@
         "title": "允許文件擴展名",
         "anchor": "bookly_files_extensions",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allowed file extensions"
     },
     {
         "type": "label",
@@ -1590,7 +1910,8 @@
         "title": "API金鑰",
         "anchor": "bookly_google_api_key",
         "addon": "bookly-addon-google-maps-address",
-        "weight": 30
+        "weight": 30,
+        "alt": "API Key"
     },
     {
         "type": "label",
@@ -1599,7 +1920,8 @@
         "title": "發票到期日期",
         "anchor": "bookly_invoices_due_days",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice due days"
     },
     {
         "type": "label",
@@ -1608,7 +1930,8 @@
         "title": "字體",
         "anchor": "bookly_invoices_font_name",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Font"
     },
     {
         "type": "label",
@@ -1617,7 +1940,8 @@
         "title": "發票文件名稱前綴",
         "anchor": "bookly_invoices_file_prefix",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice file name prefix"
     },
     {
         "type": "label",
@@ -1626,7 +1950,8 @@
         "title": "按順序編號",
         "anchor": "bookly_invoices_id_fill_gaps",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sequential numbering"
     },
     {
         "type": "label",
@@ -1635,7 +1960,8 @@
         "title": "初始發票編號",
         "anchor": "bookly_invoices_id_start_number",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Initial invoice number"
     },
     {
         "type": "label",
@@ -1644,7 +1970,8 @@
         "title": "顯示手動調整",
         "anchor": "bookly_invoices_show_adjustments",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show manual adjustments"
     },
     {
         "type": "label",
@@ -1653,7 +1980,8 @@
         "title": "發票樣式",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice template"
     },
     {
         "type": "label",
@@ -1662,7 +1990,8 @@
         "title": "自定地區設定",
         "anchor": "bookly_locations_allow_services_per_location",
         "addon": "bookly-addon-locations",
-        "weight": 30
+        "weight": 30,
+        "alt": "Custom settings for location"
     },
     {
         "type": "label",
@@ -1671,7 +2000,8 @@
         "title": "應用程式號",
         "anchor": "bookly_oc_app_id",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Application ID"
     },
     {
         "type": "label",
@@ -1689,7 +2019,8 @@
         "title": "轉向連接URI",
         "anchor": "bookly-redirect-uri",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Redirect URI"
     },
     {
         "type": "label",
@@ -1698,7 +2029,8 @@
         "title": "同步模式",
         "anchor": "bookly_oc_sync_mode",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1707,7 +2039,8 @@
         "title": "同步約會的歷史（過去和將來）",
         "anchor": "bookly_oc_full_sync_offset_days_before",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1716,7 +2049,8 @@
         "title": "複製Outlook日曆活動標題",
         "anchor": "bookly_oc_full_sync_titles",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Copy Outlook Calendar event titles"
     },
     {
         "type": "label",
@@ -1725,7 +2059,8 @@
         "title": "獲取事件的數量限制",
         "anchor": "bookly_oc_limit_events",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1734,7 +2069,8 @@
         "title": "預約標題的模板",
         "anchor": "bookly_oc_event_title",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1743,7 +2079,8 @@
         "title": "事件描述樣板",
         "anchor": "bookly_oc_event_description",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1752,7 +2089,8 @@
         "title": "在後端顯示預約評分",
         "anchor": "bookly_ratings_show_at_backend",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Displaying appointments rating in the backend"
     },
     {
         "type": "label",
@@ -1761,7 +2099,8 @@
         "title": "預約評分超時",
         "anchor": "bookly_ratings_timeout",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Timeout for rating appointment"
     },
     {
         "type": "label",
@@ -1770,7 +2109,8 @@
         "title": "計算平均評分時期",
         "anchor": "bookly_ratings_period",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Period for calculating rating average"
     },
     {
         "type": "label",
@@ -1779,7 +2119,8 @@
         "title": "網上付款",
         "anchor": "bookly_recurring_appointments_payment",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Online Payments"
     },
     {
         "type": "label",
@@ -1788,7 +2129,8 @@
         "title": "組別預約",
         "anchor": "bookly_recurring_appointments_use_groups",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Group appointments"
     },
     {
         "type": "label",
@@ -1797,7 +2139,8 @@
         "title": "額外費用乘以人數",
         "anchor": "bookly_service_extras_multiply_nop",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Multiply extras by number of persons"
     },
     {
         "type": "label",
@@ -1806,7 +2149,8 @@
         "title": "額外步驟",
         "anchor": "bookly_service_extras_after_step_time",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Extras Step"
     },
     {
         "type": "label",
@@ -1815,7 +2159,8 @@
         "title": "顯示",
         "anchor": "bookly_service_extras_show",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show"
     },
     {
         "type": "label",
@@ -1824,7 +2169,8 @@
         "title": "姓名",
         "anchor": "bookly-custom-statuses-name",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Name"
     },
     {
         "type": "label",
@@ -1833,7 +2179,8 @@
         "title": "空閒/忙碌",
         "anchor": "bookly-custom-statuses-busy",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Free/Busy"
     },
     {
         "type": "gateway",
@@ -1842,7 +2189,8 @@
         "title": "即場支付",
         "anchor": "bookly_pmt_locally",
         "addon": "core",
-        "weight": 50
+        "weight": 50,
+        "alt": "Service paid locally"
     },
     {
         "type": "gateway",
@@ -1854,6 +2202,83 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API用戶名",
+        "anchor": "bookly_paypal_api_username",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Username"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API密碼",
+        "anchor": "bookly_paypal_api_password",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Password"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API簽名",
+        "anchor": "bookly_paypal_api_signature",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Signature"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "PayPal 碼",
+        "anchor": "bookly_paypal_id",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "PayPal ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_paypal_sandbox",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "發送稅務信息",
+        "anchor": "bookly_paypal_send_tax",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_paypal_timeout",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1861,6 +2286,60 @@
         "anchor": "bookly_pmt_2checkout",
         "addon": "bookly-addon-2checkout",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "帳戶號碼",
+        "anchor": "bookly_2checkout_api_seller_id",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Account Number"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Word",
+        "anchor": "bookly_2checkout_api_secret_word",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_2checkout_sandbox",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "發送稅務信息",
+        "anchor": "bookly_2checkout_send_tax",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_2checkout_timeout",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1872,6 +2351,61 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API登入碼",
+        "anchor": "bookly_authorize_net_api_login_id",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "API Login ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API交易金鑰",
+        "anchor": "bookly_authorize_net_transaction_key",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "API Transaction Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_authorize_net_sandbox",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "發送稅務信息",
+        "anchor": "bookly_authorize_net_send_tax",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_authorize_net_timeout",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1879,6 +2413,28 @@
         "anchor": "bookly_pmt_mollie",
         "addon": "bookly-addon-mollie",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API金鑰",
+        "anchor": "bookly_mollie_api_key",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_mollie_timeout",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1890,6 +2446,50 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "代理商號",
+        "anchor": "bookly_payson_api_agent_id",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Agent ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API金鑰",
+        "anchor": "bookly_payson_api_key",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_payson_sandbox",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_payson_timeout",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1897,6 +2497,48 @@
         "anchor": "bookly_pmt_payu_biz",
         "addon": "bookly-addon-payu-biz",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_payu_biz_sandbox",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Key",
+        "anchor": "bookly_payu_biz_api_key",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Salt",
+        "anchor": "bookly_payu_biz_api_salt",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_payu_biz_timeout",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1908,6 +2550,72 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_payu_latam_sandbox",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API金鑰",
+        "anchor": "bookly_payu_latam_api_key",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "帳戶碼",
+        "anchor": "bookly_payu_latam_api_account_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Account ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "商戶編號",
+        "anchor": "bookly_payu_latam_api_merchant_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Merchant ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "發送稅務信息",
+        "anchor": "bookly_payu_latam_send_tax",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_payu_latam_timeout",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1915,6 +2623,61 @@
         "anchor": "bookly_pmt_cloud_square",
         "addon": "bookly-addon-square",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "應用程式號",
+        "anchor": "bookly_cloud_square_api_application_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Application ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "訪問令牌",
+        "anchor": "bookly_cloud_square_api_access_token",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Access token"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "位置ID",
+        "anchor": "bookly_cloud_square_api_location_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Location ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "沙箱模式",
+        "anchor": "bookly_cloud_square_sandbox",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_cloud_square_timeout",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1929,10 +2692,42 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
+        "title": "Publishable Key",
+        "anchor": "bookly_stripe_publishable_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Key",
+        "anchor": "bookly_stripe_secret_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支付方的時間間隔",
+        "anchor": "bookly_stripe_timeout",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
         "title": "貨幣",
         "anchor": "bookly_pmt_currency",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Currency"
     },
     {
         "type": "label",
@@ -1941,16 +2736,18 @@
         "title": "價格格式",
         "anchor": "bookly_pmt_price_format",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price format"
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
-        "title": "Deposit options",
+        "title": "定金選項",
         "anchor": "bookly_deposit_allow_full_payment",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-deposit-payments",
+        "weight": 30,
+        "alt": "Deposit options"
     },
     {
         "type": "label",
@@ -1958,8 +2755,196 @@
         "tab": "payments",
         "title": "價格設置和顯示",
         "anchor": "bookly_taxes_in_price",
+        "addon": "bookly-addon-taxes",
+        "weight": 30,
+        "alt": "Price settings and display"
+    },
+    {
+        "type": "action",
+        "page": "bookly-appointments",
+        "tab": null,
+        "title": "建立預約",
+        "anchor": null,
         "addon": "core",
-        "weight": 30
+        "action": "bookly-new-appointment",
+        "weight": 45,
+        "alt": "New appointment"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "新客戶",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-customer",
+        "weight": 45,
+        "alt": "New customer"
+    },
+    {
+        "type": "action",
+        "page": "bookly-services",
+        "tab": null,
+        "title": "新服務",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-service",
+        "weight": 45,
+        "alt": "New service"
+    },
+    {
+        "type": "action",
+        "page": "bookly-staff",
+        "tab": null,
+        "title": "新員工",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-staff",
+        "weight": 45,
+        "alt": "New staff member"
+    },
+    {
+        "type": "action",
+        "page": "bookly-notifications",
+        "tab": "notifications",
+        "title": "新通知",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "notifications",
+        "title": "新通知",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "sender_id",
+        "title": "請求發件人ID",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-request-sender_id",
+        "weight": 45,
+        "alt": "Request Sender ID"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-mobile-staff-cabinet",
+        "tab": null,
+        "title": "新訪問令牌",
+        "anchor": null,
+        "addon": "cloud:mobile-staff-cabinet",
+        "action": "bookly-js-new-key",
+        "weight": 45,
+        "alt": "New access token"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customer-groups",
+        "tab": null,
+        "title": "新組別",
+        "anchor": null,
+        "addon": "bookly-addon-customer-groups",
+        "action": "bookly-js-add-group",
+        "weight": 45,
+        "alt": "New group"
+    },
+    {
+        "type": "action",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "添加禮品卡",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "action": "bookly-add-gift-card",
+        "weight": 45,
+        "alt": "Add gift card"
+    },
+    {
+        "type": "action",
+        "page": "bookly-packages",
+        "tab": null,
+        "title": "新包裹",
+        "anchor": null,
+        "addon": "bookly-addon-packages",
+        "action": "bookly-new-package",
+        "weight": 45,
+        "alt": "New package"
+    },
+    {
+        "type": "action",
+        "page": "bookly-discounts",
+        "tab": null,
+        "title": "新折扣",
+        "anchor": null,
+        "addon": "bookly-addon-discounts",
+        "action": "bookly-new-discount",
+        "weight": 45,
+        "alt": "New discount"
+    },
+    {
+        "type": "action",
+        "page": "bookly-events",
+        "tab": null,
+        "title": "新活動",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "action": "bookly-new-event",
+        "weight": 45,
+        "alt": "New event"
+    },
+    {
+        "type": "action",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "添加地點",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "action": "bookly-new-location",
+        "weight": 45,
+        "alt": "Add Location"
+    },
+    {
+        "type": "action",
+        "page": "bookly-taxes",
+        "tab": null,
+        "title": "新稅收",
+        "anchor": null,
+        "addon": "bookly-addon-taxes",
+        "action": "bookly-new-tax",
+        "weight": 45,
+        "alt": "New tax"
+    },
+    {
+        "type": "action",
+        "page": "bookly-coupons",
+        "tab": null,
+        "title": "添加優惠卷",
+        "anchor": null,
+        "addon": "bookly-addon-coupons",
+        "action": "bookly-add",
+        "weight": 45,
+        "alt": "Add Coupon"
+    },
+    {
+        "type": "action",
+        "page": "bookly-settings",
+        "tab": "custom_statuses",
+        "title": "添加狀態",
+        "anchor": null,
+        "addon": "bookly-addon-custom-statuses",
+        "action": "bookly-add-status",
+        "weight": 45,
+        "alt": "Add status"
     },
     {
         "type": "tab",
@@ -1968,7 +2953,8 @@
         "title": "通知",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Notifications"
     },
     {
         "type": "tab",
@@ -1977,7 +2963,8 @@
         "title": "活動",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Campaigns"
     },
     {
         "type": "tab",
@@ -1986,7 +2973,8 @@
         "title": "郵件列表",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Mailing lists"
     },
     {
         "type": "tab",
@@ -1995,7 +2983,8 @@
         "title": "SMS 短信內容",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "SMS Details"
     },
     {
         "type": "tab",
@@ -2004,7 +2993,8 @@
         "title": "價目表",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Price list"
     },
     {
         "type": "tab",
@@ -2013,6 +3003,7 @@
         "title": "發件人ID",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Sender ID"
     }
 ]

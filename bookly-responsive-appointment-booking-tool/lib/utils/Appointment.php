@@ -748,13 +748,25 @@ class Appointment
         $chain->add( $chain_item );
 
         $custom_slot = array();
+        $custom_slot_end = array();
         $ignore_appointments = array();
         if ( $appointment_id ) {
             $appointment = Lib\Entities\Appointment::find( $appointment_id );
-            if ( date_create( $appointment->getStartDate() )->format( 'Y-m-d' ) === date_create( $date )->format( 'Y-m-d' ) ) {
+            $appointment_start = date_create( $appointment->getStartDate() );
+            if ( $appointment_start->format( 'Y-m-d' ) === date_create( $date )->format( 'Y-m-d' ) ) {
                 $custom_slot = array(
                     'title' => DatePoint::fromStr( $appointment->getStartDate() )->formatI18n( get_option( 'time_format' ) ),
-                    'value' => date_create( $appointment->getStartDate() )->format( 'H:i' ),
+                    'value' => $appointment_start->format( 'H:i' ),
+                    'disabled' => false,
+                );
+                $appointment_end = date_create( $appointment->getEndDate() );
+                $midnight = ( clone $appointment_start )->modify( 'midnight' );
+                $custom_slot_end = array(
+                    'title_time' => date_i18n( get_option( 'time_format' ), $appointment_end->getTimestamp() ),
+                    'value' => $appointment_end->getTimestamp() - $midnight->getTimestamp() >= DAY_IN_SECONDS
+                        ? ( (int) $appointment_end->format( 'H' ) + 24 ) . ':' . $appointment_end->format( 'i' )
+                        : $appointment_end->format( 'H:i' ),
+                    'disabled' => false,
                 );
             }
             $ignore_appointments[] = $appointment_id;
@@ -762,7 +774,7 @@ class Appointment
 
         $scheduler = new Lib\Scheduler( $chain, date_create( $date )->format( 'Y-m-d 00:00' ), date_create( $date )->format( 'Y-m-d' ), 'daily', array( 'every' => 1 ), array(), false, $ignore_appointments );
         $schedule = $scheduler->scheduleForFrontend( 1 );
-        $result = array();
+        $result = array( 'start' => array(), 'end' => array() );
         $time_format = get_option( 'time_format' );
         if ( isset( $schedule[0]['options'] ) ) {
             foreach ( $schedule[0]['options'] as $slot ) {
@@ -773,7 +785,8 @@ class Appointment
                     $custom_slot = array();
                 }
                 if ( ! empty( $custom_slot ) && strcmp( $value, $custom_slot['value'] ) > 0 ) {
-                    $result[] = $custom_slot;
+                    $result['start'][] = $custom_slot;
+                    $result['end'][] = $custom_slot_end;
                     $custom_slot = array();
                 }
                 $end_date = clone $date;
@@ -793,7 +806,8 @@ class Appointment
         }
 
         if ( ! empty( $custom_slot ) ) {
-            $result[] = $custom_slot;
+            $result['start'][] = $custom_slot;
+            $result['end'][] = $custom_slot_end;
         }
 
         return $result;

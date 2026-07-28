@@ -15,10 +15,9 @@ abstract class Backend
         add_action( 'admin_menu', array( __CLASS__, 'addAdminMenu' ) );
 
         if ( ! Lib\Config::setupMode() ) {
+            // Single notices area inside #wpbody-content (in_admin_header would print
+            // them under #wpcontent — outside the fullscreen scroller, see appearance CSS).
             add_action( 'all_admin_notices', function() use ( $bookly_page ) {
-                Backend::renderNotices( $bookly_page );
-            } );
-            add_action( 'in_admin_header', function() use ( $bookly_page ) {
                 Backend::renderNotices( $bookly_page );
             } );
             if ( $bookly_page ) {
@@ -82,6 +81,12 @@ abstract class Backend
         // =====================================================================
         if ( isset( $_REQUEST['page'] ) && strncmp( $_REQUEST['page'], 'bookly-', 7 ) === 0 ) {
             add_filter( 'admin_body_class', function ( $classes ) {
+                // Setup wizard v2 always runs fullscreen — page-scoped, independent
+                // of the per-user appearance setting. The marker class keeps the
+                // #wpbody-content scroller rules off the wizard (it draws its own scene).
+                if ( $_REQUEST['page'] === Modules\Setup\Page::pageSlug() && Modules\Setup\Page::resolveVariant() === 'v2' ) {
+                    return $classes . ' bookly-fullscreen-active bookly-setup-wizard';
+                }
                 $ap = get_user_meta( get_current_user_id(), 'bookly_appearance', true );
                 if ( ! is_array( $ap ) ) {
                     return $classes;
@@ -94,6 +99,12 @@ abstract class Backend
                 // Rules only bite when the matching body class is present (added
                 // from meta above, or toggled at runtime by the appearance panel).
                 echo '<style id="bookly-appearance-css">'
+                    // Admin notices relocated after our .wp-header-end marker (see
+                    // registerHooks) become direct children of #wpbody-content, where
+                    // WP's default 15px side margins don't line up with .wrap
+                    // (margin: 10px 20px 0 2px) — align them with the page grid.
+                    // margin-inline flips with RTL by itself.
+                    . '#wpbody-content>div.notice,#wpbody-content>div.updated,#wpbody-content>div.error{margin-block:5px 2px;margin-inline:2px 20px;}'
                     // Fullscreen: hide the known WP core chrome (display:none — immune
                     // to z-index/stacking/timing) + overlay our page as a backstop for
                     // anything unknown. `.js`-gated, matching WP's own fullscreen.
@@ -105,26 +116,43 @@ abstract class Backend
                     . 'html:has(body.js.bookly-fullscreen-active){padding-top:0!important;overflow:hidden!important;}'
                     . 'body.js.bookly-fullscreen-active{overflow:hidden!important;}'
                     . 'body.js.bookly-fullscreen-active #wpcontent{margin-left:0!important;}'
+                    // The fullscreen overlay/scroller is #wpbody-content (NOT the page wrap):
+                    // both notice areas — Bookly ones (.wrap, all_admin_notices) and relocated
+                    // third-party div.notice — are its direct children, so they stay visible
+                    // and scroll together with the page.
+                    . 'body.js.bookly-fullscreen-active:not(.bookly-setup-wizard) #wpbody-content{position:fixed;inset:0;z-index:100049;overflow:auto;padding:10px 20px;box-sizing:border-box;background:#f0f0f1;}'
                     // background uses !important: bootstrap resets #bookly-tbs to
                     // background-color:transparent (ID specificity) — a class can never
                     // out-specify an ID. Drop the !important once #bookly-tbs is gone.
-                    . 'body.js.bookly-fullscreen-active .bookly-main-page-wrap{position:fixed;inset:0;z-index:100049;margin:0;padding:10px 20px;overflow:auto;background:#f0f0f1!important;}'
-                    // Fixed page width: cap the content column and centre it.
-                    . 'body.js.bookly-fixed-width .bookly-main-page-wrap{max-width:1180px;margin-inline:auto;}'
-                    // ...and the Bookly admin notices, which WP renders as .wrap
-                    // siblings directly under #wpcontent (via in_admin_header) — so
-                    // they line up with the centred content instead of spanning full.
-                    . 'body.js.bookly-fixed-width #wpcontent>.wrap{max-width:1180px;margin-inline:auto;}'
-                    // When also fullscreen, the wrap is a full-width fixed scroller
-                    // (inset:0) — max-width + auto margins fight it, so centre via padding.
-                    . 'body.js.bookly-fullscreen-active.bookly-fixed-width .bookly-main-page-wrap{max-width:none;margin-inline:0;padding-inline:max(20px,calc((100% - 1180px) / 2));}'
+                    . 'body.js.bookly-fullscreen-active .bookly-main-page-wrap{background:#f0f0f1!important;}'
+                    // The scroller carries the side padding — flatten side margins of its
+                    // children (page wrap, both notice kinds) so edges line up.
+                    . 'body.js.bookly-fullscreen-active #wpbody-content>.wrap{margin-inline:0;}'
+                    . 'body.js.bookly-fullscreen-active #wpbody-content>div.notice,body.js.bookly-fullscreen-active #wpbody-content>div.updated,body.js.bookly-fullscreen-active #wpbody-content>div.error{margin-inline:0;}'
+                    // Fixed page width: cap and centre the content column, the page wrap and
+                    // both notice areas alike (all direct children of #wpbody-content).
+                    // box-sizing: div.notice is content-box — its padding/border would
+                    // otherwise poke past the 1180px column the .wrap children align to.
+                    . 'body.js.bookly-fixed-width #wpbody-content>.wrap,body.js.bookly-fixed-width #wpbody-content>div.notice,body.js.bookly-fixed-width #wpbody-content>div.updated,body.js.bookly-fixed-width #wpbody-content>div.error{max-width:1180px;margin-inline:auto;box-sizing:border-box;}'
+                    // The auto margins above replace .wrap's own asymmetric WP margins
+                    // (10px 20px 0 2px) and collapse to 0 when the viewport is narrower
+                    // than the column — the right gutter vanished. Keep the gutters on
+                    // the container instead (2px left complements #wpcontent's 20px
+                    // padding-left, 20px right mirrors .wrap's default right margin).
+                    . 'body.js.bookly-fixed-width:not(.bookly-fullscreen-active) #wpbody-content{padding-inline:2px 20px;box-sizing:border-box;}'
+                    // WP core update nag is inline-block (width by content) — auto margins
+                    // can't centre it; as a block it joins the fixed-width column.
+                    . 'body.js.bookly-fixed-width #wpbody-content>div.update-nag{display:block;}'
+                    // When also fullscreen, the scroller spans the viewport — centre the
+                    // column via its padding, children stay full-width within it.
+                    . 'body.js.bookly-fullscreen-active.bookly-fixed-width:not(.bookly-setup-wizard) #wpbody-content{padding-inline:max(20px,calc((100% - 1180px) / 2));}'
                     // Fullscreen left sidebar (the Svelte nav, w-60 = 240px) is shown only at >=md
-                    // and pinned to the viewport — offset the page content right by it (240 + 20
+                    // and pinned to the viewport — offset the scroller content right by it (240 + 20
                     // gutter). Below md the sidebar is an off-canvas drawer, so no offset there.
-                    . '@media(min-width:768px){body.js.bookly-fullscreen-active .bookly-main-page-wrap{padding-left:260px;}}'
+                    . '@media(min-width:768px){body.js.bookly-fullscreen-active:not(.bookly-setup-wizard) #wpbody-content{padding-left:260px;}}'
                     // ...and with fixed width too: centre the 1180px column within the space to the
                     // RIGHT of the sidebar (left = sidebar + gutter, right = matching gutter).
-                    . '@media(min-width:768px){body.js.bookly-fullscreen-active.bookly-fixed-width .bookly-main-page-wrap{padding-left:calc(240px + max(20px,(100% - 240px - 1180px) / 2));padding-right:max(20px,(100% - 240px - 1180px) / 2);}}'
+                    . '@media(min-width:768px){body.js.bookly-fullscreen-active.bookly-fixed-width:not(.bookly-setup-wizard) #wpbody-content{padding-left:calc(240px + max(20px,(100% - 240px - 1180px) / 2));padding-right:max(20px,(100% - 240px - 1180px) / 2);}}'
                     // Loading-window placeholder: a blank panel matching the sidebar footprint
                     // (240px, card bg, right border), shown only in fullscreen >= md and sitting
                     // one z-index below the real Svelte <aside> (z-40), which covers it on mount.
@@ -209,6 +237,11 @@ abstract class Backend
                     plugins_url( 'resources/images/menu.png', __FILE__ ), $dynamic_position );
             }
             if ( Lib\Config::setupMode() ) {
+                // Warm up the Cloud info cache (promotions, wizard rollout config) so the
+                // Setup page never waits for the network; fires only while the cache is empty.
+                if ( ! is_array( get_option( 'bookly_cloud_promotions' ) ) ) {
+                    Lib\Cloud\API::getInstance()->general->loadInfo();
+                }
                 $setup = __( 'Initial setup', 'bookly-responsive-appointment-booking-tool' );
                 add_submenu_page( 'bookly-menu', $setup, $setup, $required_capability, Modules\Setup\Page::pageSlug(), function() { Modules\Setup\Page::render(); } );
             } elseif ( Lib\Proxy\Pro::graceExpired() ) {

@@ -152,7 +152,7 @@ class Elements extends Lib\Base\Component
             'edit' => esc_html__( 'Edit', 'bookly-responsive-appointment-booking-tool' ),
             'empty' => esc_html__( 'Empty', 'bookly-responsive-appointment-booking-tool' ),
             'enter_a_content' => esc_html__( 'Enter a content', 'bookly-responsive-appointment-booking-tool' ),
-            'script_is_used' => esc_html__( 'WARNING', 'bookly-responsive-appointment-booking-tool' ) . "\n\n" . esc_html__( 'Using <script> tag can be dangerous.', 'bookly-responsive-appointment-booking-tool' ) . "\n\n" . esc_html__( 'Unless you understand exactly what you are doing, click Cancel and stay safe.', 'bookly-responsive-appointment-booking-tool' )
+            'script_is_used' => esc_html__( 'Warning', 'bookly-responsive-appointment-booking-tool' ) . "\n\n" . esc_html__( 'Using <script> tag can be dangerous.', 'bookly-responsive-appointment-booking-tool' ) . "\n\n" . esc_html__( 'Unless you understand exactly what you are doing, click Cancel and stay safe.', 'bookly-responsive-appointment-booking-tool' )
         ) );
 
         self::renderTemplate( 'ace-modal', compact( 'doc_slug' ) );

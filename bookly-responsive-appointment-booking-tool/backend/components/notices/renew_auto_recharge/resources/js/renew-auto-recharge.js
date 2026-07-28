@@ -12,17 +12,23 @@ jQuery(function ($) {
             hide_until: 'forever'
         };
 
+    function removeNotice() {
+        $notice.closest('.wrap').slideUp(150, function () {
+            $(this).remove();
+        });
+    }
+
     $close
         .on('click', function () {
             data.hide_until = 'forever';
             $.post(ajaxurl, data);
-            $notice.remove();
+            removeNotice();
         });
     $dismiss
         .on('click', function () {
             data.hide_until = 'short-time';
             $.post(ajaxurl, data);
-            $notice.remove();
+            removeNotice();
         });
     $renewPayPal
         .on('click', function () {
@@ -47,7 +53,7 @@ jQuery(function ($) {
                 if (response.success) {
                     window.location.replace(response.data.redirect_url);
                 } else {
-                    $notice.remove()
+                    removeNotice();
                     booklyAlert({error: [response.data.message]});
                 }
             }

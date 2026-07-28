@@ -6,7 +6,8 @@
         "title": "Консоль",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Dashboard"
     },
     {
         "type": "page",
@@ -15,7 +16,8 @@
         "title": "Календарь",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Calendar"
     },
     {
         "type": "page",
@@ -24,7 +26,8 @@
         "title": "Записи",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appointments"
     },
     {
         "type": "page",
@@ -33,7 +36,8 @@
         "title": "Локации",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 100
+        "weight": 100,
+        "alt": "Locations"
     },
     {
         "type": "page",
@@ -42,7 +46,8 @@
         "title": "События",
         "anchor": null,
         "addon": "bookly-addon-events",
-        "weight": 100
+        "weight": 100,
+        "alt": "Events"
     },
     {
         "type": "page",
@@ -51,7 +56,8 @@
         "title": "Пакеты услуг",
         "anchor": null,
         "addon": "bookly-addon-packages",
-        "weight": 100
+        "weight": 100,
+        "alt": "Packages"
     },
     {
         "type": "page",
@@ -60,7 +66,8 @@
         "title": "Сотрудники",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Members"
     },
     {
         "type": "page",
@@ -69,7 +76,8 @@
         "title": "Сервисы",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Services"
     },
     {
         "type": "page",
@@ -78,7 +86,8 @@
         "title": "Налоги",
         "anchor": null,
         "addon": "bookly-addon-taxes",
-        "weight": 100
+        "weight": 100,
+        "alt": "Taxes"
     },
     {
         "type": "page",
@@ -87,7 +96,8 @@
         "title": "Клиенты",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customers"
     },
     {
         "type": "page",
@@ -96,7 +106,8 @@
         "title": "Информация о клиенте",
         "anchor": null,
         "addon": "bookly-addon-customer-information",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Information"
     },
     {
         "type": "page",
@@ -105,7 +116,8 @@
         "title": "Группы клиентов",
         "anchor": null,
         "addon": "bookly-addon-customer-groups",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Groups"
     },
     {
         "type": "page",
@@ -114,7 +126,8 @@
         "title": "Скидки",
         "anchor": null,
         "addon": "bookly-addon-discounts",
-        "weight": 100
+        "weight": 100,
+        "alt": "Discounts"
     },
     {
         "type": "page",
@@ -123,7 +136,8 @@
         "title": "Email уведомления",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -132,7 +146,8 @@
         "title": "Платежи",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Payments"
     },
     {
         "type": "page",
@@ -141,7 +156,8 @@
         "title": "Внешний вид",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appearance"
     },
     {
         "type": "page",
@@ -150,7 +166,8 @@
         "title": "Купоны",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 100
+        "weight": 100,
+        "alt": "Coupons"
     },
     {
         "type": "page",
@@ -159,7 +176,8 @@
         "title": "Подарочные карты",
         "anchor": null,
         "addon": "bookly-addon-gift-cards",
-        "weight": 100
+        "weight": 100,
+        "alt": "Gift Cards"
     },
     {
         "type": "page",
@@ -168,7 +186,8 @@
         "title": "Пользовательские поля",
         "anchor": null,
         "addon": "bookly-addon-custom-fields",
-        "weight": 100
+        "weight": 100,
+        "alt": "Custom Fields"
     },
     {
         "type": "page",
@@ -177,7 +196,8 @@
         "title": "Настройки",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -186,7 +206,8 @@
         "title": "Диагностика",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Diagnostics"
     },
     {
         "type": "page",
@@ -195,7 +216,8 @@
         "title": "Новости",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "News"
     },
     {
         "type": "page",
@@ -204,7 +226,8 @@
         "title": "Дополнения",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Add-ons"
     },
     {
         "type": "page",
@@ -213,7 +236,8 @@
         "title": "Продукты",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Products"
     },
     {
         "type": "page",
@@ -222,7 +246,8 @@
         "title": "SMS уведомления",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 100
+        "weight": 100,
+        "alt": "SMS Notifications"
     },
     {
         "type": "page",
@@ -231,7 +256,8 @@
         "title": "Голосовые Уведомления",
         "anchor": null,
         "addon": "cloud:voice",
-        "weight": 100
+        "weight": 100,
+        "alt": "Voice Notifications"
     },
     {
         "type": "page",
@@ -240,7 +266,8 @@
         "title": "WhatsApp уведомления",
         "anchor": null,
         "addon": "cloud:whatsapp",
-        "weight": 100
+        "weight": 100,
+        "alt": "WhatsApp Notifications"
     },
     {
         "type": "page",
@@ -249,7 +276,8 @@
         "title": "Мобильное Приложение Staff Cabinet",
         "anchor": null,
         "addon": "cloud:mobile-staff-cabinet",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Cabinet Mobile App"
     },
     {
         "type": "page",
@@ -267,7 +295,8 @@
         "title": "Оплата услуг",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Billing"
     },
     {
         "type": "page",
@@ -276,7 +305,8 @@
         "title": "Настройки",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "product",
@@ -297,13 +327,102 @@
         "weight": 70
     },
     {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма поиска",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "search-form",
+        "weight": 80,
+        "alt": "Search form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма с тегами",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "tags-form",
+        "weight": 80,
+        "alt": "Tags form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма услуг",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "services-form",
+        "weight": 80,
+        "alt": "Services form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма сотрудника",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "staff-form",
+        "weight": 80,
+        "alt": "Staff form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Пошаговая форма",
+        "anchor": null,
+        "addon": "core",
+        "arg": "bookly-form",
+        "weight": 80,
+        "alt": "Step by step form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма оплаты",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80,
+        "alt": "Checkout form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма отмены бронирования",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "cancellation-confirmation",
+        "weight": 80,
+        "alt": "Cancellation form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Форма событий",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80,
+        "alt": "Events form"
+    },
+    {
         "type": "tab",
         "page": "bookly-settings",
         "tab": "general",
         "title": "Общие",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "General"
     },
     {
         "type": "tab",
@@ -312,7 +431,8 @@
         "title": "Настройки URL",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "URL Settings"
     },
     {
         "type": "tab",
@@ -321,7 +441,8 @@
         "title": "Календарь",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Calendar"
     },
     {
         "type": "tab",
@@ -330,7 +451,8 @@
         "title": "Компания",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Company"
     },
     {
         "type": "tab",
@@ -339,7 +461,8 @@
         "title": "Клиенты",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Customers"
     },
     {
         "type": "tab",
@@ -348,7 +471,8 @@
         "title": "Записи",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Appointments"
     },
     {
         "type": "tab",
@@ -357,7 +481,8 @@
         "title": "Google Календарь",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Calendar"
     },
     {
         "type": "tab",
@@ -384,7 +509,8 @@
         "title": "Корзина",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Cart"
     },
     {
         "type": "tab",
@@ -393,7 +519,8 @@
         "title": "Календарь Apple",
         "anchor": null,
         "addon": "bookly-addon-apple-calendar",
-        "weight": 60
+        "weight": 60,
+        "alt": "Apple Calendar"
     },
     {
         "type": "tab",
@@ -402,7 +529,8 @@
         "title": "Купоны",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 60
+        "weight": 60,
+        "alt": "Coupons"
     },
     {
         "type": "tab",
@@ -411,7 +539,8 @@
         "title": "Пользовательские статусы",
         "anchor": null,
         "addon": "bookly-addon-custom-statuses",
-        "weight": 60
+        "weight": 60,
+        "alt": "Custom Statuses"
     },
     {
         "type": "tab",
@@ -420,7 +549,8 @@
         "title": "Файлы",
         "anchor": null,
         "addon": "bookly-addon-files",
-        "weight": 60
+        "weight": 60,
+        "alt": "Files"
     },
     {
         "type": "tab",
@@ -429,7 +559,8 @@
         "title": "Карты Google",
         "anchor": null,
         "addon": "bookly-addon-google-maps-address",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Maps"
     },
     {
         "type": "tab",
@@ -438,7 +569,8 @@
         "title": "Счета",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 60
+        "weight": 60,
+        "alt": "Invoices"
     },
     {
         "type": "tab",
@@ -447,7 +579,8 @@
         "title": "Локации",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 60
+        "weight": 60,
+        "alt": "Locations"
     },
     {
         "type": "tab",
@@ -456,7 +589,8 @@
         "title": "Календарь Outlook",
         "anchor": null,
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 60
+        "weight": 60,
+        "alt": "Outlook Calendar"
     },
     {
         "type": "tab",
@@ -465,7 +599,8 @@
         "title": "Рейтинги",
         "anchor": null,
         "addon": "bookly-addon-ratings",
-        "weight": 60
+        "weight": 60,
+        "alt": "Ratings"
     },
     {
         "type": "tab",
@@ -474,7 +609,8 @@
         "title": "Повторяющиеся записи",
         "anchor": null,
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 60
+        "weight": 60,
+        "alt": "Recurring Appointments"
     },
     {
         "type": "tab",
@@ -483,7 +619,8 @@
         "title": "Дополнения к сервисам",
         "anchor": null,
         "addon": "bookly-addon-service-extras",
-        "weight": 60
+        "weight": 60,
+        "alt": "Service Extras"
     },
     {
         "type": "tab",
@@ -492,7 +629,8 @@
         "title": "Онлайн-встречи",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Online Meetings"
     },
     {
         "type": "tab",
@@ -501,7 +639,8 @@
         "title": "Права пользователя",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "User Permissions"
     },
     {
         "type": "tab",
@@ -510,7 +649,8 @@
         "title": "Платежи",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Payments"
     },
     {
         "type": "tab",
@@ -519,7 +659,8 @@
         "title": "Дополнительные",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Additional"
     },
     {
         "type": "tab",
@@ -528,7 +669,8 @@
         "title": "Часы работы",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Business Hours"
     },
     {
         "type": "tab",
@@ -537,7 +679,8 @@
         "title": "Выходные и праздничные дни",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Holidays"
     },
     {
         "type": "label",
@@ -546,7 +689,8 @@
         "title": "Данные Bookly при удалении плагинов Bookly",
         "anchor": "bookly_gen_delete_data_on_uninstall",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Bookly data upon deleting Bookly items"
     },
     {
         "type": "label",
@@ -555,7 +699,8 @@
         "title": "Длина временного интервала",
         "anchor": "bookly_gen_time_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Time slot length"
     },
     {
         "type": "label",
@@ -564,7 +709,8 @@
         "title": "Установить длину интервала в качестве продолжительности сервиса",
         "anchor": "bookly_gen_service_duration_as_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Set slot length as service duration"
     },
     {
         "type": "label",
@@ -572,8 +718,9 @@
         "tab": "general",
         "title": "Минимальный промежуток времени между бронированием и записью",
         "anchor": "bookly_gen_min_time_prior_booking",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to booking"
     },
     {
         "type": "label",
@@ -581,8 +728,9 @@
         "tab": "general",
         "title": "Минимальный промежуток времени между отменой и записью",
         "anchor": "bookly_gen_min_time_prior_cancel",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to canceling"
     },
     {
         "type": "label",
@@ -591,7 +739,8 @@
         "title": "Количество дней доступных для бронирования",
         "anchor": "bookly_gen_max_days_for_booking",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Number of days available for booking"
     },
     {
         "type": "label",
@@ -600,7 +749,8 @@
         "title": "Показывать доступное для бронирования время в часовом поясе клиента",
         "anchor": "bookly_gen_use_client_time_zone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display available time slots in client's time zone"
     },
     {
         "type": "label",
@@ -609,7 +759,8 @@
         "title": "Разрешить сотрудникам редактировать свои профили",
         "anchor": "bookly_gen_allow_staff_edit_profile",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow staff members to edit their profiles"
     },
     {
         "type": "label",
@@ -618,7 +769,8 @@
         "title": "Метод подключения JavaScript и CSS файлов Bookly на странице",
         "anchor": "bookly_gen_link_assets_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Method to include Bookly JavaScript and CSS files on the page"
     },
     {
         "type": "label",
@@ -627,7 +779,8 @@
         "title": "Помогите нам улучшить Bookly, отправляя анонимную статистику использования",
         "anchor": "bookly_gen_collect_stats",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Help us improve Bookly by sending anonymous usage stats"
     },
     {
         "type": "label",
@@ -645,7 +798,8 @@
         "title": "Предотвращать кэширование страниц содержащих форму бронирования",
         "anchor": "bookly_gen_prevent_caching",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Prevent caching of pages with booking form"
     },
     {
         "type": "label",
@@ -654,7 +808,8 @@
         "title": "Показывать уведомления о новостях",
         "anchor": "bookly_gen_badge_consider_news",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show news notifications"
     },
     {
         "type": "label",
@@ -663,7 +818,8 @@
         "title": "Почтовый шлюз",
         "anchor": "bookly_email_gateway",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Mail gateway"
     },
     {
         "type": "label",
@@ -672,7 +828,8 @@
         "title": "Имя хоста",
         "anchor": "bookly_smtp_host",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Hostname"
     },
     {
         "type": "label",
@@ -681,7 +838,8 @@
         "title": "Порт",
         "anchor": "bookly_smtp_port",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Port"
     },
     {
         "type": "label",
@@ -690,7 +848,8 @@
         "title": "Имя пользователя",
         "anchor": "bookly_smtp_user",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Username"
     },
     {
         "type": "label",
@@ -699,7 +858,8 @@
         "title": "Пароль",
         "anchor": "bookly_smtp_password",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Password"
     },
     {
         "type": "label",
@@ -708,7 +868,8 @@
         "title": "Шифрование",
         "anchor": "bookly_smtp_secure",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Secure"
     },
     {
         "type": "label",
@@ -717,7 +878,8 @@
         "title": "Эл. почта получателя",
         "anchor": "bookly-smtp-to",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Recipient email"
     },
     {
         "type": "label",
@@ -726,7 +888,8 @@
         "title": "URL страницы после подтверждения записи (в случае успеха)",
         "anchor": "bookly_url_approve_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (success)"
     },
     {
         "type": "label",
@@ -735,7 +898,8 @@
         "title": "URL страницы после подтверждения забронированной записи (в случае отказа)",
         "anchor": "bookly_url_approve_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (denied)"
     },
     {
         "type": "label",
@@ -744,7 +908,8 @@
         "title": "URL страницы после отмены записи (в случае успеха)",
         "anchor": "bookly_url_cancel_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (success)"
     },
     {
         "type": "label",
@@ -753,7 +918,8 @@
         "title": "URL страницы после отмены записи (в случае отказа)",
         "anchor": "bookly_url_cancel_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (denied)"
     },
     {
         "type": "label",
@@ -761,8 +927,9 @@
         "tab": "url",
         "title": "URL страницы для отмены записи с подтверждением",
         "anchor": "bookly_url_cancel_confirm_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Appointment cancellation confirmation URL"
     },
     {
         "type": "label",
@@ -771,7 +938,8 @@
         "title": "URL страницы после отказа в записи (в случае успеха)",
         "anchor": "bookly_url_reject_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (success)"
     },
     {
         "type": "label",
@@ -780,7 +948,8 @@
         "title": "URL страницы после отказа в записи (в случае отказа)",
         "anchor": "bookly_url_reject_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (denied)"
     },
     {
         "type": "label",
@@ -788,8 +957,9 @@
         "tab": "url",
         "title": "URL страницы для последнего шага бронирования",
         "anchor": "bookly_settings_final_step_url_mode",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Final step URL"
     },
     {
         "type": "label",
@@ -797,8 +967,9 @@
         "tab": "url",
         "title": "Введите URL",
         "anchor": "bookly_url_final_step_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Enter a URL"
     },
     {
         "type": "label",
@@ -806,8 +977,9 @@
         "tab": "url",
         "title": "URL страницы оценки услуг",
         "anchor": "bookly_ratings_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-ratings",
+        "weight": 30,
+        "alt": "Rating page URL"
     },
     {
         "type": "label",
@@ -815,8 +987,9 @@
         "tab": "url",
         "title": "URL страницы после подтверждения забронированной повторяющейся записи (в случае успеха)",
         "anchor": "bookly_recurring_appointments_approve_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (success)"
     },
     {
         "type": "label",
@@ -824,8 +997,9 @@
         "tab": "url",
         "title": "URL страницы после подтверждения забронированной повторяющейся записи (в случае отказа)",
         "anchor": "bookly_recurring_appointments_approve_denied_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (denied)"
     },
     {
         "type": "label",
@@ -833,8 +1007,9 @@
         "tab": "url",
         "title": "URL страницы при создании записи из списка ожидания (в случае успеха)",
         "anchor": "bookly_url_confirm_from_waitlisted_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "weight": 30,
+        "alt": "Set appointment from waiting list (success)"
     },
     {
         "type": "label",
@@ -842,8 +1017,9 @@
         "tab": "url",
         "title": "URL страницы при создании записи из списка ожидания (в случае отказа)",
         "anchor": "bookly_url_confirm_from_waitlisted_denied_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "weight": 30,
+        "alt": "Set appointment from waiting list (denied)"
     },
     {
         "type": "label",
@@ -852,7 +1028,8 @@
         "title": "Показывать только рабочие дни в календаре",
         "anchor": "bookly_cal_show_only_business_days",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only business days in the calendar"
     },
     {
         "type": "label",
@@ -861,7 +1038,8 @@
         "title": "Показывать только рабочие часы в календаре",
         "anchor": "bookly_cal_show_only_business_hours",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only business hours in the calendar"
     },
     {
         "type": "label",
@@ -870,7 +1048,8 @@
         "title": "Показывать только сотрудников с записями в календаре",
         "anchor": "bookly_cal_show_only_staff_with_appointments",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show only staff members with appointments in Day view"
     },
     {
         "type": "label",
@@ -879,7 +1058,8 @@
         "title": "Показывать уведомления о новых записях",
         "anchor": "bookly_cal_show_new_appointments_badge",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show new appointments notifications"
     },
     {
         "type": "label",
@@ -888,7 +1068,8 @@
         "title": "Устаревший режим",
         "anchor": "bookly_legacy_calendar",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Legacy mode"
     },
     {
         "type": "label",
@@ -897,7 +1078,8 @@
         "title": "Прокрутка календаря",
         "anchor": "bookly_cal_scrollable_calendar",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Scrollable calendar"
     },
     {
         "type": "label",
@@ -906,7 +1088,8 @@
         "title": "Стиль календаря в режиме \"Месяц\"",
         "anchor": "bookly_cal_month_view_style",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Month view style"
     },
     {
         "type": "label",
@@ -915,7 +1098,8 @@
         "title": "Цветовой режим",
         "anchor": "bookly_cal_coloring_mode",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Coloring mode"
     },
     {
         "type": "label",
@@ -924,7 +1108,8 @@
         "title": "Календарь",
         "anchor": "bookly_appointment_participants",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Calendar"
     },
     {
         "type": "label",
@@ -933,7 +1118,8 @@
         "title": "Имя компании",
         "anchor": "bookly_co_name",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company name"
     },
     {
         "type": "label",
@@ -942,7 +1128,8 @@
         "title": "Адрес",
         "anchor": "bookly_co_address",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Address"
     },
     {
         "type": "label",
@@ -951,7 +1138,8 @@
         "title": "Телефон",
         "anchor": "bookly_co_phone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone"
     },
     {
         "type": "label",
@@ -960,7 +1148,8 @@
         "title": "Веб-сайт",
         "anchor": "bookly_co_website",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Website"
     },
     {
         "type": "label",
@@ -969,7 +1158,8 @@
         "title": "Индустрия",
         "anchor": "bookly_co_industry",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Industry"
     },
     {
         "type": "label",
@@ -978,7 +1168,8 @@
         "title": "Размер компании",
         "anchor": "bookly_co_size",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company size"
     },
     {
         "type": "label",
@@ -987,7 +1178,8 @@
         "title": "Электронная почта",
         "anchor": "bookly_co_email",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Email"
     },
     {
         "type": "label",
@@ -995,8 +1187,9 @@
         "tab": "customers",
         "title": "Создавать клиентам учётные записи WordPress",
         "anchor": "bookly_cst_create_account",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Create WordPress user account for customers"
     },
     {
         "type": "label",
@@ -1004,8 +1197,9 @@
         "tab": "customers",
         "title": "Роль новой учётной записи WordPress",
         "anchor": "bookly_cst_new_account_role",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "New user account role"
     },
     {
         "type": "label",
@@ -1014,7 +1208,8 @@
         "title": "Страна в поле ввода номера телефона",
         "anchor": "bookly_cst_phone_default_country",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone field default country"
     },
     {
         "type": "label",
@@ -1023,7 +1218,8 @@
         "title": "Код страны по умолчанию",
         "anchor": "bookly_cst_default_country_code",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default country code"
     },
     {
         "type": "label",
@@ -1031,8 +1227,9 @@
         "tab": "customers",
         "title": "Обязательный ввод даты рождения",
         "anchor": "bookly_cst_required_birthday",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make birthday mandatory"
     },
     {
         "type": "label",
@@ -1040,8 +1237,9 @@
         "tab": "customers",
         "title": "Сделать ввод адреса обязательным",
         "anchor": "bookly_cst_required_address",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make address mandatory"
     },
     {
         "type": "label",
@@ -1049,8 +1247,9 @@
         "tab": "customers",
         "title": "Поля для ввода адреса клиента",
         "anchor": "bookly_cst_address_show_fields",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer's address fields"
     },
     {
         "type": "label",
@@ -1058,8 +1257,9 @@
         "tab": "customers",
         "title": "Адрес клиента",
         "anchor": "bookly-settings-customers-editor",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer address"
     },
     {
         "type": "label",
@@ -1068,7 +1268,8 @@
         "title": "Запоминать личные данные в файлах cookie",
         "anchor": "bookly_cst_remember_in_cookie",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Remember personal information in cookies"
     },
     {
         "type": "label",
@@ -1077,7 +1278,8 @@
         "title": "Разрешить дубликаты клиентов",
         "anchor": "bookly_cst_allow_duplicates",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow duplicate customers"
     },
     {
         "type": "label",
@@ -1086,7 +1288,8 @@
         "title": "Показывать диалоговое окно подтверждения перед обновлением данных клиента",
         "anchor": "bookly_cst_show_update_details_dialog",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show confirmation dialog before updating customer's data"
     },
     {
         "type": "label",
@@ -1095,7 +1298,8 @@
         "title": "Верифицировать контактную информацию клиента на шаге \"Детали\"",
         "anchor": "bookly_cst_verify_customer_details",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Verify customer's contact information at Details step"
     },
     {
         "type": "label",
@@ -1104,7 +1308,8 @@
         "title": "Первоначальный статус записи",
         "anchor": "bookly_appointment_default_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default appointment status"
     },
     {
         "type": "label",
@@ -1113,7 +1318,8 @@
         "title": "Статус записи после успешной оплаты",
         "anchor": "bookly_successful_payment_appointment_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Successful payment appointment status"
     },
     {
         "type": "label",
@@ -1121,8 +1327,9 @@
         "tab": "appointments",
         "title": "Первое значение для новых записей, созданных из административной панели",
         "anchor": "bookly_appointments_main_value",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "First value for newly created appointments via backend"
     },
     {
         "type": "label",
@@ -1130,8 +1337,9 @@
         "tab": "appointments",
         "title": "Отображение доступных временных интервалов",
         "anchor": "bookly_appointments_displayed_time_slots",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Displayed time slots"
     },
     {
         "type": "label",
@@ -1139,8 +1347,9 @@
         "tab": "appointments",
         "title": "Разделитель времени",
         "anchor": "bookly_appointments_time_delimiter",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Time delimiter"
     },
     {
         "type": "label",
@@ -1148,8 +1357,9 @@
         "tab": "appointments",
         "title": "Действие при отмене записи",
         "anchor": "bookly_appointment_cancel_action",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Cancel appointment action"
     },
     {
         "type": "label",
@@ -1157,8 +1367,9 @@
         "tab": "appointments",
         "title": "Автоматически изменять статус записи",
         "anchor": "bookly_auto_change_status",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Automatically change status of appointment"
     },
     {
         "type": "label",
@@ -1166,8 +1377,9 @@
         "tab": "appointments",
         "title": "Исходный статус",
         "anchor": "bookly_auto_change_status_from",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Initial status"
     },
     {
         "type": "label",
@@ -1175,8 +1387,9 @@
         "tab": "appointments",
         "title": "Новый статус",
         "anchor": "bookly_auto_change_status_to",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Status to be set"
     },
     {
         "type": "label",
@@ -1185,7 +1398,8 @@
         "title": "Описание для календаря клиента",
         "anchor": "bookly-ics-customer-editor",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Description for customer's calendar"
     },
     {
         "type": "label",
@@ -1194,7 +1408,8 @@
         "title": "Описание ICS для сотрудников",
         "anchor": "bookly-ics-staff-editor",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "ICS description for staff"
     },
     {
         "type": "label",
@@ -1203,7 +1418,8 @@
         "title": "Значение, возвращаемое кодом {appointment_end_date}",
         "anchor": "bookly_appointment_end_date_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "The value returned by {appointment_end_date} placeholder"
     },
     {
         "type": "label",
@@ -1221,7 +1437,8 @@
         "title": "Товар для бронирования",
         "anchor": "bookly_wc_product",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Booking product"
     },
     {
         "type": "label",
@@ -1230,7 +1447,8 @@
         "title": "Создавать заказ WooCommerce из административной панели",
         "anchor": "bookly_wc_create_order_via_backend",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Create a WooCommerce order from backend"
     },
     {
         "type": "label",
@@ -1239,7 +1457,8 @@
         "title": "Создавать заказ WooCommerce, если стоимость услуги равна нулю",
         "anchor": "bookly_wc_create_order_at_zero_cost",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Create a WooCommerce order if the cost of the service is zero"
     },
     {
         "type": "label",
@@ -1248,7 +1467,8 @@
         "title": "Данные о содержимом корзины",
         "anchor": "bookly_l10n_wc_cart_info_name",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cart item data"
     },
     {
         "type": "label",
@@ -1257,7 +1477,8 @@
         "title": "ID приложения",
         "anchor": "bookly_fb_app_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "App ID"
     },
     {
         "type": "label",
@@ -1266,7 +1487,68 @@
         "title": "Колонки",
         "anchor": "bookly_cart_show_columns",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Columns"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Совместные сервисы",
+        "anchor": "bookly_add-collaborative_services",
+        "addon": "bookly-addon-collaborative-services",
+        "weight": 50,
+        "alt": "Collaborative services"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "События",
+        "anchor": "bookly_add-events",
+        "addon": "bookly-addon-events",
+        "weight": 50,
+        "alt": "Events"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Групповое бронирование",
+        "anchor": "bookly_add-group-booking",
+        "addon": "bookly-addon-group-booking",
+        "weight": 50,
+        "alt": "Group Booking"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Множественные Записи",
+        "anchor": "bookly_add-multiply-appointments",
+        "addon": "bookly-addon-multiply-appointments",
+        "weight": 50,
+        "alt": "Multiply Appointments"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Пакеты услуг",
+        "anchor": "bookly_add-pkg",
+        "addon": "bookly-addon-packages",
+        "weight": 50,
+        "alt": "Packages"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Лист Ожидания",
+        "anchor": "bookly_add-waiting-list",
+        "addon": "bookly-addon-waiting-list",
+        "weight": 50,
+        "alt": "Waiting List"
     },
     {
         "type": "label",
@@ -1275,7 +1557,8 @@
         "title": "Отображать календарь встреч на фронтенде",
         "anchor": "bookly_cal_frontend_enabled",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display front-end calendar"
     },
     {
         "type": "label",
@@ -1284,7 +1567,8 @@
         "title": "Показывать только занятые слоты",
         "anchor": "bookly_cal_frontend_display_only_busy_slots",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display only busy slots"
     },
     {
         "type": "label",
@@ -1293,7 +1577,8 @@
         "title": "Метод расчёта цены для комбинированных услуг",
         "anchor": "bookly_combined_price_method",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price calculation method for combined services"
     },
     {
         "type": "label",
@@ -1301,8 +1586,10 @@
         "tab": "additional",
         "title": "Не позволять выбрать конкретного сотрудника",
         "anchor": "bookly_collaborative_hide_staff",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-collaborative-services",
+        "group": "Совместные сервисы",
+        "weight": 30,
+        "alt": "Do not allow to select a specific staff member"
     },
     {
         "type": "label",
@@ -1310,8 +1597,10 @@
         "tab": "additional",
         "title": "Маска билета по умолчанию",
         "anchor": "bookly_event_ticked_default_code_mask",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-events",
+        "group": "События",
+        "weight": 30,
+        "alt": "Default ticket mask"
     },
     {
         "type": "label",
@@ -1319,8 +1608,10 @@
         "tab": "additional",
         "title": "Формат отображения информации о групповых бронированиях",
         "anchor": "bookly_group_booking_nop_format",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-group-booking",
+        "group": "Групповое бронирование",
+        "weight": 30,
+        "alt": "Group bookings information format"
     },
     {
         "type": "label",
@@ -1328,8 +1619,10 @@
         "tab": "additional",
         "title": "Максимальное количество",
         "anchor": "bookly_multiply_appointments_quantity_max",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-multiply-appointments",
+        "group": "Множественные Записи",
+        "weight": 30,
+        "alt": "Max quantity"
     },
     {
         "type": "label",
@@ -1337,8 +1630,10 @@
         "tab": "additional",
         "title": "Показывать пакеты без оплат в списке пакетов услуг",
         "anchor": "bookly_packages_show_without_payments",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-packages",
+        "group": "Пакеты услуг",
+        "weight": 30,
+        "alt": "Show packages without payments in a packages list"
     },
     {
         "type": "label",
@@ -1346,8 +1641,10 @@
         "tab": "additional",
         "title": "Показывать пакеты с оплатой",
         "anchor": "bookly_packages_show_with_payments",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-packages",
+        "group": "Пакеты услуг",
+        "weight": 30,
+        "alt": "Show packages with payments"
     },
     {
         "type": "label",
@@ -1355,8 +1652,10 @@
         "tab": "additional",
         "title": "Добавлять клиентов в лист ожидания несмотря на значение вместимости",
         "anchor": "bookly_waiting_list_despite_capacity",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-waiting-list",
+        "group": "Лист Ожидания",
+        "weight": 30,
+        "alt": "Add customers to the waiting list despite the capacity value"
     },
     {
         "type": "provider",
@@ -1392,7 +1691,8 @@
         "title": "Выберите, кто может управлять записями в Bookly",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Select who can manage Bookly appointments"
     },
     {
         "type": "label",
@@ -1401,7 +1701,8 @@
         "title": "Выберите, кто может администрировать Bookly",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Select who can administrate Bookly"
     },
     {
         "type": "label",
@@ -1410,7 +1711,8 @@
         "title": "Роль новой учётной записи сотрудника",
         "anchor": "bookly_staff_new_account_role",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "New staff account role"
     },
     {
         "type": "label",
@@ -1445,8 +1747,9 @@
         "tab": "google_calendar",
         "title": "Режим синхронизации",
         "anchor": "bookly_gc_sync_mode",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1454,8 +1757,9 @@
         "tab": "google_calendar",
         "title": "Синхронизировать историю записей (прошлых и будущих)",
         "anchor": "bookly_gc_full_sync_offset_days_before",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1463,8 +1767,9 @@
         "tab": "google_calendar",
         "title": "Копировать названия событий Google Календаря",
         "anchor": "bookly_gc_full_sync_titles",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Copy Google Calendar event titles"
     },
     {
         "type": "label",
@@ -1472,8 +1777,9 @@
         "tab": "google_calendar",
         "title": "Перезаписывать описание оригинальных событий Google Календаря",
         "anchor": "bookly_gc_force_update_description",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Overwrite the description of the original Google Calendar events"
     },
     {
         "type": "label",
@@ -1482,7 +1788,8 @@
         "title": "Ограничить количество выгружаемых событий",
         "anchor": "bookly_gc_limit_events",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1491,7 +1798,8 @@
         "title": "Шаблон заголовка событий",
         "anchor": "bookly_gc_event_title",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1500,7 +1808,8 @@
         "title": "Шаблон описания событий",
         "anchor": "bookly_gc_event_description",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1509,7 +1818,8 @@
         "title": "Режим синхронизации",
         "anchor": "bookly_ac_sync_mode",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1518,7 +1828,8 @@
         "title": "Синхронизировать историю записей (прошлых и будущих)",
         "anchor": "bookly_ac_full_sync_offset_days_before",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1527,7 +1838,8 @@
         "title": "Скопировать названия событий Календаря Apple",
         "anchor": "bookly_ac_full_sync_titles",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Copy Apple Calendar event titles"
     },
     {
         "type": "label",
@@ -1536,7 +1848,8 @@
         "title": "Ограничить количество выгружаемых событий",
         "anchor": "bookly_ac_limit_events",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1545,7 +1858,8 @@
         "title": "Шаблон заголовка событий",
         "anchor": "bookly_ac_event_title",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1554,7 +1868,8 @@
         "title": "Шаблон описания событий",
         "anchor": "bookly_ac_event_description",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1563,7 +1878,8 @@
         "title": "Маска для кодов по умолчанию",
         "anchor": "bookly_coupons_default_code_mask",
         "addon": "bookly-addon-coupons",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default code mask"
     },
     {
         "type": "label",
@@ -1572,7 +1888,8 @@
         "title": "Путь к каталогу",
         "anchor": "bookly_files_directory",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Upload directory"
     },
     {
         "type": "label",
@@ -1581,7 +1898,8 @@
         "title": "Разрешённые расширения файлов",
         "anchor": "bookly_files_extensions",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allowed file extensions"
     },
     {
         "type": "label",
@@ -1599,7 +1917,8 @@
         "title": "Срок оплаты счёта",
         "anchor": "bookly_invoices_due_days",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice due days"
     },
     {
         "type": "label",
@@ -1608,7 +1927,8 @@
         "title": "Шрифт",
         "anchor": "bookly_invoices_font_name",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Font"
     },
     {
         "type": "label",
@@ -1617,7 +1937,8 @@
         "title": "Префикс для имени файла счёта",
         "anchor": "bookly_invoices_file_prefix",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice file name prefix"
     },
     {
         "type": "label",
@@ -1626,7 +1947,8 @@
         "title": "Последовательная нумерация",
         "anchor": "bookly_invoices_id_fill_gaps",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sequential numbering"
     },
     {
         "type": "label",
@@ -1635,7 +1957,8 @@
         "title": "Первоначальный номер счёта",
         "anchor": "bookly_invoices_id_start_number",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Initial invoice number"
     },
     {
         "type": "label",
@@ -1644,7 +1967,8 @@
         "title": "Отображать ручную коррекцию",
         "anchor": "bookly_invoices_show_adjustments",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show manual adjustments"
     },
     {
         "type": "label",
@@ -1653,7 +1977,8 @@
         "title": "Шаблон счёта",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice template"
     },
     {
         "type": "label",
@@ -1662,7 +1987,8 @@
         "title": "Индивидуальные настройки для локаций",
         "anchor": "bookly_locations_allow_services_per_location",
         "addon": "bookly-addon-locations",
-        "weight": 30
+        "weight": 30,
+        "alt": "Custom settings for location"
     },
     {
         "type": "label",
@@ -1671,7 +1997,8 @@
         "title": "ID приложения",
         "anchor": "bookly_oc_app_id",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Application ID"
     },
     {
         "type": "label",
@@ -1680,7 +2007,8 @@
         "title": "Секрет приложения",
         "anchor": "bookly_oc_app_secret",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Application secret"
     },
     {
         "type": "label",
@@ -1698,7 +2026,8 @@
         "title": "Режим синхронизации",
         "anchor": "bookly_oc_sync_mode",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1707,7 +2036,8 @@
         "title": "Синхронизировать историю записей (прошлых и будущих)",
         "anchor": "bookly_oc_full_sync_offset_days_before",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1716,7 +2046,8 @@
         "title": "Копировать названия событий Календаря Outlook",
         "anchor": "bookly_oc_full_sync_titles",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Copy Outlook Calendar event titles"
     },
     {
         "type": "label",
@@ -1725,7 +2056,8 @@
         "title": "Ограничить количество выгружаемых событий",
         "anchor": "bookly_oc_limit_events",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1734,7 +2066,8 @@
         "title": "Шаблон заголовка событий",
         "anchor": "bookly_oc_event_title",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1743,7 +2076,8 @@
         "title": "Шаблон описания событий",
         "anchor": "bookly_oc_event_description",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event description"
     },
     {
         "type": "label",
@@ -1752,7 +2086,8 @@
         "title": "Отображение оценок в административной панели",
         "anchor": "bookly_ratings_show_at_backend",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Displaying appointments rating in the backend"
     },
     {
         "type": "label",
@@ -1761,7 +2096,8 @@
         "title": "Время для выставления оценки",
         "anchor": "bookly_ratings_timeout",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Timeout for rating appointment"
     },
     {
         "type": "label",
@@ -1770,7 +2106,8 @@
         "title": "Период усреднения оценки",
         "anchor": "bookly_ratings_period",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Period for calculating rating average"
     },
     {
         "type": "label",
@@ -1779,7 +2116,8 @@
         "title": "Онлайн платежи",
         "anchor": "bookly_recurring_appointments_payment",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Online Payments"
     },
     {
         "type": "label",
@@ -1788,16 +2126,18 @@
         "title": "Групповые записи",
         "anchor": "bookly_recurring_appointments_use_groups",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Group appointments"
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "service_extras",
-        "title": "Умножать дополнения на количество персон",
+        "title": "Умножать дополнения на количество участников",
         "anchor": "bookly_service_extras_multiply_nop",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Multiply extras by number of persons"
     },
     {
         "type": "label",
@@ -1806,7 +2146,8 @@
         "title": "Шаг Дополнения",
         "anchor": "bookly_service_extras_after_step_time",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Extras Step"
     },
     {
         "type": "label",
@@ -1815,7 +2156,8 @@
         "title": "Показать",
         "anchor": "bookly_service_extras_show",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show"
     },
     {
         "type": "label",
@@ -1824,7 +2166,8 @@
         "title": "Имя",
         "anchor": "bookly-custom-statuses-name",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Name"
     },
     {
         "type": "label",
@@ -1833,7 +2176,8 @@
         "title": "Свободно/Занято",
         "anchor": "bookly-custom-statuses-busy",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Free/Busy"
     },
     {
         "type": "gateway",
@@ -1842,7 +2186,8 @@
         "title": "Оплата сервиса наличными",
         "anchor": "bookly_pmt_locally",
         "addon": "core",
-        "weight": 50
+        "weight": 50,
+        "alt": "Service paid locally"
     },
     {
         "type": "gateway",
@@ -1854,6 +2199,78 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Username",
+        "anchor": "bookly_paypal_api_username",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Password",
+        "anchor": "bookly_paypal_api_password",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Signature",
+        "anchor": "bookly_paypal_api_signature",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "PayPal ID",
+        "anchor": "bookly_paypal_id",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_paypal_sandbox",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Передавать информацию о налоге",
+        "anchor": "bookly_paypal_send_tax",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_paypal_timeout",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1861,6 +2278,59 @@
         "anchor": "bookly_pmt_2checkout",
         "addon": "bookly-addon-2checkout",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Номер учетной записи",
+        "anchor": "bookly_2checkout_api_seller_id",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Account Number"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Word",
+        "anchor": "bookly_2checkout_api_secret_word",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_2checkout_sandbox",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Передавать информацию о налоге",
+        "anchor": "bookly_2checkout_send_tax",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_2checkout_timeout",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1872,6 +2342,58 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Login ID",
+        "anchor": "bookly_authorize_net_api_login_id",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Transaction Key",
+        "anchor": "bookly_authorize_net_transaction_key",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_authorize_net_sandbox",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Передавать информацию о налоге",
+        "anchor": "bookly_authorize_net_send_tax",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_authorize_net_timeout",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1879,6 +2401,27 @@
         "anchor": "bookly_pmt_mollie",
         "addon": "bookly-addon-mollie",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_mollie_api_key",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_mollie_timeout",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1890,6 +2433,47 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Agent ID",
+        "anchor": "bookly_payson_api_agent_id",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_payson_api_key",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_payson_sandbox",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_payson_timeout",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1897,6 +2481,47 @@
         "anchor": "bookly_pmt_payu_biz",
         "addon": "bookly-addon-payu-biz",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_payu_biz_sandbox",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Key",
+        "anchor": "bookly_payu_biz_api_key",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Salt",
+        "anchor": "bookly_payu_biz_api_salt",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_payu_biz_timeout",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1908,6 +2533,68 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_payu_latam_sandbox",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_payu_latam_api_key",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Account ID",
+        "anchor": "bookly_payu_latam_api_account_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant ID",
+        "anchor": "bookly_payu_latam_api_merchant_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Передавать информацию о налоге",
+        "anchor": "bookly_payu_latam_send_tax",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_payu_latam_timeout",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1915,6 +2602,60 @@
         "anchor": "bookly_pmt_cloud_square",
         "addon": "bookly-addon-square",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "ID приложения",
+        "anchor": "bookly_cloud_square_api_application_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Application ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Токен доступа",
+        "anchor": "bookly_cloud_square_api_access_token",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Access token"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "ID локации",
+        "anchor": "bookly_cloud_square_api_location_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Location ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Sandbox Mode",
+        "anchor": "bookly_cloud_square_sandbox",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_cloud_square_timeout",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1929,10 +2670,42 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
+        "title": "Publishable Key",
+        "anchor": "bookly_stripe_publishable_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Key",
+        "anchor": "bookly_stripe_secret_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Временное окно платёжной системы",
+        "anchor": "bookly_stripe_timeout",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
         "title": "Валюта",
         "anchor": "bookly_pmt_currency",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Currency"
     },
     {
         "type": "label",
@@ -1941,16 +2714,18 @@
         "title": "Формат цен",
         "anchor": "bookly_pmt_price_format",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price format"
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
-        "title": "Deposit options",
+        "title": "Варианты депозита",
         "anchor": "bookly_deposit_allow_full_payment",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-deposit-payments",
+        "weight": 30,
+        "alt": "Deposit options"
     },
     {
         "type": "label",
@@ -1958,8 +2733,196 @@
         "tab": "payments",
         "title": "Настройки и отображение цены",
         "anchor": "bookly_taxes_in_price",
+        "addon": "bookly-addon-taxes",
+        "weight": 30,
+        "alt": "Price settings and display"
+    },
+    {
+        "type": "action",
+        "page": "bookly-appointments",
+        "tab": null,
+        "title": "Новая запись",
+        "anchor": null,
         "addon": "core",
-        "weight": 30
+        "action": "bookly-new-appointment",
+        "weight": 45,
+        "alt": "New appointment"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "Новый клиент",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-customer",
+        "weight": 45,
+        "alt": "New customer"
+    },
+    {
+        "type": "action",
+        "page": "bookly-services",
+        "tab": null,
+        "title": "Новый сервис",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-service",
+        "weight": 45,
+        "alt": "New service"
+    },
+    {
+        "type": "action",
+        "page": "bookly-staff",
+        "tab": null,
+        "title": "Новый сотрудник",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-staff",
+        "weight": 45,
+        "alt": "New staff member"
+    },
+    {
+        "type": "action",
+        "page": "bookly-notifications",
+        "tab": "notifications",
+        "title": "Новое уведомление",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "notifications",
+        "title": "Новое уведомление",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "sender_id",
+        "title": "Запросить новый ID отправителя",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-request-sender_id",
+        "weight": 45,
+        "alt": "Request Sender ID"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-mobile-staff-cabinet",
+        "tab": null,
+        "title": "Новый токен доступа",
+        "anchor": null,
+        "addon": "cloud:mobile-staff-cabinet",
+        "action": "bookly-js-new-key",
+        "weight": 45,
+        "alt": "New access token"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customer-groups",
+        "tab": null,
+        "title": "Новая группа",
+        "anchor": null,
+        "addon": "bookly-addon-customer-groups",
+        "action": "bookly-js-add-group",
+        "weight": 45,
+        "alt": "New group"
+    },
+    {
+        "type": "action",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "Добавить подарочную карту",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "action": "bookly-add-gift-card",
+        "weight": 45,
+        "alt": "Add gift card"
+    },
+    {
+        "type": "action",
+        "page": "bookly-packages",
+        "tab": null,
+        "title": "Новый пакет услуг",
+        "anchor": null,
+        "addon": "bookly-addon-packages",
+        "action": "bookly-new-package",
+        "weight": 45,
+        "alt": "New package"
+    },
+    {
+        "type": "action",
+        "page": "bookly-discounts",
+        "tab": null,
+        "title": "Новая скидка",
+        "anchor": null,
+        "addon": "bookly-addon-discounts",
+        "action": "bookly-new-discount",
+        "weight": 45,
+        "alt": "New discount"
+    },
+    {
+        "type": "action",
+        "page": "bookly-events",
+        "tab": null,
+        "title": "Новое событие",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "action": "bookly-new-event",
+        "weight": 45,
+        "alt": "New event"
+    },
+    {
+        "type": "action",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "Добавить локацию",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "action": "bookly-new-location",
+        "weight": 45,
+        "alt": "Add Location"
+    },
+    {
+        "type": "action",
+        "page": "bookly-taxes",
+        "tab": null,
+        "title": "Новый налог",
+        "anchor": null,
+        "addon": "bookly-addon-taxes",
+        "action": "bookly-new-tax",
+        "weight": 45,
+        "alt": "New tax"
+    },
+    {
+        "type": "action",
+        "page": "bookly-coupons",
+        "tab": null,
+        "title": "Добавить купон",
+        "anchor": null,
+        "addon": "bookly-addon-coupons",
+        "action": "bookly-add",
+        "weight": 45,
+        "alt": "Add Coupon"
+    },
+    {
+        "type": "action",
+        "page": "bookly-settings",
+        "tab": "custom_statuses",
+        "title": "Добавить статус",
+        "anchor": null,
+        "addon": "bookly-addon-custom-statuses",
+        "action": "bookly-add-status",
+        "weight": 45,
+        "alt": "Add status"
     },
     {
         "type": "tab",
@@ -1968,7 +2931,8 @@
         "title": "Уведомления",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Notifications"
     },
     {
         "type": "tab",
@@ -1977,7 +2941,8 @@
         "title": "Кампании",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Campaigns"
     },
     {
         "type": "tab",
@@ -1986,7 +2951,8 @@
         "title": "Списки рассылки",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Mailing lists"
     },
     {
         "type": "tab",
@@ -1995,7 +2961,8 @@
         "title": "Детали SMS",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "SMS Details"
     },
     {
         "type": "tab",
@@ -2004,7 +2971,8 @@
         "title": "Цены",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Price list"
     },
     {
         "type": "tab",
@@ -2013,6 +2981,7 @@
         "title": "ID отправителя",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Sender ID"
     }
 ]

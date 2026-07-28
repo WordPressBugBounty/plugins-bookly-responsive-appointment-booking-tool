@@ -402,6 +402,10 @@ jQuery(function ($) {
     // view and flash it; if it sits inside a collapsed payment/provider panel, expand it first.
     var highlightId = new URLSearchParams(window.location.search).get('highlight');
     if (highlightId) {
+        // Consume the parameter so a reload or a copied URL doesn't re-flash the setting.
+        var cleanParams = new URLSearchParams(window.location.search);
+        cleanParams.delete('highlight');
+        window.history.replaceState(null, '', window.location.pathname + '?' + cleanParams.toString() + window.location.hash);
         var target = document.getElementById(highlightId);
         if (target) {
             var collapse = target.classList.contains('bookly-collapse') ? target : target.closest('.bookly-collapse');

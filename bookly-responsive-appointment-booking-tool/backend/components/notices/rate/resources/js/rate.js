@@ -8,20 +8,22 @@ jQuery(function ($) {
             hide_until: 'long-time'
         };
 
+    function close() {
+        $.post(ajaxurl, data);
+        $rate.closest('.wrap').slideUp(150, function () {
+            $(this).remove();
+        });
+    }
+
     $rate
         .on('click', '.bookly-js-ok', function () {
             window.open(BooklyRateL10n.reviewsUrl, '_blank');
             data.hide_until = 'forever';
-            $.post(ajaxurl, data);
-            $rate.remove();
+            close();
         })
         .on('click', '.bookly-js-maybe-later', function () {
             data.hide_until = 'short-time';
-            $.post(ajaxurl, data);
-            $rate.remove();
+            close();
         })
-        .on('click', '.bookly-js-dismiss', function () {
-            $.post(ajaxurl, data);
-            $rate.remove();
-        });
+        .on('click', '.bookly-js-dismiss', close);
 });

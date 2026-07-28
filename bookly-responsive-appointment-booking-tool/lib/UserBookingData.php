@@ -97,8 +97,14 @@ class UserBookingData
     // Verification code
     /** @var string */
     protected $verification_code;
-    /** @var bool|string */
-    protected $verification_code_sent = false;
+    /** @var string|null Recipient (phone/email) the current code was sent to */
+    protected $verification_code_recipient;
+    /** @var int Unix timestamp of the last verification code dispatch */
+    protected $verification_code_sent_at = 0;
+    /** @var int Number of verification code dispatches in this session */
+    protected $verification_resend_count = 0;
+    /** @var string|null Recipient (phone/email) already verified in this session */
+    protected $verification_verified_recipient;
 
     // Private
 
@@ -307,7 +313,10 @@ class UserBookingData
         $this->session['payment_id'] = $this->payment_id;
         $this->session['payment_type'] = $this->payment_type;
         $this->session['verification_code'] = $this->verification_code ?: mt_rand( 100000, 999999 );
-        $this->session['verification_code_sent'] = $this->verification_code_sent;
+        $this->session['verification_code_recipient'] = $this->verification_code_recipient;
+        $this->session['verification_code_sent_at'] = $this->verification_code_sent_at;
+        $this->session['verification_resend_count'] = $this->verification_resend_count;
+        $this->session['verification_verified_recipient'] = $this->verification_verified_recipient;
         $this->session['order_id'] = $this->order_id;
 
         FormSession::saveSession( $this->form_id, $this->session );
@@ -344,7 +353,10 @@ class UserBookingData
                 $this->payment_id = isset( $this->session['payment_id'] ) ? $this->session['payment_id'] : null;
                 $this->payment_type = isset( $this->session['payment_type'] ) ? $this->session['payment_type'] : null;
                 $this->verification_code = isset( $this->session['verification_code'] ) ? $this->session['verification_code'] : null;
-                $this->verification_code_sent = isset( $this->session['verification_code_sent'] ) ? $this->session['verification_code_sent'] : null;
+                $this->verification_code_recipient = isset( $this->session['verification_code_recipient'] ) ? $this->session['verification_code_recipient'] : null;
+                $this->verification_code_sent_at = isset( $this->session['verification_code_sent_at'] ) ? $this->session['verification_code_sent_at'] : 0;
+                $this->verification_resend_count = isset( $this->session['verification_resend_count'] ) ? $this->session['verification_resend_count'] : 0;
+                $this->verification_verified_recipient = isset( $this->session['verification_verified_recipient'] ) ? $this->session['verification_verified_recipient'] : null;
                 $this->order_id = isset( $this->session['order_id'] ) ? $this->session['order_id'] : null;
                 $this->applyTimeZone();
 
@@ -1838,22 +1850,79 @@ class UserBookingData
     }
 
     /**
-     * @param bool|string $value
+     * @param string|null $value
      * @return $this
      */
-    public function setVerificationCodeSent( $value )
+    public function setVerificationCodeRecipient( $value )
     {
-        $this->verification_code_sent = $value;
+        $this->verification_code_recipient = $value;
 
         return $this;
     }
 
     /**
-     * @return bool
+     * @return string|null
      */
-    public function getVerificationCodeSent()
+    public function getVerificationCodeRecipient()
     {
-        return $this->verification_code_sent;
+        return $this->verification_code_recipient;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVerificationCodeSentAt()
+    {
+        return (int) $this->verification_code_sent_at;
+    }
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setVerificationCodeSentAt( $value )
+    {
+        $this->verification_code_sent_at = (int) $value;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVerificationResendCount()
+    {
+        return (int) $this->verification_resend_count;
+    }
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setVerificationResendCount( $value )
+    {
+        $this->verification_resend_count = (int) $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getVerifiedRecipient()
+    {
+        return $this->verification_verified_recipient;
+    }
+
+    /**
+     * @param string|null $value
+     * @return $this
+     */
+    public function setVerifiedRecipient( $value )
+    {
+        $this->verification_verified_recipient = $value;
+
+        return $this;
     }
 
     /**

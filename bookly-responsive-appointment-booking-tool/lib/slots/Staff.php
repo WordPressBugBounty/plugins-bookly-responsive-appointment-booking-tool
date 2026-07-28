@@ -339,18 +339,4 @@ class Staff
         return $value1 < $value2 ? -1 : 1;
     }
 
-    /**
-     * Check whether this staff is more preferable than the given one for given time slot.
-     *
-     * Equal preference resolves to false here; the random/stable tie-break is applied
-     * by the caller (see Generator::_resolveCandidates).
-     *
-     * @param Staff $staff
-     * @param Range $slot
-     * @return bool
-     */
-    public function morePreferableThan( Staff $staff, Range $slot )
-    {
-        return $this->comparePreference( $staff, $slot ) < 0;
-    }
 }

@@ -1,8 +1,15 @@
 function booklyAlert(alert) {
+    // type => [legacy hook class (kept for Selenium and old callers), icon]
+    const types = {
+        success: ['alert-success', '<svg class="bookly:toast-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>'],
+        error: ['alert-danger', '<svg class="bookly:toast-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>'],
+        warning: ['alert-warning', '<svg class="bookly:toast-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'],
+        info: ['alert-info', '<svg class="bookly:toast-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'],
+    };
     // Check if there are messages in alert.
     let not_empty = false;
     for (let type in alert) {
-        if (['success', 'error'].includes(type) && alert[type].length) {
+        if (types.hasOwnProperty(type) && alert[type].length) {
             not_empty = true;
             break;
         }
@@ -11,48 +18,69 @@ function booklyAlert(alert) {
     if (not_empty) {
         let $container = jQuery('#bookly-alert');
         if ($container.length === 0) {
-            $container = jQuery('<div id="bookly-alert" class="bookly-alert" style="max-width:600px"></div>').appendTo('#bookly-tbs');
+            $container = jQuery('<div id="bookly-alert" class="bookly-css-root bookly-toast-container"></div>').appendTo(document.body);
         }
         for (let type in alert) {
+            if (!types.hasOwnProperty(type)) {
+                continue;
+            }
             alert[type].forEach(function (message) {
-                const $alert = jQuery('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button></div>');
-
-                switch (type) {
-                    case 'success':
-                        $alert
-                            .addClass('alert-success')
-                            .prepend('<i class="fas fa-check-circle fa-fw fa-lg text-success align-middle mr-1"></i>');
-                        setTimeout(function () {
-                            $alert.remove();
-                        }, 10000);
-                        break;
-                    case 'error':
-                        $alert
-                            .addClass('alert-danger')
-                            .prepend('<i class="fas fa-times-circle fa-fw fa-lg text-danger align-middle mr-1"></i>');
-                        break;
-                }
-
-                $alert
-                    .append('<b>' + message + '</b>')
+                const $toast = jQuery('<div class="bookly:toast alert ' + types[type][0] + '"></div>')
+                    .append(types[type][1])
+                    .append(jQuery('<b class="bookly:toast-message"></b>').html(message))
+                    .append(
+                        jQuery('<button type="button" class="bookly:toast-close" aria-label="Close"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>')
+                            .on('click', function () {
+                                $toast.remove();
+                            })
+                    )
                     .appendTo($container);
+                if (type !== 'error') {
+                    setTimeout(function () {
+                        $toast.remove();
+                    }, 10000);
+                }
             });
         }
     }
 }
 
 function booklyModal(title, text, closeCaption, mainActionCaption) {
+    const closeIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
     let $mainButton = '',
-        $modal = jQuery('<div>', {class: 'bookly-modal bookly-fade', tabindex: -1, role: 'dialog'});
+        $modal = jQuery('<div>', {class: 'bookly-css-root bookly:modal-overlay', tabindex: -1});
+
+    function onKeydown(e) {
+        if (e.key === 'Escape') {
+            hide();
+        }
+    }
+
+    function hide() {
+        $modal.trigger('hide.bs.modal');
+        document.removeEventListener('keydown', onKeydown);
+        $modal.remove();
+    }
+
+    // Compatibility shim: builder consumers call modal.booklyModal('hide') on the
+    // returned instance — keep that working without the legacy bootstrap plugin.
+    $modal.booklyModal = function (action) {
+        if (action === 'hide') {
+            hide();
+        }
+        return this;
+    };
+
     if (mainActionCaption) {
+        // ladda-button + .ladda-label kept: consumers run Ladda.create(mainButton).
         $mainButton = jQuery('<button>', {
-            class: 'btn ladda-button btn-success',
+            class: 'bookly:alert-btn bookly:alert-btn-primary ladda-button',
             type: 'button',
             title: mainActionCaption,
             'data-spinner-size': 40,
             'data-style': 'zoom-in'
         })
-            .append('<span>', {class: 'ladda-label'}).text(mainActionCaption);
+            .append(jQuery('<span>', {class: 'ladda-label'}).text(mainActionCaption));
         $mainButton.on('click', function (e) {
             e.stopPropagation();
             $modal.trigger('bs.click.main.button', [$modal, $mainButton.get(0)]);
@@ -61,40 +89,39 @@ function booklyModal(title, text, closeCaption, mainActionCaption) {
 
     $modal
         .append(
-            jQuery('<div>', {class: 'modal-dialog'})
+            jQuery('<div>', {class: 'bookly:modal-box', role: 'dialog'})
                 .append(
-                    jQuery('<div>', {class: 'modal-content'})
+                    jQuery('<div>', {class: 'bookly:modal-header'})
+                        .append(jQuery('<div>', {class: 'bookly:modal-title', html: title}))
                         .append(
-                            jQuery('<div>', {class: 'modal-header'})
-                                .append(jQuery('<h5>', {class: 'modal-title', html: title}))
-                                .append(
-                                    jQuery('<button>', {class: 'close', 'data-dismiss': 'bookly-modal', type: 'button'})
-                                        .append('<span>').text('×')
-                                )
-                        )
-                        .append(
-                            text ? jQuery('<div>', {class: 'modal-body', html: text}) : ''
-                        )
-                        .append(
-                            jQuery('<div>', {class: 'modal-footer'})
-                                .append($mainButton)
-                                .append(
-                                    jQuery('<button>', {
-                                        class: 'btn ladda-button btn-default',
-                                        'data-dismiss': 'bookly-modal',
-                                        type: 'button'
-                                    })
-                                        .append('<span>').text(closeCaption)
-                                )
+                            jQuery('<button>', {class: 'bookly:alert-close', type: 'button', 'aria-label': 'Close', html: closeIcon})
+                                .on('click', hide)
                         )
                 )
-        );
-    jQuery('#bookly-tbs').append($modal);
+                .append(
+                    text ? jQuery('<div>', {class: 'bookly:modal-body', html: text}) : ''
+                )
+                .append(
+                    jQuery('<div>', {class: 'bookly:modal-footer'})
+                        .append($mainButton)
+                        .append(
+                            jQuery('<button>', {class: 'bookly:alert-btn bookly:alert-btn-outline', type: 'button'})
+                                .text(closeCaption)
+                                .on('click', hide)
+                        )
+                )
+        )
+        .on('click', function (e) {
+            if (e.target === this) {
+                hide();
+            }
+        });
 
-    $modal.on('hide.bs.modal', function () {
-        setTimeout(function () {$modal.remove();}, 2000)
-    });
-    setTimeout(function () {$modal.booklyModal('show')}, 0);
+    setTimeout(function () {
+        jQuery(document.body).append($modal);
+        document.addEventListener('keydown', onKeydown);
+        $modal.trigger('show.bs.modal');
+    }, 0);
 
     return $modal;
 }
@@ -125,25 +152,27 @@ function requiredBooklyPro() {
         },
         success: function (response) {
             if (response.success) {
-                let $features = jQuery('<div>', {class: 'col-12'}),
+                const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+                let $features = jQuery('<div>', {class: 'bookly:grid bookly:gap-1.5 bookly:mt-4'}),
                     $content = jQuery('<div>')
                 ;
-                response.data.features.forEach(function (feature, f) {
-                    $features.append(jQuery('<div>', {html: feature}).prepend(jQuery('<i>', {class: 'fa-fw mr-1 fas fa-check text-success'})));
+                response.data.features.forEach(function (feature) {
+                    $features.append(
+                        jQuery('<div>', {class: 'bookly:flex bookly:items-start bookly:gap-2'})
+                            .append(jQuery('<span>', {class: 'bookly:shrink-0 bookly:mt-0.5 bookly:text-primary', html: checkIcon}))
+                            .append(jQuery('<div>', {html: feature}))
+                    );
                 });
 
                 $content
-                    .append(jQuery('<div>', {class: 'm-n3'})
+                    .append(jQuery('<div>', {class: 'bookly:-mx-4 bookly:-mt-4'})
                         .append(
-                            jQuery('<img/>', {src: response.data.image, alt: 'Bookly Pro', class: 'img-fluid'})
+                            jQuery('<img/>', {src: response.data.image, alt: 'Bookly Pro', class: 'bookly:w-full bookly:rounded-t-xl'})
                         )
-                    ).append(jQuery('<div>', {class: 'row'})
-                    .append(jQuery('<div>', {class: 'mx-auto h4 mt-4 text-bookly', html: response.data.caption}))
-                ).append(jQuery('<div>', {class: 'row'})
-                    .append(jQuery('<div>', {class: 'col text-center', html: response.data.body}))
-                ).append(jQuery('<div>', {class: 'form-row mt-3'})
-                    .append($features)
-                );
+                    )
+                    .append(jQuery('<div>', {class: 'bookly:text-lg bookly:font-semibold bookly:text-center bookly:mt-4', html: response.data.caption}))
+                    .append(jQuery('<div>', {class: 'bookly:text-center bookly:mt-2', html: response.data.body}))
+                    .append($features);
 
                 booklyModal('', $content, response.data.close, response.data.upgrade)
                     .on('bs.click.main.button', function (event, modal, mainButton) {
@@ -152,7 +181,7 @@ function requiredBooklyPro() {
                         modal.booklyModal('hide');
                     })
                     .on('show.bs.modal', function () {
-                        jQuery('.modal-header', jQuery(this)).remove();
+                        jQuery('.bookly\\:modal-header', jQuery(this)).remove();
                     });
             }
         },
@@ -273,3 +302,25 @@ function requiredBooklyPro() {
         }
     }
 })(jQuery);
+
+(function () {
+    // Deep-link action from the global search palette: ?bookly-action=<button-id> clicks that
+    // button once it appears (datatable toolbars are mounted asynchronously). The parameter is
+    // consumed immediately — the address bar is cleaned up so a reload doesn't repeat the action.
+    let params = new URLSearchParams(window.location.search);
+    let actionId = params.get('bookly-action');
+    if (!actionId) {
+        return;
+    }
+    params.delete('bookly-action');
+    window.history.replaceState(null, '', window.location.pathname + '?' + params.toString() + window.location.hash);
+    let deadline = Date.now() + 10000;
+    (function attempt() {
+        let el = document.getElementById(actionId);
+        if (el) {
+            el.click();
+        } else if (Date.now() < deadline) {
+            setTimeout(attempt, 200);
+        }
+    })();
+})();

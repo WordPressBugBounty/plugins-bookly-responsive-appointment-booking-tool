@@ -178,4 +178,175 @@ class Ajax extends Lib\Base\Ajax
 
         wp_send_json_success();
     }
+
+    /**
+     * Billing data for the wizard Done screen (requested after in-wizard sign-in).
+     */
+    public static function getWizardBilling()
+    {
+        wp_send_json_success( Page::getCloudBilling() );
+    }
+
+    /**
+     * Save setup wizard v2 data (single bulk request at finish).
+     * Empty rows are skipped; free plan limits are enforced server-side.
+     */
+    public static function saveSetupV2()
+    {
+        $pro_active = Lib\Config::proActive();
+
+        // Company
+        $company = trim( self::parameter( 'company', '' ) );
+        if ( $company !== '' ) {
+            update_option( 'bookly_co_name', $company );
+        }
+
+        // Services. Free plan: max 5 in total — mirrors Services\Ajax::createService() gate.
+        $services_left = $pro_active || get_option( 'bookly_updated_from_legacy_version' ) == 'lite'
+            ? PHP_INT_MAX
+            : max( 0, 5 - Lib\Entities\Service::query()->count() );
+        foreach ( (array) self::parameter( 'services', array() ) as $service_data ) {
+            $title = isset( $service_data['title'] ) ? trim( $service_data['title'] ) : '';
+            if ( $title === '' || $services_left <= 0 ) {
+                continue;
+            }
+            $service = new Lib\Entities\Service();
+            $service
+                ->setTitle( $title )
+                ->setDuration( (int) $service_data['duration'] ?: Lib\Config::getTimeSlotLength() )
+                ->save();
+            Proxy\Shared::serviceCreated( $service );
+            $services_left --;
+        }
+
+        // Staff. Free plan: max 1 in total (same UI-level rule as the old wizard, enforced here).
+        $staff_left = $pro_active ? PHP_INT_MAX : max( 0, 1 - Lib\Entities\Staff::query()->count() );
+        foreach ( (array) self::parameter( 'staff', array() ) as $staff_data ) {
+            $name = isset( $staff_data['name'] ) ? trim( $staff_data['name'] ) : '';
+            if ( $name === '' || $staff_left <= 0 ) {
+                continue;
+            }
+            $staff = new Lib\Entities\Staff();
+            $staff
+                ->setFullName( $name )
+                ->setEmail( isset( $staff_data['email'] ) ? trim( $staff_data['email'] ) : '' )
+                ->setPhone( isset( $staff_data['phone'] ) ? trim( $staff_data['phone'] ) : '' )
+                ->save();
+            $staff_left --;
+        }
+
+        $sample_created = self::createSampleData();
+
+        // Link every staff member to every service (same full matrix as the old wizard).
+        foreach ( Lib\Entities\Staff::query()->find() as $staff ) {
+            foreach ( Lib\Entities\Service::query()->find() as $service ) {
+                $staff_service = new Lib\Entities\StaffService();
+                $staff_service->loadBy( array( 'staff_id' => $staff->getId(), 'service_id' => $service->getId() ) );
+                if ( ! $staff_service->isLoaded() ) {
+                    $staff_service
+                        ->setStaffId( $staff->getId() )
+                        ->setServiceId( $service->getId() )
+                        ->save();
+                }
+            }
+        }
+
+        wp_send_json_success( array( 'sample' => $sample_created ) );
+    }
+
+    /**
+     * Finish setup mode. Called on the final screen when the user proceeds to
+     * the calendar, so the wizard page stays available until they leave it.
+     */
+    public static function completeSetupV2()
+    {
+        delete_option( 'bookly_setup_step' );
+
+        wp_send_json_success();
+    }
+
+    /**
+     * Top up missing entities with samples and add demo appointments so the calendar
+     * is alive right after the wizard. Sample customers are fake (@example.com, no
+     * phones). Created ids are tracked in the bookly_sample_data option.
+     *
+     * @return bool Whether anything was created.
+     */
+    protected static function createSampleData()
+    {
+        $registry = array( 'staff' => array(), 'services' => array(), 'customers' => array(), 'appointments' => array() );
+
+        // Everything auto-created is visibly marked "(sample)" — staff, services, customers.
+        $sample_mark = ' (' . __( 'sample', 'bookly-responsive-appointment-booking-tool' ) . ')';
+
+        // Staff: the calendar page renders only when at least one staff member exists.
+        if ( ! Lib\Entities\Staff::query()->count() ) {
+            $staff = new Lib\Entities\Staff();
+            $staff->setFullName( __( 'Jane Doe', 'bookly-responsive-appointment-booking-tool' ) . $sample_mark )->save();
+            $registry['staff'][] = $staff->getId();
+        }
+        if ( ! Lib\Entities\Service::query()->count() ) {
+            $samples = array(
+                array( __( 'Teeth Whitening', 'bookly-responsive-appointment-booking-tool' ), 3600 ),
+                array( __( 'Consultation', 'bookly-responsive-appointment-booking-tool' ), 1800 ),
+            );
+            foreach ( $samples as $sample ) {
+                $service = new Lib\Entities\Service();
+                $service->setTitle( $sample[0] . $sample_mark )->setDuration( $sample[1] )->save();
+                Proxy\Shared::serviceCreated( $service );
+                $registry['services'][] = $service->getId();
+            }
+        }
+
+        // Demo appointments — only on a virgin calendar.
+        if ( ! Lib\Entities\Appointment::query()->count() ) {
+            $staff_id = Lib\Entities\Staff::query()->limit( 1 )->fetchRow()['id'];
+            $services = Lib\Entities\Service::query()->limit( 3 )->fetchArray();
+            $customers = array();
+            $customer = new Lib\Entities\Customer();
+            $customer
+                ->setFullName( 'Nick Johnson' . $sample_mark )
+                ->setEmail( 'nick@example.com' )
+                ->save();
+            $registry['customers'][] = $customer->getId();
+            $customers[] = $customer->getId();
+            // Tue/Wed/Thu of the week displayed by the calendar (start_of_week based),
+            // so the default week view opens with visible sample entries.
+            $timezone = wp_timezone();
+            $start_of_week = (int) get_option( 'start_of_week' );
+            $today = new \DateTimeImmutable( 'today', $timezone );
+            $week_start = $today->modify( sprintf( '-%d days', ( (int) $today->format( 'w' ) - $start_of_week + 7 ) % 7 ) );
+            $slots = array( array( 2, '10:00' ), array( 3, '14:00' ), array( 4, '16:30' ) );
+            foreach ( $slots as $i => $slot ) {
+                $service = $services[ $i % count( $services ) ];
+                $start = $week_start->modify( sprintf( '+%d days', ( $slot[0] - $start_of_week + 7 ) % 7 ) )->modify( $slot[1] );
+                $appointment = new Lib\Entities\Appointment();
+                $appointment
+                    ->setStaffId( $staff_id )
+                    ->setServiceId( $service['id'] )
+                    ->setStartDate( $start->format( 'Y-m-d H:i:s' ) )
+                    ->setEndDate( $start->modify( '+' . (int) $service['duration'] . ' seconds' )->format( 'Y-m-d H:i:s' ) )
+                    ->setInternalNote( __( 'Sample appointment created by the setup wizard.', 'bookly-responsive-appointment-booking-tool' ) )
+                    ->setCreatedFrom( 'backend' )
+                    ->save();
+                $ca = new Lib\Entities\CustomerAppointment();
+                $ca
+                    ->setAppointmentId( $appointment->getId() )
+                    ->setCustomerId( $customers[ $i % count( $customers ) ] )
+                    ->setStatus( Lib\Entities\CustomerAppointment::STATUS_APPROVED )
+                    ->setCreatedFrom( 'backend' )
+                    ->setCreatedAt( current_time( 'mysql' ) )
+                    ->save();
+                $registry['appointments'][] = $appointment->getId();
+            }
+        }
+
+        if ( array_filter( $registry ) ) {
+            update_option( 'bookly_sample_data', $registry );
+
+            return true;
+        }
+
+        return false;
+    }
 }

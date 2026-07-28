@@ -85,13 +85,12 @@ jQuery(function ($) {
     });
 
     function rowHasInvoice(row) {
-        return (row.type === 'PayPal' || row.type === 'Card') && row.status === 'Paid';
+        return (row.type === 'PayPal' || row.type === 'Card' || row.type === 'Paddle') && row.status === 'Paid';
     }
 
     if (columns.length) {
         let purchasesBt = BooklyDatatables.showForm('bookly-' + purchasesTable + '-datatables', {
             datePicker: BooklyL10n.datePicker,
-            serverSide: false,
             ajax: {
                 url: ajaxurl,
                 method: 'POST',

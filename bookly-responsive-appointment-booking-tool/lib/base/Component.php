@@ -260,6 +260,10 @@ abstract class Component extends Cache
                         'bookly-backend-globals' => array( 'bookly-globals' ),
                     ),
                 ) );
+
+                Component::_register( 'styles', array(
+                    'alias' => array( 'bookly-backend-globals' => array() ),
+                ) );
             }
             $ajax_url = admin_url( 'admin-ajax.php' );
             wp_localize_script( 'bookly-globals', 'BooklyL10nGlobal', Lib\Proxy\Shared::prepareL10nGlobal( array(

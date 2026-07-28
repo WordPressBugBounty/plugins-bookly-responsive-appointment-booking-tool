@@ -15,7 +15,8 @@
         "title": "Kalendář",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Calendar"
     },
     {
         "type": "page",
@@ -24,7 +25,8 @@
         "title": "Rezervace",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appointments"
     },
     {
         "type": "page",
@@ -33,7 +35,8 @@
         "title": "Lokace",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 100
+        "weight": 100,
+        "alt": "Locations"
     },
     {
         "type": "page",
@@ -51,7 +54,8 @@
         "title": "Balíčky",
         "anchor": null,
         "addon": "bookly-addon-packages",
-        "weight": 100
+        "weight": 100,
+        "alt": "Packages"
     },
     {
         "type": "page",
@@ -60,7 +64,8 @@
         "title": "Zaměstnanci",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Members"
     },
     {
         "type": "page",
@@ -69,7 +74,8 @@
         "title": "Služby",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Services"
     },
     {
         "type": "page",
@@ -87,7 +93,8 @@
         "title": "Zákazníci",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customers"
     },
     {
         "type": "page",
@@ -96,7 +103,8 @@
         "title": "Informace o zákazníkovi",
         "anchor": null,
         "addon": "bookly-addon-customer-information",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Information"
     },
     {
         "type": "page",
@@ -123,7 +131,8 @@
         "title": "E-mailová upozornění",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -132,7 +141,8 @@
         "title": "Platby",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Payments"
     },
     {
         "type": "page",
@@ -141,7 +151,8 @@
         "title": "Vzhled",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appearance"
     },
     {
         "type": "page",
@@ -150,7 +161,8 @@
         "title": "Kupóny",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 100
+        "weight": 100,
+        "alt": "Coupons"
     },
     {
         "type": "page",
@@ -168,7 +180,8 @@
         "title": "Vlastní pole",
         "anchor": null,
         "addon": "bookly-addon-custom-fields",
-        "weight": 100
+        "weight": 100,
+        "alt": "Custom Fields"
     },
     {
         "type": "page",
@@ -177,7 +190,8 @@
         "title": "Nastavení",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -222,7 +236,8 @@
         "title": "Upozornění SMS",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 100
+        "weight": 100,
+        "alt": "SMS Notifications"
     },
     {
         "type": "page",
@@ -276,7 +291,8 @@
         "title": "Nastavení",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "product",
@@ -297,13 +313,94 @@
         "weight": 70
     },
     {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Search form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "search-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Tags form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "tags-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Services form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "services-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Staff form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "staff-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Step by step form",
+        "anchor": null,
+        "addon": "core",
+        "arg": "bookly-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Checkout form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Cancellation form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "cancellation-confirmation",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Events form",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80
+    },
+    {
         "type": "tab",
         "page": "bookly-settings",
         "tab": "general",
         "title": "Obecné",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "General"
     },
     {
         "type": "tab",
@@ -312,7 +409,8 @@
         "title": "Nastavení URL",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "URL Settings"
     },
     {
         "type": "tab",
@@ -321,7 +419,8 @@
         "title": "Kalendář",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Calendar"
     },
     {
         "type": "tab",
@@ -330,7 +429,8 @@
         "title": "Společnost",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Company"
     },
     {
         "type": "tab",
@@ -339,7 +439,8 @@
         "title": "Zákazníci",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Customers"
     },
     {
         "type": "tab",
@@ -348,7 +449,8 @@
         "title": "Rezervace",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Appointments"
     },
     {
         "type": "tab",
@@ -357,7 +459,8 @@
         "title": "Kalendář Google",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Calendar"
     },
     {
         "type": "tab",
@@ -384,7 +487,8 @@
         "title": "Košík",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Cart"
     },
     {
         "type": "tab",
@@ -402,7 +506,8 @@
         "title": "Kupóny",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 60
+        "weight": 60,
+        "alt": "Coupons"
     },
     {
         "type": "tab",
@@ -420,7 +525,8 @@
         "title": "Soubory",
         "anchor": null,
         "addon": "bookly-addon-files",
-        "weight": 60
+        "weight": 60,
+        "alt": "Files"
     },
     {
         "type": "tab",
@@ -438,7 +544,8 @@
         "title": "Faktury",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 60
+        "weight": 60,
+        "alt": "Invoices"
     },
     {
         "type": "tab",
@@ -447,7 +554,8 @@
         "title": "Lokace",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 60
+        "weight": 60,
+        "alt": "Locations"
     },
     {
         "type": "tab",
@@ -510,7 +618,8 @@
         "title": "Platby",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Payments"
     },
     {
         "type": "tab",
@@ -528,7 +637,8 @@
         "title": "Pracovní doba",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Business Hours"
     },
     {
         "type": "tab",
@@ -537,7 +647,8 @@
         "title": "Volno",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Holidays"
     },
     {
         "type": "label",
@@ -555,7 +666,8 @@
         "title": "Délka časového okna",
         "anchor": "bookly_gen_time_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Time slot length"
     },
     {
         "type": "label",
@@ -572,8 +684,9 @@
         "tab": "general",
         "title": "Minimální čas požadovaný před rezervací",
         "anchor": "bookly_gen_min_time_prior_booking",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to booking"
     },
     {
         "type": "label",
@@ -581,8 +694,9 @@
         "tab": "general",
         "title": "Minimální požadovaných čas pro zrušení",
         "anchor": "bookly_gen_min_time_prior_cancel",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to canceling"
     },
     {
         "type": "label",
@@ -591,7 +705,8 @@
         "title": "Počet dní dostupných pro rezervaci",
         "anchor": "bookly_gen_max_days_for_booking",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Number of days available for booking"
     },
     {
         "type": "label",
@@ -600,7 +715,8 @@
         "title": "Zobrazovat dostupná časová okna s ohledem na časovou zónu zákazníka",
         "anchor": "bookly_gen_use_client_time_zone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display available time slots in client's time zone"
     },
     {
         "type": "label",
@@ -609,7 +725,8 @@
         "title": "Umožnit zaměstnancům upravovat jejich profily",
         "anchor": "bookly_gen_allow_staff_edit_profile",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow staff members to edit their profiles"
     },
     {
         "type": "label",
@@ -618,7 +735,8 @@
         "title": "Metoda jak bude Bookly vkládat JavaScript a CSS soubory do stránky",
         "anchor": "bookly_gen_link_assets_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Method to include Bookly JavaScript and CSS files on the page"
     },
     {
         "type": "label",
@@ -627,7 +745,8 @@
         "title": "Pomozte nám zlepšit Bookly zasíláním anonymních statistik o jeho užívání",
         "anchor": "bookly_gen_collect_stats",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Help us improve Bookly by sending anonymous usage stats"
     },
     {
         "type": "label",
@@ -699,7 +818,8 @@
         "title": "Heslo",
         "anchor": "bookly_smtp_password",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Password"
     },
     {
         "type": "label",
@@ -726,7 +846,8 @@
         "title": "URL pro schválení rezervace (úspěšně)",
         "anchor": "bookly_url_approve_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (success)"
     },
     {
         "type": "label",
@@ -735,7 +856,8 @@
         "title": "URL pro schválení rezervace (odmítnuto)",
         "anchor": "bookly_url_approve_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (denied)"
     },
     {
         "type": "label",
@@ -744,7 +866,8 @@
         "title": "URL pro zrušení rezervace (úspěšně)",
         "anchor": "bookly_url_cancel_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (success)"
     },
     {
         "type": "label",
@@ -753,7 +876,8 @@
         "title": "URL pro zrušení rezervace (odmítnuto)",
         "anchor": "bookly_url_cancel_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (denied)"
     },
     {
         "type": "label",
@@ -761,8 +885,9 @@
         "tab": "url",
         "title": "URL pro zrušenou potvzenou rezervaci",
         "anchor": "bookly_url_cancel_confirm_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Appointment cancellation confirmation URL"
     },
     {
         "type": "label",
@@ -771,7 +896,8 @@
         "title": "URL pro zamítnutí rezervace (úspešné)",
         "anchor": "bookly_url_reject_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (success)"
     },
     {
         "type": "label",
@@ -780,7 +906,8 @@
         "title": "URL pro zamítnutí rezervace (odmítnuto)",
         "anchor": "bookly_url_reject_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (denied)"
     },
     {
         "type": "label",
@@ -788,7 +915,7 @@
         "tab": "url",
         "title": "Final step URL",
         "anchor": "bookly_settings_final_step_url_mode",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -797,7 +924,7 @@
         "tab": "url",
         "title": "Enter a URL",
         "anchor": "bookly_url_final_step_url",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -806,7 +933,7 @@
         "tab": "url",
         "title": "Rating page URL",
         "anchor": "bookly_ratings_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-ratings",
         "weight": 30
     },
     {
@@ -815,7 +942,7 @@
         "tab": "url",
         "title": "Approve recurring appointment URL (success)",
         "anchor": "bookly_recurring_appointments_approve_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-recurring-appointments",
         "weight": 30
     },
     {
@@ -824,7 +951,7 @@
         "tab": "url",
         "title": "Approve recurring appointment URL (denied)",
         "anchor": "bookly_recurring_appointments_approve_denied_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-recurring-appointments",
         "weight": 30
     },
     {
@@ -833,7 +960,7 @@
         "tab": "url",
         "title": "Set appointment from waiting list (success)",
         "anchor": "bookly_url_confirm_from_waitlisted_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-waiting-list",
         "weight": 30
     },
     {
@@ -842,7 +969,7 @@
         "tab": "url",
         "title": "Set appointment from waiting list (denied)",
         "anchor": "bookly_url_confirm_from_waitlisted_denied_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-waiting-list",
         "weight": 30
     },
     {
@@ -924,7 +1051,8 @@
         "title": "Kalendář",
         "anchor": "bookly_appointment_participants",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Calendar"
     },
     {
         "type": "label",
@@ -933,7 +1061,8 @@
         "title": "Název společnosti",
         "anchor": "bookly_co_name",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company name"
     },
     {
         "type": "label",
@@ -942,7 +1071,8 @@
         "title": "Adresa",
         "anchor": "bookly_co_address",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Address"
     },
     {
         "type": "label",
@@ -951,7 +1081,8 @@
         "title": "Telefon",
         "anchor": "bookly_co_phone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone"
     },
     {
         "type": "label",
@@ -960,7 +1091,8 @@
         "title": "Webová stránka",
         "anchor": "bookly_co_website",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Website"
     },
     {
         "type": "label",
@@ -987,7 +1119,8 @@
         "title": "E-mail",
         "anchor": "bookly_co_email",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Email"
     },
     {
         "type": "label",
@@ -995,8 +1128,9 @@
         "tab": "customers",
         "title": "Vytvořit WordPress účet pro zákazníky",
         "anchor": "bookly_cst_create_account",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Create WordPress user account for customers"
     },
     {
         "type": "label",
@@ -1004,8 +1138,9 @@
         "tab": "customers",
         "title": "Nová role uživatelského účtu",
         "anchor": "bookly_cst_new_account_role",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "New user account role"
     },
     {
         "type": "label",
@@ -1014,16 +1149,18 @@
         "title": "Přednastavená předvolba země",
         "anchor": "bookly_cst_phone_default_country",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone field default country"
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "customers",
-        "title": "Přednastavený kód země ",
+        "title": "Přednastavený kód země",
         "anchor": "bookly_cst_default_country_code",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default country code"
     },
     {
         "type": "label",
@@ -1031,7 +1168,7 @@
         "tab": "customers",
         "title": "Make birthday mandatory",
         "anchor": "bookly_cst_required_birthday",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1040,8 +1177,9 @@
         "tab": "customers",
         "title": "Učinit adresu povinným polem",
         "anchor": "bookly_cst_required_address",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make address mandatory"
     },
     {
         "type": "label",
@@ -1049,8 +1187,9 @@
         "tab": "customers",
         "title": "Pole s adresou zákazníka",
         "anchor": "bookly_cst_address_show_fields",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer's address fields"
     },
     {
         "type": "label",
@@ -1058,7 +1197,7 @@
         "tab": "customers",
         "title": "Customer address",
         "anchor": "bookly-settings-customers-editor",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1068,7 +1207,8 @@
         "title": "Zapamatovat na osobní informace v cookies",
         "anchor": "bookly_cst_remember_in_cookie",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Remember personal information in cookies"
     },
     {
         "type": "label",
@@ -1077,7 +1217,8 @@
         "title": "Povolit duplicitní zákazníky",
         "anchor": "bookly_cst_allow_duplicates",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow duplicate customers"
     },
     {
         "type": "label",
@@ -1086,7 +1227,8 @@
         "title": "Zobrazit potvrzovací dialog před aktualizací zákazníkovo údajů",
         "anchor": "bookly_cst_show_update_details_dialog",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show confirmation dialog before updating customer's data"
     },
     {
         "type": "label",
@@ -1104,7 +1246,8 @@
         "title": "Přednastavený stav rezervace",
         "anchor": "bookly_appointment_default_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default appointment status"
     },
     {
         "type": "label",
@@ -1121,7 +1264,7 @@
         "tab": "appointments",
         "title": "First value for newly created appointments via backend",
         "anchor": "bookly_appointments_main_value",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1130,7 +1273,7 @@
         "tab": "appointments",
         "title": "Displayed time slots",
         "anchor": "bookly_appointments_displayed_time_slots",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1139,7 +1282,7 @@
         "tab": "appointments",
         "title": "Time delimiter",
         "anchor": "bookly_appointments_time_delimiter",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1148,8 +1291,9 @@
         "tab": "appointments",
         "title": "Zrušit akci rezervace",
         "anchor": "bookly_appointment_cancel_action",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Cancel appointment action"
     },
     {
         "type": "label",
@@ -1157,7 +1301,7 @@
         "tab": "appointments",
         "title": "Automatically change status of appointment",
         "anchor": "bookly_auto_change_status",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1166,7 +1310,7 @@
         "tab": "appointments",
         "title": "Initial status",
         "anchor": "bookly_auto_change_status_from",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1175,7 +1319,7 @@
         "tab": "appointments",
         "title": "Status to be set",
         "anchor": "bookly_auto_change_status_to",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1221,7 +1365,8 @@
         "title": "Rezervační produkt",
         "anchor": "bookly_wc_product",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Booking product"
     },
     {
         "type": "label",
@@ -1248,7 +1393,8 @@
         "title": "Data položky v košíku",
         "anchor": "bookly_l10n_wc_cart_info_name",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cart item data"
     },
     {
         "type": "label",
@@ -1257,7 +1403,8 @@
         "title": "ID aplikace",
         "anchor": "bookly_fb_app_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "App ID"
     },
     {
         "type": "label",
@@ -1266,7 +1413,63 @@
         "title": "Sloupce",
         "anchor": "bookly_cart_show_columns",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Columns"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Collaborative services",
+        "anchor": "bookly_add-collaborative_services",
+        "addon": "bookly-addon-collaborative-services",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Events",
+        "anchor": "bookly_add-events",
+        "addon": "bookly-addon-events",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Group Booking",
+        "anchor": "bookly_add-group-booking",
+        "addon": "bookly-addon-group-booking",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Multiply Appointments",
+        "anchor": "bookly_add-multiply-appointments",
+        "addon": "bookly-addon-multiply-appointments",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Balíčky",
+        "anchor": "bookly_add-pkg",
+        "addon": "bookly-addon-packages",
+        "weight": 50,
+        "alt": "Packages"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Waiting List",
+        "anchor": "bookly_add-waiting-list",
+        "addon": "bookly-addon-waiting-list",
+        "weight": 50
     },
     {
         "type": "label",
@@ -1301,7 +1504,8 @@
         "tab": "additional",
         "title": "Do not allow to select a specific staff member",
         "anchor": "bookly_collaborative_hide_staff",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-collaborative-services",
+        "group": "Collaborative services",
         "weight": 30
     },
     {
@@ -1310,7 +1514,8 @@
         "tab": "additional",
         "title": "Default ticket mask",
         "anchor": "bookly_event_ticked_default_code_mask",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-events",
+        "group": "Events",
         "weight": 30
     },
     {
@@ -1319,7 +1524,8 @@
         "tab": "additional",
         "title": "Group bookings information format",
         "anchor": "bookly_group_booking_nop_format",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-group-booking",
+        "group": "Group Booking",
         "weight": 30
     },
     {
@@ -1328,8 +1534,10 @@
         "tab": "additional",
         "title": "Max množství",
         "anchor": "bookly_multiply_appointments_quantity_max",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-multiply-appointments",
+        "group": "Multiply Appointments",
+        "weight": 30,
+        "alt": "Max quantity"
     },
     {
         "type": "label",
@@ -1337,7 +1545,8 @@
         "tab": "additional",
         "title": "Show packages without payments in a packages list",
         "anchor": "bookly_packages_show_without_payments",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-packages",
+        "group": "Balíčky",
         "weight": 30
     },
     {
@@ -1346,7 +1555,8 @@
         "tab": "additional",
         "title": "Show packages with payments",
         "anchor": "bookly_packages_show_with_payments",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-packages",
+        "group": "Balíčky",
         "weight": 30
     },
     {
@@ -1355,7 +1565,8 @@
         "tab": "additional",
         "title": "Add customers to the waiting list despite the capacity value",
         "anchor": "bookly_waiting_list_despite_capacity",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-waiting-list",
+        "group": "Waiting List",
         "weight": 30
     },
     {
@@ -1445,8 +1656,9 @@
         "tab": "google_calendar",
         "title": "Mod synchronizace",
         "anchor": "bookly_gc_sync_mode",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1454,17 +1666,18 @@
         "tab": "google_calendar",
         "title": "Sync appointments history (past and future)",
         "anchor": "bookly_gc_full_sync_offset_days_before",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-advanced-google-calendar",
         "weight": 30
     },
     {
         "type": "label",
         "page": "bookly-settings",
         "tab": "google_calendar",
-        "title": "Kopírovat názvy událostí do Google Kalendáře ",
+        "title": "Kopírovat názvy událostí do Google Kalendáře",
         "anchor": "bookly_gc_full_sync_titles",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Copy Google Calendar event titles"
     },
     {
         "type": "label",
@@ -1472,7 +1685,7 @@
         "tab": "google_calendar",
         "title": "Overwrite the description of the original Google Calendar events",
         "anchor": "bookly_gc_force_update_description",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-advanced-google-calendar",
         "weight": 30
     },
     {
@@ -1482,7 +1695,8 @@
         "title": "Omezit počet načtených událostí",
         "anchor": "bookly_gc_limit_events",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1491,7 +1705,8 @@
         "title": "Šablona pro název události",
         "anchor": "bookly_gc_event_title",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1509,7 +1724,8 @@
         "title": "Mod synchronizace",
         "anchor": "bookly_ac_sync_mode",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1536,7 +1752,8 @@
         "title": "Omezit počet načtených událostí",
         "anchor": "bookly_ac_limit_events",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1545,7 +1762,8 @@
         "title": "Šablona pro název události",
         "anchor": "bookly_ac_event_title",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1572,7 +1790,8 @@
         "title": "Nahrát složku",
         "anchor": "bookly_files_directory",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Upload directory"
     },
     {
         "type": "label",
@@ -1596,7 +1815,7 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "invoices",
-        "title": "Fakturační dny",
+        "title": "Invoice due days",
         "anchor": "bookly_invoices_due_days",
         "addon": "bookly-addon-invoices",
         "weight": 30
@@ -1653,7 +1872,8 @@
         "title": "Šablona faktury",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice template"
     },
     {
         "type": "label",
@@ -1698,7 +1918,8 @@
         "title": "Mod synchronizace",
         "anchor": "bookly_oc_sync_mode",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1725,7 +1946,8 @@
         "title": "Omezit počet načtených událostí",
         "anchor": "bookly_oc_limit_events",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1734,7 +1956,8 @@
         "title": "Šablona pro název události",
         "anchor": "bookly_oc_event_title",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1824,7 +2047,8 @@
         "title": "Jméno",
         "anchor": "bookly-custom-statuses-name",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Name"
     },
     {
         "type": "label",
@@ -1842,7 +2066,8 @@
         "title": "Služba bude placená lokálně",
         "anchor": "bookly_pmt_locally",
         "addon": "core",
-        "weight": 50
+        "weight": 50,
+        "alt": "Service paid locally"
     },
     {
         "type": "gateway",
@@ -1854,6 +2079,79 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Username",
+        "anchor": "bookly_paypal_api_username",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Password",
+        "anchor": "bookly_paypal_api_password",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Signature",
+        "anchor": "bookly_paypal_api_signature",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "PayPal ID",
+        "anchor": "bookly_paypal_id",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_paypal_sandbox",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Odeslat informaci o dani",
+        "anchor": "bookly_paypal_send_tax",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_paypal_timeout",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1861,6 +2159,60 @@
         "anchor": "bookly_pmt_2checkout",
         "addon": "bookly-addon-2checkout",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Číslo účtu",
+        "anchor": "bookly_2checkout_api_seller_id",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Account Number"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Word",
+        "anchor": "bookly_2checkout_api_secret_word",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_2checkout_sandbox",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Odeslat informaci o dani",
+        "anchor": "bookly_2checkout_send_tax",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_2checkout_timeout",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1872,6 +2224,59 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Login ID",
+        "anchor": "bookly_authorize_net_api_login_id",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Transaction Key",
+        "anchor": "bookly_authorize_net_transaction_key",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_authorize_net_sandbox",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Odeslat informaci o dani",
+        "anchor": "bookly_authorize_net_send_tax",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_authorize_net_timeout",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1879,6 +2284,27 @@
         "anchor": "bookly_pmt_mollie",
         "addon": "bookly-addon-mollie",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_mollie_api_key",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_mollie_timeout",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1890,6 +2316,48 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Agent ID",
+        "anchor": "bookly_payson_api_agent_id",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_payson_api_key",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_payson_sandbox",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_payson_timeout",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1897,6 +2365,48 @@
         "anchor": "bookly_pmt_payu_biz",
         "addon": "bookly-addon-payu-biz",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_payu_biz_sandbox",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Key",
+        "anchor": "bookly_payu_biz_api_key",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant Salt",
+        "anchor": "bookly_payu_biz_api_salt",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_payu_biz_timeout",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1908,6 +2418,69 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_payu_latam_sandbox",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Key",
+        "anchor": "bookly_payu_latam_api_key",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Account ID",
+        "anchor": "bookly_payu_latam_api_account_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Merchant ID",
+        "anchor": "bookly_payu_latam_api_merchant_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Odeslat informaci o dani",
+        "anchor": "bookly_payu_latam_send_tax",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_payu_latam_timeout",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1915,6 +2488,58 @@
         "anchor": "bookly_pmt_cloud_square",
         "addon": "bookly-addon-square",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Application ID",
+        "anchor": "bookly_cloud_square_api_application_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Access token",
+        "anchor": "bookly_cloud_square_api_access_token",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Location ID",
+        "anchor": "bookly_cloud_square_api_location_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Mod pískoviště",
+        "anchor": "bookly_cloud_square_sandbox",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_cloud_square_timeout",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1929,10 +2554,42 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
+        "title": "Publishable Key",
+        "anchor": "bookly_stripe_publishable_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Secret Key",
+        "anchor": "bookly_stripe_secret_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Časový interval platební brány",
+        "anchor": "bookly_stripe_timeout",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
         "title": "Měna",
         "anchor": "bookly_pmt_currency",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Currency"
     },
     {
         "type": "label",
@@ -1941,7 +2598,8 @@
         "title": "Formát ceny",
         "anchor": "bookly_pmt_price_format",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price format"
     },
     {
         "type": "label",
@@ -1949,7 +2607,7 @@
         "tab": "payments",
         "title": "Deposit options",
         "anchor": "bookly_deposit_allow_full_payment",
-        "addon": "core",
+        "addon": "bookly-addon-deposit-payments",
         "weight": 30
     },
     {
@@ -1958,8 +2616,182 @@
         "tab": "payments",
         "title": "Price settings and display",
         "anchor": "bookly_taxes_in_price",
-        "addon": "core",
+        "addon": "bookly-addon-taxes",
         "weight": 30
+    },
+    {
+        "type": "action",
+        "page": "bookly-appointments",
+        "tab": null,
+        "title": "Nová rezervace",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-appointment",
+        "weight": 45,
+        "alt": "New appointment"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "Nový zákazník",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-customer",
+        "weight": 45,
+        "alt": "New customer"
+    },
+    {
+        "type": "action",
+        "page": "bookly-services",
+        "tab": null,
+        "title": "New service",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-service",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-staff",
+        "tab": null,
+        "title": "New staff member",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-staff",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-notifications",
+        "tab": "notifications",
+        "title": "New notification",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-js-new-notification",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "notifications",
+        "title": "New notification",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-js-new-notification",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "sender_id",
+        "title": "Požádat o ID odesílatele",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-request-sender_id",
+        "weight": 45,
+        "alt": "Request Sender ID"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-mobile-staff-cabinet",
+        "tab": null,
+        "title": "New access token",
+        "anchor": null,
+        "addon": "cloud:mobile-staff-cabinet",
+        "action": "bookly-js-new-key",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-customer-groups",
+        "tab": null,
+        "title": "New group",
+        "anchor": null,
+        "addon": "bookly-addon-customer-groups",
+        "action": "bookly-js-add-group",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "Add gift card",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "action": "bookly-add-gift-card",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-packages",
+        "tab": null,
+        "title": "New package",
+        "anchor": null,
+        "addon": "bookly-addon-packages",
+        "action": "bookly-new-package",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-discounts",
+        "tab": null,
+        "title": "New discount",
+        "anchor": null,
+        "addon": "bookly-addon-discounts",
+        "action": "bookly-new-discount",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-events",
+        "tab": null,
+        "title": "New event",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "action": "bookly-new-event",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "Add Location",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "action": "bookly-new-location",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-taxes",
+        "tab": null,
+        "title": "New tax",
+        "anchor": null,
+        "addon": "bookly-addon-taxes",
+        "action": "bookly-new-tax",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-coupons",
+        "tab": null,
+        "title": "Přidat Kupón",
+        "anchor": null,
+        "addon": "bookly-addon-coupons",
+        "action": "bookly-add",
+        "weight": 45,
+        "alt": "Add Coupon"
+    },
+    {
+        "type": "action",
+        "page": "bookly-settings",
+        "tab": "custom_statuses",
+        "title": "Add status",
+        "anchor": null,
+        "addon": "bookly-addon-custom-statuses",
+        "action": "bookly-add-status",
+        "weight": 45
     },
     {
         "type": "tab",
@@ -1968,7 +2800,8 @@
         "title": "Upozornění",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Notifications"
     },
     {
         "type": "tab",
@@ -1995,7 +2828,8 @@
         "title": "SMS Detaily",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "SMS Details"
     },
     {
         "type": "tab",
@@ -2004,7 +2838,8 @@
         "title": "Ceník",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Price list"
     },
     {
         "type": "tab",
@@ -2013,6 +2848,7 @@
         "title": "ID odesílatele",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Sender ID"
     }
 ]

@@ -629,7 +629,7 @@ class DateTime extends Cache
             $offset_name = str_replace( array( '.25', '.5', '.75' ), array( ':15', ':30', ':45' ), $offset_name );
             $offset_name = 'UTC' . $offset_name;
             $offset_value = 'UTC' . $offset_value;
-            $result[ __( 'Manual Offsets' ) ][ $offset_value ] = $offset_name;
+            $result[ __( 'Manual Offsets', 'bookly-responsive-appointment-booking-tool' ) ][ $offset_value ] = $offset_name;
         }
 
         return $result;

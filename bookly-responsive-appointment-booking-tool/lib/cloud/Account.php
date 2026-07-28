@@ -18,11 +18,14 @@ class Account extends Base
     const RENEW_STRIPE_AUTO_RECHARGE     = '/1.0/users/%token%/stripe/renew/auto-recharge'; //POST
     const DISABLE_AUTO_RECHARGE          = '/1.0/users/%token%/auto-recharge';            //DELETE
     const GET_INVOICE                    = '/1.2/users/%token%/invoice';                  //GET
-    const GET_BILLING                    = '/1.1/users/%token%/billing';                  //GET
+    const GET_BILLING                    = '/1.2/users/%token%/billing';                  //POST
     const GET_PRODUCT_ACTIVATION_TEXTS   = '/1.0/users/%token%/products/%product%/activation-texts'; //GET
     const LOG_OUT                        = '/1.0/users/%token%/logout';                   //GET
     const RECOVER_PASSWORD               = '/1.0/recoveries';                             //POST
     const REGISTER                       = '/1.4/users';                                  //POST
+    const REGISTER_NO_PASSWORD           = '/1.0/users/no-password';                      //POST
+    const SEND_OTP                       = '/1.0/otps';                                   //POST
+    const AUTHENTICATE_OTP               = '/1.0/logins/otp';                             //POST
     const RESEND_CONFIRMATION            = '/1.3/users/%token%/resend-confirmation';      //GET
     const SET_INVOICE_DATA               = '/1.1/users/%token%/invoice';                  //POST
     const SEND_WEEKLY_SUMMARY            = '/1.0/users/%token%/weekly-summary/send';      //POST || DELETE
@@ -53,6 +56,9 @@ class Account extends Base
     # @deprecated
     const PRODUCT_SQUARE = 'square';
     const PRODUCT_GIFT = 'gift';
+
+    /** Balance level that triggers Auto-Recharge */
+    const AUTO_RECHARGE_THRESHOLD = 10;
 
     /** @var string */
     protected $username;
@@ -105,6 +111,57 @@ class Account extends Base
         }
 
         return $this->api->sendPostRequest( self::REGISTER, $data );
+    }
+
+    /**
+     * Register new account without password. The password is generated
+     * on the server and emailed to the user along with the confirmation code.
+     *
+     * @param string $username
+     * @param string $country
+     * @param string $source
+     * @param string|null $variant
+     * @return array|false
+     */
+    public function registerNoPassword( $username, $country, $source = 'bookly', $variant = null )
+    {
+        $data = array( '_username' => $username, 'country' => $country, 'source' => $source );
+        if ( $variant ) {
+            $data['variant'] = $variant;
+        }
+
+        return $this->api->sendPostRequest( self::REGISTER_NO_PASSWORD, $data );
+    }
+
+    /**
+     * Send one-time sign-in code to the account email.
+     *
+     * @param string $username
+     * @return array|false
+     */
+    public function sendOtp( $username )
+    {
+        return $this->api->sendPostRequest( self::SEND_OTP, array( '_username' => $username ) );
+    }
+
+    /**
+     * Log in with a one-time code.
+     *
+     * @param string $username
+     * @param string $otp
+     * @return bool
+     */
+    public function loginOtp( $username, $otp )
+    {
+        $response = $this->api->sendPostRequest( self::AUTHENTICATE_OTP, array( '_username' => $username, 'otp' => $otp ) );
+        if ( $response ) {
+            update_option( 'bookly_cloud_token', $response['token'] );
+            $this->api->setToken( $response['token'] );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -386,16 +443,19 @@ class Account extends Base
     /**
      * Get purchases list.
      *
-     * @param null $start_date
-     * @param null $end_date
+     * @param int   $start
+     * @param int   $length
+     * @param array $filter [ start_date => string|null, end_date => string|null ]
      * @return array
      */
-    public function getPurchasesList( $start_date = null, $end_date = null )
+    public function getPurchasesList( $start, $length, array $filter )
     {
+        $data = array();
+        $filtered = 0;
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendGetRequest(
+            $response = $this->api->sendPostRequest(
                 self::GET_BILLING,
-                compact( 'start_date', 'end_date' )
+                compact( 'start', 'length', 'filter' )
             );
             if ( $response ) {
                 array_walk( $response['list'], function ( &$item ) {
@@ -404,11 +464,15 @@ class Account extends Base
                     $item['time'] = Utils\DateTime::formatTime( $date_time );
                 } );
 
-                return $response;
+                $data = $response['list'];
+                $filtered = $response['filtered'];
             }
         }
 
-        return array( 'success' => false, 'list' => array() );
+        return array(
+            'data' => $data,
+            'recordsFiltered' => $filtered,
+        );
     }
 
     /**
@@ -418,18 +482,25 @@ class Account extends Base
      * @param string $promo_code
      * @param string $mode
      * @param string $url
+     * @param bool $consent Whether the user has authorized the recurring charge, for the 'setup' mode only
      * @return array|false
      */
-    public function createCheckoutSession( $recharge, $promo_code, $mode, $url )
+    public function createCheckoutSession( $recharge, $promo_code, $mode, $url, $consent = false )
     {
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendPostRequest( self::CHECKOUT_SESSIONS, array(
+            $request = array(
                 'mode' => $mode,
                 'recharge' => $recharge,
                 'promo_code' => $promo_code,
                 'success_url' => $url . ( $mode == 'setup' ? '#auto-recharge=enabled' : '#payment=accepted' ),
                 'cancel_url' => $url . ( $mode == 'setup' ? '#auto-recharge=cancelled' : '#payment=cancelled' ),
-            ) );
+            );
+            // Auto-Recharge is charged on our own trigger, so the user authorization is
+            // recorded with the mandate. The wording shown is restorable from the plugin version.
+            if ( $mode == 'setup' ) {
+                $request['consent'] = $consent ? 1 : 0;
+            }
+            $response = $this->api->sendPostRequest( self::CHECKOUT_SESSIONS, $request );
             if ( $response ) {
 
                 return $response;
@@ -696,8 +767,12 @@ class Account extends Base
     public function translateError( $error_code )
     {
         switch ( $error_code ) {
+            case 'ERROR_CODE_EXPIRED':
+                return __( 'Code expired, please request a new one.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_EMPTY_PASSWORD':
                 return __( 'Empty password.', 'bookly-responsive-appointment-booking-tool' );
+            case 'ERROR_INCORRECT_CODE':
+                return __( 'Incorrect code.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INCORRECT_PASSWORD':
                 return __( 'Incorrect password.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_INCORRECT_RECOVERY_CODE':
@@ -720,6 +795,8 @@ class Account extends Base
                 return __( 'Error sending email.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_SUBSCRIPTION_NOT_AVAILABLE':
                 return __( 'Subscription not available.', 'bookly-responsive-appointment-booking-tool' );
+            case 'ERROR_TOO_MANY_REQUESTS':
+                return __( 'Please wait a minute before requesting a new code.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_USER_NOT_FOUND':
                 return __( 'User not found.', 'bookly-responsive-appointment-booking-tool' );
             case 'ERROR_USERNAME_ALREADY_EXISTS':

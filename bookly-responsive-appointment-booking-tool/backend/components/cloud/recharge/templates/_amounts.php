@@ -1,7 +1,11 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Cloud\Recharge\Amounts;
+use Bookly\Lib\Cloud\Account;
 
 $amounts = Amounts::getInstance();
+// Served for the current account only while it is eligible (no top-ups yet)
+$promotions = get_option( 'bookly_cloud_promotions' );
+$first_recharge = is_array( $promotions ) && isset( $promotions['first_recharge'] ) ? $promotions['first_recharge'] : null;
 ?>
 <div class="text-center mt-3">
     <div class="btn-group">
@@ -21,9 +25,23 @@ $amounts = Amounts::getInstance();
             </a>
         </div>
         <div class="bookly-collapse alert alert-info text-justify mx-5" id="how-auto-recharge-works">
-            <?php printf( __( 'Your account will be topped up with the selected amount <b>now</b> if your balance is less than %1$s, and <b>automatically later</b> when the balance falls below %1$s.', 'bookly-responsive-appointment-booking-tool' ), '$10' ) ?>
+            <?php printf( __( 'Your account will be topped up with the selected amount <b>now</b> if your balance is less than %1$s, and <b>automatically later</b> when the balance falls below %1$s.', 'bookly-responsive-appointment-booking-tool' ), '$' . Account::AUTO_RECHARGE_THRESHOLD ) ?>
         </div>
     </div>
+    <?php if ( ! $cloud->account->autoRechargeEnabled() ) : ?>
+        <?php // Authorization is asked only when the recurring charge is about to be set up ?>
+        <div class="mx-5 mb-4">
+            <div class="custom-control custom-checkbox">
+                <input class="custom-control-input" type="checkbox" id="bookly-js-auto-recharge-consent"/>
+                <label class="custom-control-label" for="bookly-js-auto-recharge-consent">
+                    <?php printf( esc_html__( 'I authorize Bookly to automatically charge my payment method with the amount I choose below when my balance drops below %s.', 'bookly-responsive-appointment-booking-tool' ), '$' . Account::AUTO_RECHARGE_THRESHOLD ) ?>
+                </label>
+            </div>
+            <div class="text-danger mt-1 bookly-js-consent-error" style="display: none;">
+                <?php esc_html_e( 'Please confirm the authorization to continue.', 'bookly-responsive-appointment-booking-tool' ) ?>
+            </div>
+        </div>
+    <?php endif ?>
 </div>
 
 <div class="bookly-js-manual-recharge-text">
@@ -33,7 +51,7 @@ $amounts = Amounts::getInstance();
 <div class="form-row bookly-js-manual-recharges mt-4" style="display: none;">
     <?php foreach ( $amounts->getItems( Amounts::RECHARGE_TYPE_MANUAL ) as $recharge ) : ?>
         <div class="col-12 col-md-6 col-lg-4">
-            <?php self::renderTemplate( '_button', array( 'recharge' => $recharge, 'type' => Amounts::RECHARGE_TYPE_MANUAL ) ) ?>
+            <?php self::renderTemplate( '_button', array( 'recharge' => $recharge, 'type' => Amounts::RECHARGE_TYPE_MANUAL, 'first_recharge' => $first_recharge ) ) ?>
         </div>
     <?php endforeach ?>
 </div>
@@ -41,7 +59,7 @@ $amounts = Amounts::getInstance();
 <div class="form-row bookly-js-auto-recharges mt-4">
     <?php foreach ( $amounts->getItems( Amounts::RECHARGE_TYPE_AUTO ) as $recharge ) : ?>
         <div class="col-12 col-md-6 col-lg-4">
-            <?php self::renderTemplate( '_button', array( 'recharge' => $recharge, 'type' => Amounts::RECHARGE_TYPE_AUTO, 'cloud' => $cloud ) ) ?>
+            <?php self::renderTemplate( '_button', array( 'recharge' => $recharge, 'type' => Amounts::RECHARGE_TYPE_AUTO, 'cloud' => $cloud, 'first_recharge' => $first_recharge ) ) ?>
         </div>
     <?php endforeach ?>
 </div>

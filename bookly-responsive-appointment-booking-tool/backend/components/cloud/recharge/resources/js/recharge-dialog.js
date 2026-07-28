@@ -33,15 +33,23 @@ jQuery(function ($) {
     ;
 
     let $amounts = $('.bookly-js-amount', slides.payment),
-        $pay = $('.bookly-js-pay', slides.payment);
+        $pay = $('.bookly-js-pay', slides.payment),
+        consent = {
+            $input: $('#bookly-js-auto-recharge-consent', slides.amounts),
+            $error: $('.bookly-js-consent-error', slides.amounts),
+        };
+
+    consent.$input.on('change', function () {
+        if (this.checked) {
+            consent.$error.hide();
+        }
+    });
 
     $(document.body).on('bookly.recharge.choice', {},
-        function (event, type, recharge) {
-            $modal.booklyModal('show');
+        function (event, type, recharge, btn) {
             payment.type = type;
             payment.recharge = recharge;
-            $amounts.html(recharge.amount);
-            showSlide('payment');
+            checkout(btn);
         }
     );
 
@@ -152,7 +160,13 @@ jQuery(function ($) {
 
     $recharge.on('click', function (e) {
         e.preventDefault();
-        $(document.body).trigger('bookly.recharge.choice', [$(this).data('recharge-type'), $(this).data('recharge')]);
+        // Auto-Recharge sets up a recurring charge, it needs an explicit authorization.
+        // The checkbox is absent while Auto-Recharge is already on, there is nothing to set up then.
+        if ($(this).data('recharge-type') === 'auto' && consent.$input.length && !consent.$input.prop('checked')) {
+            consent.$error.show();
+            return;
+        }
+        $(document.body).trigger('bookly.recharge.choice', [$(this).data('recharge-type'), $(this).data('recharge'), this]);
     });
 
     $back.on('click', function () {
@@ -343,6 +357,7 @@ jQuery(function ($) {
                 recharge: payment.recharge.id,
                 promo_code: getValidatedPromoCode(),
                 mode: payment.type === 'manual' ? 'payment' : 'setup',
+                consent: payment.type === 'auto' && consent.$input.prop('checked') ? 1 : 0,
                 url: document.URL.split('#')[0],
             },
             dataType: 'json',
@@ -355,6 +370,7 @@ jQuery(function ($) {
                         window.location.href = response.url;
                     }
                 } else {
+                    $modal.booklyModal('hide');
                     ladda.stop();
                     booklyAlert({error: [response.data.message]});
                 }

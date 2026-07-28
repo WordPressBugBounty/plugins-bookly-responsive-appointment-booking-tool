@@ -11,7 +11,7 @@ class Page extends Lib\Base\Component
     public static function render()
     {
         self::enqueueStyles( array(
-            'backend' => array( 'tailwind/tailwind.css', ),
+            'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ) ),
         ) );
 
         self::enqueueScripts( array(

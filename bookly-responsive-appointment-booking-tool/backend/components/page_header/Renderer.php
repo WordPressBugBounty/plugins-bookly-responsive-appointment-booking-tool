@@ -28,17 +28,19 @@ class Renderer extends Lib\Base\Component
             'backend' => array( 'js/bookly-header.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
+        $current_user = wp_get_current_user();
+
         // "View at Bookly Pro Demo" — only on non-Pro pages that have a demo
         // counterpart. Until the user dismisses the intro, the button opens the
-        // info modal (rendered by SupportButtons::renderModals); afterwards it
-        // links straight to the demo. support.js handles the modal's dismiss.
+        // demo info dialog (SupportDialogs.svelte in the header bundle); afterwards
+        // it links straight to the demo.
         $demo_url = SupportButtons::getDemoUrl( $page_slug );
         if ( $demo_url ) {
             $label = __( 'View this page at Bookly Pro Demo', 'bookly-responsive-appointment-booking-tool' );
             if ( get_user_meta( get_current_user_id(), 'bookly_dismiss_demo_site_description', true ) ) {
                 $actions[] = array( 'icon' => 'demo', 'label' => $label, 'href' => $demo_url, 'target' => '_blank', 'variant' => 'outline' );
             } else {
-                $actions[] = array( 'icon' => 'demo', 'label' => $label, 'href' => '#bookly-demo-site-info-modal', 'modal' => true, 'variant' => 'outline' );
+                $actions[] = array( 'icon' => 'demo', 'label' => $label, 'dialog' => 'demo', 'variant' => 'outline' );
             }
         }
 
@@ -93,16 +95,24 @@ class Renderer extends Lib\Base\Component
             $items = array();
             foreach ( $submenu[ $parent ] as $item ) {
                 $slug = isset( $item[2] ) ? $item[2] : '';
-                // Menu titles may carry a count badge as trailing <span> markup
-                // (e.g. News, undelivered SMS). Split the number into its own badge
-                // and keep a clean label (otherwise strip_all_tags glues "News 60").
-                // Zero counts stay hidden — WordPress does the same via .count-0 CSS.
+                // Menu titles may carry a count bubble in the WordPress convention —
+                // <span class="update-plugins …"><span class="update-count">N</span></span>
+                // (News, Shop, undelivered SMS, Cloud promotions). Cut the bubble out and
+                // keep the number as a separate badge, otherwise strip_all_tags glues
+                // "News 60". Zero counts stay hidden — WordPress does the same via
+                // .count-0 CSS, and a non-numeric bubble ("$") carries no count.
+                // Everything else is part of the title and must survive: an item may
+                // style a piece of its own label ("Bookly <span>Add-ons</span>"), which a
+                // blanket "strip from the first <span> on" would collapse to "Bookly".
                 $raw = isset( $item[0] ) ? $item[0] : '';
                 $badge = '';
-                if ( preg_match( '/<span\b[^>]*>.*?(\d+)/s', $raw, $m ) && (int) $m[1] > 0 ) {
-                    $badge = $m[1];
+                if ( preg_match( '#<span[^>]*\bupdate-plugins\b.*?</span>#is', $raw, $bubble ) ) {
+                    if ( preg_match( '/\d+/', $bubble[0], $count ) && (int) $count[0] > 0 ) {
+                        $badge = $count[0];
+                    }
+                    $raw = str_replace( $bubble[0], ' ', $raw );
                 }
-                $label = trim( wp_strip_all_tags( preg_replace( '/<span\b.*$/is', '', $raw ) ) );
+                $label = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $raw ) ) );
                 // The Bookly-menu "SMS Notifications" entry is a JS-redirect hack (empty slug + inline
                 // script pointing to the SMS page, or to Cloud Products when the SMS product isn't owned).
                 // Resolve it the same way so it appears under Bookly too — mirrors the WordPress menu.
@@ -264,16 +274,15 @@ class Renderer extends Lib\Base\Component
                 array(
                     'icon'    => 'contact',
                     'label'   => __( 'Contact us', 'bookly-responsive-appointment-booking-tool' ),
-                    'href'    => '#bookly-contact-us-modal',
-                    'modal'   => true,
+                    'dialog'  => 'contact',
                     'dot'     => (bool) $support_notices['contact_us'],
                     'dismiss' => 'bookly_contact_us_btn_clicked',
                 ),
                 array(
                     'icon'   => 'feature',
                     'label'  => __( 'Feature requests', 'bookly-responsive-appointment-booking-tool' ),
-                    'href'   => '#bookly-feature-requests-modal',
-                    'modal'  => true,
+                    'dialog' => get_user_meta( get_current_user_id(), 'bookly_dismiss_feature_requests_description', true ) ? null : 'feature',
+                    'href'   => Lib\Utils\Common::prepareUrlReferrers( Urls::FEATURES_REQUEST_PAGE, 'notification_bar' ),
                 ),
                 array(
                     'icon'    => 'feedback',
@@ -281,6 +290,36 @@ class Renderer extends Lib\Base\Component
                     'href'    => Lib\Utils\Common::prepareUrlReferrers( Urls::REVIEWS_PAGE, 'feedback' ),
                     'dot'     => (bool) $support_notices['feedback'],
                     'dismiss' => 'bookly_dismiss_feedback_notice',
+                ),
+            ),
+            // Data for the Svelte support dialogs (SupportDialogs.svelte) — the
+            // replacement for the legacy bootstrap modals of Support\Buttons::renderModals().
+            'supportDialogs' => array(
+                'user' => array(
+                    'name'  => trim( $current_user->user_firstname . ' ' . $current_user->user_lastname ),
+                    'email' => $current_user->user_email,
+                ),
+                'featureRequestsUrl' => Lib\Utils\Common::prepareUrlReferrers( Urls::FEATURES_REQUEST_PAGE, 'notification_bar' ),
+                'demoUrl' => $demo_url,
+                'l10n' => array(
+                    'contactTitle'   => __( 'Leave us a message', 'bookly-responsive-appointment-booking-tool' ),
+                    'contactName'    => __( 'Your name', 'bookly-responsive-appointment-booking-tool' ),
+                    'contactEmail'   => __( 'Email address', 'bookly-responsive-appointment-booking-tool' ),
+                    'contactMsg'     => __( 'How can we help you?', 'bookly-responsive-appointment-booking-tool' ),
+                    'send'           => __( 'Send', 'bookly-responsive-appointment-booking-tool' ),
+                    'cancel'         => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureTitle'   => __( 'Feature requests', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureP1'      => __( 'In the Feature Requests section of our Community, you can make suggestions about what you\'d like to see in our future releases.', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureP2'      => __( 'Before you post, please check if the same suggestion has already been made. If so, vote for ideas you like and add a comment with the details about your situation.', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureP3'      => __( 'It\'s much easier for us to address a suggestion if we clearly understand the context of the issue, the problem, and why it matters to you. When commenting or posting, please consider these questions so we can get a better idea of the problem you\'re facing:', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureLi1'     => __( 'What is the issue you\'re struggling with?', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureLi2'     => __( 'Where in your workflow do you encounter this issue?', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureLi3'     => __( 'Is this something that impacts just you, your whole team, or your customers?', 'bookly-responsive-appointment-booking-tool' ),
+                    'featureProceed' => __( 'Proceed to Feature requests', 'bookly-responsive-appointment-booking-tool' ),
+                    'demoTitle'      => __( 'Visit demo', 'bookly-responsive-appointment-booking-tool' ),
+                    'demoP1'         => __( 'The demo is a version of Bookly Pro with all installed add-ons so that you can try all the features and capabilities of the system and then choose the most suitable configuration according to your business needs.', 'bookly-responsive-appointment-booking-tool' ),
+                    'demoProceed'    => __( 'Proceed to demo', 'bookly-responsive-appointment-booking-tool' ),
+                    'dontShowAgain'  => __( 'don\'t show this notification again', 'bookly-responsive-appointment-booking-tool' ),
                 ),
             ),
         );
@@ -296,8 +335,5 @@ class Renderer extends Lib\Base\Component
         // (CSS gates it to fullscreen >= md). Avoids the bare body-coloured gap.
         echo '<div class="bookly-fs-sidebar-placeholder"></div>';
 
-        // Render the support modals (Contact us, Feature requests) so the
-        // buttons in our Svelte header can trigger them via data-toggle.
-        SupportButtons::renderModals( $page_slug );
     }
 }

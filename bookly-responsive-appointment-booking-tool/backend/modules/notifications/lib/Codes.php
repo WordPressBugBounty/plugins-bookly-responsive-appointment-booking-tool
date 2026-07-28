@@ -72,12 +72,12 @@ class Codes
                 'cancellation_reason' => array( 'description' => __( 'Reason mentioned while cancelling appointment', 'bookly-responsive-appointment-booking-tool' ), 'if' => true ),
                 'google_calendar_url' => array( 'description' => __( 'URL for adding event to Google Calendar (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
                 'reject_appointment_url' => array( 'description' => __( 'URL of reject appointment link (to use inside <a> tag)', 'bookly-responsive-appointment-booking-tool' ) ),
-                'cancellation_time_limit' => array( 'description' => __( 'Time limit to which appointments can be cancelled ', 'bookly-responsive-appointment-booking-tool' ) ),
+                'cancellation_time_limit' => array( 'description' => __( 'Time limit to which appointments can be cancelled', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'payment' => array(
                 'payment_type' => array( 'description' => __( 'Payment type', 'bookly-responsive-appointment-booking-tool' ) ),
                 'payment_status' => array( 'description' => __( 'Payment status', 'bookly-responsive-appointment-booking-tool' ) ),
-                'total_price' => array( 'description' => __( 'Total price of booking (sum of all cart items after applying coupon)' ) ),
+                'total_price' => array( 'description' => __( 'Total price of booking (sum of all cart items after applying coupon)', 'bookly-responsive-appointment-booking-tool' ) ),
             ),
             'service' => array(
                 'service_duration' => array( 'description' => __( 'Duration of service', 'bookly-responsive-appointment-booking-tool' ) ),

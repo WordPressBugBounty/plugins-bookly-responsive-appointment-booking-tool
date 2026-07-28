@@ -247,7 +247,7 @@ class Validator
                             $customer_data['phone'] = $data['phone'];
                         }
                         $customer->loadBy( $customer_data );
-                    } elseif ( ! isset ( $data['force_update_customer'] ) && $customer->isLoaded() ) {
+                    } elseif ( $customer->isLoaded() ) {
                         // Find difference between new and existing data.
                         $diff = array();
                         $fields = array(
@@ -271,9 +271,12 @@ class Validator
                             }
                         }
                         if ( ! empty ( $diff ) ) {
-                            if ( $verify_customer_details === 'on_update' && $data['verification_code'] != $userData->getVerificationCode() ) {
-                                $this->errors['verify'] = $identifier;
-                            } else {
+                            if ( $verify_customer_details === 'on_update' ) {
+                                // force_update_customer is client-supplied and must never bypass code verification.
+                                if ( $data['verification_code'] != $userData->getVerificationCode() ) {
+                                    $this->errors['verify'] = $identifier;
+                                }
+                            } elseif ( ! isset ( $data['force_update_customer'] ) ) {
                                 $this->errors['customer'] = sprintf(
                                     __( 'Your %s: %s is already associated with another %s.<br/>Press Update if we should update your user data, or press Cancel to edit entered data.', 'bookly-responsive-appointment-booking-tool' ),
                                     $fields[ $identifier ],
@@ -298,8 +301,32 @@ class Validator
             }
 
             // Verify customer details
-            if ( in_array( $verify_customer_details, array( 'always_phone', 'always_email' ) ) && $data['verification_code'] != $userData->getVerificationCode() ) {
-                $this->errors['verify'] = $verify_customer_details === 'always_phone' ? 'phone' : 'email';
+            if ( in_array( $verify_customer_details, array( 'always_phone', 'always_email' ) ) ) {
+                // Normalized recipient key so that mere reformatting (or a loaded customer's
+                // stored format) is not mistaken for a different recipient.
+                if ( $verify_customer_details === 'always_phone' ) {
+                    $verify_recipient = Cloud\SMS::normalizePhoneNumber( (string) $customer->getPhone() );
+                    $sent_recipient = Cloud\SMS::normalizePhoneNumber( (string) $userData->getVerificationCodeRecipient() );
+                } else {
+                    $verify_recipient = strtolower( trim( (string) $customer->getEmail() ) );
+                    $sent_recipient = strtolower( trim( (string) $userData->getVerificationCodeRecipient() ) );
+                }
+                if ( $verify_recipient !== '' && $userData->getVerifiedRecipient() === $verify_recipient ) {
+                    // This recipient was already verified earlier in the session — do not ask again.
+                } elseif ( $data['verification_code'] !== ''
+                    && $data['verification_code'] == $userData->getVerificationCode()
+                    && $sent_recipient === $verify_recipient ) {
+                    // Correct code entered for the recipient it was actually sent to —
+                    // remember it so this recipient is not asked to verify again this session.
+                    // The recipient binding prevents passing with a code issued for another number.
+                    $userData->setVerifiedRecipient( $verify_recipient );
+                    // Proven control of the recipient — reset the resend throttle so a later
+                    // verification round (e.g. a new number) starts fresh at the first interval.
+                    $userData->setVerificationResendCount( 0 );
+                    $userData->setVerificationCodeSentAt( 0 );
+                } else {
+                    $this->errors['verify'] = $verify_customer_details === 'always_phone' ? 'phone' : 'email';
+                }
             }
 
             // Send message with verification code
@@ -307,10 +334,28 @@ class Validator
                 $recipient = $this->errors['verify'] == 'phone' ? $customer->getPhone() : $customer->getEmail();
                 $this->errors['verify_text'] = $this->errors['verify'] == 'phone' ? __( 'Enter verification code from SMS', 'bookly-responsive-appointment-booking-tool' ) : __( 'Enter verification code from email', 'bookly-responsive-appointment-booking-tool' );
                 $this->errors['incorrect_code_text'] = $this->errors['verify'] == 'phone' ? Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_phone_verification_code' ) : Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_email_verification_code' );
-                if ( $userData->getVerificationCodeSent() !== $recipient || isset( $data['resend_verification_code'] ) ) {
+
+                $resend_schedule = array( 60, 120, 600 );
+                $now = time();
+                $count = $userData->getVerificationResendCount();
+                $required = $count > 0
+                    ? $resend_schedule[ min( $count, count( $resend_schedule ) ) - 1 ]
+                    : 0;
+                $elapsed = $now - $userData->getVerificationCodeSentAt();
+                $need_new_code = $userData->getVerificationCodeRecipient() !== $recipient || isset( $data['resend_verification_code'] );
+                if ( $need_new_code && $elapsed >= $required ) {
                     $userData->setVerificationCode( mt_rand( 100000, 999999 ) );
                     Sender::send( $customer, $userData->getVerificationCode(), $this->errors['verify'] );
-                    $userData->setVerificationCodeSent( $recipient );
+                    $userData->setVerificationCodeRecipient( $recipient );
+                    $userData->setVerificationCodeSentAt( $now );
+                    $userData->setVerificationResendCount( ++$count );
+                }
+                // Seconds the client must wait before the next resend is allowed.
+                if ( $count > 0 ) {
+                    $next_required = $resend_schedule[ min( $count, count( $resend_schedule ) ) - 1 ];
+                    $this->errors['resend_after'] = max( 0, $next_required - ( $now - $userData->getVerificationCodeSentAt() ) );
+                } else {
+                    $this->errors['resend_after'] = 0;
                 }
             }
 

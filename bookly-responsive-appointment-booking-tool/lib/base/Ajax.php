@@ -57,7 +57,7 @@ abstract class Ajax extends Component
             date_default_timezone_set( $original_timezone );
             // @codingStandardsIgnoreEnd
         } else {
-            wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.', 'bookly' ) );
         }
     }
 

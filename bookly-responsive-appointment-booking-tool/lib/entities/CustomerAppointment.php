@@ -184,14 +184,13 @@ class CustomerAppointment extends Lib\Base\Entity
     {
         $allow_cancel = true;
         $appointment = new Lib\Entities\Appointment();
-        $minimum_time_prior_cancel = (int) Lib\Proxy\Pro::getMinimumTimePriorCancel( $appointment->getServiceId() );
-        if ( $minimum_time_prior_cancel > 0
-            && $appointment->load( $this->getAppointmentId() )
-            && $appointment->getStartDate() !== null
-        ) {
-            $allow_cancel_time = strtotime( $appointment->getStartDate() ) - $minimum_time_prior_cancel;
-            if ( current_time( 'timestamp' ) > $allow_cancel_time ) {
-                $allow_cancel = false;
+        if ( $appointment->load( $this->getAppointmentId() ) && $appointment->getStartDate() !== null ) {
+            $minimum_time_prior_cancel = (int) Lib\Proxy\Pro::getMinimumTimePriorCancel( $appointment->getServiceId() );
+            if ( $minimum_time_prior_cancel > 0 ) {
+                $allow_cancel_time = strtotime( $appointment->getStartDate() ) - $minimum_time_prior_cancel;
+                if ( current_time( 'timestamp' ) > $allow_cancel_time ) {
+                    $allow_cancel = false;
+                }
             }
         }
         if ( $this->getStatus() == self::STATUS_DONE ) {

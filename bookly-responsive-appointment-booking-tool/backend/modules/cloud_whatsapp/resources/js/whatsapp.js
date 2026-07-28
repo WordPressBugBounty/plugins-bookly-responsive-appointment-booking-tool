@@ -119,8 +119,7 @@ jQuery(function ($) {
                             csrf_token: BooklyL10nGlobal.csrf_token,
                             filter: { range: serializeDate(dateValue) }
                         });
-                    },
-                    dataSrc: 'list'
+                    }
                 },
                 columns: columns,
                 tableSettings: Object.assign({}, BooklyL10n.datatables[detailsTable], {

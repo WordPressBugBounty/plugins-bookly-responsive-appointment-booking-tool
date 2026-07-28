@@ -6,7 +6,8 @@
         "title": "ダッシュボード",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Dashboard"
     },
     {
         "type": "page",
@@ -15,7 +16,8 @@
         "title": "カレンダー",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Calendar"
     },
     {
         "type": "page",
@@ -24,7 +26,8 @@
         "title": "面会予定",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appointments"
     },
     {
         "type": "page",
@@ -33,7 +36,8 @@
         "title": "場所",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 100
+        "weight": 100,
+        "alt": "Locations"
     },
     {
         "type": "page",
@@ -51,7 +55,8 @@
         "title": "複数のパッケージ",
         "anchor": null,
         "addon": "bookly-addon-packages",
-        "weight": 100
+        "weight": 100,
+        "alt": "Packages"
     },
     {
         "type": "page",
@@ -60,7 +65,8 @@
         "title": "スタッフメンバー",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Staff Members"
     },
     {
         "type": "page",
@@ -69,7 +75,8 @@
         "title": "サービス",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Services"
     },
     {
         "type": "page",
@@ -78,7 +85,8 @@
         "title": "税金",
         "anchor": null,
         "addon": "bookly-addon-taxes",
-        "weight": 100
+        "weight": 100,
+        "alt": "Taxes"
     },
     {
         "type": "page",
@@ -87,7 +95,8 @@
         "title": "顧客",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customers"
     },
     {
         "type": "page",
@@ -96,7 +105,8 @@
         "title": "顧客情報",
         "anchor": null,
         "addon": "bookly-addon-customer-information",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Information"
     },
     {
         "type": "page",
@@ -105,7 +115,8 @@
         "title": "顧客のグループ",
         "anchor": null,
         "addon": "bookly-addon-customer-groups",
-        "weight": 100
+        "weight": 100,
+        "alt": "Customer Groups"
     },
     {
         "type": "page",
@@ -123,7 +134,8 @@
         "title": "Eメールによる通知",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -132,7 +144,8 @@
         "title": "お支払い",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Payments"
     },
     {
         "type": "page",
@@ -141,7 +154,8 @@
         "title": "外観",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Appearance"
     },
     {
         "type": "page",
@@ -150,7 +164,8 @@
         "title": "クーポン",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 100
+        "weight": 100,
+        "alt": "Coupons"
     },
     {
         "type": "page",
@@ -168,7 +183,8 @@
         "title": "カスタム欄",
         "anchor": null,
         "addon": "bookly-addon-custom-fields",
-        "weight": 100
+        "weight": 100,
+        "alt": "Custom Fields"
     },
     {
         "type": "page",
@@ -177,7 +193,8 @@
         "title": "設定",
         "anchor": null,
         "addon": "core",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -213,7 +230,8 @@
         "title": "製品",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Products"
     },
     {
         "type": "page",
@@ -222,7 +240,8 @@
         "title": "SMSによる通知",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 100
+        "weight": 100,
+        "alt": "SMS Notifications"
     },
     {
         "type": "page",
@@ -276,7 +295,8 @@
         "title": "設定",
         "anchor": null,
         "addon": "cloud",
-        "weight": 100
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "product",
@@ -297,13 +317,94 @@
         "weight": 70
     },
     {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Search form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "search-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Tags form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "tags-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Services form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "services-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Staff form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "staff-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Step by step form",
+        "anchor": null,
+        "addon": "core",
+        "arg": "bookly-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Checkout form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Cancellation form",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "cancellation-confirmation",
+        "weight": 80
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Events form",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80
+    },
+    {
         "type": "tab",
         "page": "bookly-settings",
         "tab": "general",
         "title": "一般",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "General"
     },
     {
         "type": "tab",
@@ -312,7 +413,8 @@
         "title": "URLの設定",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "URL Settings"
     },
     {
         "type": "tab",
@@ -321,7 +423,8 @@
         "title": "カレンダー",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Calendar"
     },
     {
         "type": "tab",
@@ -330,7 +433,8 @@
         "title": "会社",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Company"
     },
     {
         "type": "tab",
@@ -339,7 +443,8 @@
         "title": "顧客",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Customers"
     },
     {
         "type": "tab",
@@ -348,7 +453,8 @@
         "title": "面会予定",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Appointments"
     },
     {
         "type": "tab",
@@ -357,7 +463,8 @@
         "title": "Googleカレンダー",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Calendar"
     },
     {
         "type": "tab",
@@ -384,7 +491,8 @@
         "title": "カート",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Cart"
     },
     {
         "type": "tab",
@@ -402,7 +510,8 @@
         "title": "クーポン",
         "anchor": null,
         "addon": "bookly-addon-coupons",
-        "weight": 60
+        "weight": 60,
+        "alt": "Coupons"
     },
     {
         "type": "tab",
@@ -411,7 +520,8 @@
         "title": "カスタム•ステータス",
         "anchor": null,
         "addon": "bookly-addon-custom-statuses",
-        "weight": 60
+        "weight": 60,
+        "alt": "Custom Statuses"
     },
     {
         "type": "tab",
@@ -420,7 +530,8 @@
         "title": "複数のファイル",
         "anchor": null,
         "addon": "bookly-addon-files",
-        "weight": 60
+        "weight": 60,
+        "alt": "Files"
     },
     {
         "type": "tab",
@@ -429,7 +540,8 @@
         "title": "Google マップ",
         "anchor": null,
         "addon": "bookly-addon-google-maps-address",
-        "weight": 60
+        "weight": 60,
+        "alt": "Google Maps"
     },
     {
         "type": "tab",
@@ -438,7 +550,8 @@
         "title": "請求書",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 60
+        "weight": 60,
+        "alt": "Invoices"
     },
     {
         "type": "tab",
@@ -447,7 +560,8 @@
         "title": "場所",
         "anchor": null,
         "addon": "bookly-addon-locations",
-        "weight": 60
+        "weight": 60,
+        "alt": "Locations"
     },
     {
         "type": "tab",
@@ -456,7 +570,8 @@
         "title": "Outlook（アウトルック）カレンダー",
         "anchor": null,
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 60
+        "weight": 60,
+        "alt": "Outlook Calendar"
     },
     {
         "type": "tab",
@@ -465,7 +580,8 @@
         "title": "複数の評価",
         "anchor": null,
         "addon": "bookly-addon-ratings",
-        "weight": 60
+        "weight": 60,
+        "alt": "Ratings"
     },
     {
         "type": "tab",
@@ -474,7 +590,8 @@
         "title": "定期的な面会予定",
         "anchor": null,
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 60
+        "weight": 60,
+        "alt": "Recurring Appointments"
     },
     {
         "type": "tab",
@@ -483,7 +600,8 @@
         "title": "追加サービス",
         "anchor": null,
         "addon": "bookly-addon-service-extras",
-        "weight": 60
+        "weight": 60,
+        "alt": "Service Extras"
     },
     {
         "type": "tab",
@@ -492,7 +610,8 @@
         "title": "オンライン会議",
         "anchor": null,
         "addon": "bookly-addon-pro",
-        "weight": 60
+        "weight": 60,
+        "alt": "Online Meetings"
     },
     {
         "type": "tab",
@@ -510,7 +629,8 @@
         "title": "お支払い",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Payments"
     },
     {
         "type": "tab",
@@ -528,7 +648,8 @@
         "title": "営業時間",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Business Hours"
     },
     {
         "type": "tab",
@@ -537,7 +658,8 @@
         "title": "休日",
         "anchor": null,
         "addon": "core",
-        "weight": 60
+        "weight": 60,
+        "alt": "Holidays"
     },
     {
         "type": "label",
@@ -555,7 +677,8 @@
         "title": "時間枠の長さ",
         "anchor": "bookly_gen_time_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Time slot length"
     },
     {
         "type": "label",
@@ -564,7 +687,8 @@
         "title": "スロットの長さをサービス期間として設定する",
         "anchor": "bookly_gen_service_duration_as_slot_length",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Set slot length as service duration"
     },
     {
         "type": "label",
@@ -572,8 +696,9 @@
         "tab": "general",
         "title": "直前の予約が可能な時間の設定",
         "anchor": "bookly_gen_min_time_prior_booking",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to booking"
     },
     {
         "type": "label",
@@ -581,8 +706,9 @@
         "tab": "general",
         "title": "事前のキャンセルが可能な時間の設定",
         "anchor": "bookly_gen_min_time_prior_cancel",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Minimum time requirement prior to canceling"
     },
     {
         "type": "label",
@@ -591,7 +717,8 @@
         "title": "面会の予約が可能な日数",
         "anchor": "bookly_gen_max_days_for_booking",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Number of days available for booking"
     },
     {
         "type": "label",
@@ -600,7 +727,8 @@
         "title": "クライアントのタイムゾーンで使用可能な時間枠を表示する",
         "anchor": "bookly_gen_use_client_time_zone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Display available time slots in client's time zone"
     },
     {
         "type": "label",
@@ -609,7 +737,8 @@
         "title": "スタッフがプロフィールを編集できるようにする",
         "anchor": "bookly_gen_allow_staff_edit_profile",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow staff members to edit their profiles"
     },
     {
         "type": "label",
@@ -618,7 +747,8 @@
         "title": "Bookly JavaScriptとCSSファイルをページに埋め込む方法",
         "anchor": "bookly_gen_link_assets_method",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Method to include Bookly JavaScript and CSS files on the page"
     },
     {
         "type": "label",
@@ -627,7 +757,8 @@
         "title": "匿名の利用統計情報を送信してBooklyの改善にご協力ください",
         "anchor": "bookly_gen_collect_stats",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Help us improve Bookly by sending anonymous usage stats"
     },
     {
         "type": "label",
@@ -690,7 +821,8 @@
         "title": "ユーザ名",
         "anchor": "bookly_smtp_user",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Username"
     },
     {
         "type": "label",
@@ -699,7 +831,8 @@
         "title": "パスワード",
         "anchor": "bookly_smtp_password",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Password"
     },
     {
         "type": "label",
@@ -726,7 +859,8 @@
         "title": "面会予定のURLを承認する（成功）",
         "anchor": "bookly_url_approve_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (success)"
     },
     {
         "type": "label",
@@ -735,7 +869,8 @@
         "title": "面会予定のURLを承認する（拒否）",
         "anchor": "bookly_url_approve_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Approve appointment URL (denied)"
     },
     {
         "type": "label",
@@ -744,7 +879,8 @@
         "title": "面会予定のURLをキャンセルする（成功）",
         "anchor": "bookly_url_cancel_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (success)"
     },
     {
         "type": "label",
@@ -753,7 +889,8 @@
         "title": "面会予定のURLをキャンセルする（拒否）",
         "anchor": "bookly_url_cancel_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cancel appointment URL (denied)"
     },
     {
         "type": "label",
@@ -761,8 +898,9 @@
         "tab": "url",
         "title": "面会予定の取消確認URL",
         "anchor": "bookly_url_cancel_confirm_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Appointment cancellation confirmation URL"
     },
     {
         "type": "label",
@@ -771,7 +909,8 @@
         "title": "面会予定のURLを却下する（成功）",
         "anchor": "bookly_url_reject_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (success)"
     },
     {
         "type": "label",
@@ -780,7 +919,8 @@
         "title": "面会予定URLを却下する（拒否）",
         "anchor": "bookly_url_reject_denied_page_url",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Reject appointment URL (denied)"
     },
     {
         "type": "label",
@@ -788,8 +928,9 @@
         "tab": "url",
         "title": "最終段階のURL",
         "anchor": "bookly_settings_final_step_url_mode",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Final step URL"
     },
     {
         "type": "label",
@@ -797,8 +938,9 @@
         "tab": "url",
         "title": "URLを入力してください",
         "anchor": "bookly_url_final_step_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Enter a URL"
     },
     {
         "type": "label",
@@ -806,8 +948,9 @@
         "tab": "url",
         "title": "評価ページのURL",
         "anchor": "bookly_ratings_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-ratings",
+        "weight": 30,
+        "alt": "Rating page URL"
     },
     {
         "type": "label",
@@ -815,8 +958,9 @@
         "tab": "url",
         "title": "定期的な面会予定のURLを承認する（成功）",
         "anchor": "bookly_recurring_appointments_approve_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (success)"
     },
     {
         "type": "label",
@@ -824,8 +968,9 @@
         "tab": "url",
         "title": "定期的な面会予定のURLを承認する（拒否）",
         "anchor": "bookly_recurring_appointments_approve_denied_page_url",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-recurring-appointments",
+        "weight": 30,
+        "alt": "Approve recurring appointment URL (denied)"
     },
     {
         "type": "label",
@@ -833,7 +978,7 @@
         "tab": "url",
         "title": "Set appointment from waiting list (success)",
         "anchor": "bookly_url_confirm_from_waitlisted_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-waiting-list",
         "weight": 30
     },
     {
@@ -842,7 +987,7 @@
         "tab": "url",
         "title": "Set appointment from waiting list (denied)",
         "anchor": "bookly_url_confirm_from_waitlisted_denied_page_url",
-        "addon": "core",
+        "addon": "bookly-addon-waiting-list",
         "weight": 30
     },
     {
@@ -924,7 +1069,8 @@
         "title": "カレンダー",
         "anchor": "bookly_appointment_participants",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Calendar"
     },
     {
         "type": "label",
@@ -933,7 +1079,8 @@
         "title": "会社名",
         "anchor": "bookly_co_name",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Company name"
     },
     {
         "type": "label",
@@ -942,7 +1089,8 @@
         "title": "住所",
         "anchor": "bookly_co_address",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Address"
     },
     {
         "type": "label",
@@ -951,7 +1099,8 @@
         "title": "電話番号",
         "anchor": "bookly_co_phone",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone"
     },
     {
         "type": "label",
@@ -960,7 +1109,8 @@
         "title": "ウェブサイト",
         "anchor": "bookly_co_website",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Website"
     },
     {
         "type": "label",
@@ -987,7 +1137,8 @@
         "title": "Eメール",
         "anchor": "bookly_co_email",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Email"
     },
     {
         "type": "label",
@@ -995,8 +1146,9 @@
         "tab": "customers",
         "title": "顧客向けにWordPressユーザーアカウントを作成する",
         "anchor": "bookly_cst_create_account",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Create WordPress user account for customers"
     },
     {
         "type": "label",
@@ -1004,8 +1156,9 @@
         "tab": "customers",
         "title": "新しいユーザーアカウントの役割",
         "anchor": "bookly_cst_new_account_role",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "New user account role"
     },
     {
         "type": "label",
@@ -1014,7 +1167,8 @@
         "title": "電話の欄のデフォルトの国",
         "anchor": "bookly_cst_phone_default_country",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Phone field default country"
     },
     {
         "type": "label",
@@ -1023,7 +1177,8 @@
         "title": "国コードのデフォルト",
         "anchor": "bookly_cst_default_country_code",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default country code"
     },
     {
         "type": "label",
@@ -1031,8 +1186,9 @@
         "tab": "customers",
         "title": "誕生日を必須にする",
         "anchor": "bookly_cst_required_birthday",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make birthday mandatory"
     },
     {
         "type": "label",
@@ -1040,8 +1196,9 @@
         "tab": "customers",
         "title": "住所の記入を必須にする",
         "anchor": "bookly_cst_required_address",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Make address mandatory"
     },
     {
         "type": "label",
@@ -1049,8 +1206,9 @@
         "tab": "customers",
         "title": "顧客の住所の欄",
         "anchor": "bookly_cst_address_show_fields",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer's address fields"
     },
     {
         "type": "label",
@@ -1058,8 +1216,9 @@
         "tab": "customers",
         "title": "お客様の住所",
         "anchor": "bookly-settings-customers-editor",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Customer address"
     },
     {
         "type": "label",
@@ -1068,7 +1227,8 @@
         "title": "クッキーに個人情報を記憶する",
         "anchor": "bookly_cst_remember_in_cookie",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Remember personal information in cookies"
     },
     {
         "type": "label",
@@ -1077,7 +1237,8 @@
         "title": "重複する顧客を許可する",
         "anchor": "bookly_cst_allow_duplicates",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Allow duplicate customers"
     },
     {
         "type": "label",
@@ -1086,7 +1247,8 @@
         "title": "顧客のデータを更新する前に確認ダイアログを表示する",
         "anchor": "bookly_cst_show_update_details_dialog",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show confirmation dialog before updating customer's data"
     },
     {
         "type": "label",
@@ -1101,10 +1263,11 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "appointments",
-        "title": "面会予定のステータスのデフォルト\n",
+        "title": "面会予定のステータスのデフォルト",
         "anchor": "bookly_appointment_default_status",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default appointment status"
     },
     {
         "type": "label",
@@ -1121,7 +1284,7 @@
         "tab": "appointments",
         "title": "First value for newly created appointments via backend",
         "anchor": "bookly_appointments_main_value",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1130,7 +1293,7 @@
         "tab": "appointments",
         "title": "Displayed time slots",
         "anchor": "bookly_appointments_displayed_time_slots",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1139,7 +1302,7 @@
         "tab": "appointments",
         "title": "Time delimiter",
         "anchor": "bookly_appointments_time_delimiter",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1148,8 +1311,9 @@
         "tab": "appointments",
         "title": "面会予定を取り消す",
         "anchor": "bookly_appointment_cancel_action",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-pro",
+        "weight": 30,
+        "alt": "Cancel appointment action"
     },
     {
         "type": "label",
@@ -1157,7 +1321,7 @@
         "tab": "appointments",
         "title": "Automatically change status of appointment",
         "anchor": "bookly_auto_change_status",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1166,7 +1330,7 @@
         "tab": "appointments",
         "title": "Initial status",
         "anchor": "bookly_auto_change_status_from",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1175,7 +1339,7 @@
         "tab": "appointments",
         "title": "Status to be set",
         "anchor": "bookly_auto_change_status_to",
-        "addon": "core",
+        "addon": "bookly-addon-pro",
         "weight": 30
     },
     {
@@ -1221,7 +1385,8 @@
         "title": "予約した製品",
         "anchor": "bookly_wc_product",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Booking product"
     },
     {
         "type": "label",
@@ -1248,7 +1413,8 @@
         "title": "カートのアイテムのデータ",
         "anchor": "bookly_l10n_wc_cart_info_name",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Cart item data"
     },
     {
         "type": "label",
@@ -1257,7 +1423,8 @@
         "title": "アプリID",
         "anchor": "bookly_fb_app_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "App ID"
     },
     {
         "type": "label",
@@ -1266,7 +1433,65 @@
         "title": "列",
         "anchor": "bookly_cart_show_columns",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Columns"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Collaborative services",
+        "anchor": "bookly_add-collaborative_services",
+        "addon": "bookly-addon-collaborative-services",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Events",
+        "anchor": "bookly_add-events",
+        "addon": "bookly-addon-events",
+        "weight": 50
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "グループ予約",
+        "anchor": "bookly_add-group-booking",
+        "addon": "bookly-addon-group-booking",
+        "weight": 50,
+        "alt": "Group Booking"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "複数の予約",
+        "anchor": "bookly_add-multiply-appointments",
+        "addon": "bookly-addon-multiply-appointments",
+        "weight": 50,
+        "alt": "Multiply Appointments"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "複数のパッケージ",
+        "anchor": "bookly_add-pkg",
+        "addon": "bookly-addon-packages",
+        "weight": 50,
+        "alt": "Packages"
+    },
+    {
+        "type": "section",
+        "page": "bookly-settings",
+        "tab": "additional",
+        "title": "Waiting List",
+        "anchor": "bookly_add-waiting-list",
+        "addon": "bookly-addon-waiting-list",
+        "weight": 50
     },
     {
         "type": "label",
@@ -1301,7 +1526,8 @@
         "tab": "additional",
         "title": "Do not allow to select a specific staff member",
         "anchor": "bookly_collaborative_hide_staff",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-collaborative-services",
+        "group": "Collaborative services",
         "weight": 30
     },
     {
@@ -1310,7 +1536,8 @@
         "tab": "additional",
         "title": "Default ticket mask",
         "anchor": "bookly_event_ticked_default_code_mask",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-events",
+        "group": "Events",
         "weight": 30
     },
     {
@@ -1319,8 +1546,10 @@
         "tab": "additional",
         "title": "グループ予約情報のフォーマット",
         "anchor": "bookly_group_booking_nop_format",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-group-booking",
+        "group": "グループ予約",
+        "weight": 30,
+        "alt": "Group bookings information format"
     },
     {
         "type": "label",
@@ -1328,8 +1557,10 @@
         "tab": "additional",
         "title": "最大数",
         "anchor": "bookly_multiply_appointments_quantity_max",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-multiply-appointments",
+        "group": "複数の予約",
+        "weight": 30,
+        "alt": "Max quantity"
     },
     {
         "type": "label",
@@ -1337,7 +1568,8 @@
         "tab": "additional",
         "title": "Show packages without payments in a packages list",
         "anchor": "bookly_packages_show_without_payments",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-packages",
+        "group": "複数のパッケージ",
         "weight": 30
     },
     {
@@ -1346,7 +1578,8 @@
         "tab": "additional",
         "title": "Show packages with payments",
         "anchor": "bookly_packages_show_with_payments",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-packages",
+        "group": "複数のパッケージ",
         "weight": 30
     },
     {
@@ -1355,7 +1588,8 @@
         "tab": "additional",
         "title": "Add customers to the waiting list despite the capacity value",
         "anchor": "bookly_waiting_list_despite_capacity",
-        "addon": "bookly-addon-pro",
+        "addon": "bookly-addon-waiting-list",
+        "group": "Waiting List",
         "weight": 30
     },
     {
@@ -1419,7 +1653,8 @@
         "title": "クライアントID",
         "anchor": "bookly_gc_client_id",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Client ID"
     },
     {
         "type": "label",
@@ -1428,7 +1663,8 @@
         "title": "クライアントの機密情報",
         "anchor": "bookly_gc_client_secret",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Client secret"
     },
     {
         "type": "label",
@@ -1437,7 +1673,8 @@
         "title": "リダイレクトURI",
         "anchor": "bookly-redirect-uri",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Redirect URI"
     },
     {
         "type": "label",
@@ -1445,8 +1682,9 @@
         "tab": "google_calendar",
         "title": "同期モード",
         "anchor": "bookly_gc_sync_mode",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1454,8 +1692,9 @@
         "tab": "google_calendar",
         "title": "予定の履歴を同期（過去と未来）",
         "anchor": "bookly_gc_full_sync_offset_days_before",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1463,8 +1702,9 @@
         "tab": "google_calendar",
         "title": "Googleカレンダーの予定のタイトルをコピーする",
         "anchor": "bookly_gc_full_sync_titles",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Copy Google Calendar event titles"
     },
     {
         "type": "label",
@@ -1472,8 +1712,9 @@
         "tab": "google_calendar",
         "title": "元のGoogleカレンダーのイベントの説明を上書きする",
         "anchor": "bookly_gc_force_update_description",
-        "addon": "bookly-addon-pro",
-        "weight": 30
+        "addon": "bookly-addon-advanced-google-calendar",
+        "weight": 30,
+        "alt": "Overwrite the description of the original Google Calendar events"
     },
     {
         "type": "label",
@@ -1482,7 +1723,8 @@
         "title": "取得されたイベントの数を制限する",
         "anchor": "bookly_gc_limit_events",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1491,7 +1733,8 @@
         "title": "イベントのタイトルのテンプレート",
         "anchor": "bookly_gc_event_title",
         "addon": "bookly-addon-pro",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1509,7 +1752,8 @@
         "title": "同期モード",
         "anchor": "bookly_ac_sync_mode",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1518,7 +1762,8 @@
         "title": "予定の履歴を同期（過去と未来）",
         "anchor": "bookly_ac_full_sync_offset_days_before",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1536,7 +1781,8 @@
         "title": "取得されたイベントの数を制限する",
         "anchor": "bookly_ac_limit_events",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1545,7 +1791,8 @@
         "title": "イベントのタイトルのテンプレート",
         "anchor": "bookly_ac_event_title",
         "addon": "bookly-addon-apple-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1563,7 +1810,8 @@
         "title": "デフォルトのコードのマスク",
         "anchor": "bookly_coupons_default_code_mask",
         "addon": "bookly-addon-coupons",
-        "weight": 30
+        "weight": 30,
+        "alt": "Default code mask"
     },
     {
         "type": "label",
@@ -1572,7 +1820,8 @@
         "title": "ディレクトリをアップロードする",
         "anchor": "bookly_files_directory",
         "addon": "bookly-addon-files",
-        "weight": 30
+        "weight": 30,
+        "alt": "Upload directory"
     },
     {
         "type": "label",
@@ -1590,7 +1839,8 @@
         "title": "APIキー",
         "anchor": "bookly_google_api_key",
         "addon": "bookly-addon-google-maps-address",
-        "weight": 30
+        "weight": 30,
+        "alt": "API Key"
     },
     {
         "type": "label",
@@ -1599,7 +1849,8 @@
         "title": "請求書の支払期限",
         "anchor": "bookly_invoices_due_days",
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice due days"
     },
     {
         "type": "label",
@@ -1653,7 +1904,8 @@
         "title": "請求書テンプレート",
         "anchor": null,
         "addon": "bookly-addon-invoices",
-        "weight": 30
+        "weight": 30,
+        "alt": "Invoice template"
     },
     {
         "type": "label",
@@ -1662,7 +1914,8 @@
         "title": "場所のカスタム設定",
         "anchor": "bookly_locations_allow_services_per_location",
         "addon": "bookly-addon-locations",
-        "weight": 30
+        "weight": 30,
+        "alt": "Custom settings for location"
     },
     {
         "type": "label",
@@ -1671,7 +1924,8 @@
         "title": "アプリケーションID",
         "anchor": "bookly_oc_app_id",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Application ID"
     },
     {
         "type": "label",
@@ -1680,7 +1934,8 @@
         "title": "アプリケーション•シークレット",
         "anchor": "bookly_oc_app_secret",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Application secret"
     },
     {
         "type": "label",
@@ -1689,7 +1944,8 @@
         "title": "リダイレクトURI",
         "anchor": "bookly-redirect-uri",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Redirect URI"
     },
     {
         "type": "label",
@@ -1698,7 +1954,8 @@
         "title": "同期モード",
         "anchor": "bookly_oc_sync_mode",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Synchronization mode"
     },
     {
         "type": "label",
@@ -1707,7 +1964,8 @@
         "title": "予定の履歴を同期（過去と未来）",
         "anchor": "bookly_oc_full_sync_offset_days_before",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Sync appointments history (past and future)"
     },
     {
         "type": "label",
@@ -1716,7 +1974,8 @@
         "title": "Outlook（アウトルック）カレンダーのイベントのタイトルをコピーする",
         "anchor": "bookly_oc_full_sync_titles",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Copy Outlook Calendar event titles"
     },
     {
         "type": "label",
@@ -1725,7 +1984,8 @@
         "title": "取得されたイベントの数を制限する",
         "anchor": "bookly_oc_limit_events",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Limit number of fetched events"
     },
     {
         "type": "label",
@@ -1734,7 +1994,8 @@
         "title": "イベントのタイトルのテンプレート",
         "anchor": "bookly_oc_event_title",
         "addon": "bookly-addon-outlook-calendar",
-        "weight": 30
+        "weight": 30,
+        "alt": "Template for event title"
     },
     {
         "type": "label",
@@ -1752,7 +2013,8 @@
         "title": "バックエンドに面会の評価を表示する",
         "anchor": "bookly_ratings_show_at_backend",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Displaying appointments rating in the backend"
     },
     {
         "type": "label",
@@ -1761,7 +2023,8 @@
         "title": "予約の評価がタイムアウトとなりました。",
         "anchor": "bookly_ratings_timeout",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Timeout for rating appointment"
     },
     {
         "type": "label",
@@ -1770,7 +2033,8 @@
         "title": "評価の平均値を計算する期間",
         "anchor": "bookly_ratings_period",
         "addon": "bookly-addon-ratings",
-        "weight": 30
+        "weight": 30,
+        "alt": "Period for calculating rating average"
     },
     {
         "type": "label",
@@ -1779,7 +2043,8 @@
         "title": "オンラインでの支払い",
         "anchor": "bookly_recurring_appointments_payment",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Online Payments"
     },
     {
         "type": "label",
@@ -1788,7 +2053,8 @@
         "title": "グループでの面会",
         "anchor": "bookly_recurring_appointments_use_groups",
         "addon": "bookly-addon-recurring-appointments",
-        "weight": 30
+        "weight": 30,
+        "alt": "Group appointments"
     },
     {
         "type": "label",
@@ -1797,7 +2063,8 @@
         "title": "人数で追加項目を乗算する",
         "anchor": "bookly_service_extras_multiply_nop",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Multiply extras by number of persons"
     },
     {
         "type": "label",
@@ -1806,7 +2073,8 @@
         "title": "追加のステップ",
         "anchor": "bookly_service_extras_after_step_time",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Extras Step"
     },
     {
         "type": "label",
@@ -1815,7 +2083,8 @@
         "title": "表示する",
         "anchor": "bookly_service_extras_show",
         "addon": "bookly-addon-service-extras",
-        "weight": 30
+        "weight": 30,
+        "alt": "Show"
     },
     {
         "type": "label",
@@ -1824,7 +2093,8 @@
         "title": "お名前",
         "anchor": "bookly-custom-statuses-name",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Name"
     },
     {
         "type": "label",
@@ -1833,7 +2103,8 @@
         "title": "空いている/忙しい",
         "anchor": "bookly-custom-statuses-busy",
         "addon": "bookly-addon-custom-statuses",
-        "weight": 30
+        "weight": 30,
+        "alt": "Free/Busy"
     },
     {
         "type": "gateway",
@@ -1842,7 +2113,8 @@
         "title": "窓口でサービスの支払いをする",
         "anchor": "bookly_pmt_locally",
         "addon": "core",
-        "weight": 50
+        "weight": 50,
+        "alt": "Service paid locally"
     },
     {
         "type": "gateway",
@@ -1854,6 +2126,82 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIユーザーネーム",
+        "anchor": "bookly_paypal_api_username",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Username"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIパスワード",
+        "anchor": "bookly_paypal_api_password",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Password"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API署名",
+        "anchor": "bookly_paypal_api_signature",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "API Signature"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "PayPal ID",
+        "anchor": "bookly_paypal_id",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_paypal_sandbox",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "税務情報を送信する",
+        "anchor": "bookly_paypal_send_tax",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_paypal_timeout",
+        "addon": "bookly-addon-pro",
+        "group": "PayPal",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1861,6 +2209,61 @@
         "anchor": "bookly_pmt_2checkout",
         "addon": "bookly-addon-2checkout",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "口座番号",
+        "anchor": "bookly_2checkout_api_seller_id",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Account Number"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "秘密の言葉",
+        "anchor": "bookly_2checkout_api_secret_word",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Secret Word"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_2checkout_sandbox",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "税務情報を送信する",
+        "anchor": "bookly_2checkout_send_tax",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_2checkout_timeout",
+        "addon": "bookly-addon-2checkout",
+        "group": "2Checkout",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1872,6 +2275,61 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIログインID",
+        "anchor": "bookly_authorize_net_api_login_id",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "API Login ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIトランザクションキー",
+        "anchor": "bookly_authorize_net_transaction_key",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "API Transaction Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_authorize_net_sandbox",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "税務情報を送信する",
+        "anchor": "bookly_authorize_net_send_tax",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_authorize_net_timeout",
+        "addon": "bookly-addon-authorize-net",
+        "group": "Authorize.Net",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1879,6 +2337,28 @@
         "anchor": "bookly_pmt_mollie",
         "addon": "bookly-addon-mollie",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIキー",
+        "anchor": "bookly_mollie_api_key",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_mollie_timeout",
+        "addon": "bookly-addon-mollie",
+        "group": "Mollie",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1890,6 +2370,50 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "エージェントID",
+        "anchor": "bookly_payson_api_agent_id",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Agent ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIキー",
+        "anchor": "bookly_payson_api_key",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_payson_sandbox",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_payson_timeout",
+        "addon": "bookly-addon-payson",
+        "group": "Payson",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1897,6 +2421,50 @@
         "anchor": "bookly_pmt_payu_biz",
         "addon": "bookly-addon-payu-biz",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_payu_biz_sandbox",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "マーチャントキー",
+        "anchor": "bookly_payu_biz_api_key",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Merchant Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "マーチャントソルト",
+        "anchor": "bookly_payu_biz_api_salt",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Merchant Salt"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_payu_biz_timeout",
+        "addon": "bookly-addon-payu-biz",
+        "group": "PayUbiz",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1908,6 +2476,72 @@
         "weight": 50
     },
     {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_payu_latam_sandbox",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "APIキー",
+        "anchor": "bookly_payu_latam_api_key",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "アカウントID",
+        "anchor": "bookly_payu_latam_api_account_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Account ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "マーチャントID",
+        "anchor": "bookly_payu_latam_api_merchant_id",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Merchant ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "税務情報を送信する",
+        "anchor": "bookly_payu_latam_send_tax",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Send tax information"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_payu_latam_timeout",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
         "type": "gateway",
         "page": "bookly-settings",
         "tab": "payments",
@@ -1915,6 +2549,59 @@
         "anchor": "bookly_pmt_cloud_square",
         "addon": "bookly-addon-square",
         "weight": 50
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "アプリケーションID",
+        "anchor": "bookly_cloud_square_api_application_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Application ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Access token",
+        "anchor": "bookly_cloud_square_api_access_token",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Location ID",
+        "anchor": "bookly_cloud_square_api_location_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "サンドボックスモード",
+        "anchor": "bookly_cloud_square_sandbox",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Sandbox Mode"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_cloud_square_timeout",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
     },
     {
         "type": "gateway",
@@ -1929,10 +2616,44 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "payments",
+        "title": "パブリッシュ可能なキー",
+        "anchor": "bookly_stripe_publishable_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Publishable Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "シークレットキー",
+        "anchor": "bookly_stripe_secret_key",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Secret Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "支払用ゲートウェイのタイム•インターバル",
+        "anchor": "bookly_stripe_timeout",
+        "addon": "bookly-addon-stripe",
+        "group": "Stripe",
+        "weight": 30,
+        "alt": "Time interval of payment gateway"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
         "title": "通貨",
         "anchor": "bookly_pmt_currency",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Currency"
     },
     {
         "type": "label",
@@ -1941,7 +2662,8 @@
         "title": "価格形式",
         "anchor": "bookly_pmt_price_format",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Price format"
     },
     {
         "type": "label",
@@ -1949,8 +2671,9 @@
         "tab": "payments",
         "title": "手付金のオプション",
         "anchor": "bookly_deposit_allow_full_payment",
-        "addon": "core",
-        "weight": 30
+        "addon": "bookly-addon-deposit-payments",
+        "weight": 30,
+        "alt": "Deposit options"
     },
     {
         "type": "label",
@@ -1958,8 +2681,190 @@
         "tab": "payments",
         "title": "価格設定と表示",
         "anchor": "bookly_taxes_in_price",
+        "addon": "bookly-addon-taxes",
+        "weight": 30,
+        "alt": "Price settings and display"
+    },
+    {
+        "type": "action",
+        "page": "bookly-appointments",
+        "tab": null,
+        "title": "新しい面会",
+        "anchor": null,
         "addon": "core",
-        "weight": 30
+        "action": "bookly-new-appointment",
+        "weight": 45,
+        "alt": "New appointment"
+    },
+    {
+        "type": "action",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "新しい顧客",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-customer",
+        "weight": 45,
+        "alt": "New customer"
+    },
+    {
+        "type": "action",
+        "page": "bookly-services",
+        "tab": null,
+        "title": "New service",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-service",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-staff",
+        "tab": null,
+        "title": "New staff member",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-new-staff",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-notifications",
+        "tab": "notifications",
+        "title": "新しい通知",
+        "anchor": null,
+        "addon": "core",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "notifications",
+        "title": "新しい通知",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-js-new-notification",
+        "weight": 45,
+        "alt": "New notification"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-sms",
+        "tab": "sender_id",
+        "title": "送信者IDを要求する",
+        "anchor": null,
+        "addon": "cloud:sms",
+        "action": "bookly-request-sender_id",
+        "weight": 45,
+        "alt": "Request Sender ID"
+    },
+    {
+        "type": "action",
+        "page": "bookly-cloud-mobile-staff-cabinet",
+        "tab": null,
+        "title": "New access token",
+        "anchor": null,
+        "addon": "cloud:mobile-staff-cabinet",
+        "action": "bookly-js-new-key",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-customer-groups",
+        "tab": null,
+        "title": "新しいグループ",
+        "anchor": null,
+        "addon": "bookly-addon-customer-groups",
+        "action": "bookly-js-add-group",
+        "weight": 45,
+        "alt": "New group"
+    },
+    {
+        "type": "action",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "Add gift card",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "action": "bookly-add-gift-card",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-packages",
+        "tab": null,
+        "title": "新しいパッケージ",
+        "anchor": null,
+        "addon": "bookly-addon-packages",
+        "action": "bookly-new-package",
+        "weight": 45,
+        "alt": "New package"
+    },
+    {
+        "type": "action",
+        "page": "bookly-discounts",
+        "tab": null,
+        "title": "New discount",
+        "anchor": null,
+        "addon": "bookly-addon-discounts",
+        "action": "bookly-new-discount",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-events",
+        "tab": null,
+        "title": "New event",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "action": "bookly-new-event",
+        "weight": 45
+    },
+    {
+        "type": "action",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "場所を追加する",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "action": "bookly-new-location",
+        "weight": 45,
+        "alt": "Add Location"
+    },
+    {
+        "type": "action",
+        "page": "bookly-taxes",
+        "tab": null,
+        "title": "新規の税金",
+        "anchor": null,
+        "addon": "bookly-addon-taxes",
+        "action": "bookly-new-tax",
+        "weight": 45,
+        "alt": "New tax"
+    },
+    {
+        "type": "action",
+        "page": "bookly-coupons",
+        "tab": null,
+        "title": "全てのクーポン",
+        "anchor": null,
+        "addon": "bookly-addon-coupons",
+        "action": "bookly-add",
+        "weight": 45,
+        "alt": "Add Coupon"
+    },
+    {
+        "type": "action",
+        "page": "bookly-settings",
+        "tab": "custom_statuses",
+        "title": "ステータス（状況）を追加する",
+        "anchor": null,
+        "addon": "bookly-addon-custom-statuses",
+        "action": "bookly-add-status",
+        "weight": 45,
+        "alt": "Add status"
     },
     {
         "type": "tab",
@@ -1968,7 +2873,8 @@
         "title": "通知",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Notifications"
     },
     {
         "type": "tab",
@@ -1995,7 +2901,8 @@
         "title": "SMSの詳細",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "SMS Details"
     },
     {
         "type": "tab",
@@ -2004,7 +2911,8 @@
         "title": "価格表",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Price list"
     },
     {
         "type": "tab",
@@ -2013,6 +2921,7 @@
         "title": "送信者ID",
         "anchor": null,
         "addon": "cloud:sms",
-        "weight": 60
+        "weight": 60,
+        "alt": "Sender ID"
     }
 ]

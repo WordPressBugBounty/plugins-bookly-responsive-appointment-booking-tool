@@ -377,7 +377,10 @@
 
             if (allowEditAppointment) {
                 if (arg.event.extendedProps.type === 'event') {
-                    BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
+                    BooklyAttendeesDialog.showForm(
+                        getBooklyModalContainer('bookly-attendees-dialog'),
+                        {eventId: arg.event.extendedProps.id, onDone: function () { calendar.refetchEvents(); }}
+                    )
                 } else {
                     let visible_staff_id;
                     if (arg.view.type === 'resourceTimeGridDay') {
@@ -427,7 +430,10 @@
                         .attr('title', obj.options.l10n.events.attendees)
                         .on('click', function (e) {
                             e.stopPropagation();
-                            BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
+                            BooklyAttendeesDialog.showForm(
+                                getBooklyModalContainer('bookly-attendees-dialog'),
+                                {eventId: arg.event.extendedProps.id, onDone: function () { calendar.refetchEvents(); }}
+                            )
                         })
                 );
             } else {

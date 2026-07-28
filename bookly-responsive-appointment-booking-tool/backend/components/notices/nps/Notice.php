@@ -19,7 +19,7 @@ class Notice extends Lib\Base\Component
                 // Show notice 1 month after installation time.
                 if ( time() - Lib\Plugin::getInstallationTime() >= 30 * DAY_IN_SECONDS ) {
                     self::enqueueStyles( array(
-                        'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ), ),
+                        'alias' => array( 'bookly-backend-globals', ),
                     ) );
 
                     self::enqueueScripts( array(

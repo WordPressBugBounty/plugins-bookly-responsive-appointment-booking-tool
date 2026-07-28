@@ -27,7 +27,7 @@ $update_required_modal = false;
                     <div class="form-row">
                         <div class="col-xl-9 col-md-8 col-xs-12">
                             <div class="d-flex">
-                                <div class="mr-4 mb-4">
+                                <div class="mr-4 mb-4 flex-shrink-0">
                                     <img src="<?php echo esc_attr( $product['icon_url'] ) ?>" alt="<?php echo esc_attr( $product['texts']['title'] ) ?>"/>
                                 </div>
                                 <div class="flex-fill">

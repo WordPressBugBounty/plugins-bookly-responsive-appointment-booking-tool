@@ -38,7 +38,8 @@ class Ajax extends Lib\Base\Ajax
             self::parameter( 'recharge' ),
             self::parameter( 'promo_code' ),
             self::parameter( 'mode' ),
-            self::parameter( 'url' )
+            self::parameter( 'url' ),
+            (bool) self::parameter( 'consent' )
         );
 
         if ( $result === false ) {
@@ -46,7 +47,7 @@ class Ajax extends Lib\Base\Ajax
             if ( array_key_exists( 'ERROR_RECHARGE_NOT_AVAILABLE', $errors ) ) {
                 wp_send_json_error( array( 'message' => $errors['ERROR_RECHARGE_NOT_AVAILABLE'] ) );
             } else {
-                wp_send_json_error( array( 'message' => __( 'Card payment has failed, please use another payment option', 'bookly-responsive-appointment-booking-tool' ) ) );
+                wp_send_json_error( array( 'message' => __( 'Payment has failed, please try again later', 'bookly-responsive-appointment-booking-tool' ) ) );
             }
         } else {
             wp_send_json( $result );

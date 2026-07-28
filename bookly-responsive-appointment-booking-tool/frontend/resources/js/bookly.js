@@ -1,4 +1,4 @@
-const booklyJsVersion="27.8";
+const booklyJsVersion="27.9";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -15943,7 +15943,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (163:0) {#if container === 'div'}
+	// (177:0) {#if container === 'div'}
 	function create_if_block$4(ctx) {
 	  let current_block_type_index;
 	  let if_block;
@@ -16007,7 +16007,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (216:8) {#if loading}
+	// (230:8) {#if loading}
 	function create_if_block_4$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16046,7 +16046,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (186:4) {:else}
+	// (200:4) {:else}
 	function create_else_block$1(ctx) {
 	  let div;
 	  let t;
@@ -16140,7 +16140,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (164:4) {#if !disabled}
+	// (178:4) {#if !disabled}
 	function create_if_block_1$3(ctx) {
 	  let div;
 	  let t;
@@ -16249,7 +16249,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (193:12) {#if loading}
+	// (207:12) {#if loading}
 	function create_if_block_3$2(ctx) {
 	  let span;
 	  let spinner;
@@ -16288,7 +16288,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (177:12) {#if loading}
+	// (191:12) {#if loading}
 	function create_if_block_2$3(ctx) {
 	  let span;
 	  let spinner;
@@ -16509,8 +16509,8 @@ var bookly = (function ($) {
 	            $$invalidate(16, hover = 'bookly:hover:text-white hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'link':
-	            $$invalidate(7, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
-	            $$invalidate(16, hover = 'bookly:hover:text-gray-600');
+	            $$invalidate(7, buttonClasses = 'bookly:bg-transparent bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none ' + (disabled ? 'bookly:text-gray-600' : color ? color : 'text-bookly'));
+	            $$invalidate(16, hover = color ? 'bookly:hover:opacity-70' : 'bookly:hover:text-gray-600');
 	            $$invalidate(8, rounded = false);
 	            $$invalidate(9, bordered = false);
 	            $$invalidate(10, paddings = false);
@@ -16573,6 +16573,14 @@ var bookly = (function ($) {
 	        }
 	        if (bordered) {
 	          $$invalidate(7, buttonClasses += ' bookly:border bookly:border-solid');
+	        } else {
+	          // Явный border-0, а не «ничего»: темы (TT1) вешают на button
+	          // собственный border, и без нашей утилиты кнопка получает
+	          // тематическую обводку. Гасим ширину, а не style (border-none):
+	          // style у всех элементов solid из preflight, а вызывающий код
+	          // (ButtonGroup) рисует свои бордеры per-side width-утилитами —
+	          // border-none убивал бы и их.
+	          $$invalidate(7, buttonClasses += ' bookly:border-0');
 	        }
 	        if (paddings) {
 	          switch (size) {
@@ -16607,6 +16615,13 @@ var bookly = (function ($) {
 	        if (margins) {
 	          $$invalidate(7, buttonClasses += ' bookly:relative');
 	        }
+
+	        // WP-конвенция: агрессивные темы (TT1 и класс подобных) красят кнопки
+	        // селекторами вида button:not(:hover):not(:active):not(.has-background)
+	        // / :not(.has-text-color) (0-3-1) — они бьют наши нестандартные классы
+	        // (text-bookly и т.п., 0-3-0). Эти два класса — штатный эскейп таких
+	        // правил: тема считает, что цвета у кнопки уже заданы, и не трогает её.
+	        $$invalidate(7, buttonClasses += ' has-text-color has-background');
 	      }
 	    }
 	  };
@@ -16849,7 +16864,7 @@ var bookly = (function ($) {
 	  let current;
 	  button0 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16869,7 +16884,7 @@ var bookly = (function ($) {
 	  button0.$on("keypress", /*onClickLeft*/ctx[26]);
 	  button1 = new Button({
 	    props: {
-	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16887,7 +16902,7 @@ var bookly = (function ($) {
 	  button1.$on("keypress", /*changeView*/ctx[25]);
 	  button2 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16930,7 +16945,7 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button0_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button0_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear();
 	      if (dirty[0] & /*l10n*/128) button0_changes.ariaLabel = /*l10n*/ctx[7].prev;
 	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
@@ -16941,7 +16956,7 @@ var bookly = (function ($) {
 	      }
 	      button0.$set(button0_changes);
 	      const button1_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
 	      if (dirty[0] & /*title*/8388608 | dirty[2] & /*$$scope*/4) {
 	        button1_changes.$$scope = {
 	          dirty,
@@ -16950,7 +16965,7 @@ var bookly = (function ($) {
 	      }
 	      button1.$set(button1_changes);
 	      const button2_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*controlButtonClasses*/4194304) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button2_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
 	      if (dirty[0] & /*l10n*/128) button2_changes.ariaLabel = /*l10n*/ctx[7].next;
 	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
@@ -16988,7 +17003,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (289:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                             ariaLabel={l10n.prev}                     >
+	// (289:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                             ariaLabel={l10n.prev}                     >
 	function create_default_slot_7(ctx) {
 	  let i;
 	  return {
@@ -17017,7 +17032,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (303:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
+	// (303:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
 	function create_default_slot_6(ctx) {
 	  let t;
 	  return {
@@ -17038,7 +17053,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (315:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                             ariaLabel={l10n.next}                     >
+	// (315:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                             ariaLabel={l10n.next}                     >
 	function create_default_slot_5(ctx) {
 	  let i;
 	  return {
@@ -17369,7 +17384,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (439:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (439:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_4(ctx) {
 	  let t_value = /*__year*/ctx[61] + "";
 	  let t;
@@ -17410,7 +17425,7 @@ var bookly = (function ($) {
 	      rounded: false,
 	      paddings: false,
 	      margins: false,
-	      class: "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
 	      disabled: /*_disabled*/ctx[53],
 	      container: "div",
 	      size: "custom",
@@ -17440,7 +17455,7 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
 	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
 	      if (dirty[0] & /*year*/2 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
@@ -17468,7 +17483,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (414:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (414:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_3(ctx) {
 	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[60]] + "";
 	  let t;
@@ -17505,7 +17520,7 @@ var bookly = (function ($) {
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
@@ -17538,7 +17553,7 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
 	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
 	      if (dirty[0] & /*datePicker*/16 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
@@ -17830,7 +17845,7 @@ var bookly = (function ($) {
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
 	      type: "calendar",
 	      bordered: false,
 	      rounded: /*mode*/ctx[6] === 'horizontal',
@@ -17857,7 +17872,7 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
+	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
 	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
 	      if (dirty[0] & /*loading, limits, month, year, mode, currentWeek*/8271) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[13] <= 0);
 	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
@@ -17883,7 +17898,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (349:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (mode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
+	// (349:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (mode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
 	function create_default_slot_2(ctx) {
 	  let i;
 	  return {
@@ -17945,7 +17960,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (366:40) <Button                                                 type='calendar'                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
+	// (366:40) <Button                                                 type='calendar'                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
 	function create_default_slot_1(ctx) {
 	  let t0;
 	  let span;
@@ -18011,7 +18026,7 @@ var bookly = (function ($) {
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : '')),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : '')),
 	      bordered: false,
 	      disabled: /*_disabled*/ctx[53],
 	      container: "div",
@@ -18037,7 +18052,7 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/3936320) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : ''));
+	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/3936320) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : ''));
 	      if (dirty[0] & /*days*/4096) button_changes.disabled = /*_disabled*/ctx[53];
 	      if (dirty[0] & /*mode, days, datePicker*/4176 | dirty[2] & /*$$scope*/4) {
 	        button_changes.$$scope = {
@@ -18068,7 +18083,7 @@ var bookly = (function ($) {
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
+	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
 	      type: "calendar",
 	      bordered: false,
 	      rounded: /*mode*/ctx[6] === 'horizontal',
@@ -18095,7 +18110,7 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
+	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
 	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
 	      if (dirty[0] & /*loading, limits, month, year*/15) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
 	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
@@ -18121,7 +18136,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (390:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
+	// (390:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
 	function create_default_slot(ctx) {
 	  let i;
 	  return {
@@ -18955,18 +18970,34 @@ var bookly = (function ($) {
 	        }
 	      });
 	    };
-	    let startVerificationTimer = function () {
-	      let timer = 60;
+	    let verificationCountdown = null;
+	    let startVerificationTimer = function (seconds) {
+	      let timer = _parseInt$4(seconds, 10);
+	      if (isNaN(timer)) {
+	        timer = 60;
+	      }
+	      // Ensure only a single countdown runs at a time (avoid stacked intervals
+	      // fighting over the same counter when verify responses arrive repeatedly).
+	      if (verificationCountdown !== null) {
+	        clearInterval(verificationCountdown);
+	        verificationCountdown = null;
+	      }
+	      if (timer <= 0) {
+	        $verification_resend_timer.text('');
+	        $verification_resend_button.prop('disabled', false);
+	        return;
+	      }
 	      $verification_resend_timer.text('(' + timer + ')');
 	      $verification_resend_button.prop('disabled', true);
-	      const countdown = _setInterval(() => {
+	      verificationCountdown = _setInterval(() => {
+	        timer--;
 	        if (timer <= 0) {
-	          clearInterval(countdown);
+	          clearInterval(verificationCountdown);
+	          verificationCountdown = null;
 	          $verification_resend_timer.text('');
 	          $verification_resend_button.prop('disabled', false);
 	        } else {
 	          $verification_resend_timer.text('(' + timer + ')');
-	          timer--;
 	        }
 	      }, 1000);
 	    };
@@ -19357,7 +19388,7 @@ var bookly = (function ($) {
 	            });
 	          } else if (response.hasOwnProperty('verify')) {
 	            ladda.stop();
-	            startVerificationTimer();
+	            startVerificationTimer(response.resend_after);
 	            _findInstanceProperty($verification_modal).call($verification_modal, '#bookly-verification-code-text').html(response.verify_text).end().addClass('bookly-in');
 	            let $error = _findInstanceProperty($verification_modal).call($verification_modal, '.bookly-js-verification-code-error');
 	            if (response.success === false && $verification_code.val()) {

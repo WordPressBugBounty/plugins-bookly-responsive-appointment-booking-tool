@@ -29,16 +29,22 @@ class Ajax extends Lib\Base\Ajax
         $range  = $filter['range'];
 
         if ( $range === 'any' ) {
-            $start = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '-100 year' ) ), 0 );
-            $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day' ) ), 0 );
+            $start_date = null;
+            $end_date   = null;
         } else {
             $dates = explode( ' - ', $range, 2 );
-            $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
-            $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
+            $start_date = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
+            $end_date   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
         }
+
+        $length = self::parameter( 'length' );
+        $start  = self::parameter( 'start' );
+
+        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->getMessagesList( $start, $length, compact( 'start_date', 'end_date' ) );
+        $data['draw'] = (int) self::parameter( 'draw' );
 
         Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::WHATSAPP_DETAILS, null, null, $filter );
 
-        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->getMessagesList( $start, $end ) );
+        wp_send_json( $data );
     }
 }

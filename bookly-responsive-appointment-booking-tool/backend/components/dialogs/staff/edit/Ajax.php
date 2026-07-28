@@ -94,14 +94,14 @@ class Ajax extends Lib\Base\Ajax
                     break;
                 }
                 do_action( 'admin_page_access_denied' );
-                wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.' ) );
+                wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.', 'bookly-responsive-appointment-booking-tool' ) );
             } while ( 0 );
         } elseif ( self::parameter( 'id' ) == 0
             && ! Lib\Config::proActive()
             && Lib\Entities\Staff::query()->count() > 0
         ) {
             do_action( 'admin_page_access_denied' );
-            wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.' ) );
+            wp_die( 'Bookly: ' . __( 'You do not have sufficient permissions to access this page.', 'bookly-responsive-appointment-booking-tool' ) );
         }
 
         $parameters = self::parameters();

@@ -47,6 +47,9 @@ class General extends Base
                 if ( isset( $response['ads'] ) ) {
                     update_option( 'bookly_advertisement', $this->localize( 'texts', $response['ads'] ) );
                 }
+                if ( isset( $response['wizard'] ) ) {
+                    update_option( 'bookly_setup_wizard_config', $response['wizard'] );
+                }
 
                 $this->info_is_loaded = true;
                 $this->api->dispatch( Events::GENERAL_INFO_LOADED, $response );

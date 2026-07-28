@@ -260,7 +260,7 @@ class PluginsUpdater
             'data-update-bookly-plugin="' . $plugin_class::getSlug() . '"',
             sprintf(
                 'class="update-link" aria-label="%s"',
-                esc_attr( sprintf( __( 'Update %s now' ), $plugin_class::getTitle() ) )
+                esc_attr( sprintf( __( 'Update %s now', 'bookly-responsive-appointment-booking-tool' ), $plugin_class::getTitle() ) )
             )
         );
     }

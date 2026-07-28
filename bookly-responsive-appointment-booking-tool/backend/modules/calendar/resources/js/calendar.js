@@ -14,7 +14,7 @@ jQuery(function ($) {
         serviceIds = getCookie('bookly_cal_service_ids'),
         locationIds = getCookie('bookly_cal_location_ids'),
         tabId = getCookie('bookly_cal_tab_id'),
-        lastView = !getCookie('bookly_cal_view') || getCookie('bookly_cal_view') === 'undefined' ? 'resourceTimeGridDay' : getCookie('bookly_cal_view'),
+        lastView = !getCookie('bookly_cal_view') || getCookie('bookly_cal_view') === 'undefined' ? 'timeGridWeek' : getCookie('bookly_cal_view'),
         headerToolbar = {
             start: 'prev,next today',
             center: 'title',

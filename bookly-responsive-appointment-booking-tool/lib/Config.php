@@ -206,6 +206,7 @@ abstract class Config
                 'min_capacity' => (int) $row['capacity_min'],
                 'max_capacity' => (int) $row['capacity_max'],
                 'price' => Utils\Price::format( $row['price'] ),
+                'flat_price' => (float) $row['price'],
             );
             if ( self::depositPaymentsActive() ) {
                 $location_data['deposit'] = $row['deposit'];

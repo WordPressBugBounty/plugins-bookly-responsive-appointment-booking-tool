@@ -11,7 +11,7 @@ class WhatsApp extends Product
     const REVERT_CANCEL           = '/1.0/users/%token%/products/whatsapp/revert-cancel';   //POST
     const SETTINGS                = '/1.0/users/%token%/products/whatsapp/settings';        //POST
     const TEMPLATES               = '/1.0/users/%token%/products/whatsapp/templates';       //GET
-    const MESSAGES                = '/1.0/users/%token%/products/whatsapp/messages';        //GET
+    const MESSAGES                = '/1.1/users/%token%/products/whatsapp/messages';        //POST
     const MESSAGE                 = '/1.0/users/%token%/products/whatsapp/message';         //POST
 
     /** @var string */
@@ -86,16 +86,19 @@ class WhatsApp extends Product
     /**
      * Get messages list.
      *
-     * @param null $start_date
-     * @param null $end_date
+     * @param int   $start
+     * @param int   $length
+     * @param array $filter [ start_date => string|null, end_date => string|null ]
      * @return array
      */
-    public function getMessagesList( $start_date = null, $end_date = null )
+    public function getMessagesList( $start, $length, array $filter )
     {
+        $data = array();
+        $filtered = 0;
         if ( $this->api->getToken() ) {
-            $response = $this->api->sendGetRequest(
+            $response = $this->api->sendPostRequest(
                 self::MESSAGES,
-                compact( 'start_date', 'end_date' )
+                compact( 'start', 'length', 'filter' )
             );
             if ( $response ) {
                 array_walk( $response['list'], function( &$item ) {
@@ -110,10 +113,14 @@ class WhatsApp extends Product
                     }
                 } );
 
-                return $response;
+                $data = $response['list'];
+                $filtered = $response['filtered'];
             }
         }
 
-        return array( 'success' => false, 'list' => array() );
+        return array(
+            'data' => $data,
+            'recordsFiltered' => $filtered,
+        );
     }
 }

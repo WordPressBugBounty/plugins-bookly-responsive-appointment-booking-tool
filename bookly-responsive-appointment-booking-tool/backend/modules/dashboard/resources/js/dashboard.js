@@ -4,17 +4,20 @@ jQuery(function ($) {
     // ─────────────────────────────────────────────────────────────────────────
     // Single orchestrator for the Bookly dashboard page.
     //
-    // The whole page is driven by ONE combined endpoint (bookly_get_dashboard_data):
-    // a single round-trip returns { kpi, chart, analytics }. This controller owns the
-    // filter bar + the request, and broadcasts the result to the section components
-    // (KPI row, trend chart, analytics datatable) over a native CustomEvent bus:
+    // Every load fires TWO parallel requests: bookly_get_dashboard_data ({ kpi, chart },
+    // also persists the filter state) and bookly_get_dashboard_analytics (the Detailed
+    // report — the heaviest section, so it neither delays the first paint nor takes the
+    // KPI / chart down with it). This controller owns the filter bar + the requests, and
+    // broadcasts the results to the section components over a native CustomEvent bus:
     //
-    //   bookly.dashboard.loading  — a request started (sections dim their content)
-    //   bookly.dashboard.data     — { kpi, chart, analytics, basedOn } (sections render)
+    //   bookly.dashboard.loading    — a load started (sections dim their content)
+    //   bookly.dashboard.data       — { kpi, chart, basedOn } (KPI row + chart render)
+    //   bookly.dashboard.analytics  — { analytics } (datatable renders; null = failed)
     //
-    // First paint shows a server-rendered full-page skeleton; once the first response
-    // has rendered every section, the skeleton is removed and the real content revealed
-    // all at once. The native WP dashboard widget is unaffected — it loads only its chart.
+    // First paint shows a server-rendered full-page skeleton; once the KPI + chart have
+    // rendered, the skeleton is removed and the content revealed — the report fills in
+    // when its response lands. The native WP dashboard widget is unaffected — it loads
+    // only its chart.
     // ─────────────────────────────────────────────────────────────────────────
 
     // Mount the KPI row + trend chart from the self-contained dashboard-chart bundle.
@@ -93,20 +96,25 @@ jQuery(function ($) {
         requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     }
 
+    function requestData(action) {
+        const fd = new FormData();
+        fd.append('action',     action);
+        fd.append('csrf_token', BooklyL10nGlobal.csrf_token);
+        fd.append('range',      state.range);
+        fd.append('based_on',   state.basedOn);
+        (state.staff || []).forEach(v => fd.append('filter[staff][]', v));
+        (state.services || []).forEach(v => fd.append('filter[services][]', v));
+        return fd;
+    }
+
     function loadData() {
         const seq = ++loadSeq;
         document.body.dispatchEvent(new CustomEvent('bookly.dashboard.loading'));
 
-        const fd = new FormData();
-        fd.append('action',      'bookly_get_dashboard_data');
-        fd.append('csrf_token',  BooklyL10nGlobal.csrf_token);
-        fd.append('range',       state.range);
-        fd.append('based_on',    state.basedOn);
-        fd.append('compared_to', state.comparedTo);
-        (state.staff || []).forEach(v => fd.append('filter[staff][]', v));
-        (state.services || []).forEach(v => fd.append('filter[services][]', v));
-
-        fetch(ajaxurl, { method: 'POST', body: fd })
+        // KPI + chart (also persists the filter state server-side).
+        const main = requestData('bookly_get_dashboard_data');
+        main.append('compared_to', state.comparedTo);
+        fetch(ajaxurl, { method: 'POST', body: main })
             .then(res => res.json())
             .then(json => {
                 if (seq !== loadSeq) return; // superseded by a newer request
@@ -115,7 +123,6 @@ jQuery(function ($) {
                     detail: {
                         kpi: json.data.kpi,
                         chart: json.data.chart,
-                        analytics: json.data.analytics,
                         basedOn: state.basedOn
                     }
                 }));
@@ -133,6 +140,24 @@ jQuery(function ($) {
                     reveal();
                 }
             });
+
+        // Detailed report — in parallel, only when the section exists (Pro).
+        if (document.getElementById('bookly-analytics-datatables')) {
+            fetch(ajaxurl, { method: 'POST', body: requestData('bookly_get_dashboard_analytics') })
+                .then(res => res.json())
+                .then(json => {
+                    if (seq !== loadSeq) return;
+                    document.body.dispatchEvent(new CustomEvent('bookly.dashboard.analytics', {
+                        detail: { analytics: json.success ? (json.data || {}) : null }
+                    }));
+                })
+                .catch(() => {
+                    if (seq !== loadSeq) return;
+                    document.body.dispatchEvent(new CustomEvent('bookly.dashboard.analytics', {
+                        detail: { analytics: null }
+                    }));
+                });
+        }
     }
 
     BooklyDatatables.showExternalFilters('bookly-dashboard-filters', {

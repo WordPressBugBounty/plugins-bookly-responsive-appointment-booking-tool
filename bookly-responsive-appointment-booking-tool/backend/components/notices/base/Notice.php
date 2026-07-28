@@ -83,7 +83,7 @@ class Notice extends Lib\Base\Component
     {
         $this->buttons[] = array(
             'caption' => $caption,
-            'class'   => 'btn-success ' . $js_class,
+            'class'   => 'bookly:alert-btn-primary ' . $js_class,
         );
 
         return $this;
@@ -100,7 +100,7 @@ class Notice extends Lib\Base\Component
     {
         $this->buttons[] = array(
             'caption' => $caption,
-            'class'   => 'btn-default ' . $js_class,
+            'class'   => 'bookly:alert-btn-outline ' . $js_class,
         );
 
         return $this;
