@@ -68,6 +68,9 @@ class Handler1_0 extends Handler
         $response = array( 'data' => array() );
         $appointment = new Appointment();
         if ( $appointment->load( $this->param( 'id' ) ) ) {
+            if ( $this->role === self::ROLE_STAFF && $appointment->getStaffId() != $this->staff->getId() ) {
+                throw new Exceptions\ApiException( 'FORBIDDEN', 403 );
+            }
             $query = Appointment::query( 'a' )
                 ->select( 'SUM(ca.number_of_persons) AS total_number_of_persons,
                     a.staff_id,
@@ -255,6 +258,12 @@ class Handler1_0 extends Handler
             }
         } else {
             $staff_id = $this->staff->getId();
+            if ( $appointment_id ) {
+                $owner_id = Appointment::query()->where( 'id', $appointment_id )->fetchVar( 'staff_id' );
+                if ( $owner_id != $staff_id ) {
+                    throw new Exceptions\ApiException( 'FORBIDDEN', 403 );
+                }
+            }
         }
 
         $skip_date = 0;
