@@ -4,7 +4,9 @@ namespace Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Lib;
 
 /**
- * @method static void renderModernAppearance() Render modern appearance
+ * @method static array getAppearanceTypes() Get extra modern-appearance form types (id => card metadata) contributed by add-ons.
+ * @method static array getAppearanceDefaults( string $form_type ) Get default settings for an add-on-contributed form type ("get*" name required so the proxy falls back to null, not $form_type, when no add-on registers it).
+ * @method static array prepareAppearanceData( array $data ) Extend localized data for the modern-appearance picker (categories/services/staff/tags/fields/payment systems needed by add-on-contributed types).
  * @method static void renderAddress() Render inputs for address fields in appearance.
  * @method static void renderBirthday() Render inputs for birthday fields in appearance.
  * @method static void renderBookingStatesSelector() Render single/multiple/100% off booking selector on Payment step.

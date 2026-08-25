@@ -93,6 +93,12 @@ class Page extends Lib\Base\Component
             'l10n'      => array(
                 'revenue'         => __( 'Revenue', 'bookly-responsive-appointment-booking-tool' ),
                 'appointments'    => __( 'Appointments', 'bookly-responsive-appointment-booking-tool' ),
+                // Sale kinds — trend-chart series and the chips on the Sales card. Only
+                // shown when the matching add-on is active, but always localized.
+                'sales'           => __( 'Sales', 'bookly-responsive-appointment-booking-tool' ),
+                'tickets'         => __( 'Tickets', 'bookly-responsive-appointment-booking-tool' ),
+                'packages'        => __( 'Packages', 'bookly-responsive-appointment-booking-tool' ),
+                'giftCards'       => __( 'Gift cards', 'bookly-responsive-appointment-booking-tool' ),
                 'newCustomers'    => __( 'New customers', 'bookly-responsive-appointment-booking-tool' ),
                 'approved'        => __( 'approved', 'bookly-responsive-appointment-booking-tool' ),
                 'pending'         => __( 'pending', 'bookly-responsive-appointment-booking-tool' ),
@@ -100,7 +106,6 @@ class Page extends Lib\Base\Component
                 'rejected'        => __( 'rejected', 'bookly-responsive-appointment-booking-tool' ),
                 'waitlisted'      => __( 'waitlisted', 'bookly-responsive-appointment-booking-tool' ),
                 'returning'       => __( 'returning', 'bookly-responsive-appointment-booking-tool' ),
-                'newLabel'        => __( 'new', 'bookly-responsive-appointment-booking-tool' ),
                 'pendingApproval' => __( 'appointments pending approval', 'bookly-responsive-appointment-booking-tool' ),
                 'awaitingAction'  => __( 'Awaiting your action', 'bookly-responsive-appointment-booking-tool' ),
                 'lost'            => __( 'lost appointments', 'bookly-responsive-appointment-booking-tool' ),

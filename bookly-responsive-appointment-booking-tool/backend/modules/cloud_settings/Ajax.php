@@ -20,6 +20,23 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Save automatic top-up limit.
+     */
+    public static function saveAutoRechargeLimit()
+    {
+        $cloud = Lib\Cloud\API::getInstance();
+        $result = $cloud->account->setAutoRechargeLimit(
+            (int) self::parameter( 'max_count' ),
+            (int) self::parameter( 'interval' )
+        );
+        if ( $result === false ) {
+            wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
+        } else {
+            wp_send_json_success();
+        }
+    }
+
+    /**
      * Enable or Disable administrators email reports.
      */
     public static function adminNotify()

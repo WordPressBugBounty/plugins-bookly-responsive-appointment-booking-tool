@@ -263,18 +263,28 @@ abstract class Backend
                 $products = __( 'Products', 'bookly-responsive-appointment-booking-tool' );
                 $billing = __( 'Billing', 'bookly-responsive-appointment-booking-tool' );
 
+                // Menu order: everyday operational pages first (bookable products included),
+                // then communications (SMS ahead of email), then business catalog, then the
+                // configure-once cluster, closing with Appearance / Add-ons / Settings.
                 add_submenu_page( 'bookly-menu', $dashboard, $dashboard, $required_capability,
                     Modules\Dashboard\Page::pageSlug(), function() { Modules\Dashboard\Page::render(); } );
                 Modules\Calendar\Page::addBooklyMenuItem( $calendar_badge );
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
                     add_submenu_page( 'bookly-menu', $appointments, $appointments, 'read',
                         Modules\Appointments\Page::pageSlug(), function() { Modules\Appointments\Page::render(); } );
-                }
-                Lib\Proxy\Locations::addBooklyMenuItem();
-                if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
                     Lib\Proxy\Events::addBooklyMenuItem();
                     Lib\Proxy\Packages::addBooklyMenuItem();
                 }
+                Lib\Proxy\GiftCards::addBooklyMenuItem();
+                if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
+                    add_submenu_page( 'bookly-menu', $customers, $customers, 'read',
+                        Modules\Customers\Page::pageSlug(), function() { Modules\Customers\Page::render(); } );
+                    add_submenu_page( 'bookly-menu', $payments, $payments, 'read',
+                        Modules\Payments\Page::pageSlug(), function() { Modules\Payments\Page::render(); } );
+                }
+                Modules\CloudSms\Page::addBooklyMenuItem();
+                add_submenu_page( 'bookly-menu', $notifications, $notifications, $required_capability,
+                    Modules\Notifications\Page::pageSlug(), function() { Modules\Notifications\Page::render(); } );
                 if ( $current_user->has_cap( $required_capability ) ) {
                     add_submenu_page( 'bookly-menu', $staff_members, $staff_members, $required_capability,
                         Modules\Staff\Page::pageSlug(), function() { Modules\Staff\Page::render(); } );
@@ -286,33 +296,25 @@ abstract class Backend
                 }
                 add_submenu_page( 'bookly-menu', $services, $services, $required_capability,
                     Modules\Services\Page::pageSlug(), function() { Modules\Services\Page::render(); } );
+                Lib\Proxy\Locations::addBooklyMenuItem();
+                // Configure-once cluster — above the closing Appearance / Add-ons / Settings
+                // trio so both menus end with the frequently needed pages (the fullscreen
+                // sidebar folds this cluster into "More" at the very bottom instead).
                 Lib\Proxy\Taxes::addBooklyMenuItem();
-                if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
-                    add_submenu_page( 'bookly-menu', $customers, $customers, 'read',
-                        Modules\Customers\Page::pageSlug(), function() { Modules\Customers\Page::render(); } );
-                }
                 Lib\Proxy\CustomerInformation::addBooklyMenuItem();
                 Lib\Proxy\CustomerGroups::addBooklyMenuItem();
                 Lib\Proxy\Discounts::addBooklyMenuItem();
-                add_submenu_page( 'bookly-menu', $notifications, $notifications, $required_capability,
-                    Modules\Notifications\Page::pageSlug(), function() { Modules\Notifications\Page::render(); } );
-                Modules\CloudSms\Page::addBooklyMenuItem();
-                if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
-                    add_submenu_page( 'bookly-menu', $payments, $payments, 'read',
-                        Modules\Payments\Page::pageSlug(), function() { Modules\Payments\Page::render(); } );
-                }
+                Lib\Proxy\Coupons::addBooklyMenuItem();
+                Lib\Proxy\CustomFields::addBooklyMenuItem();
+                Modules\Diagnostics\Page::addBooklyMenuItem();
+                Modules\News\Page::addBooklyMenuItem();
                 add_submenu_page( 'bookly-menu', $appearance, $appearance, $required_capability,
                     Modules\Appearance\Page::pageSlug(), function() { Modules\Appearance\Page::render(); } );
-                Lib\Proxy\Coupons::addBooklyMenuItem();
-                Lib\Proxy\GiftCards::addBooklyMenuItem();
-                Lib\Proxy\CustomFields::addBooklyMenuItem();
+                Modules\Shop\Page::addBooklyMenuItem();
                 add_submenu_page(
                     'bookly-menu', $settings, $settings, $required_capability,
                     Modules\Settings\Page::pageSlug(), function() { Modules\Settings\Page::render(); }
                 );
-                Modules\Diagnostics\Page::addBooklyMenuItem();
-                Modules\News\Page::addBooklyMenuItem();
-                Modules\Shop\Page::addBooklyMenuItem();
 
                 if ( ! Lib\Config::proActive() ) {
                     $submenu['bookly-menu'][] = array( esc_attr__( 'Get Bookly Pro', 'bookly-responsive-appointment-booking-tool' ) . ' <i class="fas fa-fw fa-certificate" style="color: #f4662f"></i>', 'read', Lib\Utils\Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'admin_menu' ), );

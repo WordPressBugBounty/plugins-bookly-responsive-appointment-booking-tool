@@ -105,6 +105,58 @@ jQuery(function ($) {
     }).trigger('change');
 
     /**
+     * Auto-recharge tab
+     */
+    const $limitEnabled = $('#bookly-auto-recharge-limit');
+    const $limitMaxCount = $('#bookly-auto-recharge-max-count');
+    const $limitInterval = $('#bookly-auto-recharge-interval');
+
+    $limitEnabled.on('change', function () {
+        $('.bookly-js-auto-recharge-limit').toggle(this.value === '1');
+    }).trigger('change');
+
+    $('#bookly-save-auto-recharge-limit').on('click', function (e) {
+        e.preventDefault();
+        const enabled = $limitEnabled.val() === '1';
+        if (enabled && !($limitMaxCount.val() > 0)) {
+            $limitMaxCount.addClass('is-invalid');
+            return;
+        }
+        $limitMaxCount.removeClass('is-invalid');
+        const ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                action: 'bookly_save_auto_recharge_limit',
+                csrf_token: BooklyL10nGlobal.csrf_token,
+                max_count: $limitMaxCount.val(),
+                // Zero interval means the number of automatic top-ups is not limited
+                interval: enabled ? $limitInterval.val() : 0
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    booklyAlert({success: [BooklyL10n.settingsSaved]});
+                } else {
+                    if (response.data && response.data.message) {
+                        booklyAlert({error: [response.data.message]});
+                    }
+                }
+            }
+        }).always(ladda.stop);
+    });
+
+    $(document.body).on('bookly.auto-recharge.toggle', function (e, enabled) {
+        const $tab = $('.bookly-js-auto-recharge-tab');
+        $tab.toggleClass('d-none', !enabled);
+        if (!enabled && $tab.hasClass('active')) {
+            $('.nav-link[href="#bookly-invoice-tab"]').trigger('click');
+        }
+    });
+
+    /**
      * Notifications tab
      */
     $('#bookly-account-notifications-tab :checkbox').on('change', function () {

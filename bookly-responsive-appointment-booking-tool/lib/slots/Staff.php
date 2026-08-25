@@ -289,54 +289,55 @@ class Staff
      */
     public function comparePreference( Staff $staff, Range $slot )
     {
-        $service_id = $slot->serviceId();
-        $location_id = Proxy\Locations::servicesPerLocationAllowed() ? $slot->locationId() : 0;
-        $service = $this->getService( $service_id, $location_id );
-        $settings = $service->getStaffPreferenceSettings();
-
-        switch ( $service->getStaffPreferenceRule() ) {
-            case Entities\Service::PREFERRED_ORDER:
-                $value1 = $service->getStaffPreferenceOrder();
-                $value2 = $staff->getService( $service_id, $location_id )->getStaffPreferenceOrder();
-                break;
-            case Entities\Service::PREFERRED_LEAST_OCCUPIED:
-                $date = $slot->start()->value()->format( 'Y-m-d' );
-                $value1 = $this->getWorkload( $date );
-                $value2 = $staff->getWorkload( $date );
-                break;
-            case Entities\Service::PREFERRED_MOST_OCCUPIED:
-                $date = $slot->start()->value()->format( 'Y-m-d' );
-                $value1 = $staff->getWorkload( $date );
-                $value2 = $this->getWorkload( $date );
-                break;
-            case Entities\Service::PREFERRED_LEAST_OCCUPIED_FOR_PERIOD:
-                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
-                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
-                $value1 = $this->getWorkloadForPeriod( $from, $to );
-                $value2 = $staff->getWorkloadForPeriod( $from, $to );
-                break;
-            case Entities\Service::PREFERRED_MOST_OCCUPIED_FOR_PERIOD:
-                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
-                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
-                $value1 = $staff->getWorkloadForPeriod( $from, $to );
-                $value2 = $this->getWorkloadForPeriod( $from, $to );
-                break;
-            case Entities\Service::PREFERRED_LEAST_EXPENSIVE:
-                $value1 = $service->price();
-                $value2 = $staff->getService( $service_id, $location_id )->price();
-                break;
-            case Entities\Service::PREFERRED_MOST_EXPENSIVE:
-            default:
-                $value1 = $staff->getService( $service_id, $location_id )->price();
-                $value2 = $service->price();
-                break;
-        }
+        $value1 = $this->getPreferenceValue( $slot );
+        $value2 = $staff->getPreferenceValue( $slot );
 
         if ( $value1 == $value2 ) {
             return 0;
         }
 
         return $value1 < $value2 ? -1 : 1;
+    }
+
+    /**
+     * Get the scalar ordering key of this staff member for the given slot: sorting staff
+     * by this value ascending follows the service staff-preference rule. MOST_* rules
+     * negate the value so that ascending order works for every rule.
+     *
+     * @param Range $slot
+     * @return int|float
+     */
+    public function getPreferenceValue( Range $slot )
+    {
+        $service_id = $slot->serviceId();
+        $location_id = Proxy\Locations::servicesPerLocationAllowed() ? $slot->locationId() : 0;
+        $service = $this->getService( $service_id, $location_id );
+
+        switch ( $service->getStaffPreferenceRule() ) {
+            case Entities\Service::PREFERRED_ORDER:
+                return $service->getStaffPreferenceOrder();
+            case Entities\Service::PREFERRED_LEAST_OCCUPIED:
+                return $this->getWorkload( $slot->start()->value()->format( 'Y-m-d' ) );
+            case Entities\Service::PREFERRED_MOST_OCCUPIED:
+                return - $this->getWorkload( $slot->start()->value()->format( 'Y-m-d' ) );
+            case Entities\Service::PREFERRED_LEAST_OCCUPIED_FOR_PERIOD:
+                $settings = $service->getStaffPreferenceSettings();
+                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
+                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
+
+                return $this->getWorkloadForPeriod( $from, $to );
+            case Entities\Service::PREFERRED_MOST_OCCUPIED_FOR_PERIOD:
+                $settings = $service->getStaffPreferenceSettings();
+                $from = $slot->start()->modify( sprintf( '-%d days', $settings['period']['before'] ) );
+                $to = $slot->start()->modify( sprintf( '+%d days', $settings['period']['after'] ) );
+
+                return - $this->getWorkloadForPeriod( $from, $to );
+            case Entities\Service::PREFERRED_LEAST_EXPENSIVE:
+                return $service->price();
+            case Entities\Service::PREFERRED_MOST_EXPENSIVE:
+            default:
+                return - $service->price();
+        }
     }
 
 }

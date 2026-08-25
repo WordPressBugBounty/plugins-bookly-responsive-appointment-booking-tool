@@ -3,6 +3,85 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_28_1()
+    {
+        $disposable_options = array();
+
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-create', function( $self ) {
+            $self->createTables( array(
+                'bookly_ai_conversations' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `status` ENUM("active","processing","done","error") NOT NULL DEFAULT "active",
+                        `error_code` VARCHAR(64) DEFAULT NULL,
+                        `created_at` DATETIME NOT NULL,
+                        `updated_at` DATETIME NOT NULL
+                    ) ENGINE = INNODB',
+                'bookly_ai_messages' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `conversation_id` INT UNSIGNED NOT NULL,
+                        `role` ENUM("user","assistant","tool") NOT NULL,
+                        `content` LONGTEXT NULL,
+                        `tool_calls` TEXT NULL,
+                        `tool_call_id` VARCHAR(64) NULL,
+                        `tool_name` VARCHAR(128) NULL,
+                        `created_at` DATETIME NOT NULL,
+                        KEY `conversation_id` (`conversation_id`),
+                    CONSTRAINT
+                        FOREIGN KEY (conversation_id)
+                        REFERENCES ' . $self->getTableName( 'bookly_ai_conversations' ) . '(id)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE
+                    ) ENGINE = INNODB',
+                'bookly_ai_jobs' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `conversation_id` INT UNSIGNED NOT NULL,
+                        `status` ENUM("queued","running","done","failed") NOT NULL DEFAULT "queued",
+                        `step` INT UNSIGNED NOT NULL DEFAULT 0,
+                        `heartbeat_at` DATETIME NULL,
+                        `attempts` INT UNSIGNED NOT NULL DEFAULT 0,
+                        `created_at` DATETIME NOT NULL,
+                        `updated_at` DATETIME NOT NULL,
+                        KEY `conversation_id` (`conversation_id`),
+                    CONSTRAINT
+                        FOREIGN KEY (conversation_id)
+                        REFERENCES ' . $self->getTableName( 'bookly_ai_conversations' ) . '(id)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE
+                    ) ENGINE = INNODB',
+                'bookly_forms' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `type` ENUM("search-form","services-form","staff-form","cancellation-confirmation","tags-form","events-form","checkout-form") NOT NULL DEFAULT "search-form",
+                        `name` VARCHAR(255) NOT NULL,
+                        `token` VARCHAR(255) NOT NULL,
+                        `settings` TEXT DEFAULT NULL,
+                        `custom_css` TEXT DEFAULT NULL,
+                        `created_at` DATETIME NOT NULL
+                ) ENGINE = INNODB',
+            ) );
+        } );
+
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter', function( $self ) {
+            $self->alterTables( array(
+                'bookly_forms' => array(
+                    'ALTER TABLE `%s` CHANGE `type` `type` ENUM("search-form","services-form","staff-form","cancellation-confirmation","tags-form","events-form","checkout-form","ai-assistant-form") NOT NULL DEFAULT "search-form"',
+                ),
+                'bookly_payments' => array(
+                    'ALTER TABLE `%s` ADD INDEX `created_at_idx` (`created_at`)',
+                ),
+            ) );
+        } );
+
+        add_option( 'bookly_appointments_create_with_wizard', '0' );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
     function update_27_8()
     {
         $this->alterTables( array(

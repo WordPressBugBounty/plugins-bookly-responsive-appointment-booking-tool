@@ -41,6 +41,23 @@ class Tools extends Lib\Base\Component
             $img = '<span class="bookly-media-icon"></span> ';
             echo '<a href="#TB_inline?width=640&inlineId=bookly-tinymce-popup&height=650" id="add-bookly-form" class="thickbox button bookly-media-button" title="' . esc_attr__( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '">' . $img . __( 'Add Bookly booking form', 'bookly-responsive-appointment-booking-tool' ) . '</a>';
         }
+
+        // One button per non-classic type — core (TYPE_AI_ASSISTANT) and
+        // whatever Pro contributes (Lib\Entities\Form::getTypes() merges
+        // both, empty Pro part when Pro is inactive). Not routed through
+        // Proxy\Shared — this must work without Pro providing that proxy.
+        foreach ( Lib\Entities\Form::getTypes() as $type ) {
+            if ( $type === Lib\Entities\Form::TYPE_BOOKLY_FORM ) {
+                continue;
+            }
+            $title = sprintf( __( 'Add Bookly %s', 'bookly-responsive-appointment-booking-tool' ), Lib\Entities\Form::getTitle( $type ) );
+            if ( $version < 3.5 ) {
+                echo '<a href="#TB_inline?width=400&inlineId=bookly-' . $type . '-popup&height=300" id="add-' . $type . '-form" title="' . esc_attr( $title ) . '">' . $title . '</a>';
+            } else {
+                echo '<a href="#TB_inline?width=400&inlineId=bookly-' . $type . '-popup&height=300" class="thickbox button bookly-media-button" title="' . esc_attr( $title ) . '">' . $img . $title . '</a>';
+            }
+        }
+
         Proxy\Shared::renderMediaButtons( $version );
     }
 
@@ -64,6 +81,17 @@ class Tools extends Lib\Base\Component
     {
         self::enqueueAssets();
         self::renderTemplate( 'bookly_popup' );
+
+        foreach ( Lib\Entities\Form::getTypes() as $type ) {
+            if ( $type === Lib\Entities\Form::TYPE_BOOKLY_FORM ) {
+                continue;
+            }
+            $forms = Lib\Entities\Form::query()->select( 'name, token' )->where( 'type', $type )->fetchArray();
+            if ( ! $forms ) {
+                $forms = array( array( 'name' => __( 'Default', 'bookly-responsive-appointment-booking-tool' ), 'token' => '' ) );
+            }
+            self::renderTemplate( 'modern_form', compact( 'type', 'forms' ) );
+        }
 
         Proxy\Shared::renderPopup();
     }

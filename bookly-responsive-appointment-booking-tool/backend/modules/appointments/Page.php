@@ -18,6 +18,7 @@ class Page extends Lib\Base\Component
         self::enqueueScripts( array(
             'module' => array( 'js/appointments.js' => array( 'bookly-backend-globals' ) ),
             'frontend' => array( 'js/intlTelInput.min.js' => array( 'bookly-backend-globals' ) ),
+            'backend' => array( 'js/booking-wizard.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::APPOINTMENTS );
@@ -86,8 +87,10 @@ class Page extends Lib\Base\Component
             'print' => __( 'Print', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'reorder' => _x( 'Reorder', 'order of elements', 'bookly-responsive-appointment-booking-tool' ),
             'proEnabled' => Lib\Config::proActive(),
+            'createWithWizard' => get_option( 'bookly_appointments_create_with_wizard', '1' ) === '1',
             'datatables' => $datatables,
         ) );
+        wp_localize_script( 'bookly-booking-wizard.js', 'BooklyL10nBookingWizard', \Bookly\Backend\Components\Dialogs\BookingWizard\Ajax::getL10n() );
 
         self::renderTemplate( 'index', compact( 'datatables' ) );
     }

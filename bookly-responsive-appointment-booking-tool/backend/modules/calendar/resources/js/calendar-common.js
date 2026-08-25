@@ -441,6 +441,22 @@
                     e.stopPropagation();
                     eventClick(arg);
                 }));
+                // Reschedule the whole appointment in the booking wizard (all customers move
+                // together); shown only when the wizard flow is enabled and its bundle loaded.
+                if (typeof BooklyBookingWizard !== 'undefined' && BooklyL10n.createWithWizard) {
+                    $buttons.append(
+                        $('<a class="btn btn-default btn-sm me-1">').append('<i class="fas fa-fw fa-exchange-alt">')
+                            .attr('title', obj.options.l10n.reschedule)
+                            .on('click', function (e) {
+                                e.stopPropagation();
+                                popoverClose();
+                                BooklyBookingWizard.showDialog({
+                                    reschedule: parseInt(arg.event.id),
+                                    onSaved: function () { calendar.refetchEvents(); }
+                                });
+                            })
+                    );
+                }
                 if (props.participants == 'one') {
                     if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
                         $buttons.append(
@@ -505,11 +521,25 @@
         }
 
         function addAppointmentDialog(date, staffId, visibleStaffId) {
-            if (allowEditAppointment) {
+            if (!allowEditAppointment) {
+                return;
+            }
+            var openWizard = typeof BooklyBookingWizard !== 'undefined' ? function (params) {
+                BooklyBookingWizard.showDialog({
+                    start_date: params && params.start_date,
+                    start_time: params && params.start_time,
+                    staff_id: params && params.staff_id,
+                    service_id: params && params.service_id,
+                    location_id: params && params.location_id,
+                    onSaved: function () { calendar.refetchEvents(); },
+                    onOpenClassic: openClassic
+                });
+            } : null;
+            function openClassic(params) {
                 BooklyAppointmentDialog.showDialog(
                     null,
-                    parseInt(staffId),
-                    moment(date),
+                    params && params.staff_id ? params.staff_id : parseInt(staffId),
+                    params && params.date ? moment(params.date) : moment(date),
                     function (event) {
                         if (event == 'refresh') {
                             calendar.refetchEvents();
@@ -533,9 +563,25 @@
                             calendar.refetchEvents();
                             locationChanged = false;
                         }
-                    }
+                    },
+                    params ? { service_id: params.service_id, location_id: params.location_id } : null,
+                    openWizard
                 );
             }
+            // When the wizard is the chosen creation flow, an empty-slot click opens it
+            // with the clicked day preset and, in a staff column, that staff preferred.
+            // The header link inside the wizard falls back to the classic form.
+            if (typeof BooklyBookingWizard !== 'undefined' && BooklyL10n.createWithWizard) {
+                BooklyBookingWizard.showDialog({
+                    start_date: moment(date).format('YYYY-MM-DD'),
+                    start_time: moment(date).format('HH:mm'),
+                    staff_id: parseInt(staffId) > 0 ? parseInt(staffId) : null,
+                    onSaved: function () { calendar.refetchEvents(); },
+                    onOpenClassic: openClassic
+                });
+                return;
+            }
+            openClassic();
         }
 
 

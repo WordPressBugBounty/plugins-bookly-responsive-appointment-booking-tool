@@ -13,9 +13,6 @@ use Bookly\Backend\Components\Controls\Buttons;
                     <p>
                         <?php esc_html_e( 'Please spend a minute to setup your country. This will help us provide you with appropriate payment methods when replenishing your account.', 'bookly-responsive-appointment-booking-tool' ) ?>
                     </p>
-                    <p class="mb-0">
-                        <?php esc_html_e( 'The country will also be displayed in the invoice on a separate line below the company address. Make sure the other fields in the invoice do not contain the name of the country.', 'bookly-responsive-appointment-booking-tool' ) ?>
-                    </p>
                 </div>
                 <div class="form-group mt-2">
                     <select id="bookly-s-country"></select>

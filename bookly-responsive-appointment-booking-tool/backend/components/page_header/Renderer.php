@@ -88,11 +88,25 @@ class Renderer extends Lib\Base\Component
             'bookly-menu'       => 'Bookly',
             'bookly-cloud-menu' => 'Bookly Cloud',
         );
+        // Curated set of configure-once pages folded into a collapsible "More" entry at the
+        // bottom of the Bookly group — keeps the everyday items above the fold. Only pages
+        // without in-page tabs qualify (a tabbed page inside More would need a third level).
+        $more_slugs = array(
+            'bookly-taxes',
+            'bookly-customer-information',
+            'bookly-customer-groups',
+            'bookly-discounts',
+            'bookly-coupons',
+            'bookly-custom-fields',
+            'bookly-diagnostics',
+            'bookly-news',
+        );
         foreach ( $nav_groups as $parent => $group_label ) {
             if ( empty( $submenu[ $parent ] ) ) {
                 continue;
             }
             $items = array();
+            $more_items = array();
             foreach ( $submenu[ $parent ] as $item ) {
                 $slug = isset( $item[2] ) ? $item[2] : '';
                 // Menu titles may carry a count bubble in the WordPress convention —
@@ -137,6 +151,15 @@ class Renderer extends Lib\Base\Component
                 } else {
                     $url = admin_url( 'admin.php?page=' . $slug );
                 }
+                if ( in_array( $slug, $more_slugs, true ) ) {
+                    $more_items[] = array(
+                        'label'  => $label,
+                        'url'    => $url,
+                        'active' => $slug === $current_page,
+                        'badge'  => $badge,
+                    );
+                    continue;
+                }
                 // Attach the page's in-page sections as a submenu, navigable from anywhere. Two
                 // schemes: a ?tab= page (supply 'tab'), or a custom-URL page (supply 'url' + the
                 // bare query 'flag' used to detect the active one, e.g. appearance forms). Active is
@@ -168,6 +191,16 @@ class Renderer extends Lib\Base\Component
                     'current' => ! $duplicate && $slug === $current_page,
                     'badge'   => $badge,
                     'submenu' => $item_submenu,
+                );
+            }
+            if ( $more_items ) {
+                // No own URL — the sidebar renders a URL-less item as a pure expander row.
+                $items[] = array(
+                    'label'   => __( 'More', 'bookly-responsive-appointment-booking-tool' ),
+                    'url'     => '',
+                    'current' => false,
+                    'badge'   => '',
+                    'submenu' => $more_items,
                 );
             }
             if ( $items ) {

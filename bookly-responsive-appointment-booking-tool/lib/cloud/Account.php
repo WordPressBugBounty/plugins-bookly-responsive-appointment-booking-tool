@@ -17,6 +17,7 @@ class Account extends Base
     const RENEW_PAYPAL_AUTO_RECHARGE     = '/1.1/users/%token%/paypal/renew/auto-recharge'; //POST
     const RENEW_STRIPE_AUTO_RECHARGE     = '/1.0/users/%token%/stripe/renew/auto-recharge'; //POST
     const DISABLE_AUTO_RECHARGE          = '/1.0/users/%token%/auto-recharge';            //DELETE
+    const SET_AUTO_RECHARGE_LIMIT        = '/1.0/users/%token%/auto-recharge/limit';      //PATCH
     const GET_INVOICE                    = '/1.2/users/%token%/invoice';                  //GET
     const GET_BILLING                    = '/1.2/users/%token%/billing';                  //POST
     const GET_PRODUCT_ACTIVATION_TEXTS   = '/1.0/users/%token%/products/%product%/activation-texts'; //GET
@@ -40,6 +41,7 @@ class Account extends Base
     const PRODUCT_VOICE = 'voice';
     const PRODUCT_WHATSAPP = 'whatsapp';
     const PRODUCT_MOBILE_STAFF_CABINET = 'mobile-staff-cabinet';
+    const PRODUCT_AI = 'ai';
 
     const PRODUCT_PAYU_LATAM = 'payu-latam';
     const PRODUCT_PAYSON = 'payson';
@@ -412,6 +414,33 @@ class Account extends Base
     }
 
     /**
+     * Set automatic top-up limit
+     *
+     * @param int $max_count
+     * @param int $interval Hours, zero means the number of top-ups is not limited
+     * @return bool
+     */
+    public function setAutoRechargeLimit( $max_count, $interval )
+    {
+        if ( $this->api->getToken() ) {
+            $response = $this->api->sendPatchRequest( self::SET_AUTO_RECHARGE_LIMIT, array(
+                'max_count' => $max_count,
+                'interval' => $interval,
+            ) );
+            if ( $response ) {
+                $this->auto_recharge['limit'] = array(
+                    'max_count' => (int) $max_count,
+                    'interval' => (int) $interval,
+                );
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Set invoice data
      *
      * @param array $settings
@@ -604,6 +633,24 @@ class Account extends Base
     public function getAutoRechargeBonus()
     {
         return $this->auto_recharge['bonus'];
+    }
+
+    /**
+     * Get automatic top-up limit.
+     *
+     * The interval is stored in hours, zero means the number of top-ups is not limited.
+     *
+     * @return array [ enabled => bool, max_count => int, interval => int ]
+     */
+    public function getAutoRechargeLimit()
+    {
+        $limit = isset( $this->auto_recharge['limit'] ) ? (array) $this->auto_recharge['limit'] : array();
+
+        return array(
+            'enabled' => isset( $limit['interval'] ) && $limit['interval'] > 0,
+            'max_count' => isset( $limit['max_count'] ) && $limit['max_count'] > 0 ? (int) $limit['max_count'] : 1,
+            'interval' => isset( $limit['interval'] ) && $limit['interval'] > 0 ? (int) $limit['interval'] : 1,
+        );
     }
 
     /**

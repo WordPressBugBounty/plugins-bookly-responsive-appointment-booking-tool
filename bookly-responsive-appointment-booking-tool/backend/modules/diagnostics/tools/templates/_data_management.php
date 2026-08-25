@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Inputs;
 
-$tables = array( 'appointments' => false, 'payments' => false, 'files' => true, 'mailing queue' => true, 'sessions' => true, 'logs' => true );
+$tables = array( 'appointments' => false, 'payments' => false, 'files' => true, 'mailing queue' => true, 'sessions' => true, 'logs' => true, 'AI conversations' => true );
 ?>
 <div class="form-row">
     <div class="col-auto">

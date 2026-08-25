@@ -5,7 +5,7 @@ use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib;
 use Bookly\Lib\Entities;
 use Bookly\Lib\CartItem;
-use BooklyPro\Backend\Modules\Appearance;
+use Bookly\Backend\Modules\Appearance\ModernAppearance;
 
 class Request extends Lib\Base\Component
 {
@@ -327,7 +327,7 @@ class Request extends Lib\Base\Component
     {
         static $settings;
         if ( $settings === null ) {
-            $settings = new Lib\Utils\Collection( Appearance\ProxyProviders\Local::getAppearance( self::parameter( 'form_type' ), $this->get( 'form_slug' ) ) );
+            $settings = new Lib\Utils\Collection( ModernAppearance::getAppearance( self::parameter( 'form_type' ), $this->get( 'form_slug' ) ) );
         }
 
         return $settings;

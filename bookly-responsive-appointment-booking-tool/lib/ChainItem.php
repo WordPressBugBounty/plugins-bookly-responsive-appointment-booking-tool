@@ -249,6 +249,10 @@ class ChainItem
         // Cast to int: staff ids can arrive from unsanitized front-end form_data
         // and later flow into a raw SQL IN(...) list in the Slots Finder.
         $this->staff_ids = array_map( 'intval', (array) $staff_ids );
+        // The per-sub-service staff lists are derived from staff_ids (the first
+        // sub-service inherits them directly) - drop the cache so that a later
+        // change of staff_ids cannot serve stale lists.
+        $this->sub_services_staff_ids = array();
 
         return $this;
     }

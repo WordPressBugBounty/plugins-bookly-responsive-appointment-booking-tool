@@ -41,6 +41,8 @@ class API extends Cache
     public $whatsapp;
     /** @var MobileStaffCabinet */
     public $mobile_staff_cabinet;
+    /** @var Ai */
+    public $ai;
     /** @var ProductX[] */
     public $productX = array();
 
@@ -96,6 +98,8 @@ class API extends Cache
                 return $this->stripe = $this->stripe ?: new Stripe( $this );
             case Account::PRODUCT_SMS_NOTIFICATIONS:
                 return $this->sms = $this->sms ?: new SMS( $this );
+            case Account::PRODUCT_AI:
+                return $this->ai = $this->ai ?: new Ai( $this );
             default:
                 if ( array_key_exists( $slug, $this->productX ) ) {
                     if ( ! isset( $this->productX[ $slug ] ) ) {

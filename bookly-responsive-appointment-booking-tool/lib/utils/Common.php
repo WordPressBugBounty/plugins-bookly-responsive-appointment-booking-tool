@@ -919,10 +919,31 @@ abstract class Common extends Lib\Base\Cache
                     array( 'label' => __( 'Notifications', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'notifications', 'badge' => '' ),
                     array( 'label' => __( 'Settings', 'bookly-responsive-appointment-booking-tool' ),      'tab' => 'settings',      'badge' => '' ),
                 ),
+                // Appearance form types the core ships itself; add-ons append theirs via the
+                // proxy below. `pos` mirrors the Appearance catalog card order (ModernAppearance)
+                // — the submenu is sorted by it after the proxy pass.
+                'bookly-appearance' => array(
+                    array( 'label' => __( 'AI assistant', 'bookly-responsive-appointment-booking-tool' ),      'url' => admin_url( 'admin.php?page=bookly-appearance&' . Lib\Entities\Form::TYPE_AI_ASSISTANT ), 'flag' => Lib\Entities\Form::TYPE_AI_ASSISTANT, 'badge' => '', 'pos' => 10 ),
+                    array( 'label' => __( 'Step by step form', 'bookly-responsive-appointment-booking-tool' ), 'url' => admin_url( 'admin.php?page=bookly-appearance&' . Lib\Entities\Form::TYPE_BOOKLY_FORM ),  'flag' => Lib\Entities\Form::TYPE_BOOKLY_FORM,  'badge' => '', 'pos' => 90 ),
+                ),
             );
+            if ( ! Lib\Config::proActive() ) {
+                // Free build: the modern booking form promo card has its own screen —
+                // keep the submenu in sync with the catalog.
+                $submenus['bookly-appearance'][] = array( 'label' => __( 'Modern booking form', 'bookly-responsive-appointment-booking-tool' ), 'url' => admin_url( 'admin.php?page=bookly-appearance&modern-form-promo' ), 'flag' => 'modern-form-promo', 'badge' => '', 'pos' => 95 );
+            }
 
             // Add-ons extend the map (own pages / extra Settings tabs). No-op when none implement it.
             $submenus = Lib\Proxy\Shared::buildHeaderSubmenus( $submenus );
+
+            // The Appearance submenu mirrors the catalog card order: sort by the same
+            // pos weights (items without one land in the middle add-on cluster).
+            usort( $submenus['bookly-appearance'], function ( $a, $b ) {
+                $wa = isset( $a['pos'] ) ? $a['pos'] : 50;
+                $wb = isset( $b['pos'] ) ? $b['pos'] : 50;
+
+                return $wa === $wb ? strcmp( $a['flag'], $b['flag'] ) : $wa - $wb;
+            } );
 
             // Order the Settings submenu to mirror the in-page Settings menu (single source of order).
             // The page renders core/Pro tabs at fixed positions and every other add-on tab as an

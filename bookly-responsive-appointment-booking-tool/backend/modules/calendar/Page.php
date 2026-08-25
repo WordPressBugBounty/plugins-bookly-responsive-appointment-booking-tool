@@ -65,6 +65,7 @@ class Page extends Lib\Base\Ajax
                     ),
                     'backend' => array(
                         'js/nav-scrollable.js' => array( 'bookly-backend-globals' ),
+                        'js/booking-wizard.js' => array( 'bookly-backend-globals' ),
                     ),
                 ) :
                 array(
@@ -79,8 +80,10 @@ class Page extends Lib\Base\Ajax
             Lib\Utils\Common::getCalendarSettings(),
             array(
                 'calendar_version' => $calendar_version,
+                'createWithWizard' => get_option( 'bookly_appointments_create_with_wizard', '1' ) === '1',
                 'clmn_min_width' => get_option( 'bookly_bc_clmn_min_width', '120' ),
                 'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'reschedule' => __( 'Reschedule', 'bookly-responsive-appointment-booking-tool' ),
                 'are_you_sure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
                 'scrollable_calendar' => (int) get_option( 'bookly_cal_scrollable_calendar', '1' ),
@@ -100,6 +103,9 @@ class Page extends Lib\Base\Ajax
                     'attendees' => __( 'Attendees', 'bookly-responsive-appointment-booking-tool' ),
                 )
             ) ) );
+        if ( $staff_members ) {
+            wp_localize_script( 'bookly-booking-wizard.js', 'BooklyL10nBookingWizard', \Bookly\Backend\Components\Dialogs\BookingWizard\Ajax::getL10n() );
+        }
 
         $refresh_rate = get_user_meta( get_current_user_id(), 'bookly_calendar_refresh_rate', true );
         $services_dropdown_data = Common::getServiceDataForDropDown( 's.type = "simple"' );

@@ -512,6 +512,10 @@ class Finder
                         array(),
                         0
                     );
+                    // Register the custom service at the staff member's locations as well,
+                    // same as the regular-service path below does: the generator gates
+                    // providers by providesService( service, requested location ).
+                    Lib\Proxy\Locations::addServices( $this->staff[ $_staff_id ], $_staff_id, null );
                 }
             }
         }
@@ -776,6 +780,25 @@ class Finder
     /**
      * Add cart items to staff bookings arrays.
      */
+    /**
+     * Add an extra in-memory booking to a prepared staff member — a reservation
+     * that is not in the database (yet) but must be taken into account by the
+     * search, e.g. an item of an order being composed. Call between prepare()
+     * and load().
+     *
+     * @param int $staff_id
+     * @param Booking $booking
+     * @return $this
+     */
+    public function addStaffBooking( $staff_id, Booking $booking )
+    {
+        if ( isset ( $this->staff[ $staff_id ] ) ) {
+            $this->staff[ $staff_id ]->addBooking( $booking );
+        }
+
+        return $this;
+    }
+
     public function handleCartBookings()
     {
         foreach ( $this->userData->cart->getItems() as $cart_key => $cart_item ) {

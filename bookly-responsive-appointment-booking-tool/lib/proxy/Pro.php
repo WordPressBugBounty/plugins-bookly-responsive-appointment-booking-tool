@@ -12,6 +12,7 @@ use Bookly\Lib;
  * @method static string getFullAddressByCustomerData( array $data ) Get address string from customer data.
  * @method static string getCustomerTimezone( string|null $time_zone, string $time_zone_offset ) Get last appointment timezone for customer.
  * @method static array  getDisplayedAddressFields() Get displayed address fields.
+ * @method static array  getFormTypes() Get Form::TYPE_* constants contributed by the Pro add-on (search/services/staff/tags/checkout/cancellation) — empty when Pro is inactive. See Form::getTypes(), which merges these with the core-only types (TYPE_BOOKLY_FORM, TYPE_AI_ASSISTANT).
  * @method static array  getGoogleCalendarBookings( array $staff_ids, Lib\Slots\DatePoint $dp ) Get bookings fromGoogle Calendar  for Finder.
  * @method static string getGoogleCalendarSyncMode() Get Google Calendar synchronization mode ( 1-way, 1.5-way, 2-way. null means Google Calendar integration is not configured ).
  * @method static string|null getLastCustomerLocale( int $customer_id ) Get last appointment locale for customer.

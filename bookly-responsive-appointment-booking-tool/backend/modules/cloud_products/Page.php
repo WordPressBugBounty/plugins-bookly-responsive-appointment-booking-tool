@@ -44,11 +44,15 @@ class Page extends Lib\Base\Component
                             if ( isset( $subscription['usage'] ) ) {
                                 if ( $product['id'] === 'whatsapp' ) {
                                     $prefix = __( 'Messages', 'bookly-responsive-appointment-booking-tool' );
+                                } elseif ( $product['id'] === 'ai' ) {
+                                    $prefix = __( 'Tokens', 'bookly-responsive-appointment-booking-tool' );
                                 } else {
                                     $prefix = __( 'Tasks', 'bookly-responsive-appointment-booking-tool' );
                                 }
                                 if ( $subscription['usage']['limit'] === null ) {
                                     $product['usage'] = sprintf( '%s: %s', $prefix, __( 'unlimited in trial', 'bookly-responsive-appointment-booking-tool' ) );
+                                } elseif ( $product['id'] === 'ai' ) {
+                                    $product['usage'] = sprintf( '%s: %d / %d %s', $prefix, $subscription['usage']['used'], $subscription['usage']['limit'], __( 'per day', 'bookly-responsive-appointment-booking-tool' ) );
                                 } else {
                                     $product['usage'] = sprintf( '%s: %d / %d', $prefix, $subscription['usage']['used'], $subscription['usage']['limit'] );
                                 }

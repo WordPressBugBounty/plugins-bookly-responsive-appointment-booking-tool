@@ -163,6 +163,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_appointment_default_status', self::parameter( 'bookly_appointment_default_status' ) );
                     update_option( 'bookly_successful_payment_appointment_status', self::parameter( 'bookly_successful_payment_appointment_status' ) );
                     update_option( 'bookly_appointment_end_date_method', self::parameter( 'bookly_appointment_end_date_method' ) );
+                    update_option( 'bookly_appointments_create_with_wizard', self::parameter( 'bookly_appointments_create_with_wizard' ) );
                     $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
                     break;
                 case 'company':  // Company form.

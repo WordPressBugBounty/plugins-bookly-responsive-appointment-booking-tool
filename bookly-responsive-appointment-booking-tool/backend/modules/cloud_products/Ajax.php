@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Backend\Modules\CloudProducts;
 
+use Bookly\Backend\Modules\Appearance\Page as AppearancePage;
 use Bookly\Backend\Modules\Settings\Page as SettingsPage;
 use Bookly\Backend\Modules\CloudSMS\Page as CloudSMSPage;
 use Bookly\Backend\Modules\CloudZapier\Page as CloudZapierPage;
@@ -244,6 +245,13 @@ class Ajax extends Lib\Base\Ajax
                     $data['button'] = array(
                         'caption' => $texts['button'],
                         'url' => add_query_arg( array( 'page' => ServicesPage::pageSlug() ), admin_url( 'admin.php' ) )
+                    );
+                    wp_send_json_success( $data );
+                    break;
+                case Account::PRODUCT_AI:
+                    $data['button'] = array(
+                        'caption' => $texts['button'],
+                        'url' => add_query_arg( array( 'page' => AppearancePage::pageSlug() ), admin_url( 'admin.php' ) ) . '&' . Lib\Entities\Form::TYPE_AI_ASSISTANT,
                     );
                     wp_send_json_success( $data );
                     break;

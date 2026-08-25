@@ -156,16 +156,25 @@ class Generator implements \Iterator
         $candidates = array();
 
         // Order staff by preference once per day: the preference rank depends only on
-        // (service, location, slot date) — see Staff::comparePreference — so it is the
+        // (service, location, slot date) — see Staff::getPreferenceValue — so it is the
         // same for every timestamp of the day. With staff iterated in preference order
         // the candidates arrive to _resolveCandidates already sorted, and the
         // alternatives chain is built in one linear pass there.
         $staff_order = $this->staff_members;
         if ( count( $staff_order ) > 1 ) {
             $probe = new Range( $this->dp, $this->dp, new RangeData( $this->srv_id, 0, $this->location_id ) );
-            uasort( $staff_order, function ( $a, $b ) use ( $probe ) {
-                return $a->comparePreference( $b, $probe );
-            } );
+            // Rank every staff member once and sort the ranks — cheaper than paying
+            // service lookups inside a comparator on every comparison.
+            $ranks = array();
+            foreach ( $staff_order as $staff_id => $staff ) {
+                $ranks[ $staff_id ] = $staff->getPreferenceValue( $probe );
+            }
+            asort( $ranks );
+            $ordered = array();
+            foreach ( $ranks as $staff_id => $rank ) {
+                $ordered[ $staff_id ] = $staff_order[ $staff_id ];
+            }
+            $staff_order = $ordered;
         }
 
         // Loop through all staff members.
@@ -410,9 +419,30 @@ class Generator implements \Iterator
             $service = $staff->getService( $this->srv_id, $this->location_id );
             $max_capacity = $service->capacityMax();
             $max_waiting_list_capacity = $service->waitingListCapacity();
+            // The bookings list covers the whole search period while $ranges holds a single day.
+            // Compute the day bounds once and skip the bookings that cannot overlap them,
+            // avoiding a full rebuild of the collection for every unrelated booking.
+            $bounds_start = null;
+            $bounds_end = null;
+            foreach ( $ranges->all() as $r ) {
+                if ( $bounds_start === null || $r->start()->lt( $bounds_start ) ) {
+                    $bounds_start = $r->start();
+                }
+                if ( $bounds_end === null || $r->end()->gt( $bounds_end ) ) {
+                    $bounds_end = $r->end();
+                }
+            }
+            // Bounds pre-adjusted for the transform below: it turns a padded booking [start, end]
+            // into [start - service padding right, end + service padding left].
+            $reject_end = $bounds_start->modify( - $this->srv_padding_left );
+            $reject_start = $bounds_end->modify( $this->srv_padding_right );
             foreach ( $staff->getBookings() as $booking ) {
+                $padded_range = $booking->rangeWithPadding();
+                if ( $padded_range->end()->lte( $reject_end ) || $padded_range->start()->gte( $reject_start ) ) {
+                    continue;
+                }
                 // Take in account booking and service padding.
-                $range_to_remove = $booking->rangeWithPadding()->transform( -$this->srv_padding_right, $this->srv_padding_left );
+                $range_to_remove = $padded_range->transform( -$this->srv_padding_right, $this->srv_padding_left );
                 // Remove booking from ranges.
                 $new_ranges = new RangeCollection();
                 $removed = new RangeCollection();

@@ -7,10 +7,10 @@ class Page extends Lib\Base\Component
 {
     public static function render()
     {
-        if ( self::hasParameter( 'bookly-form' ) || ! Lib\Config::proActive() ) {
+        if ( self::hasParameter( 'bookly-form' ) ) {
             BooklyForm::render();
         } else {
-            Proxy\Pro::renderModernAppearance();
+            ModernAppearance::render();
         }
     }
 }

@@ -18,20 +18,30 @@ class Handler1_1  extends Handler
      */
     protected function slots()
     {
-        return ( get_option( 'bookly_appointments_displayed_time_slots' ) === 'appropriate' )
+        $appropriate = get_option( 'bookly_appointments_displayed_time_slots' ) === 'appropriate';
+        $service_id = $this->param( 'service_id' );
+        $service = $service_id ? Service::find( $service_id ) : null;
+
+        // Custom service has no duration to fit in, so appropriate slots are not applicable for it
+        return ( $appropriate && $service )
             ? $this->appropriateSlots()
-            : $this->simpleSlots();
+            : $this->simpleSlots( $service ?: null, $appropriate );
     }
 
     /**
+     * @param Service|null $service
+     * @param bool $appropriate
      * @return array
      * @throws Exceptions\ParameterException
      */
-    private function simpleSlots()
+    private function simpleSlots( $service, $appropriate = false )
     {
-        $service_id = $this->param( 'service_id' );
-        $service = Service::find( $service_id );
-        $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
+        if ( $appropriate ) {
+            // As at backend in appointment form
+            $appointments_time_delimiter = 5 * MINUTE_IN_SECONDS;
+        } else {
+            $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
+        }
 
         if ( ! $service ) {
             $service = new Service();

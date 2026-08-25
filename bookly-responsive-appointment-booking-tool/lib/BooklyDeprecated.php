@@ -130,6 +130,11 @@ namespace Bookly\Lib\Payment\Proxy
     abstract class Pro extends \Bookly\Lib\Base\Proxy{}
 }
 
+namespace BooklyPro\Lib\Entities
+{
+    class Form extends \Bookly\Lib\Entities\Form{}
+}
+
 namespace BooklyPro\Lib\Payment
 {
     abstract class PayPal {

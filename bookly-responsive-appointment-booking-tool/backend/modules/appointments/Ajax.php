@@ -320,7 +320,9 @@ class Ajax extends Lib\Base\Ajax
                 $extras = Lib\Proxy\ServiceExtras::getInfo( json_decode( $row['extras'], true ) ?: array(), false ) ?: array();
                 if ( $row['extras_multiply_nop'] && $row['number_of_persons'] > 1 ) {
                     foreach ( $extras as $index => $extra ) {
-                        $extras[ $index ]['title'] = '<i class="far fa-user"></i>&nbsp;' . $row['number_of_persons'] . '&nbsp;&times;&nbsp;' . $extra['title'];
+                        // Plain text (no icon markup): the table renderer escapes cell
+                        // values, and the title also goes to export/print as-is.
+                        $extras[ $index ]['title'] = $row['number_of_persons'] . ' × ' . $extra['title'];
                     }
                 }
             } else {

@@ -283,6 +283,8 @@ class QueryBuilder
     public static function getConstraintRules( $table, $column, $ref_table, $ref_column )
     {
         $rules = array(
+            'bookly_ai_jobs.conversation_id' => array( 'bookly_ai_conversations.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_ai_messages.conversation_id' => array( 'bookly_ai_conversations.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_appointments.location_id' => array( 'bookly_locations.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_appointments.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_appointments.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
@@ -386,6 +388,27 @@ class QueryBuilder
     private static function getColumns()
     {
         return array(
+            'bookly_ai_conversations.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_ai_conversations.status' => array( 'type' => "enum('active','processing','done','error')", 'is_nullabe' => 0, 'extra' => "", 'default' => "active", 'key' => "" ),
+            'bookly_ai_conversations.error_code' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_conversations.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_conversations.updated_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_jobs.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_ai_jobs.conversation_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_ai_jobs.status' => array( 'type' => "enum('queued','running','done','failed')", 'is_nullabe' => 0, 'extra' => "", 'default' => "queued", 'key' => "" ),
+            'bookly_ai_jobs.step' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_ai_jobs.heartbeat_at' => array( 'type' => "datetime", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_jobs.attempts' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_ai_jobs.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_jobs.updated_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_ai_messages.conversation_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_ai_messages.role' => array( 'type' => "enum('user','assistant','tool')", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.content' => array( 'type' => "longtext", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.tool_calls' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.tool_call_id' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.tool_name' => array( 'type' => "varchar(128)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_appointments.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_appointments.location_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_appointments.staff_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
@@ -580,7 +603,7 @@ class QueryBuilder
             'bookly_form_sessions.value' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_form_sessions.expire' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_forms.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
-            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation','tags-form','events-form','checkout-form')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
+            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation','tags-form','events-form','checkout-form','ai-assistant-form')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
             'bookly_forms.name' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.token' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.settings' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),

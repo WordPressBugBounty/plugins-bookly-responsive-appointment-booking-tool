@@ -30,16 +30,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-locations",
-        "tab": null,
-        "title": "Locaties",
-        "anchor": null,
-        "addon": "bookly-addon-locations",
-        "weight": 100,
-        "alt": "Locations"
-    },
-    {
-        "type": "page",
         "page": "bookly-events",
         "tab": null,
         "title": "Evenementen",
@@ -57,6 +47,46 @@
         "addon": "bookly-addon-packages",
         "weight": 100,
         "alt": "Packages"
+    },
+    {
+        "type": "page",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "Cadeaubonnen",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "weight": 100,
+        "alt": "Gift Cards"
+    },
+    {
+        "type": "page",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "Klanten",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Customers"
+    },
+    {
+        "type": "page",
+        "page": "bookly-payments",
+        "tab": null,
+        "title": "Betalingen",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Payments"
+    },
+    {
+        "type": "page",
+        "page": "bookly-notifications",
+        "tab": null,
+        "title": "E-mailmeldingen",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -80,6 +110,16 @@
     },
     {
         "type": "page",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "Locaties",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "weight": 100,
+        "alt": "Locations"
+    },
+    {
+        "type": "page",
         "page": "bookly-taxes",
         "tab": null,
         "title": "Belastingen",
@@ -87,16 +127,6 @@
         "addon": "bookly-addon-taxes",
         "weight": 100,
         "alt": "Taxes"
-    },
-    {
-        "type": "page",
-        "page": "bookly-customers",
-        "tab": null,
-        "title": "Klanten",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Customers"
     },
     {
         "type": "page",
@@ -130,36 +160,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-notifications",
-        "tab": null,
-        "title": "E-mailmeldingen",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Email Notifications"
-    },
-    {
-        "type": "page",
-        "page": "bookly-payments",
-        "tab": null,
-        "title": "Betalingen",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Payments"
-    },
-    {
-        "type": "page",
-        "page": "bookly-appearance",
-        "tab": null,
-        "title": "Weergave",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Appearance"
-    },
-    {
-        "type": "page",
         "page": "bookly-coupons",
         "tab": null,
         "title": "Kortingsbonnen",
@@ -170,16 +170,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-gift-cards",
-        "tab": null,
-        "title": "Cadeaubonnen",
-        "anchor": null,
-        "addon": "bookly-addon-gift-cards",
-        "weight": 100,
-        "alt": "Gift Cards"
-    },
-    {
-        "type": "page",
         "page": "bookly-custom-fields",
         "tab": null,
         "title": "Aangepaste velden",
@@ -187,16 +177,6 @@
         "addon": "bookly-addon-custom-fields",
         "weight": 100,
         "alt": "Custom Fields"
-    },
-    {
-        "type": "page",
-        "page": "bookly-settings",
-        "tab": null,
-        "title": "Instellingen",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Settings"
     },
     {
         "type": "page",
@@ -220,12 +200,32 @@
     },
     {
         "type": "page",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Weergave",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Appearance"
+    },
+    {
+        "type": "page",
         "page": "bookly-shop",
         "tab": null,
         "title": "Add-ons",
         "anchor": null,
         "addon": "core",
         "weight": 100
+    },
+    {
+        "type": "page",
+        "page": "bookly-settings",
+        "tab": null,
+        "title": "Instellingen",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -327,12 +327,34 @@
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
+        "title": "AI-assistent",
+        "anchor": null,
+        "addon": "core",
+        "arg": "ai-assistant-form",
+        "weight": 80,
+        "alt": "AI assistant"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
         "title": "Zoekformulier",
         "anchor": null,
         "addon": "bookly-addon-pro",
         "arg": "search-form",
         "weight": 80,
         "alt": "Search form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Afrekenformulier",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80,
+        "alt": "Checkout form"
     },
     {
         "type": "form",
@@ -371,6 +393,17 @@
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
+        "title": "Evenementenformulier",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80,
+        "alt": "Events form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
         "title": "Stap voor stap formulier",
         "anchor": null,
         "addon": "core",
@@ -382,34 +415,12 @@
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
-        "title": "Afrekenformulier",
-        "anchor": null,
-        "addon": "bookly-addon-pro",
-        "arg": "checkout-form",
-        "weight": 80,
-        "alt": "Checkout form"
-    },
-    {
-        "type": "form",
-        "page": "bookly-appearance",
-        "tab": null,
         "title": "Annuleringsformulier",
         "anchor": null,
         "addon": "bookly-addon-pro",
         "arg": "cancellation-confirmation",
         "weight": 80,
         "alt": "Cancellation form"
-    },
-    {
-        "type": "form",
-        "page": "bookly-appearance",
-        "tab": null,
-        "title": "Evenementenformulier",
-        "anchor": null,
-        "addon": "bookly-addon-events",
-        "arg": "events-form",
-        "weight": 80,
-        "alt": "Events form"
     },
     {
         "type": "tab",
@@ -782,10 +793,11 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "general",
-        "title": "Powered by Bookly",
+        "title": "Mogelijk gemaakt door Bookly",
         "anchor": "bookly_gen_show_powered_by",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Powered by Bookly"
     },
     {
         "type": "label",
@@ -1294,6 +1306,16 @@
         "addon": "core",
         "weight": 30,
         "alt": "Verify customer's contact information at Details step"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "appointments",
+        "title": "Afspraken aanmaken met de boekingswizard",
+        "anchor": "bookly_appointments_create_with_wizard",
+        "addon": "core",
+        "weight": 30,
+        "alt": "Create appointments with the booking wizard"
     },
     {
         "type": "label",

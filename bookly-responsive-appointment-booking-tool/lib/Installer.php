@@ -284,7 +284,7 @@ class Installer extends Base\Installer
             'bookly_l10n_info_complete_step_processing' => __( 'Your payment has been accepted for processing.', 'bookly-responsive-appointment-booking-tool' ),
             'bookly_l10n_info_details_step' => __( "You selected a booking for {service_name} by {staff_name} at {appointment_time} on {appointment_date}. The price for the service is {service_price}.\nPlease provide your details in the form below to proceed with booking.", 'bookly-responsive-appointment-booking-tool' ),
             'bookly_l10n_info_details_step_guest' => '',
-            'bookly_l10n_info_payment_step_single_app' => __( 'Please tell us how you would like to pay:', 'bookly-responsive-appointment-booking-tool' ),
+            'bookly_l10n_info_payment_step_single_app' => __( 'Please tell us how you would like to pay', 'bookly-responsive-appointment-booking-tool' ) . ':',
             'bookly_l10n_info_service_step' => __( 'Please select service:', 'bookly-responsive-appointment-booking-tool' ),
             'bookly_l10n_info_time_step' => __( "Below you can find a list of available time slots for {service_name} by {staff_name}.\nClick on a time slot to proceed with booking.", 'bookly-responsive-appointment-booking-tool' ),
             'bookly_l10n_info_add_to_calendar' => __( 'Add to calendar', 'bookly-responsive-appointment-booking-tool' ),
@@ -347,6 +347,7 @@ class Installer extends Base\Installer
             'bookly_cal_coloring_mode' => 'service',
             'bookly_cal_month_view_style' => 'classic',
             'bookly_cal_show_new_appointments_badge' => '0',
+            'bookly_appointments_create_with_wizard' => '1',
             'bookly_cal_last_seen_appointment' => '0',
             'bookly_legacy_calendar' => '0',
             // Company.
@@ -867,6 +868,7 @@ class Installer extends Base\Installer
                 `created_at`   DATETIME NOT NULL,
                 `updated_at`   DATETIME NOT NULL,
             INDEX `invoice_id_idx` (`invoice_id`),
+            INDEX `created_at_idx` (`created_at`),
             CONSTRAINT
                 FOREIGN KEY (order_id)
                 REFERENCES ' . Entities\Order::getTableName() . '(id)
@@ -1112,6 +1114,19 @@ class Installer extends Base\Installer
         );
 
         $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\Form::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `type` ENUM("search-form","services-form","staff-form","cancellation-confirmation","tags-form","events-form","checkout-form","ai-assistant-form") NOT NULL DEFAULT "search-form",
+                `name` VARCHAR(255) NOT NULL,
+                `token` VARCHAR(255) NOT NULL,
+                `settings` TEXT DEFAULT NULL,
+                `custom_css` TEXT DEFAULT NULL,
+                `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\NotificationQueue::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `token` VARCHAR(255) NOT NULL,
@@ -1145,6 +1160,57 @@ class Installer extends Base\Installer
             CONSTRAINT
                 FOREIGN KEY (staff_id)
                 REFERENCES ' . Entities\Staff::getTableName() . '(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\AiConversation::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `status` ENUM("active","processing","done","error") NOT NULL DEFAULT "active",
+                `error_code` VARCHAR(64) DEFAULT NULL,
+                `created_at` DATETIME NOT NULL,
+                `updated_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\AiMessage::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `conversation_id` INT UNSIGNED NOT NULL,
+                `role` ENUM("user","assistant","tool") NOT NULL,
+                `content` LONGTEXT NULL,
+                `tool_calls` TEXT NULL,
+                `tool_call_id` VARCHAR(64) NULL,
+                `tool_name` VARCHAR(128) NULL,
+                `created_at` DATETIME NOT NULL,
+                KEY `conversation_id` (`conversation_id`),
+            CONSTRAINT
+                FOREIGN KEY (conversation_id)
+                REFERENCES ' . Entities\AiConversation::getTableName() . '(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\AiJob::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `conversation_id` INT UNSIGNED NOT NULL,
+                `status` ENUM("queued","running","done","failed") NOT NULL DEFAULT "queued",
+                `step` INT UNSIGNED NOT NULL DEFAULT 0,
+                `heartbeat_at` DATETIME NULL,
+                `attempts` INT UNSIGNED NOT NULL DEFAULT 0,
+                `created_at` DATETIME NOT NULL,
+                `updated_at` DATETIME NOT NULL,
+                KEY `conversation_id` (`conversation_id`),
+            CONSTRAINT
+                FOREIGN KEY (conversation_id)
+                REFERENCES ' . Entities\AiConversation::getTableName() . '(id)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
             ) ENGINE = INNODB

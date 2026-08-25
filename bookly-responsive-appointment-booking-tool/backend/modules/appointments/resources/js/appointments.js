@@ -21,6 +21,12 @@ jQuery(function ($) {
         isMobile = true;
     } catch (e) {}
 
+    // The booking wizard is the creation flow only when the setting is on and the
+    // component is present on the page.
+    function wizardEnabled() {
+        return BooklyL10n.createWithWizard && typeof BooklyBookingWizard !== 'undefined';
+    }
+
     // Tailwind classes per appointment status — used by the status column badge.
     const statusBadgeClass = {
         pending:    'bookly:bg-amber-100 bookly:text-amber-800 bookly:border-amber-200',
@@ -459,6 +465,22 @@ jQuery(function ($) {
                 }
             )
         },
+        rowActions: function (row) {
+            if (!wizardEnabled()) return [];
+            return [{
+                label: 'Reschedule',
+                icon: 'calendar',
+                variant: 'outline',
+                click: function (r) {
+                    BooklyBookingWizard.showDialog({
+                        reschedule_ca: r.ca_id,
+                        onSaved: function () {
+                            bt.reload();
+                        }
+                    });
+                }
+            }];
+        },
         checked: function (rows) {
             return [
                 {
@@ -534,14 +556,49 @@ jQuery(function ($) {
                 icon: 'plus',
                 variant: 'default',
                 click: function () {
-                    BooklyAppointmentDialog.showDialog(
-                        null,
-                        null,
-                        moment(),
-                        function (event) {
-                            bt.reload();
-                        }
-                    );
+                    // When the wizard is the chosen creation flow, "New appointment"
+                    // opens it instead of the classic form (setting replaces the flow,
+                    // does not add a second button).
+                    // Мосты визард↔классика: каждая форма получает колбэк открытия другой
+                    // (кнопки рендерятся только при переданном колбэке — на страницах без
+                    // бандла визарда классика остаётся прежней).
+                    let openWizard = typeof BooklyBookingWizard !== 'undefined' ? function (params) {
+                        BooklyBookingWizard.showDialog({
+                            start_date: params && params.start_date,
+                            start_time: params && params.start_time,
+                            staff_id: params && params.staff_id,
+                            service_id: params && params.service_id,
+                            location_id: params && params.location_id,
+                            onSaved: function () {
+                                bt.reload();
+                            },
+                            onOpenClassic: openClassic
+                        });
+                    } : null;
+                    function openClassic(params) {
+                        BooklyAppointmentDialog.showDialog(
+                            null,
+                            params && params.staff_id ? params.staff_id : null,
+                            params && params.date ? moment(params.date) : moment(),
+                            function (event) {
+                                bt.reload();
+                            },
+                            params ? { service_id: params.service_id, location_id: params.location_id } : null,
+                            openWizard
+                        );
+                    }
+                    if (wizardEnabled()) {
+                        BooklyBookingWizard.showDialog({
+                            onSaved: function () {
+                                bt.reload();
+                            },
+                            // Header link in the wizard: escape hatch to the classic form
+                            // (recurring, tasks and other features the wizard lacks).
+                            onOpenClassic: openClassic
+                        });
+                    } else {
+                        openClassic();
+                    }
                 }
             });
             return buttons;

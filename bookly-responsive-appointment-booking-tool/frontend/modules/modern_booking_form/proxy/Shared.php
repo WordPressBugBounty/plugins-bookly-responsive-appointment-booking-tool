@@ -12,6 +12,9 @@ use BooklyPro\Frontend\Modules\ModernBookingForm\Lib\Request;
  * @method static void  pendingPaymentCreated( \Bookly\Frontend\Modules\Payment\Request $request ) Pending payment created.
  * @method static void  processNullGateway( \Bookly\Frontend\Modules\Payment\Request $request ) Process null gateway.
  * @method static void  validate( Request $request ) Validate request.
+ * @method static array|null getCssVars( array $appearance ) CSS custom properties of the form (theme options + appearance token overrides).
+ * @method static string|null getThemeWrapperClasses( array $appearance ) Wrapper CSS classes of the form theme.
+ * @method static array enqueueThemeStyles( array $appearance ) Enqueue the stylesheets of the form theme.
  */
 abstract class Shared extends Lib\Base\Proxy
 {

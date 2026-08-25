@@ -15,6 +15,7 @@ if ( Config::customerGroupsActive() ) {
 ?>
 <form method="post" action="<?php echo esc_url( add_query_arg( 'tab', 'appointments' ) ) ?>">
     <div class="card-body">
+        <?php Selects::renderSingleValue( 'bookly_appointments_create_with_wizard', get_option( 'bookly_appointments_create_with_wizard', '1' ), __( 'Create appointments with the booking wizard', 'bookly-responsive-appointment-booking-tool' ), __( 'If enabled, the \'New appointment\' button and clicking an empty calendar slot open the booking wizard (search available slots by service, staff and time) instead of the classic appointment form.', 'bookly-responsive-appointment-booking-tool' ) ) ?>
         <?php Selects::renderSingle( 'bookly_appointment_default_status', __( 'Default appointment status', 'bookly-responsive-appointment-booking-tool' ), $help, $statuses ) ?>
         <?php Selects::renderSingle( 'bookly_successful_payment_appointment_status', __( 'Successful payment appointment status', 'bookly-responsive-appointment-booking-tool' ), __( 'Select the status that will be automatically assigned to an appointment once its payment is successfully completed. Only appointments with the status defined in the \'Default appointment status\' setting will be affected.', 'bookly-responsive-appointment-booking-tool' ), array_merge( array( array( 'disabled', __( 'Disabled', 'bookly-responsive-appointment-booking-tool' ) ) ), $statuses ) ) ?>
         <?php Proxy\Pro::renderAppointmentsSettings() ?>

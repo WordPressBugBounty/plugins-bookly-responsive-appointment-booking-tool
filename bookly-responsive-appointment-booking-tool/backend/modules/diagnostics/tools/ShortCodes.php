@@ -16,17 +16,16 @@ class ShortCodes extends Tool
         $shortcodes = array(
             array( 'name' => 'Booking form', 'code' => '[bookly-form' ),
             array( 'name' => 'Appointments list', 'code' => '[bookly-appointments-list' ),
+            array( 'name' => 'AI Assistant', 'code' => '[bookly-ai-assistant-form' ),
             array( 'name' => 'Calendar', 'code' => '[bookly-calendar' ),
             array( 'name' => 'Cancellation confirmation', 'code' => '[bookly-cancellation-confirmation' ),
+            array( 'name' => 'Checkout form', 'code' => '[bookly-checkout-form' ),
             array( 'name' => 'Customer Cabinet', 'code' => '[bookly-customer-cabinet' ),
             array( 'name' => 'Customer Gift Cards', 'code' => '[bookly-customer-gift-cards]' ),
             array( 'name' => 'Events form', 'code' => '[bookly-events-form' ),
-            array( 'name' => 'Checkout form', 'code' => '[bookly-checkout-form' ),
             array( 'name' => 'Packages list', 'code' => '[bookly-packages-list' ),
             array( 'name' => 'Search form', 'code' => '[bookly-search-form' ),
             array( 'name' => 'Services form', 'code' => '[bookly-services-form' ),
-            array( 'name' => 'Staff form', 'code' => '[bookly-staff-form' ),
-            array( 'name' => 'Tags form', 'code' => '[bookly-tags-form' ),
             array( 'name' => 'Staff Cabinet - Advanced', 'code' => '[bookly-staff-advanced' ),
             array( 'name' => 'Staff Cabinet - Calendar', 'code' => '[bookly-staff-calendar' ),
             array( 'name' => 'Staff Cabinet - Days off', 'code' => '[bookly-staff-days-off' ),
@@ -34,7 +33,9 @@ class ShortCodes extends Tool
             array( 'name' => 'Staff Cabinet - Schedule', 'code' => '[bookly-staff-schedule' ),
             array( 'name' => 'Staff Cabinet - Services', 'code' => '[bookly-staff-services' ),
             array( 'name' => 'Staff Cabinet - Special days', 'code' => '[bookly-staff-special-days' ),
+            array( 'name' => 'Staff form', 'code' => '[bookly-staff-form' ),
             array( 'name' => 'Staff ratings', 'code' => '[bookly-staff-rating' ),
+            array( 'name' => 'Tags form', 'code' => '[bookly-tags-form' ),
         );
 
         return self::renderTemplate( '_short_codes', compact( 'shortcodes' ), false );

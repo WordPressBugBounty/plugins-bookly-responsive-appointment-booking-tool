@@ -8,6 +8,12 @@ use Bookly\Lib;
  * @var Lib\Cloud\API $cloud
  */
 $invoice = $cloud->account->getInvoiceData();
+$auto_recharge_limit = $cloud->account->getAutoRechargeLimit();
+$intervals = array( 1, 2, 3, 6, 12, 24, 48, 168 );
+if ( ! in_array( $auto_recharge_limit['interval'], $intervals ) ) {
+    $intervals[] = $auto_recharge_limit['interval'];
+    sort( $intervals );
+}
 ?>
 <div id="bookly-tbs" class="wrap bookly-css-root bookly-main-page-wrap">
     <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'Bookly Cloud Settings', 'bookly-responsive-appointment-booking-tool' ) ) ?>
@@ -27,6 +33,7 @@ $invoice = $cloud->account->getInvoiceData();
         <div id="bookly-sidebar" class="col-12 col-sm-auto">
             <div class="nav flex-column nav-pills mb-2 mb-sm-0" role="tablist">
                 <a class="nav-link active" data-toggle="bookly-pill" href="#bookly-invoice-tab"><?php esc_html_e( 'Invoice', 'bookly-responsive-appointment-booking-tool' ) ?></a>
+                <a class="nav-link mt-2 bookly-js-auto-recharge-tab<?php echo $cloud->account->autoRechargeEnabled() ? '' : ' d-none' ?>" data-toggle="bookly-pill" href="#bookly-auto-recharge-tab"><?php esc_html_e( 'Auto-recharge', 'bookly-responsive-appointment-booking-tool' ) ?></a>
                 <a class="nav-link mt-2" data-toggle="bookly-pill" href="#bookly-account-notifications-tab"><?php esc_html_e( 'Notifications', 'bookly-responsive-appointment-booking-tool' ) ?></a>
                 <a class="nav-link mt-2" data-toggle="bookly-pill" href="#bookly-country-tab"><?php esc_html_e( 'Country', 'bookly-responsive-appointment-booking-tool' ) ?></a>
                 <a class="nav-link mt-2" data-toggle="bookly-pill" href="#bookly-change-password-tab"><?php esc_html_e( 'Change password', 'bookly-responsive-appointment-booking-tool' ) ?></a>
@@ -38,6 +45,7 @@ $invoice = $cloud->account->getInvoiceData();
                 <div class="bookly:card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="bookly-invoice-tab">
+                            <div class="alert alert-warning"><?php esc_html_e( 'These settings are deprecated and have no effect on current invoice templates.', 'bookly-responsive-appointment-booking-tool' ) ?></div>
                             <form>
                                 <div class="form-group">
                                     <label for="bookly_sms_invoice_company_name"><?php esc_html_e( 'Company name', 'bookly-responsive-appointment-booking-tool' ) ?>*</label>
@@ -83,6 +91,35 @@ $invoice = $cloud->account->getInvoiceData();
                                 </div>
                                 <?php Buttons::renderSubmit( 'bookly-save-invoice', null, __( 'Save invoice settings', 'bookly-responsive-appointment-booking-tool' ) ) ?>
                             </form>
+                        </div>
+                        <div class="tab-pane" id="bookly-auto-recharge-tab" style="min-height: 200px;">
+                            <div class="form-group">
+                                <label for="bookly-auto-recharge-limit"><?php esc_html_e( 'Auto-Recharge limit', 'bookly-responsive-appointment-booking-tool' ) ?></label>
+                                <select class="form-control custom-select" id="bookly-auto-recharge-limit">
+                                    <option value="0"><?php esc_html_e( 'Disabled', 'bookly-responsive-appointment-booking-tool' ) ?></option>
+                                    <option value="1" <?php selected( $auto_recharge_limit['enabled'] ) ?>><?php esc_html_e( 'Enabled', 'bookly-responsive-appointment-booking-tool' ) ?></option>
+                                </select>
+                                <small class="form-text text-muted"><?php esc_html_e( 'Sets the maximum number of Auto-Recharges that pay as you go products can initiate during the specified time period. Once the limit is reached, further Auto-Recharges will be skipped until the period ends.', 'bookly-responsive-appointment-booking-tool' ) ?></small>
+                            </div>
+                            <div class="border-left ml-4 pl-3 bookly-js-auto-recharge-limit">
+                                <div class="form-group">
+                                    <label for="bookly-auto-recharge-max-count"><?php esc_html_e( 'Perform no more than', 'bookly-responsive-appointment-booking-tool' ) ?></label>
+                                    <input type="number" min="1" step="1" class="form-control" id="bookly-auto-recharge-max-count" value="<?php echo esc_attr( $auto_recharge_limit['max_count'] ) ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="bookly-auto-recharge-interval"><?php esc_html_e( 'Auto-Recharges per', 'bookly-responsive-appointment-booking-tool' ) ?></label>
+                                    <select class="form-control custom-select" id="bookly-auto-recharge-interval">
+                                        <?php foreach ( $intervals as $hours ) : ?>
+                                            <option value="<?php echo esc_attr( $hours ) ?>" <?php selected( $hours, $auto_recharge_limit['interval'] ) ?>><?php
+                                                echo esc_html( $hours % 24 === 0
+                                                    ? sprintf( _n( '%d day', '%d days', $hours / 24, 'bookly-responsive-appointment-booking-tool' ), $hours / 24 )
+                                                    : sprintf( _n( '%d hour', '%d hours', $hours, 'bookly-responsive-appointment-booking-tool' ), $hours ) )
+                                            ?></option>
+                                        <?php endforeach ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <?php Buttons::renderSubmit( 'bookly-save-auto-recharge-limit' ) ?>
                         </div>
                         <div class="tab-pane" id="bookly-account-notifications-tab" style="min-height: 200px;">
                             <div class="form-group">

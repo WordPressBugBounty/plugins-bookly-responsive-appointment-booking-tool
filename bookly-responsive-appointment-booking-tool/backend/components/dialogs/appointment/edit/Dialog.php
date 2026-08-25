@@ -49,6 +49,7 @@ class Dialog extends Lib\Base\Component
             'l10n' => array(
                 'edit_appointment' => __( 'Edit appointment', 'bookly-responsive-appointment-booking-tool' ),
                 'new_appointment' => __( 'New appointment', 'bookly-responsive-appointment-booking-tool' ),
+                'open_booking_wizard' => __( 'Open booking wizard', 'bookly-responsive-appointment-booking-tool' ),
                 'send_notifications' => __( 'Send notifications', 'bookly-responsive-appointment-booking-tool' ),
                 'provider' => __( 'Provider', 'bookly-responsive-appointment-booking-tool' ),
                 'service' => __( 'Service', 'bookly-responsive-appointment-booking-tool' ),

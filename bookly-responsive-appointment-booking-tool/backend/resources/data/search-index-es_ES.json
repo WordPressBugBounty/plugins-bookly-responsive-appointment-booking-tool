@@ -31,16 +31,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-locations",
-        "tab": null,
-        "title": "Ubicaciones",
-        "anchor": null,
-        "addon": "bookly-addon-locations",
-        "weight": 100,
-        "alt": "Locations"
-    },
-    {
-        "type": "page",
         "page": "bookly-events",
         "tab": null,
         "title": "Eventos",
@@ -58,6 +48,46 @@
         "addon": "bookly-addon-packages",
         "weight": 100,
         "alt": "Packages"
+    },
+    {
+        "type": "page",
+        "page": "bookly-gift-cards",
+        "tab": null,
+        "title": "Tarjetas de regalo",
+        "anchor": null,
+        "addon": "bookly-addon-gift-cards",
+        "weight": 100,
+        "alt": "Gift Cards"
+    },
+    {
+        "type": "page",
+        "page": "bookly-customers",
+        "tab": null,
+        "title": "Clientes",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Customers"
+    },
+    {
+        "type": "page",
+        "page": "bookly-payments",
+        "tab": null,
+        "title": "Pagos",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Payments"
+    },
+    {
+        "type": "page",
+        "page": "bookly-notifications",
+        "tab": null,
+        "title": "Notificaciones por correo electrónico",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Email Notifications"
     },
     {
         "type": "page",
@@ -81,6 +111,16 @@
     },
     {
         "type": "page",
+        "page": "bookly-locations",
+        "tab": null,
+        "title": "Ubicaciones",
+        "anchor": null,
+        "addon": "bookly-addon-locations",
+        "weight": 100,
+        "alt": "Locations"
+    },
+    {
+        "type": "page",
         "page": "bookly-taxes",
         "tab": null,
         "title": "Impuestos",
@@ -88,16 +128,6 @@
         "addon": "bookly-addon-taxes",
         "weight": 100,
         "alt": "Taxes"
-    },
-    {
-        "type": "page",
-        "page": "bookly-customers",
-        "tab": null,
-        "title": "Clientes",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Customers"
     },
     {
         "type": "page",
@@ -131,36 +161,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-notifications",
-        "tab": null,
-        "title": "Notificaciones por correo electrónico",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Email Notifications"
-    },
-    {
-        "type": "page",
-        "page": "bookly-payments",
-        "tab": null,
-        "title": "Pagos",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Payments"
-    },
-    {
-        "type": "page",
-        "page": "bookly-appearance",
-        "tab": null,
-        "title": "Apariencia",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Appearance"
-    },
-    {
-        "type": "page",
         "page": "bookly-coupons",
         "tab": null,
         "title": "Cupones",
@@ -171,16 +171,6 @@
     },
     {
         "type": "page",
-        "page": "bookly-gift-cards",
-        "tab": null,
-        "title": "Tarjetas de regalo",
-        "anchor": null,
-        "addon": "bookly-addon-gift-cards",
-        "weight": 100,
-        "alt": "Gift Cards"
-    },
-    {
-        "type": "page",
         "page": "bookly-custom-fields",
         "tab": null,
         "title": "Campos personalizados",
@@ -188,16 +178,6 @@
         "addon": "bookly-addon-custom-fields",
         "weight": 100,
         "alt": "Custom Fields"
-    },
-    {
-        "type": "page",
-        "page": "bookly-settings",
-        "tab": null,
-        "title": "Configuración",
-        "anchor": null,
-        "addon": "core",
-        "weight": 100,
-        "alt": "Settings"
     },
     {
         "type": "page",
@@ -221,6 +201,16 @@
     },
     {
         "type": "page",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Apariencia",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Appearance"
+    },
+    {
+        "type": "page",
         "page": "bookly-shop",
         "tab": null,
         "title": "Complementos",
@@ -228,6 +218,16 @@
         "addon": "core",
         "weight": 100,
         "alt": "Add-ons"
+    },
+    {
+        "type": "page",
+        "page": "bookly-settings",
+        "tab": null,
+        "title": "Configuración",
+        "anchor": null,
+        "addon": "core",
+        "weight": 100,
+        "alt": "Settings"
     },
     {
         "type": "page",
@@ -321,10 +321,22 @@
         "type": "product",
         "page": "bookly-cloud-products",
         "tab": null,
-        "title": "Cloud Cron",
+        "title": "Cron en la nube",
         "anchor": null,
         "addon": "cloud:cron",
-        "weight": 70
+        "weight": 70,
+        "alt": "Cloud Cron"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Asistente de IA",
+        "anchor": null,
+        "addon": "core",
+        "arg": "ai-assistant-form",
+        "weight": 80,
+        "alt": "AI assistant"
     },
     {
         "type": "form",
@@ -336,6 +348,17 @@
         "arg": "search-form",
         "weight": 80,
         "alt": "Search form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
+        "title": "Formulario de pago",
+        "anchor": null,
+        "addon": "bookly-addon-pro",
+        "arg": "checkout-form",
+        "weight": 80,
+        "alt": "Checkout form"
     },
     {
         "type": "form",
@@ -374,6 +397,17 @@
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
+        "title": "Formulario de eventos",
+        "anchor": null,
+        "addon": "bookly-addon-events",
+        "arg": "events-form",
+        "weight": 80,
+        "alt": "Events form"
+    },
+    {
+        "type": "form",
+        "page": "bookly-appearance",
+        "tab": null,
         "title": "Formulario paso a paso",
         "anchor": null,
         "addon": "core",
@@ -385,34 +419,12 @@
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
-        "title": "Formulario de pago",
-        "anchor": null,
-        "addon": "bookly-addon-pro",
-        "arg": "checkout-form",
-        "weight": 80,
-        "alt": "Checkout form"
-    },
-    {
-        "type": "form",
-        "page": "bookly-appearance",
-        "tab": null,
         "title": "Formulario de cancelación",
         "anchor": null,
         "addon": "bookly-addon-pro",
         "arg": "cancellation-confirmation",
         "weight": 80,
         "alt": "Cancellation form"
-    },
-    {
-        "type": "form",
-        "page": "bookly-appearance",
-        "tab": null,
-        "title": "Formulario de eventos",
-        "anchor": null,
-        "addon": "bookly-addon-events",
-        "arg": "events-form",
-        "weight": 80,
-        "alt": "Events form"
     },
     {
         "type": "tab",
@@ -782,10 +794,11 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "general",
-        "title": "Powered by Bookly",
+        "title": "Con la tecnología de Bookly",
         "anchor": "bookly_gen_show_powered_by",
         "addon": "core",
-        "weight": 30
+        "weight": 30,
+        "alt": "Powered by Bookly"
     },
     {
         "type": "label",
@@ -1295,6 +1308,16 @@
         "addon": "core",
         "weight": 30,
         "alt": "Verify customer's contact information at Details step"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "appointments",
+        "title": "Crear citas con el asistente de reservas",
+        "anchor": "bookly_appointments_create_with_wizard",
+        "addon": "core",
+        "weight": 30,
+        "alt": "Create appointments with the booking wizard"
     },
     {
         "type": "label",

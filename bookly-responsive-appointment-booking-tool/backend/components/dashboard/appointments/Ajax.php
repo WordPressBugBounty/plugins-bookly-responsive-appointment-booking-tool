@@ -3,6 +3,7 @@ namespace Bookly\Backend\Components\Dashboard\Appointments;
 
 use Bookly\Lib;
 use Bookly\Backend\Modules;
+use Bookly\Backend\Components\Dashboard\Proxy;
 
 class Ajax extends Lib\Base\Ajax
 {
@@ -69,20 +70,37 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function buildChartData( $range, $based_on = 'created_at', $staff = array(), $services = array() )
     {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
         list ( $start, $end ) = explode( ' - ', $range );
         $start = date_create( $start );
         $end = date_create( $end );
+        $from_s = $start->format( 'Y-m-d H:i:s' );
+        $to_s = ( clone $end )->modify( '+1 day' )->format( 'Y-m-d H:i:s' );
+        // Sales series are added per active add-on only. A key that is absent from the
+        // payload means "this install cannot sell that at all" and the chart draws no
+        // series for it; a key present but zero for every day means "nothing sold in
+        // this period", which is a different statement and must still be drawn.
+        $sales_series = self::salesSeriesData( $based_on, $from_s, $to_s, $staff, $services );
+
         $day = array(
             'total' => 0,
             'revenue' => 0,
         );
+        $totals = array(
+            'approved' => 0,
+            'pending' => 0,
+            'total' => 0,
+            'revenue' => 0,
+        );
+        foreach ( array_keys( $sales_series ) as $sales_key ) {
+            $day[ $sales_key ] = 0;
+            $totals[ $sales_key ] = 0;
+        }
+
         $data = array(
-            'totals' => array(
-                'approved' => 0,
-                'pending' => 0,
-                'total' => 0,
-                'revenue' => 0,
-            ),
+            'totals' => $totals,
             'filters' => array(
                 'created_at' => array(
                     // The "approved" figure counts done appointments too (done ≈ approved),
@@ -139,22 +157,36 @@ class Ajax extends Lib\Base\Ajax
             $data['days'][ $record['group_date'] ]['total'] += $quantity;
         }
 
-        // Revenue: each payment is counted once (GROUP BY p.id) and attributed to the
-        // earliest in-period day among its appointments.
-        $revenue_query = Lib\Entities\Payment::query( 'p' )
-            ->select( sprintf( 'p.paid AS paid, MIN(DATE(%s)) AS group_date', $date_col ) )
-            ->innerJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
-            ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
-            ->whereBetween( $date_col, $start->format( 'Y-m-d' ), $end->format( 'Y-m-d' ) )
-            ->groupBy( 'p.id' );
+        // Revenue per day. Both queries are collapsed to one row per day in SQL: the
+        // chart only ever draws days, while the number of payments in the period is
+        // unbounded, so summing them in PHP made the response grow with the size of
+        // the install instead of with the length of the period.
+        $appointments = self::appointmentRevenueQuery( $date_col, $from_s, $to_s, $staff, $services );
+        $per_day = $wpdb->get_results( 'SELECT group_date, SUM(amount) AS revenue FROM (' . $appointments->composeQuery() . ') t GROUP BY group_date', ARRAY_A );
 
-        self::applyStaffServiceFilter( $revenue_query, $staff, $services );
+        $sales = self::standaloneSalesQuery( $from_s, $to_s, $staff, $services );
+        if ( $sales ) {
+            $per_day = array_merge( $per_day, $sales->fetchArray() );
+        }
 
-        foreach ( $revenue_query->fetchArray() as $record ) {
-            $data['totals']['revenue'] += $record['paid'];
-            $data['days'][ $record['group_date'] ]['revenue'] += $record['paid'];
+        foreach ( $per_day as $record ) {
+            $data['totals']['revenue'] += $record['revenue'];
+            if ( isset( $data['days'][ $record['group_date'] ] ) ) {
+                $data['days'][ $record['group_date'] ]['revenue'] += $record['revenue'];
+            }
         }
         $data['totals']['revenue'] = Lib\Utils\Price::format( $data['totals']['revenue'] );
+
+        // Sold tickets / packages / gift cards per day — one grouped count each, bounded
+        // by the length of the period the same way the appointment counts are.
+        foreach ( $sales_series as $sales_key => $sold ) {
+            foreach ( $sold as $record ) {
+                $data['totals'][ $sales_key ] += (int) $record['quantity'];
+                if ( isset( $data['days'][ $record['group_date'] ] ) ) {
+                    $data['days'][ $record['group_date'] ][ $sales_key ] += (int) $record['quantity'];
+                }
+            }
+        }
 
         return $data;
     }
@@ -310,6 +342,9 @@ class Ajax extends Lib\Base\Ajax
                 'new'       => $customers_new,
                 'returning' => max( 0, $customers_total - $customers_new ),
             ),
+            // Absent (null) when the install sells none of these — the KPI row then keeps
+            // its three cards instead of showing a fourth one stuck at zero.
+            'sales'        => self::salesTotals( $based_on, $from_s, $to_s, $staff, $services ),
         );
     }
 
@@ -329,16 +364,196 @@ class Ajax extends Lib\Base\Ajax
         /** @global \wpdb $wpdb */
         global $wpdb;
 
-        $query = Lib\Entities\Payment::query( 'p' )
-            ->select( 'p.paid AS paid' )
-            ->innerJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
+        $appointments = self::appointmentRevenueQuery( $date_col, $from_s, $to_s, $staff, $services );
+        $total = (float) $wpdb->get_var( 'SELECT SUM(amount) FROM (' . $appointments->composeQuery() . ') t' );
+
+        $sales = self::standaloneSalesQuery( $from_s, $to_s, $staff, $services );
+        if ( $sales ) {
+            $total += (float) $wpdb->get_var( 'SELECT SUM(revenue) FROM (' . $sales->composeQuery() . ') t' );
+        }
+
+        return $total;
+    }
+
+    /**
+     * Sold items per day for every sale kind this install can report on, in chart
+     * order: key => rows of quantity / group_date. Each kind is asked from its own
+     * add-on via proxy, so this class never touches add-on tables itself: null
+     * (the add-on is not installed, the proxy has no provider) drops the key from
+     * the payload, while an empty set means "nothing sold" or "the active filter
+     * excludes this kind" — a series that must still be drawn, flat at zero.
+     *
+     * @param string $based_on
+     * @param string $from_s
+     * @param string $to_s
+     * @param mixed  $staff
+     * @param array  $services
+     * @return array key => array of [ quantity, group_date ]
+     */
+    private static function salesSeriesData( $based_on, $from_s, $to_s, $staff, $services )
+    {
+        $series = array();
+        $sold = Proxy\Shared::getTicketSales( $based_on, $from_s, $to_s, $staff, $services );
+        if ( $sold !== null ) {
+            $series['tickets'] = $sold;
+        }
+        $sold = Proxy\Shared::getPackageSales( $from_s, $to_s, $staff, $services );
+        if ( $sold !== null ) {
+            $series['packages'] = $sold;
+        }
+        $sold = Proxy\Shared::getGiftCardSales( $from_s, $to_s, $staff, $services );
+        if ( $sold !== null ) {
+            $series['gift_cards'] = $sold;
+        }
+
+        return $series;
+    }
+
+    /**
+     * Money received in the period for orders with no appointment behind them.
+     *
+     * Exposed for the Pro analytics report: that table breaks appointments down by staff
+     * and service, so package / gift card / ticket sales have no row to live in and its
+     * total is bound to fall short of the dashboard Revenue. Reporting this figure next
+     * to the table turns that gap from an unexplained discrepancy into the bridge between
+     * the two numbers.
+     *
+     * @param string $from_s
+     * @param string $to_s
+     * @param mixed  $staff
+     * @param array  $services
+     * @return float
+     */
+    public static function standaloneSalesRevenue( $from_s, $to_s, $staff = array(), $services = array() )
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $query = self::standaloneSalesQuery( $from_s, $to_s, $staff, $services );
+
+        return $query
+            ? (float) $wpdb->get_var( 'SELECT SUM(revenue) FROM (' . $query->composeQuery() . ') t' )
+            : 0.0;
+    }
+
+    /**
+     * Items sold in the period per kind, plus their sum — the figures behind the Sales
+     * KPI card. Counts only: the gross value of what was sold is not a slice of Revenue
+     * (coupons, deposits and gift cards paid with another gift card all break that), and
+     * putting a money figure next to Revenue that cannot be reconciled with it would be
+     * worse than showing none.
+     *
+     * @return array|null null when the install sells none of these
+     */
+    private static function salesTotals( $based_on, $from_s, $to_s, $staff, $services )
+    {
+        $series = self::salesSeriesData( $based_on, $from_s, $to_s, $staff, $services );
+        if ( ! $series ) {
+            return null;
+        }
+
+        $totals = array( 'total' => 0 );
+        foreach ( $series as $key => $sold ) {
+            $totals[ $key ] = 0;
+            // Already grouped by day and bounded by the period — summing the handful of
+            // rows here is cheaper than a second aggregate round-trip.
+            foreach ( $sold as $record ) {
+                $totals[ $key ] += (int) $record['quantity'];
+            }
+            $totals['total'] += $totals[ $key ];
+        }
+
+        return $totals;
+    }
+
+    /**
+     * Revenue of appointment-backed orders, one row per payment: amount, group_date.
+     *
+     * Two rules, both taken from the Payments page (Modules\Payments\Ajax) so the
+     * dashboard and the payments list cannot disagree about the same money:
+     * only parent payments take part, and each one is worth paid + child_paid.
+     * A balance top-up made through the checkout form is a separate payment with
+     * parent_id set; it carries no items and no customer_appointments row of its own,
+     * and its amount is added to the parent once the gateway confirms it. Counting
+     * children as well would double the top-up, dropping them without adding
+     * child_paid would lose it.
+     *
+     * Driven from customer_appointments on purpose: that is the side the period
+     * filter applies to, and starting from payments instead makes the whole payments
+     * table the driving set.
+     *
+     * @param string $date_col 'a.start_date' | 'ca.created_at'
+     * @param string $from_s
+     * @param string $to_s
+     * @param mixed  $staff
+     * @param array  $services
+     * @return Lib\Query
+     */
+    private static function appointmentRevenueQuery( $date_col, $from_s, $to_s, $staff = array(), $services = array() )
+    {
+        $query = Lib\Entities\CustomerAppointment::query( 'ca' )
+            ->select( sprintf( '(p.paid + p.child_paid) AS amount, MIN(DATE(%s)) AS group_date', $date_col ) )
+            ->innerJoin( 'Payment', 'p', 'p.id = ca.payment_id' )
             ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+            ->where( 'p.parent_id', null )
             ->whereGte( $date_col, $from_s )
             ->whereLt( $date_col, $to_s )
             ->groupBy( 'p.id' );
+
         self::applyStaffServiceFilter( $query, $staff, $services );
 
-        return (float) $wpdb->get_var( 'SELECT SUM(paid) FROM (' . $query->composeQuery() . ') t' );
+        return $query;
+    }
+
+    /**
+     * Revenue of orders with no appointment at all — packages, gift cards, event
+     * tickets. Those are paid for without ever creating a customer_appointments row,
+     * so the appointment-driven query above cannot see them and the dashboard used to
+     * leave that money out of Revenue entirely.
+     *
+     * Already aggregated per day: one row per payment exists by construction, so
+     * there is no need for the two-level grouping the appointment query requires.
+     * Such a sale has no appointment date, so it is placed by its own created_at
+     * under both "based on" modes.
+     *
+     * Kept as a separate query rather than folded into the one above with an OR:
+     * the OR makes the payments table the driving set and roughly doubles the cost
+     * of the whole revenue calculation, while two focused queries each keep their
+     * own access path.
+     *
+     * @param string $from_s
+     * @param string $to_s
+     * @param mixed  $staff
+     * @param array  $services
+     * @return Lib\Query|null null when an active filter cannot match such a sale
+     */
+    private static function standaloneSalesQuery( $from_s, $to_s, $staff = array(), $services = array() )
+    {
+        $by_staff = $staff !== 'all' && is_array( $staff ) && $staff;
+        $filtered = $by_staff || ( is_array( $services ) && $services );
+
+        $query = Lib\Entities\Payment::query( 'p' )
+            ->select( 'DATE(p.created_at) AS group_date, SUM(p.paid + p.child_paid) AS revenue' )
+            ->where( 'p.parent_id', null )
+            ->whereGte( 'p.created_at', $from_s )
+            ->whereLt( 'p.created_at', $to_s )
+            ->whereRaw( sprintf( 'NOT EXISTS (SELECT 1 FROM %s ca WHERE ca.payment_id = p.id)', Lib\Entities\CustomerAppointment::getTableName() ), array() )
+            ->groupBy( 'DATE(p.created_at)' );
+
+        if ( $filtered ) {
+            // Only packages carry a staff member and a service of their own. Gift cards
+            // and event tickets carry neither, so any active filter excludes them —
+            // the same thing the payments list does, and the two must agree. The
+            // condition itself is the Packages add-on's business: nothing back from
+            // the proxy means no standalone sale can match on this install.
+            $constraint = Proxy\Shared::getStandaloneSalesConstraint( $staff, $services );
+            if ( ! $constraint ) {
+                return null;
+            }
+            $query->whereRaw( $constraint, array() );
+        }
+
+        return $query;
     }
 
     /**

@@ -436,6 +436,91 @@ class Scheduler
     }
 
     /**
+     * Check whether the chain restricted to the given staff members has at least one
+     * bookable slot on the first requested day. The finder prepared for the full staff
+     * pool is reloaded with the chain staff narrowed to the given IDs, so a series of
+     * probes shares one prepare instead of repeating its queries for every staff
+     * member. The answer follows the findSlot rules of a frontend schedule run.
+     *
+     * @param int[] $staff_ids
+     * @return bool
+     */
+    public function staffProbe( array $staff_ids )
+    {
+        $items = $this->userData->chain->getItems();
+        $saved = array();
+        foreach ( $items as $key => $item ) {
+            $saved[ $key ] = $item->getStaffIds();
+            $item->setStaffIds( array_values( array_intersect( $saved[ $key ], $staff_ids ) ) );
+        }
+        try {
+            $client_dp = $this->client_from->modify( 'today' );
+            $this->finder->client_start_dp = $client_dp;
+            $until = $this->client_until->modify( '+1 day' );
+            $last_date = new DatePoint( date_create() );
+            $last_date = $last_date->modify( Config::getMaximumAvailableDaysForBooking() . ' days' );
+            $this->finder->client_end_dp = $last_date->gte( $until ) ? $until : $last_date;
+            $this->finder->start_dp = $this->finder->client_start_dp->toWpTz();
+            $this->finder->end_dp = $this->finder->client_end_dp->toWpTz();
+            $this->finder->load();
+
+            $this->for_backend = false;
+            $this->with_options = false;
+            if ( $this->slots === null ) {
+                $this->slots = array();
+            }
+
+            $found = $this->findSlot( $client_dp ) !== null;
+        } catch ( \Exception $e ) {
+            foreach ( $items as $key => $item ) {
+                $item->setStaffIds( $saved[ $key ] );
+            }
+            throw $e;
+        }
+        foreach ( $items as $key => $item ) {
+            $item->setStaffIds( $saved[ $key ] );
+        }
+
+        return $found;
+    }
+
+    /**
+     * Get IDs of staff members that have at least one bookable slot on the first
+     * requested day of the last schedule run. A winner slot carries the full chain
+     * of alternative staff members for its time, so one schedule run yields the
+     * same set of bookable staff as probing every staff member with a separate
+     * search. Bookable follows the findSlot rules: the slot (or an alternative)
+     * is not fully booked and passes the minimum-time-prior-booking limit.
+     *
+     * Call after scheduleForFrontend/scheduleForBackend.
+     *
+     * @return int[]
+     */
+    public function staffWithSlots()
+    {
+        $result = array();
+        $groups = $this->finder->getSlots();
+        $group_key = $this->client_from->format( 'Y-m-d' );
+        if ( isset( $groups[ $group_key ] ) ) {
+            $min_date = Lib\Slots\DatePoint::now()->modify( $this->min_time_prior_booking );
+            foreach ( $groups[ $group_key ] as $slot ) {
+                /** @var Lib\Slots\Range $slot */
+                if ( $this->for_backend || $min_date->lte( $slot->start() ) ) {
+                    $guard = 0;
+                    do {
+                        if ( $slot->notFullyBooked() ) {
+                            $result[ $slot->staffId() ] = true;
+                        }
+                        $slot = $slot->hasAltSlot() ? $slot->altSlot() : null;
+                    } while ( $slot && $guard++ < 1000 );
+                }
+            }
+        }
+
+        return array_map( 'intval', array_keys( $result ) );
+    }
+
+    /**
      * Sort days considering start_of_week.
      *
      * @param array $input

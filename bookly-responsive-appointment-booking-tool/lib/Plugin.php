@@ -27,12 +27,15 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dashboard\Appointments\Widget::init();
         Backend\Components\Editable\Proxy\Shared::init();
         Backend\Components\Gutenberg\BooklyForm\Block::init();
+        Backend\Components\Gutenberg\BooklyAiAssistant\Block::init();
+        Backend\Components\Gutenberg\Shortcodes\Block::init();
         Backend\Components\TinyMce\Tools::init();
         Frontend\Modules\Booking\Proxy\Invoices::init();
 
         if ( ! is_admin() ) {
             // Init short code.
             Frontend\Modules\Booking\ShortCode::init();
+            Frontend\Modules\Ai\ShortCode::init();
         }
     }
 
@@ -46,6 +49,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dashboard\Appointments\Ajax::init();
         Backend\Components\Dialogs\Appointment\Delete\Ajax::init();
         Backend\Components\Dialogs\Appointment\Edit\Ajax::init();
+        Backend\Components\Dialogs\BookingWizard\Ajax::init();
         Backend\Components\Dialogs\Customer\Delete\Ajax::init();
         Backend\Components\Dialogs\Customer\Edit\Ajax::init();
         Backend\Components\Dialogs\Mailing\AddRecipients\Ajax::init();
@@ -94,6 +98,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\Setup\Ajax::init();
         Backend\Modules\Shop\Ajax::init();
         Backend\Modules\Staff\Ajax::init();
+        Frontend\Modules\Ai\Ajax::init();
         Frontend\Modules\Booking\Ajax::init();
         Frontend\Modules\Cron\Ajax::init();
         Frontend\Modules\MobileStaffCabinet\Ajax::init();
@@ -114,16 +119,19 @@ abstract class Plugin extends Base\Plugin
             if ( version_compare( ELEMENTOR_VERSION, '3.5.0', '>' ) ) {
                 add_action( 'elementor/widgets/register', function ( $widgets_manager ) {
                     Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );
+                    Backend\Components\Elementor\Widgets\AiAssistant\Widget::register( $widgets_manager );
                 } );
             } else {
                 add_action( 'elementor/widgets/widgets_registered', function ( $widgets_manager ) {
                     Backend\Components\Elementor\Widgets\BooklyForm\Widget::register( $widgets_manager );
+                    Backend\Components\Elementor\Widgets\AiAssistant\Widget::register( $widgets_manager );
                 } );
             }
         }
 
         add_action( 'et_builder_ready', function () {
             new Backend\Components\Divi\BooklyForm();
+            new Backend\Components\Divi\AiAssistant();
         } );
 
         parent::run();

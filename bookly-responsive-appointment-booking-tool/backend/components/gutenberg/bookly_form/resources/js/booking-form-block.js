@@ -5,15 +5,19 @@
         inspectorControls = wp.editor.InspectorControls
     ;
 
-    wp.blocks.registerBlockType('bookly/form', {
-        title: BooklyFormL10n.block.title,
-        description: BooklyFormL10n.block.description,
-        icon: el('svg', {width: '24', height: '24', viewBox: "0 0 64 64"},
+    function icon() {
+        return el('svg', {width: '24', height: '24', viewBox: "0 0 64 64"},
             el('path', {style: {fill: "rgb(0, 0, 0)"}, d: "M 8 0 H 56 A 8 8 0 0 1 64 8 V 22 H 0 V 8 A 8 8 0 0 1 8 0 Z"}),
             el('path', {style: {fill: "rgb(244, 102, 47)"}, d: "M 0 22 H 64 V 56 A 8 8 0 0 1 56 64 H 8 A 8 8 0 0 1 0 56 V 22 Z"}),
             el('rect', {style: {fill: "rgb(98, 86, 86)"}, x: 6, y: 6, width: 52, height: 10}),
             el('rect', {style: {fill: "rgb(242, 227, 227)"}, x: 12, y: 30, width: 40, height: 24}),
-        ),
+        );
+    }
+
+    wp.blocks.registerBlockType('bookly/form', {
+        title: BooklyFormL10n.block.title,
+        description: BooklyFormL10n.block.description,
+        icon: icon(),
         category: 'bookly-blocks',
         keywords: [
             'bookly',
@@ -600,8 +604,12 @@
                         inspectorElements
                     )
                 ),
-                el('div', {},
-                    getShortCode(props, props.attributes)
+                el('div', {
+                    key: 'preview',
+                    style: {display: 'flex', alignItems: 'center', gap: '0.5em', padding: '1em', border: '1px dashed #ccc'}
+                },
+                    icon(),
+                    el('span', {}, getShortCode(props, props.attributes))
                 )
             ]
         },

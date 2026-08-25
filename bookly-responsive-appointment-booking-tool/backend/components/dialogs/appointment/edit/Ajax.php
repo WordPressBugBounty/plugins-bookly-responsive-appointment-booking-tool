@@ -365,6 +365,20 @@ class Ajax extends Lib\Base\Ajax
                     );
                 }
             }
+            // Staff data. The form is not always given the whole staff list (in the
+            // free version it receives a single member), so an appointment that
+            // belongs to another one would find no match there. Send its owner along,
+            // the same way the service above is sent, and let the form fill the gap.
+            $staff_member = Staff::find( $appointment->getStaffId() );
+            if ( $staff_member ) {
+                $archived = $staff_member->getVisibility() == 'archive';
+                $response['data']['staff'] = array(
+                    'id' => (int) $staff_member->getId(),
+                    'full_name' => $staff_member->getFullName() . ( $archived ? sprintf( ' (%s)', __( 'Archived', 'bookly-responsive-appointment-booking-tool' ) ) : '' ),
+                    'archived' => $archived,
+                    'category' => Lib\Proxy\Pro::getStaffCategoryName( $staff_member->getCategoryId() ),
+                );
+            }
         }
 
         wp_send_json( $response );

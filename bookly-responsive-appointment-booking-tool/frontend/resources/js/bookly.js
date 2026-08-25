@@ -1,4 +1,4 @@
-const booklyJsVersion="27.9";
+const booklyJsVersion="28.1";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -16652,53 +16652,54 @@ var bookly = (function ($) {
 
 	function get_each_context_4(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[49] = list[i];
-	  child_ctx[63] = i;
-	  const constants_0 = /*year*/child_ctx[1] + /*_year*/child_ctx[63] - 4;
-	  child_ctx[61] = constants_0;
-	  const constants_1 = new Date(/*__year*/child_ctx[61], 12, 0);
-	  child_ctx[57] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[57].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[57].getFullYear());
-	  child_ctx[53] = constants_2;
+	  child_ctx[54] = list[i];
+	  child_ctx[68] = i;
+	  const constants_0 = /*year*/child_ctx[1] + /*_year*/child_ctx[68] - 4;
+	  child_ctx[66] = constants_0;
+	  const constants_1 = new Date(/*__year*/child_ctx[66], 12, 0);
+	  child_ctx[62] = constants_1;
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[62].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[62].getFullYear());
+	  child_ctx[58] = constants_2;
 	  return child_ctx;
 	}
 	function get_each_context_3(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[49] = list[i];
-	  child_ctx[60] = i;
-	  const constants_0 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[60] + 1, 0);
-	  child_ctx[57] = constants_0;
-	  const constants_1 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[60], 1);
-	  child_ctx[58] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[57] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[58]);
-	  child_ctx[53] = constants_2;
+	  child_ctx[54] = list[i];
+	  child_ctx[65] = i;
+	  const constants_0 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[65] + 1, 0);
+	  child_ctx[62] = constants_0;
+	  const constants_1 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[65], 1);
+	  child_ctx[63] = constants_1;
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[62] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[63]);
+	  child_ctx[58] = constants_2;
 	  return child_ctx;
 	}
 	function get_each_context$2(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[49] = list[i];
-	  child_ctx[51] = i;
+	  child_ctx[54] = list[i];
+	  child_ctx[56] = i;
 	  return child_ctx;
 	}
 	function get_each_context_1(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[49] = list[i];
-	  child_ctx[55] = i;
-	  const constants_0 = /*days*/child_ctx[12][/*i*/child_ctx[51] * 7 + /*j*/child_ctx[55]];
-	  child_ctx[52] = constants_0;
-	  const constants_1 = /*_day*/child_ctx[52].disabled;
-	  child_ctx[53] = constants_1;
+	  child_ctx[54] = list[i];
+	  child_ctx[60] = i;
+	  const constants_0 = /*days*/child_ctx[13][/*i*/child_ctx[56] * 7 + /*j*/child_ctx[60]];
+	  child_ctx[57] = constants_0;
+	  const constants_1 = /*_day*/child_ctx[57].disabled;
+	  child_ctx[58] = constants_1;
 	  return child_ctx;
 	}
 	function get_each_context_2(ctx, list, i) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
-	  child_ctx[49] = list[i];
-	  child_ctx[51] = i;
+	  child_ctx[54] = list[i];
+	  child_ctx[56] = i;
 	  return child_ctx;
 	}
 
-	// (280:0) {#if show}
+	// (315:0) {#if show}
 	function create_if_block$3(ctx) {
+	  let div2;
 	  let div1;
 	  let t0;
 	  let t1;
@@ -16707,20 +16708,23 @@ var bookly = (function ($) {
 	  let if_block2;
 	  let div1_class_value;
 	  let div1_intro;
+	  let div2_class_value;
+	  let div2_style_value;
 	  let current;
 	  let if_block0 = (/*loading*/ctx[3] || /*disabled*/ctx[5]) && create_if_block_9$1();
-	  let if_block1 = /*mode*/ctx[6] !== 'horizontal' && create_if_block_8$1(ctx);
+	  let if_block1 = /*displayMode*/ctx[15] !== 'horizontal' && create_if_block_8$1(ctx);
 	  const if_block_creators = [create_if_block_1$2, create_if_block_7$1, create_else_block_1];
 	  const if_blocks = [];
 	  function select_block_type(ctx, dirty) {
-	    if (/*view*/ctx[11] === 'calendar') return 0;
-	    if (/*view*/ctx[11] === 'month') return 1;
+	    if (/*view*/ctx[12] === 'calendar') return 0;
+	    if (/*view*/ctx[12] === 'month') return 1;
 	    return 2;
 	  }
 	  current_block_type_index = select_block_type(ctx);
 	  if_block2 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 	  return {
 	    c() {
+	      div2 = element("div");
 	      div1 = element("div");
 	      if (if_block0) if_block0.c();
 	      t0 = space();
@@ -16729,10 +16733,13 @@ var bookly = (function ($) {
 	      div0 = element("div");
 	      if_block2.c();
 	      attr(div0, "class", "bookly:w-full");
-	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[15] + " " + /*borderColor*/ctx[17] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9");
+	      attr(div1, "class", div1_class_value = "bookly-panel-mark bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 " + /*bgColor*/ctx[18] + " " + /*borderColor*/ctx[20] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " " + (/*mode*/ctx[6] === 'horizontal' ? 'bookly:mx-auto' : '') + " " + (/*mode*/ctx[6] === 'horizontal' && /*expanded*/ctx[10] ? 'bookly:absolute bookly:top-0 bookly:left-1/2 bookly:-translate-x-1/2 bookly:z-30 bookly:shadow-xl' : 'bookly:relative') + " svelte-1ug41q9");
+	      attr(div2, "class", div2_class_value = /*mode*/ctx[6] === 'horizontal' ? 'bookly:relative bookly:w-full' : 'bookly:contents');
+	      attr(div2, "style", div2_style_value = /*mode*/ctx[6] === 'horizontal' && /*expanded*/ctx[10] && /*collapsedHeight*/ctx[16] ? 'height:' + /*collapsedHeight*/ctx[16] + 'px' : '');
 	    },
 	    m(target, anchor) {
-	      insert(target, div1, anchor);
+	      insert(target, div2, anchor);
+	      append(div2, div1);
 	      if (if_block0) if_block0.m(div1, null);
 	      append(div1, t0);
 	      if (if_block1) if_block1.m(div1, null);
@@ -16740,7 +16747,7 @@ var bookly = (function ($) {
 	      append(div1, div0);
 	      if_blocks[current_block_type_index].m(div0, null);
 	      /*div1_binding*/
-	      ctx[46](div1);
+	      ctx[51](div1);
 	      current = true;
 	    },
 	    p(ctx, dirty) {
@@ -16754,10 +16761,10 @@ var bookly = (function ($) {
 	        if_block0.d(1);
 	        if_block0 = null;
 	      }
-	      if (/*mode*/ctx[6] !== 'horizontal') {
+	      if (/*displayMode*/ctx[15] !== 'horizontal') {
 	        if (if_block1) {
 	          if_block1.p(ctx, dirty);
-	          if (dirty[0] & /*mode*/64) {
+	          if (dirty[0] & /*displayMode*/32768) {
 	            transition_in(if_block1, 1);
 	          }
 	        } else {
@@ -16793,8 +16800,14 @@ var bookly = (function ($) {
 	        transition_in(if_block2, 1);
 	        if_block2.m(div0, null);
 	      }
-	      if (!current || dirty[0] & /*bgColor, borderColor, border*/164352 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[15] + " " + /*borderColor*/ctx[17] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-1ug41q9")) {
+	      if (!current || dirty[0] & /*bgColor, borderColor, border, mode, expanded*/1312320 && div1_class_value !== (div1_class_value = "bookly-panel-mark bookly:w-full bookly:max-w-lg bookly:min-h-full bookly:p-0.5 " + /*bgColor*/ctx[18] + " " + /*borderColor*/ctx[20] + " bookly:rounded " + (/*border*/ctx[9] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " " + (/*mode*/ctx[6] === 'horizontal' ? 'bookly:mx-auto' : '') + " " + (/*mode*/ctx[6] === 'horizontal' && /*expanded*/ctx[10] ? 'bookly:absolute bookly:top-0 bookly:left-1/2 bookly:-translate-x-1/2 bookly:z-30 bookly:shadow-xl' : 'bookly:relative') + " svelte-1ug41q9")) {
 	        attr(div1, "class", div1_class_value);
+	      }
+	      if (!current || dirty[0] & /*mode*/64 && div2_class_value !== (div2_class_value = /*mode*/ctx[6] === 'horizontal' ? 'bookly:relative bookly:w-full' : 'bookly:contents')) {
+	        attr(div2, "class", div2_class_value);
+	      }
+	      if (!current || dirty[0] & /*mode, expanded, collapsedHeight*/66624 && div2_style_value !== (div2_style_value = /*mode*/ctx[6] === 'horizontal' && /*expanded*/ctx[10] && /*collapsedHeight*/ctx[16] ? 'height:' + /*collapsedHeight*/ctx[16] + 'px' : '')) {
+	        attr(div2, "style", div2_style_value);
 	      }
 	    },
 	    i(local) {
@@ -16820,18 +16833,18 @@ var bookly = (function ($) {
 	    },
 	    d(detaching) {
 	      if (detaching) {
-	        detach(div1);
+	        detach(div2);
 	      }
 	      if (if_block0) if_block0.d();
 	      if (if_block1) if_block1.d();
 	      if_blocks[current_block_type_index].d();
 	      /*div1_binding*/
-	      ctx[46](null);
+	      ctx[51](null);
 	    }
 	  };
 	}
 
-	// (282:8) {#if loading || disabled}
+	// (318:8) {#if loading || disabled}
 	function create_if_block_9$1(ctx) {
 	  let div;
 	  return {
@@ -16851,7 +16864,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (286:8) {#if mode !== 'horizontal'}
+	// (322:8) {#if displayMode !== 'horizontal'}
 	function create_if_block_8$1(ctx) {
 	  let div1;
 	  let div0;
@@ -16864,7 +16877,7 @@ var bookly = (function ($) {
 	  let current;
 	  button0 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16880,11 +16893,11 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button0.$on("click", /*onClickLeft*/ctx[26]);
-	  button0.$on("keypress", /*onClickLeft*/ctx[26]);
+	  button0.$on("click", /*onClickLeft*/ctx[31]);
+	  button0.$on("keypress", /*onClickLeft*/ctx[31]);
 	  button1 = new Button({
 	    props: {
-	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16898,11 +16911,11 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button1.$on("click", /*changeView*/ctx[25]);
-	  button1.$on("keypress", /*changeView*/ctx[25]);
+	  button1.$on("click", /*changeView*/ctx[30]);
+	  button1.$on("keypress", /*changeView*/ctx[30]);
 	  button2 = new Button({
 	    props: {
-	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -16918,8 +16931,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button2.$on("click", /*onClickRight*/ctx[27]);
-	  button2.$on("keypress", /*onClickRight*/ctx[27]);
+	  button2.$on("click", /*onClickRight*/ctx[32]);
+	  button2.$on("keypress", /*onClickRight*/ctx[32]);
 	  return {
 	    c() {
 	      div1 = element("div");
@@ -16931,7 +16944,7 @@ var bookly = (function ($) {
 	      create_component(button2.$$.fragment);
 	      attr(div0, "class", "bookly:flex bookly:text-gray-400 bookly:max-w-96 bookly:m-auto");
 	      attr(div0, "role", "group");
-	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9");
+	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[20] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div1, anchor);
@@ -16945,10 +16958,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button0_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*controlButtonClasses*/33554432) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button0_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear();
 	      if (dirty[0] & /*l10n*/128) button0_changes.ariaLabel = /*l10n*/ctx[7].prev;
-	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*rtl*/131072 | dirty[2] & /*$$scope*/128) {
 	        button0_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -16956,8 +16969,8 @@ var bookly = (function ($) {
 	      }
 	      button0.$set(button0_changes);
 	      const button1_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
-	      if (dirty[0] & /*title*/8388608 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*controlButtonClasses*/33554432) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25];
+	      if (dirty[0] & /*title*/67108864 | dirty[2] & /*$$scope*/128) {
 	        button1_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -16965,17 +16978,17 @@ var bookly = (function ($) {
 	      }
 	      button1.$set(button1_changes);
 	      const button2_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/4194304) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22];
+	      if (dirty[0] & /*controlButtonClasses*/33554432) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button2_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
 	      if (dirty[0] & /*l10n*/128) button2_changes.ariaLabel = /*l10n*/ctx[7].next;
-	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*rtl*/131072 | dirty[2] & /*$$scope*/128) {
 	        button2_changes.$$scope = {
 	          dirty,
 	          ctx
 	        };
 	      }
 	      button2.$set(button2_changes);
-	      if (!current || dirty[0] & /*borderColor*/131072 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9")) {
+	      if (!current || dirty[0] & /*borderColor*/1048576 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[20] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-1ug41q9")) {
 	        attr(div1, "class", div1_class_value);
 	      }
 	    },
@@ -17003,25 +17016,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (289:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                             ariaLabel={l10n.prev}                     >
+	// (325:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                             on:click={onClickLeft}                             on:keypress={onClickLeft}                             container="div"                             ariaLabel={l10n.prev}                     >
 	function create_default_slot_7(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
-	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[17]);
+	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[17]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[17]);
 	      }
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[17]);
 	      }
 	    },
 	    d(detaching) {
@@ -17032,18 +17045,18 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (303:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
+	// (339:20) <Button                             class="bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             on:click={changeView}                             on:keypress={changeView}                             container="div"                     >
 	function create_default_slot_6(ctx) {
 	  let t;
 	  return {
 	    c() {
-	      t = text(/*title*/ctx[23]);
+	      t = text(/*title*/ctx[26]);
 	    },
 	    m(target, anchor) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*title*/8388608) set_data(t, /*title*/ctx[23]);
+	      if (dirty[0] & /*title*/67108864) set_data(t, /*title*/ctx[26]);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17053,25 +17066,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (315:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                             ariaLabel={l10n.next}                     >
+	// (351:20) <Button                             class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                             type="calendar"                             bordered={false}                             rounded={false}                             margins={false}                             disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                             on:click={onClickRight}                             on:keypress={onClickRight}                             container="div"                             ariaLabel={l10n.next}                     >
 	function create_default_slot_5(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
-	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[17]);
+	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[17]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[17]);
 	      }
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[17]);
 	      }
 	    },
 	    d(detaching) {
@@ -17082,7 +17095,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (432:12) {:else}
+	// (473:12) {:else}
 	function create_else_block_1(ctx) {
 	  let div;
 	  let div_transition;
@@ -17114,8 +17127,9 @@ var bookly = (function ($) {
 	      }
 	      current = true;
 	    },
-	    p(ctx, dirty) {
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, view*/1312771) {
+	    p(new_ctx, dirty) {
+	      ctx = new_ctx;
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, view*/10489859) {
 	        each_value_4 = ensure_array_like({
 	          length: 9
 	        });
@@ -17147,7 +17161,9 @@ var bookly = (function ($) {
 	      if (local) {
 	        add_render_callback(() => {
 	          if (!current) return;
-	          if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, true);
+	          if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {
+	            duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	          }, true);
 	          div_transition.run(1);
 	        });
 	      }
@@ -17159,7 +17175,9 @@ var bookly = (function ($) {
 	        transition_out(each_blocks[i]);
 	      }
 	      if (local) {
-	        if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, false);
+	        if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {
+	          duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	        }, false);
 	        div_transition.run(0);
 	      }
 	      current = false;
@@ -17174,7 +17192,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (407:39) 
+	// (448:39) 
 	function create_if_block_7$1(ctx) {
 	  let div;
 	  let div_transition;
@@ -17206,8 +17224,9 @@ var bookly = (function ($) {
 	      }
 	      current = true;
 	    },
-	    p(ctx, dirty) {
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, month, dispatch, view, datePicker*/18090007) {
+	    p(new_ctx, dirty) {
+	      ctx = new_ctx;
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses, month, dispatch, view, datePicker*/144707607) {
 	        each_value_3 = ensure_array_like({
 	          length: 12
 	        });
@@ -17239,7 +17258,9 @@ var bookly = (function ($) {
 	      if (local) {
 	        add_render_callback(() => {
 	          if (!current) return;
-	          if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, true);
+	          if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {
+	            duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	          }, true);
 	          div_transition.run(1);
 	        });
 	      }
@@ -17251,7 +17272,9 @@ var bookly = (function ($) {
 	        transition_out(each_blocks[i]);
 	      }
 	      if (local) {
-	        if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, false);
+	        if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {
+	          duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	        }, false);
 	        div_transition.run(0);
 	      }
 	      current = false;
@@ -17266,7 +17289,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (331:12) {#if view === 'calendar'}
+	// (367:12) {#if view === 'calendar'}
 	function create_if_block_1$2(ctx) {
 	  let div1;
 	  let t;
@@ -17274,13 +17297,13 @@ var bookly = (function ($) {
 	  let div1_transition;
 	  let current;
 	  function select_block_type_1(ctx, dirty) {
-	    if (/*mode*/ctx[6] === 'horizontal') return create_if_block_6$1;
+	    if (/*displayMode*/ctx[15] === 'horizontal') return create_if_block_6$1;
 	    return create_else_block;
 	  }
 	  let current_block_type = select_block_type_1(ctx);
 	  let if_block = current_block_type(ctx);
 	  let each_value = ensure_array_like({
-	    length: _parseInt(/*days*/ctx[12].length / 7)
+	    length: _parseInt(/*days*/ctx[13].length / 7)
 	  });
 	  let each_blocks = [];
 	  for (let i = 0; i < each_value.length; i += 1) {
@@ -17313,7 +17336,8 @@ var bookly = (function ($) {
 	      }
 	      current = true;
 	    },
-	    p(ctx, dirty) {
+	    p(new_ctx, dirty) {
+	      ctx = new_ctx;
 	      if (current_block_type === (current_block_type = select_block_type_1(ctx)) && if_block) {
 	        if_block.p(ctx, dirty);
 	      } else {
@@ -17324,9 +17348,9 @@ var bookly = (function ($) {
 	          if_block.m(div1, t);
 	        }
 	      }
-	      if (dirty[0] & /*mode, controlButtonClasses, loading, limits, month, year, onClickRight, rtl, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker, currentWeek, onClickLeft*/477917279) {
+	      if (dirty[0] & /*displayMode, controlButtonClasses, loading, limits, month, year, rtl, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, datePicker, currentWeek*/65200159 | dirty[1] & /*onClickRight, onClickDate, onClickLeft*/7) {
 	        each_value = ensure_array_like({
-	          length: _parseInt(/*days*/ctx[12].length / 7)
+	          length: _parseInt(/*days*/ctx[13].length / 7)
 	        });
 	        let i;
 	        for (i = 0; i < each_value.length; i += 1) {
@@ -17356,7 +17380,9 @@ var bookly = (function ($) {
 	      if (local) {
 	        add_render_callback(() => {
 	          if (!current) return;
-	          if (!div1_transition) div1_transition = create_bidirectional_transition(div1, slide, {}, true);
+	          if (!div1_transition) div1_transition = create_bidirectional_transition(div1, slide, {
+	            duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	          }, true);
 	          div1_transition.run(1);
 	        });
 	      }
@@ -17368,7 +17394,9 @@ var bookly = (function ($) {
 	        transition_out(each_blocks[i]);
 	      }
 	      if (local) {
-	        if (!div1_transition) div1_transition = create_bidirectional_transition(div1, slide, {}, false);
+	        if (!div1_transition) div1_transition = create_bidirectional_transition(div1, slide, {
+	          duration: /*mode*/ctx[6] === 'horizontal' ? 0 : 400
+	        }, false);
 	        div1_transition.run(0);
 	      }
 	      current = false;
@@ -17384,9 +17412,9 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (439:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (480:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_4(ctx) {
-	  let t_value = /*__year*/ctx[61] + "";
+	  let t_value = /*__year*/ctx[66] + "";
 	  let t;
 	  return {
 	    c() {
@@ -17396,7 +17424,7 @@ var bookly = (function ($) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*year*/2 && t_value !== (t_value = /*__year*/ctx[61] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*year*/2 && t_value !== (t_value = /*__year*/ctx[66] + "")) set_data(t, t_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17406,17 +17434,17 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (434:20) {#each {length: 9} as _,_year}
+	// (475:20) {#each {length: 9} as _,_year}
 	function create_each_block_4(ctx) {
 	  let div;
 	  let button;
 	  let t;
 	  let current;
 	  function click_handler_2() {
-	    return /*click_handler_2*/ctx[44](/*__year*/ctx[61]);
+	    return /*click_handler_2*/ctx[49](/*__year*/ctx[66]);
 	  }
 	  function keypress_handler_2() {
-	    return /*keypress_handler_2*/ctx[45](/*__year*/ctx[61]);
+	    return /*keypress_handler_2*/ctx[50](/*__year*/ctx[66]);
 	  }
 	  button = new Button({
 	    props: {
@@ -17425,8 +17453,8 @@ var bookly = (function ($) {
 	      rounded: false,
 	      paddings: false,
 	      margins: false,
-	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
-	      disabled: /*_disabled*/ctx[53],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + /*buttonClasses*/ctx[21],
+	      disabled: /*_disabled*/ctx[58],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -17455,9 +17483,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
-	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
-	      if (dirty[0] & /*year*/2 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/10485763) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + /*buttonClasses*/ctx[21];
+	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[58];
+	      if (dirty[0] & /*year*/2 | dirty[2] & /*$$scope*/128) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17483,9 +17511,9 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (414:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (455:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_3(ctx) {
-	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[60]] + "";
+	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[65]] + "";
 	  let t;
 	  return {
 	    c() {
@@ -17495,7 +17523,7 @@ var bookly = (function ($) {
 	      insert(target, t, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[60]] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[65]] + "")) set_data(t, t_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17505,27 +17533,27 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (409:20) {#each {length: 12} as _,_month}
+	// (450:20) {#each {length: 12} as _,_month}
 	function create_each_block_3(ctx) {
 	  let div;
 	  let button;
 	  let t;
 	  let current;
 	  function click_handler_1() {
-	    return /*click_handler_1*/ctx[42](/*_month*/ctx[60]);
+	    return /*click_handler_1*/ctx[47](/*_month*/ctx[65]);
 	  }
 	  function keypress_handler_1() {
-	    return /*keypress_handler_1*/ctx[43](/*_month*/ctx[60]);
+	    return /*keypress_handler_1*/ctx[48](/*_month*/ctx[65]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + /*buttonClasses*/ctx[21],
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
 	      paddings: false,
-	      disabled: /*_disabled*/ctx[53],
+	      disabled: /*_disabled*/ctx[58],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -17553,9 +17581,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/1310723) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + /*buttonClasses*/ctx[18];
-	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[53];
-	      if (dirty[0] & /*datePicker*/16 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/10485763) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + /*buttonClasses*/ctx[21];
+	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[58];
+	      if (dirty[0] & /*datePicker*/16 | dirty[2] & /*$$scope*/128) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17581,7 +17609,7 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (337:20) {:else}
+	// (378:20) {:else}
 	function create_else_block(ctx) {
 	  let div;
 	  let div_class_value;
@@ -17598,7 +17626,7 @@ var bookly = (function ($) {
 	      for (let i = 0; i < each_blocks.length; i += 1) {
 	        each_blocks[i].c();
 	      }
-	      attr(div, "class", div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9");
+	      attr(div, "class", div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[20] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -17609,7 +17637,7 @@ var bookly = (function ($) {
 	      }
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*textColor, datePicker*/65552) {
+	      if (dirty[0] & /*textColor, datePicker*/524304) {
 	        each_value_2 = ensure_array_like({
 	          length: 7
 	        });
@@ -17629,7 +17657,7 @@ var bookly = (function ($) {
 	        }
 	        each_blocks.length = each_value_2.length;
 	      }
-	      if (dirty[0] & /*borderColor*/131072 && div_class_value !== (div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[17] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*borderColor*/1048576 && div_class_value !== (div_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[20] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17642,24 +17670,39 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (333:20) {#if mode === 'horizontal'}
+	// (369:20) {#if displayMode === 'horizontal'}
 	function create_if_block_6$1(ctx) {
 	  let div;
-	  let t;
+	  let t0;
+	  let t1;
+	  let i;
 	  let div_class_value;
+	  let mounted;
+	  let dispose;
 	  return {
 	    c() {
 	      div = element("div");
-	      t = text(/*title*/ctx[23]);
-	      attr(div, "class", div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[17] + " " + /*textColor*/ctx[16] + " bookly:mb-1" + " svelte-1ug41q9");
+	      t0 = text(/*title*/ctx[26]);
+	      t1 = space();
+	      i = element("i");
+	      attr(i, "class", "bi bi-chevron-down bookly:text-xs");
+	      attr(div, "class", div_class_value = "bookly:text-base bookly:text-center bookly:border-b " + /*borderColor*/ctx[20] + " " + /*textColor*/ctx[19] + " bookly:mb-1 bookly:cursor-pointer bookly-calendar-title-mark" + " svelte-1ug41q9");
+	      attr(div, "role", "button");
+	      attr(div, "tabindex", "0");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
-	      append(div, t);
+	      append(div, t0);
+	      append(div, t1);
+	      append(div, i);
+	      if (!mounted) {
+	        dispose = [listen(div, "click", /*expandCalendar*/ctx[28]), listen(div, "keypress", /*expandCalendar*/ctx[28])];
+	        mounted = true;
+	      }
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*title*/8388608) set_data(t, /*title*/ctx[23]);
-	      if (dirty[0] & /*borderColor, textColor*/196608 && div_class_value !== (div_class_value = "bookly:text-base bookly:border-b " + /*borderColor*/ctx[17] + " " + /*textColor*/ctx[16] + " bookly:mb-1" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*title*/67108864) set_data(t0, /*title*/ctx[26]);
+	      if (dirty[0] & /*borderColor, textColor*/1572864 && div_class_value !== (div_class_value = "bookly:text-base bookly:text-center bookly:border-b " + /*borderColor*/ctx[20] + " " + /*textColor*/ctx[19] + " bookly:mb-1 bookly:cursor-pointer bookly-calendar-title-mark" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17667,29 +17710,31 @@ var bookly = (function ($) {
 	      if (detaching) {
 	        detach(div);
 	      }
+	      mounted = false;
+	      run_all(dispose);
 	    }
 	  };
 	}
 
-	// (339:28) {#each {length: 7} as _, i}
+	// (380:28) {#each {length: 7} as _, i}
 	function create_each_block_2(ctx) {
 	  let div;
-	  let t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[51] + /*datePicker*/ctx[4].firstDay) % 7] + "";
+	  let t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[56] + /*datePicker*/ctx[4].firstDay) % 7] + "";
 	  let t;
 	  let div_class_value;
 	  return {
 	    c() {
 	      div = element("div");
 	      t = text(t_value);
-	      attr(div, "class", div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[16] + " bookly:cursor-default" + " svelte-1ug41q9");
+	      attr(div, "class", div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[19] + " bookly:cursor-default" + " svelte-1ug41q9");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
 	      append(div, t);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[51] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
-	      if (dirty[0] & /*textColor*/65536 && div_class_value !== (div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[16] + " bookly:cursor-default" + " svelte-1ug41q9")) {
+	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[56] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*textColor*/524288 && div_class_value !== (div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[19] + " bookly:cursor-default" + " svelte-1ug41q9")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -17701,14 +17746,14 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (346:28) {#if mode !== 'horizontal' || i === currentWeek}
+	// (387:28) {#if displayMode !== 'horizontal' || i === currentWeek}
 	function create_if_block_2$2(ctx) {
 	  let div;
 	  let t0;
 	  let t1;
 	  let t2;
 	  let current;
-	  let if_block0 = /*mode*/ctx[6] === 'horizontal' && create_if_block_5$1(ctx);
+	  let if_block0 = /*displayMode*/ctx[15] === 'horizontal' && create_if_block_5$1(ctx);
 	  let each_value_1 = ensure_array_like({
 	    length: 7
 	  });
@@ -17719,7 +17764,7 @@ var bookly = (function ($) {
 	  const out = i => transition_out(each_blocks[i], 1, 1, () => {
 	    each_blocks[i] = null;
 	  });
-	  let if_block1 = /*mode*/ctx[6] === 'horizontal' && create_if_block_3$1(ctx);
+	  let if_block1 = /*displayMode*/ctx[15] === 'horizontal' && create_if_block_3$1(ctx);
 	  return {
 	    c() {
 	      div = element("div");
@@ -17748,10 +17793,10 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (/*mode*/ctx[6] === 'horizontal') {
+	      if (/*displayMode*/ctx[15] === 'horizontal') {
 	        if (if_block0) {
 	          if_block0.p(ctx, dirty);
-	          if (dirty[0] & /*mode*/64) {
+	          if (dirty[0] & /*displayMode*/32768) {
 	            transition_in(if_block0, 1);
 	          }
 	        } else {
@@ -17767,7 +17812,7 @@ var bookly = (function ($) {
 	        });
 	        check_outros();
 	      }
-	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate, datePicker*/272371792) {
+	      if (dirty[0] & /*displayMode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, datePicker*/31498256 | dirty[1] & /*onClickDate*/4) {
 	        each_value_1 = ensure_array_like({
 	          length: 7
 	        });
@@ -17790,10 +17835,10 @@ var bookly = (function ($) {
 	        }
 	        check_outros();
 	      }
-	      if (/*mode*/ctx[6] === 'horizontal') {
+	      if (/*displayMode*/ctx[15] === 'horizontal') {
 	        if (if_block1) {
 	          if_block1.p(ctx, dirty);
-	          if (dirty[0] & /*mode*/64) {
+	          if (dirty[0] & /*displayMode*/32768) {
 	            transition_in(if_block1, 1);
 	          }
 	        } else {
@@ -17839,18 +17884,18 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (348:36) {#if mode === 'horizontal'}
+	// (389:36) {#if displayMode === 'horizontal'}
 	function create_if_block_5$1(ctx) {
 	  let button;
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
+	      class: "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25]),
 	      type: "calendar",
 	      bordered: false,
-	      rounded: /*mode*/ctx[6] === 'horizontal',
+	      rounded: /*displayMode*/ctx[15] === 'horizontal',
 	      margins: false,
-	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[13] <= 0),
+	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*displayMode*/ctx[15] !== 'horizontal' || /*currentWeek*/ctx[14] <= 0),
 	      container: "div",
 	      $$slots: {
 	        default: [create_default_slot_2]
@@ -17860,8 +17905,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button.$on("click", /*onClickLeft*/ctx[26]);
-	  button.$on("keypress", /*onClickLeft*/ctx[26]);
+	  button.$on("click", /*onClickLeft*/ctx[31]);
+	  button.$on("keypress", /*onClickLeft*/ctx[31]);
 	  return {
 	    c() {
 	      create_component(button.$$.fragment);
@@ -17872,10 +17917,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
-	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
-	      if (dirty[0] & /*loading, limits, month, year, mode, currentWeek*/8271) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*mode*/ctx[6] !== 'horizontal' || /*currentWeek*/ctx[13] <= 0);
-	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*displayMode, controlButtonClasses*/33587200) button_changes.class = "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25]);
+	      if (dirty[0] & /*displayMode*/32768) button_changes.rounded = /*displayMode*/ctx[15] === 'horizontal';
+	      if (dirty[0] & /*loading, limits, month, year, displayMode, currentWeek*/49167) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear() && (/*displayMode*/ctx[15] !== 'horizontal' || /*currentWeek*/ctx[14] <= 0);
+	      if (dirty[0] & /*rtl*/131072 | dirty[2] & /*$$scope*/128) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -17898,25 +17943,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (349:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (mode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
+	// (390:40) <Button                                                 class="{ displayMode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={displayMode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear() && (displayMode !== 'horizontal' || currentWeek <= 0))}                                                 on:click={onClickLeft}                                                 on:keypress={onClickLeft}                                                 container="div"                                         >
 	function create_default_slot_2(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
-	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[17]);
+	      toggle_class(i, "bi-chevron-right", /*rtl*/ctx[17]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-left", ! /*rtl*/ctx[17]);
 	      }
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-right", /*rtl*/ctx[17]);
 	      }
 	    },
 	    d(detaching) {
@@ -17927,10 +17972,10 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (376:44) {#if mode === 'horizontal'}
+	// (417:44) {#if displayMode === 'horizontal'}
 	function create_if_block_4$1(ctx) {
 	  let span;
-	  let t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[55] + /*datePicker*/ctx[4].firstDay) % 7] + "";
+	  let t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[60] + /*datePicker*/ctx[4].firstDay) % 7] + "";
 	  let t0;
 	  let t1;
 	  let br;
@@ -17949,7 +17994,7 @@ var bookly = (function ($) {
 	      insert(target, br, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t0_value !== (t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[55] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t0, t0_value);
+	      if (dirty[0] & /*datePicker*/16 && t0_value !== (t0_value = /*datePicker*/ctx[4].dayNamesShort[(/*j*/ctx[60] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t0, t0_value);
 	    },
 	    d(detaching) {
 	      if (detaching) {
@@ -17960,21 +18005,21 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (366:40) <Button                                                 type='calendar'                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
+	// (407:40) <Button                                                 type='calendar'                                                 class="{ displayMode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10'} bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                                 bordered={false}                                                 on:click={() => !_disabled && onClickDate(_day)}                                                 on:keypress={() => !_disabled && onClickDate(_day)}                                                 disabled={_disabled}                                                 container="div"                                                 size="custom"                                         >
 	function create_default_slot_1(ctx) {
 	  let t0;
 	  let span;
-	  let t1_value = /*_day*/ctx[52].title + "";
+	  let t1_value = /*_day*/ctx[57].title + "";
 	  let t1;
-	  let if_block = /*mode*/ctx[6] === 'horizontal' && create_if_block_4$1(ctx);
+	  let if_block = /*displayMode*/ctx[15] === 'horizontal' && create_if_block_4$1(ctx);
 	  return {
 	    c() {
 	      if (if_block) if_block.c();
 	      t0 = space();
 	      span = element("span");
 	      t1 = text(t1_value);
-	      toggle_class(span, "bookly:text-lg", /*mode*/ctx[6] === 'horizontal');
-	      toggle_class(span, "bookly:text-sm", /*mode*/ctx[6] !== 'horizontal');
+	      toggle_class(span, "bookly:text-lg", /*displayMode*/ctx[15] === 'horizontal');
+	      toggle_class(span, "bookly:text-sm", /*displayMode*/ctx[15] !== 'horizontal');
 	    },
 	    m(target, anchor) {
 	      if (if_block) if_block.m(target, anchor);
@@ -17983,7 +18028,7 @@ var bookly = (function ($) {
 	      append(span, t1);
 	    },
 	    p(ctx, dirty) {
-	      if (/*mode*/ctx[6] === 'horizontal') {
+	      if (/*displayMode*/ctx[15] === 'horizontal') {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
@@ -17995,12 +18040,12 @@ var bookly = (function ($) {
 	        if_block.d(1);
 	        if_block = null;
 	      }
-	      if (dirty[0] & /*days*/4096 && t1_value !== (t1_value = /*_day*/ctx[52].title + "")) set_data(t1, t1_value);
-	      if (dirty[0] & /*mode*/64) {
-	        toggle_class(span, "bookly:text-lg", /*mode*/ctx[6] === 'horizontal');
+	      if (dirty[0] & /*days*/8192 && t1_value !== (t1_value = /*_day*/ctx[57].title + "")) set_data(t1, t1_value);
+	      if (dirty[0] & /*displayMode*/32768) {
+	        toggle_class(span, "bookly:text-lg", /*displayMode*/ctx[15] === 'horizontal');
 	      }
-	      if (dirty[0] & /*mode*/64) {
-	        toggle_class(span, "bookly:text-sm", /*mode*/ctx[6] !== 'horizontal');
+	      if (dirty[0] & /*displayMode*/32768) {
+	        toggle_class(span, "bookly:text-sm", /*displayMode*/ctx[15] !== 'horizontal');
 	      }
 	    },
 	    d(detaching) {
@@ -18013,22 +18058,22 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (363:36) {#each {length: 7} as _, j}
+	// (404:36) {#each {length: 7} as _, j}
 	function create_each_block_1(ctx) {
 	  let button;
 	  let current;
 	  function click_handler() {
-	    return /*click_handler*/ctx[40](/*_disabled*/ctx[53], /*_day*/ctx[52]);
+	    return /*click_handler*/ctx[45](/*_disabled*/ctx[58], /*_day*/ctx[57]);
 	  }
 	  function keypress_handler() {
-	    return /*keypress_handler*/ctx[41](/*_disabled*/ctx[53], /*_day*/ctx[52]);
+	    return /*keypress_handler*/ctx[46](/*_disabled*/ctx[58], /*_day*/ctx[57]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : '')),
+	      class: "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + (/*_day*/ctx[57].active ? /*activeButtonClasses*/ctx[22] : /*_day*/ctx[57].current ? /*buttonClasses*/ctx[21] : /*otherMonthButtonClasses*/ctx[24]) + " " + (/*_day*/ctx[57].current ? 'bookly-calendar-current-month-mark' : '')),
 	      bordered: false,
-	      disabled: /*_disabled*/ctx[53],
+	      disabled: /*_disabled*/ctx[58],
 	      container: "div",
 	      size: "custom",
 	      $$slots: {
@@ -18052,9 +18097,9 @@ var bookly = (function ($) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/3936320) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[53] ? /*disabledButtonClasses*/ctx[20] : '') + " " + (/*_day*/ctx[52].active ? /*activeButtonClasses*/ctx[19] : /*_day*/ctx[52].current ? /*buttonClasses*/ctx[18] : /*otherMonthButtonClasses*/ctx[21]) + " " + (/*_day*/ctx[52].current ? 'bookly-calendar-current-month-mark' : ''));
-	      if (dirty[0] & /*days*/4096) button_changes.disabled = /*_disabled*/ctx[53];
-	      if (dirty[0] & /*mode, days, datePicker*/4176 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*displayMode, days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/31498240) button_changes.class = "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12' : 'bookly:h-10') + " bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[58] ? /*disabledButtonClasses*/ctx[23] : '') + " " + (/*_day*/ctx[57].active ? /*activeButtonClasses*/ctx[22] : /*_day*/ctx[57].current ? /*buttonClasses*/ctx[21] : /*otherMonthButtonClasses*/ctx[24]) + " " + (/*_day*/ctx[57].current ? 'bookly-calendar-current-month-mark' : ''));
+	      if (dirty[0] & /*days*/8192) button_changes.disabled = /*_disabled*/ctx[58];
+	      if (dirty[0] & /*displayMode, days, datePicker*/40976 | dirty[2] & /*$$scope*/128) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -18077,16 +18122,16 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (389:36) {#if mode === 'horizontal'}
+	// (430:36) {#if displayMode === 'horizontal'}
 	function create_if_block_3$1(ctx) {
 	  let button;
 	  let current;
 	  button = new Button({
 	    props: {
-	      class: "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]),
+	      class: "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25]),
 	      type: "calendar",
 	      bordered: false,
-	      rounded: /*mode*/ctx[6] === 'horizontal',
+	      rounded: /*displayMode*/ctx[15] === 'horizontal',
 	      margins: false,
 	      disabled: /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear(),
 	      container: "div",
@@ -18098,8 +18143,8 @@ var bookly = (function ($) {
 	      }
 	    }
 	  });
-	  button.$on("click", /*onClickRight*/ctx[27]);
-	  button.$on("keypress", /*onClickRight*/ctx[27]);
+	  button.$on("click", /*onClickRight*/ctx[32]);
+	  button.$on("keypress", /*onClickRight*/ctx[32]);
 	  return {
 	    c() {
 	      create_component(button.$$.fragment);
@@ -18110,10 +18155,10 @@ var bookly = (function ($) {
 	    },
 	    p(ctx, dirty) {
 	      const button_changes = {};
-	      if (dirty[0] & /*mode, controlButtonClasses*/4194368) button_changes.class = "" + ((/*mode*/ctx[6] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[22]);
-	      if (dirty[0] & /*mode*/64) button_changes.rounded = /*mode*/ctx[6] === 'horizontal';
+	      if (dirty[0] & /*displayMode, controlButtonClasses*/33587200) button_changes.class = "" + ((/*displayMode*/ctx[15] === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4') + " bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[25]);
+	      if (dirty[0] & /*displayMode*/32768) button_changes.rounded = /*displayMode*/ctx[15] === 'horizontal';
 	      if (dirty[0] & /*loading, limits, month, year*/15) button_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
-	      if (dirty[0] & /*rtl*/16384 | dirty[2] & /*$$scope*/4) {
+	      if (dirty[0] & /*rtl*/131072 | dirty[2] & /*$$scope*/128) {
 	        button_changes.$$scope = {
 	          dirty,
 	          ctx
@@ -18136,25 +18181,25 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (390:40) <Button                                                 class="{ mode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={mode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
+	// (431:40) <Button                                                 class="{ displayMode === 'horizontal' ? 'bookly:py-2 bookly:px-1 bookly:rounded bookly:md:mx-1 bookly:h-12 bookly:text-lg bookly:md:px-4' : 'bookly:px-4'} bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                                                 type="calendar"                                                 bordered={false}                                                 rounded={displayMode === 'horizontal'}                                                 margins={false}                                                 disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                                                 on:click={onClickRight}                                                 on:keypress={onClickRight}                                                 container="div"                                         >
 	function create_default_slot(ctx) {
 	  let i;
 	  return {
 	    c() {
 	      i = element("i");
 	      attr(i, "class", "bi");
-	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
-	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
+	      toggle_class(i, "bi-chevron-left", /*rtl*/ctx[17]);
+	      toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[17]);
 	    },
 	    m(target, anchor) {
 	      insert(target, i, anchor);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-left", /*rtl*/ctx[17]);
 	      }
-	      if (dirty[0] & /*rtl*/16384) {
-	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[14]);
+	      if (dirty[0] & /*rtl*/131072) {
+	        toggle_class(i, "bi-chevron-right", ! /*rtl*/ctx[17]);
 	      }
 	    },
 	    d(detaching) {
@@ -18165,11 +18210,11 @@ var bookly = (function ($) {
 	  };
 	}
 
-	// (345:24) {#each {length: parseInt(days.length / 7)} as _, i}
+	// (386:24) {#each {length: parseInt(days.length / 7)} as _, i}
 	function create_each_block$2(ctx) {
 	  let if_block_anchor;
 	  let current;
-	  let if_block = (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[51] === /*currentWeek*/ctx[13]) && create_if_block_2$2(ctx);
+	  let if_block = (/*displayMode*/ctx[15] !== 'horizontal' || /*i*/ctx[56] === /*currentWeek*/ctx[14]) && create_if_block_2$2(ctx);
 	  return {
 	    c() {
 	      if (if_block) if_block.c();
@@ -18181,10 +18226,10 @@ var bookly = (function ($) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if (/*mode*/ctx[6] !== 'horizontal' || /*i*/ctx[51] === /*currentWeek*/ctx[13]) {
+	      if (/*displayMode*/ctx[15] !== 'horizontal' || /*i*/ctx[56] === /*currentWeek*/ctx[14]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
-	          if (dirty[0] & /*mode, currentWeek*/8256) {
+	          if (dirty[0] & /*displayMode, currentWeek*/49152) {
 	            transition_in(if_block, 1);
 	          }
 	        } else {
@@ -18221,6 +18266,8 @@ var bookly = (function ($) {
 	function create_fragment$3(ctx) {
 	  let if_block_anchor;
 	  let current;
+	  let mounted;
+	  let dispose;
 	  let if_block = /*show*/ctx[8] && create_if_block$3(ctx);
 	  return {
 	    c() {
@@ -18231,6 +18278,10 @@ var bookly = (function ($) {
 	      if (if_block) if_block.m(target, anchor);
 	      insert(target, if_block_anchor, anchor);
 	      current = true;
+	      if (!mounted) {
+	        dispose = listen(window, "pointerdown", /*onWindowPointerDown*/ctx[29]);
+	        mounted = true;
+	      }
 	    },
 	    p(ctx, dirty) {
 	      if (/*show*/ctx[8]) {
@@ -18267,6 +18318,8 @@ var bookly = (function ($) {
 	        detach(if_block_anchor);
 	      }
 	      if (if_block) if_block.d(detaching);
+	      mounted = false;
+	      dispose();
 	    }
 	  };
 	}
@@ -18277,6 +18330,7 @@ var bookly = (function ($) {
 	  return _year + '-' + (_month < 10 ? '0' + _month : _month) + '-' + (_day < 10 ? '0' + _day : _day);
 	}
 	function instance$3($$self, $$props, $$invalidate) {
+	  let displayMode;
 	  const dispatch = createEventDispatcher();
 	  let {
 	    layout = 'text-accent'
@@ -18305,6 +18359,34 @@ var bookly = (function ($) {
 	  let {
 	    mode = 'regular'
 	  } = $$props;
+
+	  // Лента (horizontal) разворачивается кликом по заголовку в обычный месячный вид:
+	  // так можно быстро уйти на несколько месяцев вперёд. Выбор дня сворачивает обратно.
+	  let expanded = false;
+
+	  // Оверлей развёрнутого вида: обёртка резервирует высоту свёрнутой ленты,
+	  // а панель рисуется поверх контента, не сдвигая форму вниз. Высота меряется
+	  // в момент разворота (getBoundingClientRect — с бордерами и дробями, иначе
+	  // контент дёргается на пиксель).
+	  let collapsedHeight;
+	  function expandCalendar() {
+	    $$invalidate(16, collapsedHeight = el.getBoundingClientRect().height);
+	    $$invalidate(10, expanded = true);
+	  }
+
+	  // Клик мимо развёрнутого календаря сворачивает его. Слушаем pointerdown:
+	  // он приходит до click и до перерендеров Svelte — с click реальный браузер
+	  // успевает удалить кликнутый заголовок из DOM (microtask checkpoint между
+	  // обработчиками всплытия), contains() даёт false и разворот тут же откатывался.
+	  function onWindowPointerDown(event) {
+	    if (expanded && el && !el.contains(event.target)) {
+	      $$invalidate(10, expanded = false);
+
+	      // Разворот мог быть в виде месяцев/годов — свёрнутая лента живёт
+	      // только в виде календаря.
+	      $$invalidate(12, view = 'calendar');
+	    }
+	  }
 	  let {
 	    l10n = {}
 	  } = $$props;
@@ -18340,8 +18422,8 @@ var bookly = (function ($) {
 	      break;
 	  }
 	  function forceLoadSchedule() {
-	    $$invalidate(31, holidays = []);
-	    $$invalidate(32, loadedMonths = []);
+	    $$invalidate(36, holidays = []);
+	    $$invalidate(37, loadedMonths = []);
 	    $$invalidate(3, loading = true);
 	  }
 	  if (maxDays) {
@@ -18374,19 +18456,19 @@ var bookly = (function ($) {
 	  function changeView() {
 	    switch (view) {
 	      case 'calendar':
-	        $$invalidate(11, view = 'month');
+	        $$invalidate(12, view = 'month');
 	        break;
 	      case 'month':
-	        $$invalidate(11, view = 'year');
+	        $$invalidate(12, view = 'year');
 	        break;
 	      case 'year':
-	        $$invalidate(11, view = 'calendar');
+	        $$invalidate(12, view = 'calendar');
 	        break;
 	    }
 	  }
 	  function onClickLeft() {
-	    if (mode === 'horizontal' && currentWeek > 0) {
-	      $$invalidate(13, currentWeek--, currentWeek);
+	    if (displayMode === 'horizontal' && currentWeek > 0) {
+	      $$invalidate(14, currentWeek--, currentWeek);
 	      return;
 	    }
 	    switch (view) {
@@ -18397,7 +18479,7 @@ var bookly = (function ($) {
 	        } else {
 	          $$invalidate(2, month--, month);
 	        }
-	        $$invalidate(13, currentWeek = 999);
+	        $$invalidate(14, currentWeek = 999);
 	        dispatch('month-change', 'prev');
 	        break;
 	      case 'month':
@@ -18409,8 +18491,8 @@ var bookly = (function ($) {
 	    }
 	  }
 	  function onClickRight() {
-	    if (mode === 'horizontal' && currentWeek < _parseInt(days.length / 7) - 1) {
-	      $$invalidate(13, currentWeek++, currentWeek);
+	    if (displayMode === 'horizontal' && currentWeek < _parseInt(days.length / 7) - 1) {
+	      $$invalidate(14, currentWeek++, currentWeek);
 	      return;
 	    }
 	    switch (view) {
@@ -18421,7 +18503,7 @@ var bookly = (function ($) {
 	        } else {
 	          $$invalidate(2, month++, month);
 	        }
-	        $$invalidate(13, currentWeek = days[days.length - 1].title < 7 ? 1 : 0);
+	        $$invalidate(14, currentWeek = days[days.length - 1].title < 7 ? 1 : 0);
 	        dispatch('month-change', 'next');
 	        break;
 	      case 'month':
@@ -18436,23 +18518,28 @@ var bookly = (function ($) {
 	  let lastDate = monthWithYear;
 	  function _loadSchedule() {
 	    if (!_includesInstanceProperty(loadedMonths).call(loadedMonths, monthWithYear)) {
+	      // The no-date fallback below moves month/year to the first bookable
+	      // day. Apply it only if the view still shows the requested month:
+	      // a late response must not override the user's navigation.
+	      let requestedMonth = month,
+	        requestedYear = year;
 	      loadSchedule(month + 1, year).then(response => {
-	        $$invalidate(32, loadedMonths = [...new _Set$1([...loadedMonths, ...(response?.data.parsed_months || [])])]);
-	        $$invalidate(31, holidays = [...new _Set$1([...holidays, ...(response?.data.holidays || [])])]);
-	        if (date === null) {
+	        $$invalidate(37, loadedMonths = [...new _Set$1([...loadedMonths, ...(response?.data.parsed_months || [])])]);
+	        $$invalidate(36, holidays = [...new _Set$1([...holidays, ...(response?.data.holidays || [])])]);
+	        if (date === null && month === requestedMonth && year === requestedYear) {
 	          let firstDate = new Date();
-	          while (_includesInstanceProperty(holidays).call(holidays, $$invalidate(29, date = formatDate(firstDate)))) {
+	          while (_includesInstanceProperty(holidays).call(holidays, $$invalidate(34, date = formatDate(firstDate)))) {
 	            firstDate.setDate(firstDate.getDate() + 1);
 	          }
-	          $$invalidate(29, date = formatDate(firstDate));
+	          $$invalidate(34, date = formatDate(firstDate));
 	          $$invalidate(2, month = firstDate.getMonth());
 	          $$invalidate(1, year = firstDate.getFullYear());
 	          dispatch('change');
 	        }
 	      }).catch(() => {
-	        if (date === null) {
+	        if (date === null && month === requestedMonth && year === requestedYear) {
 	          let firstDate = new Date();
-	          $$invalidate(29, date = formatDate(firstDate));
+	          $$invalidate(34, date = formatDate(firstDate));
 	          $$invalidate(2, month = firstDate.getMonth());
 	          $$invalidate(1, year = firstDate.getFullYear());
 	          dispatch('change');
@@ -18464,10 +18551,11 @@ var bookly = (function ($) {
 	  }
 	  function onClickDate(_day) {
 	    document.activeElement && document.activeElement.blur();
+	    $$invalidate(10, expanded = false);
 	    $$invalidate(2, month = _day.date.getMonth());
 	    $$invalidate(1, year = _day.date.getFullYear());
-	    $$invalidate(29, date = formatDate(_day.date));
-	    $$invalidate(13, currentWeek = -1);
+	    $$invalidate(34, date = formatDate(_day.date));
+	    $$invalidate(14, currentWeek = -1);
 	    dispatch('change');
 	  }
 	  const click_handler = (_disabled, _day) => !_disabled && onClickDate(_day);
@@ -18475,84 +18563,87 @@ var bookly = (function ($) {
 	  const click_handler_1 = _month => {
 	    $$invalidate(2, month = _month);
 	    dispatch('month-change');
-	    $$invalidate(11, view = 'calendar');
+	    $$invalidate(12, view = 'calendar');
 	  };
 	  const keypress_handler_1 = _month => {
 	    $$invalidate(2, month = _month);
 	    dispatch('month-change');
-	    $$invalidate(11, view = 'calendar');
+	    $$invalidate(12, view = 'calendar');
 	  };
 	  const click_handler_2 = __year => {
 	    $$invalidate(1, year = __year);
-	    $$invalidate(11, view = 'month');
+	    $$invalidate(12, view = 'month');
 	  };
 	  const keypress_handler_2 = __year => {
 	    $$invalidate(1, year = __year);
-	    $$invalidate(11, view = 'month');
+	    $$invalidate(12, view = 'month');
 	  };
 	  function div1_binding($$value) {
 	    binding_callbacks[$$value ? 'unshift' : 'push'](() => {
 	      el = $$value;
-	      $$invalidate(10, el);
+	      $$invalidate(11, el);
 	    });
 	  }
 	  $$self.$$set = $$props => {
-	    if ('layout' in $$props) $$invalidate(33, layout = $$props.layout);
-	    if ('date' in $$props) $$invalidate(29, date = $$props.date);
-	    if ('startDate' in $$props) $$invalidate(30, startDate = $$props.startDate);
-	    if ('holidays' in $$props) $$invalidate(31, holidays = $$props.holidays);
+	    if ('layout' in $$props) $$invalidate(38, layout = $$props.layout);
+	    if ('date' in $$props) $$invalidate(34, date = $$props.date);
+	    if ('startDate' in $$props) $$invalidate(35, startDate = $$props.startDate);
+	    if ('holidays' in $$props) $$invalidate(36, holidays = $$props.holidays);
 	    if ('datePicker' in $$props) $$invalidate(4, datePicker = $$props.datePicker);
-	    if ('maxDays' in $$props) $$invalidate(34, maxDays = $$props.maxDays);
+	    if ('maxDays' in $$props) $$invalidate(39, maxDays = $$props.maxDays);
 	    if ('limits' in $$props) $$invalidate(0, limits = $$props.limits);
 	    if ('disabled' in $$props) $$invalidate(5, disabled = $$props.disabled);
 	    if ('mode' in $$props) $$invalidate(6, mode = $$props.mode);
 	    if ('l10n' in $$props) $$invalidate(7, l10n = $$props.l10n);
-	    if ('disabledWeekDays' in $$props) $$invalidate(35, disabledWeekDays = $$props.disabledWeekDays);
-	    if ('loadSchedule' in $$props) $$invalidate(36, loadSchedule = $$props.loadSchedule);
+	    if ('disabledWeekDays' in $$props) $$invalidate(40, disabledWeekDays = $$props.disabledWeekDays);
+	    if ('loadSchedule' in $$props) $$invalidate(41, loadSchedule = $$props.loadSchedule);
 	    if ('year' in $$props) $$invalidate(1, year = $$props.year);
 	    if ('month' in $$props) $$invalidate(2, month = $$props.month);
-	    if ('loadedMonths' in $$props) $$invalidate(32, loadedMonths = $$props.loadedMonths);
+	    if ('loadedMonths' in $$props) $$invalidate(37, loadedMonths = $$props.loadedMonths);
 	    if ('loading' in $$props) $$invalidate(3, loading = $$props.loading);
 	    if ('show' in $$props) $$invalidate(8, show = $$props.show);
 	    if ('border' in $$props) $$invalidate(9, border = $$props.border);
 	  };
 	  $$self.$$.update = () => {
-	    if ($$self.$$.dirty[0] & /*el*/1024) {
+	    if ($$self.$$.dirty[0] & /*mode, expanded*/1088) {
+	      $$invalidate(15, displayMode = mode === 'horizontal' && !expanded ? 'horizontal' : 'regular');
+	    }
+	    if ($$self.$$.dirty[0] & /*el*/2048) {
 	      if (el) {
-	        $$invalidate(14, rtl = getComputedStyle(el).direction === 'rtl');
+	        $$invalidate(17, rtl = getComputedStyle(el).direction === 'rtl');
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*startDate*/1073741824) {
+	    if ($$self.$$.dirty[1] & /*startDate*/16) {
 	      if (startDate === null) {
-	        $$invalidate(30, startDate = new Date());
+	        $$invalidate(35, startDate = new Date());
 	      } else {
 	        $$invalidate(1, year = startDate.getFullYear());
 	        $$invalidate(2, month = startDate.getMonth());
 	      }
 	    }
 	    if ($$self.$$.dirty[0] & /*month, year*/6) {
-	      $$invalidate(38, monthWithYear = month + '-' + year);
+	      $$invalidate(43, monthWithYear = month + '-' + year);
 	    }
-	    if ($$self.$$.dirty[0] & /*view, year, month*/2054 | $$self.$$.dirty[1] & /*loadSchedule, lastDate, monthWithYear*/416) {
+	    if ($$self.$$.dirty[0] & /*view, year, month*/4102 | $$self.$$.dirty[1] & /*loadSchedule, lastDate, monthWithYear*/13312) {
 	      if (loadSchedule !== false && view === 'calendar' && (year || month)) {
 	        if (lastDate !== monthWithYear) {
-	          $$invalidate(39, lastDate = monthWithYear);
+	          $$invalidate(44, lastDate = monthWithYear);
 	          $$invalidate(3, loading = true);
 	        }
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*loading*/8 | $$self.$$.dirty[1] & /*loadSchedule*/32) {
+	    if ($$self.$$.dirty[0] & /*loading*/8 | $$self.$$.dirty[1] & /*loadSchedule*/1024) {
 	      if (loadSchedule !== false && loading) {
 	        _loadSchedule();
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*year, month, datePicker, days, limits, date*/536875031 | $$self.$$.dirty[1] & /*disabledWeekDays, loadedMonths, monthWithYear, holidays*/147) {
+	    if ($$self.$$.dirty[0] & /*year, month, datePicker, days, limits*/8215 | $$self.$$.dirty[1] & /*disabledWeekDays, loadedMonths, monthWithYear, holidays, date*/4712) {
 	      {
 	        let _day = new Date(year, month, 1);
 	        _day.setDate(_day.getDate() - ((_day.getDay() - datePicker.firstDay) % 7 + 7) % 7);
 	        let lastDay = new Date(year, month + 1, 0);
 	        lastDay.setDate(lastDay.getDate() - ((lastDay.getDay() - datePicker.firstDay) % 7 + 7) % 7 + 6);
-	        $$invalidate(12, days = []);
+	        $$invalidate(13, days = []);
 	        do {
 	          let dayFormatted = formatDate(_day);
 	          days.push({
@@ -18566,62 +18657,62 @@ var bookly = (function ($) {
 	        } while (lastDay >= _day);
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*mode, currentWeek, days*/12352) {
-	      if (mode === 'horizontal') {
+	    if ($$self.$$.dirty[0] & /*displayMode, currentWeek, days*/57344) {
+	      if (displayMode === 'horizontal') {
 	        if (currentWeek === -1 && days.length > 0) {
 	          _forEachInstanceProperty(days).call(days, (day, index) => {
 	            if (day.active) {
-	              $$invalidate(13, currentWeek = _parseInt(index / 7));
+	              $$invalidate(14, currentWeek = _parseInt(index / 7));
 	            }
 	          });
 	        } else if (currentWeek === 999) {
-	          $$invalidate(13, currentWeek = _parseInt(days.length / 7) - (days[days.length - 1].title < 7 ? 2 : 1));
+	          $$invalidate(14, currentWeek = _parseInt(days.length / 7) - (days[days.length - 1].title < 7 ? 2 : 1));
 	        }
 	      }
 	    }
-	    if ($$self.$$.dirty[0] & /*view, datePicker, month, year*/2070) {
+	    if ($$self.$$.dirty[0] & /*view, datePicker, month, year*/4118) {
 	      if (view) {
 	        switch (view) {
 	          case 'calendar':
-	            $$invalidate(23, title = datePicker.monthNamesShort[month] + ' ' + year);
+	            $$invalidate(26, title = datePicker.monthNamesShort[month] + ' ' + year);
 	            break;
 	          case 'month':
 	          case 'year':
-	            $$invalidate(23, title = year);
+	            $$invalidate(26, title = year);
 	            break;
 	        }
 	      }
 	    }
 	  };
-	  return [limits, year, month, loading, datePicker, disabled, mode, l10n, show, border, el, view, days, currentWeek, rtl, bgColor, textColor, borderColor, buttonClasses, activeButtonClasses, disabledButtonClasses, otherMonthButtonClasses, controlButtonClasses, title, dispatch, changeView, onClickLeft, onClickRight, onClickDate, date, startDate, holidays, loadedMonths, layout, maxDays, disabledWeekDays, loadSchedule, forceLoadSchedule, monthWithYear, lastDate, click_handler, keypress_handler, click_handler_1, keypress_handler_1, click_handler_2, keypress_handler_2, div1_binding];
+	  return [limits, year, month, loading, datePicker, disabled, mode, l10n, show, border, expanded, el, view, days, currentWeek, displayMode, collapsedHeight, rtl, bgColor, textColor, borderColor, buttonClasses, activeButtonClasses, disabledButtonClasses, otherMonthButtonClasses, controlButtonClasses, title, dispatch, expandCalendar, onWindowPointerDown, changeView, onClickLeft, onClickRight, onClickDate, date, startDate, holidays, loadedMonths, layout, maxDays, disabledWeekDays, loadSchedule, forceLoadSchedule, monthWithYear, lastDate, click_handler, keypress_handler, click_handler_1, keypress_handler_1, click_handler_2, keypress_handler_2, div1_binding];
 	}
 	class Calendar extends SvelteComponent {
 	  constructor(options) {
 	    super();
 	    init(this, options, instance$3, create_fragment$3, safe_not_equal, {
-	      layout: 33,
-	      date: 29,
-	      startDate: 30,
-	      holidays: 31,
+	      layout: 38,
+	      date: 34,
+	      startDate: 35,
+	      holidays: 36,
 	      datePicker: 4,
-	      maxDays: 34,
+	      maxDays: 39,
 	      limits: 0,
 	      disabled: 5,
 	      mode: 6,
 	      l10n: 7,
-	      disabledWeekDays: 35,
-	      loadSchedule: 36,
-	      forceLoadSchedule: 37,
+	      disabledWeekDays: 40,
+	      loadSchedule: 41,
+	      forceLoadSchedule: 42,
 	      year: 1,
 	      month: 2,
-	      loadedMonths: 32,
+	      loadedMonths: 37,
 	      loading: 3,
 	      show: 8,
 	      border: 9
 	    }, null, [-1, -1, -1]);
 	  }
 	  get layout() {
-	    return this.$$.ctx[33];
+	    return this.$$.ctx[38];
 	  }
 	  set layout(layout) {
 	    this.$$set({
@@ -18630,7 +18721,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get date() {
-	    return this.$$.ctx[29];
+	    return this.$$.ctx[34];
 	  }
 	  set date(date) {
 	    this.$$set({
@@ -18639,7 +18730,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get startDate() {
-	    return this.$$.ctx[30];
+	    return this.$$.ctx[35];
 	  }
 	  set startDate(startDate) {
 	    this.$$set({
@@ -18648,7 +18739,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get holidays() {
-	    return this.$$.ctx[31];
+	    return this.$$.ctx[36];
 	  }
 	  set holidays(holidays) {
 	    this.$$set({
@@ -18666,7 +18757,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get maxDays() {
-	    return this.$$.ctx[34];
+	    return this.$$.ctx[39];
 	  }
 	  set maxDays(maxDays) {
 	    this.$$set({
@@ -18711,7 +18802,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get disabledWeekDays() {
-	    return this.$$.ctx[35];
+	    return this.$$.ctx[40];
 	  }
 	  set disabledWeekDays(disabledWeekDays) {
 	    this.$$set({
@@ -18720,7 +18811,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get loadSchedule() {
-	    return this.$$.ctx[36];
+	    return this.$$.ctx[41];
 	  }
 	  set loadSchedule(loadSchedule) {
 	    this.$$set({
@@ -18729,7 +18820,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get forceLoadSchedule() {
-	    return this.$$.ctx[37];
+	    return this.$$.ctx[42];
 	  }
 	  get year() {
 	    return this.$$.ctx[1];
@@ -18750,7 +18841,7 @@ var bookly = (function ($) {
 	    flush();
 	  }
 	  get loadedMonths() {
-	    return this.$$.ctx[32];
+	    return this.$$.ctx[37];
 	  }
 	  set loadedMonths(loadedMonths) {
 	    this.$$set({
@@ -18849,6 +18940,8 @@ var bookly = (function ($) {
 	      $first_name_error = $('.bookly-js-first-name-error', $container),
 	      $last_name_error = $('.bookly-js-last-name-error', $container),
 	      $captcha = $('.bookly-js-captcha-img', $container),
+	      $recaptcha_v2 = $('.bookly-js-recaptcha', $container),
+	      $recaptcha_v3 = $('.bookly-js-recaptcha-v3', $container),
 	      $custom_error = $('.bookly-custom-field-error', $container),
 	      $info_error = $('.bookly-js-info-field-error', $container),
 	      $modals = $('.bookly-js-modal', $container),
@@ -19189,6 +19282,35 @@ var bookly = (function ($) {
 	        $terms_error.html(terms_error);
 	      } else {
 	        var _context14, _context15;
+	        // reCAPTCHA v3: a fresh token is required for every submission
+	        if ($recaptcha_v3.length && !$recaptcha_v3.first().data('booklyTokenReady')) {
+	          let $btn = $(this);
+	          booklyLoadRecaptcha($recaptcha_v3.first().data('sitekey')).then(function () {
+	            if (typeof grecaptcha === 'undefined') {
+	              // api.js failed to load — submit anyway, server side will reject the empty token
+	              $recaptcha_v3.val('').first().data('booklyTokenReady', true);
+	              $btn.trigger('click', [force_update_customer, force_resend_verification_code]);
+	              return;
+	            }
+	            grecaptcha.ready(function () {
+	              // execute may throw synchronously (e.g. wrong key type) — the submission must still go through
+	              new _Promise(function (resolve) {
+	                resolve(grecaptcha.execute($recaptcha_v3.first().data('sitekey'), {
+	                  action: 'bookly_booking'
+	                }));
+	              }).then(function (token) {
+	                $recaptcha_v3.val(token);
+	              }, function () {
+	                $recaptcha_v3.val('');
+	              }).then(function () {
+	                $recaptcha_v3.first().data('booklyTokenReady', true);
+	                $btn.trigger('click', [force_update_customer, force_resend_verification_code]);
+	              });
+	            });
+	          });
+	          return;
+	        }
+	        $recaptcha_v3.first().data('booklyTokenReady', false);
 	        var info_fields = [],
 	          custom_fields = {},
 	          checkbox_values,
@@ -19504,6 +19626,12 @@ var bookly = (function ($) {
 	                  var $div = $('[data-id="' + field_id + '"]', $custom_fields_collector);
 	                  _findInstanceProperty($div).call($div, '.bookly-custom-field-error').html(message);
 	                  _findInstanceProperty($div).call($div, '.bookly-js-custom-field').addClass('bookly-error');
+	                  // reCAPTCHA v2 tokens are one-time, the widget must be reset after a failed attempt
+	                  let $failed_recaptcha = _findInstanceProperty($div).call($div, '.bookly-js-recaptcha');
+	                  if ($failed_recaptcha.length && typeof grecaptcha !== 'undefined') {
+	                    grecaptcha.reset($failed_recaptcha.data('booklyWidgetId'));
+	                    _findInstanceProperty($div).call($div, 'input.bookly-js-custom-field').val('');
+	                  }
 	                  if ($scroll_to === null) {
 	                    $scroll_to = _findInstanceProperty($div).call($div, '.bookly-js-custom-field');
 	                  }
@@ -19552,6 +19680,27 @@ var bookly = (function ($) {
 	        });
 	      }
 	    });
+
+	    // Google reCAPTCHA widgets (the step is loaded via AJAX, so only explicit render works)
+	    if ($recaptcha_v2.length) {
+	      booklyLoadRecaptcha('explicit').then(function () {
+	        $recaptcha_v2.each(function () {
+	          let $el = $(this),
+	            $input = $el.next('input.bookly-js-custom-field');
+	          $el.data('booklyWidgetId', grecaptcha.render(this, {
+	            sitekey: $el.data('sitekey'),
+	            callback: function (token) {
+	              $input.val(token);
+	            },
+	            'expired-callback': function () {
+	              $input.val('');
+	            }
+	          }));
+	        });
+	      });
+	    } else if ($recaptcha_v3.length) {
+	      booklyLoadRecaptcha($recaptcha_v3.first().data('sitekey'));
+	    }
 	    $('.bookly-js-captcha-refresh', $container).on('click', function () {
 	      $captcha.css('opacity', '0.5');
 	      booklyAjax({
@@ -19571,6 +19720,27 @@ var bookly = (function ($) {
 	  /**
 	   * global function to init google places
 	   */
+	  /**
+	   * Load Google reCAPTCHA api.js once per page.
+	   * render: 'explicit' for v2 widgets or a site key for v3.
+	   */
+	  function booklyLoadRecaptcha(render) {
+	    if (window.grecaptcha && window.grecaptcha.ready) {
+	      return _Promise.resolve();
+	    }
+	    if (!window.booklyRecaptchaLoader) {
+	      window.booklyRecaptchaLoader = new _Promise(function (resolve) {
+	        window.booklyRecaptchaOnload = resolve;
+	        let script = document.createElement('script');
+	        script.src = 'https://www.google.com/recaptcha/api.js?onload=booklyRecaptchaOnload&render=' + encodeURIComponent(render);
+	        script.async = true;
+	        // resolve on load failure too — the form must stay submittable, server side will reject
+	        script.onerror = resolve;
+	        document.head.appendChild(script);
+	      });
+	    }
+	    return window.booklyRecaptchaLoader;
+	  }
 	  function booklyInitGooglePlacesAutocomplete(bookly_forms) {
 	    bookly_forms = bookly_forms || $('.bookly-form .bookly-details-step');
 	    bookly_forms.each(function () {

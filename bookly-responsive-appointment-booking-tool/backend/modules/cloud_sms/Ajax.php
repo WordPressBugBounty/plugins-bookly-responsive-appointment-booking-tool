@@ -271,10 +271,8 @@ class Ajax extends Lib\Base\Ajax
         $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_LISTS );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
-        $limits = array(
-            'length' => self::parameter( 'length' ),
-            'start' => self::parameter( 'start' ),
-        );
+        $length = self::parameter( 'length' );
+        $start = self::parameter( 'start' );
 
         $query = Lib\Entities\MailingList::query( 'm' )
             ->select( 'm.id, m.name, COUNT(r.id) AS number_of_recipients' )
@@ -286,9 +284,9 @@ class Ajax extends Lib\Base\Ajax
                 ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
         }
 
-        $filtered = $total = Lib\Entities\MailingList::query()->count();
+        $total = $filtered = Lib\Entities\MailingList::query()->count();
 
-        if ( $filter['search'] != '' ) {
+        if ( isset( $filter['search'] ) && $filter['search'] != '' ) {
             $fields = array();
             foreach ( $columns as $column ) {
                 switch ( $column['data'] ) {
@@ -308,8 +306,8 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        if ( ! empty( $limits ) ) {
-            $query->limit( $limits['length'] )->offset( $limits['start'] );
+        if ( $length !== null && $start !== null ) {
+            $query->limit( $length )->offset( $start );
         }
 
         $data = $query->fetchArray();
@@ -336,10 +334,8 @@ class Ajax extends Lib\Base\Ajax
         $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_RECIPIENTS_LIST );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
-        $limits = array(
-            'length' => self::parameter( 'length' ),
-            'start' => self::parameter( 'start' ),
-        );
+        $length = self::parameter( 'length' );
+        $start = self::parameter( 'start' );
 
         $query = Lib\Entities\MailingListRecipient::query()
             ->select( 'id, name, phone' )
@@ -350,9 +346,9 @@ class Ajax extends Lib\Base\Ajax
                 ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
         }
 
-        $total = $query->count();
+        $total = $filtered = $query->count();
 
-        if ( $filter['search'] != '' ) {
+        if ( isset( $filter['search'] ) && $filter['search'] != '' ) {
             $fields = array();
             foreach ( $columns as $column ) {
                 switch ( $column['data'] ) {
@@ -368,13 +364,12 @@ class Ajax extends Lib\Base\Ajax
             }
             if ( ! empty( $search_columns ) ) {
                 $query->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) );
+                $filtered = $query->count();
             }
         }
 
-        $filtered = $query->count();
-
-        if ( ! empty( $limits ) ) {
-            $query->limit( $limits['length'] )->offset( $limits['start'] );
+        if ( $length !== null && $start !== null ) {
+            $query->limit( $length )->offset( $start );
         }
 
         $data = $query->fetchArray();
@@ -429,10 +424,8 @@ class Ajax extends Lib\Base\Ajax
         $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_CAMPAIGNS );
         $order = self::parameter( 'order', array() );
         $filter = self::parameter( 'filter' );
-        $limits = array(
-            'length' => self::parameter( 'length' ),
-            'start' => self::parameter( 'start' ),
-        );
+        $length = self::parameter( 'length' );
+        $start = self::parameter( 'start' );
 
         $query = Lib\Entities\MailingCampaign::query()
             ->select( 'id, name, state, send_at' );
@@ -442,9 +435,9 @@ class Ajax extends Lib\Base\Ajax
                 ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
         }
 
-        $total = $query->count();
+        $total = $filtered = $query->count();
 
-        if ( $filter['search'] != '' ) {
+        if ( isset( $filter['search'] ) && $filter['search'] != '' ) {
             $fields = array();
             foreach ( $columns as $column ) {
                 switch ( $column['data'] ) {
@@ -460,13 +453,12 @@ class Ajax extends Lib\Base\Ajax
             }
             if ( ! empty( $search_columns ) ) {
                 $query->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) );
+                $filtered = $query->count();
             }
         }
 
-        $filtered = $query->count();
-
-        if ( ! empty( $limits ) ) {
-            $query->limit( $limits['length'] )->offset( $limits['start'] );
+        if ( $length !== null && $start !== null ) {
+            $query->limit( $length )->offset( $start );
         }
 
         $data = $query->fetchArray();

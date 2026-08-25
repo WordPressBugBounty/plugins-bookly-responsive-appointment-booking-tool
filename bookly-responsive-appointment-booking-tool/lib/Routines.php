@@ -3,6 +3,8 @@ namespace Bookly\Lib;
 
 use Bookly\Lib\Base\Schema;
 use Bookly\Lib\Cloud\Account;
+use Bookly\Lib\Entities\AiConversation;
+use Bookly\Lib\Entities\AiJob;
 use Bookly\Lib\Entities\Appointment;
 use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Lib\Entities\Log;
@@ -12,6 +14,7 @@ use Bookly\Lib\Entities\MailingQueue;
 use Bookly\Lib\Entities\NotificationQueue;
 use Bookly\Lib\Entities\Payment;
 use Bookly\Lib\Entities\SmsLog;
+use Bookly\Frontend\Modules\Ai;
 
 abstract class Routines
 {
@@ -56,6 +59,10 @@ abstract class Routines
             self::clearSessions();
             // Handle expired logs
             self::clearLogs();
+            // Watchdog for stuck AI worker jobs — catches a job that reached
+            // status='running' and then stalled (heartbeat_at goes stale,
+            // e.g. host killed the php-fpm process mid-loop).
+            self::handleAiJobsWatchdog();
         }
 
         self::doDailyRoutine();
@@ -77,6 +84,7 @@ abstract class Routines
             self::calculateGoalOfCA();
             self::clearNotificationQueue();
             self::clearSmsLog();
+            self::clearAiConversations();
             // Let add-ons do their daily routines.
             Proxy\Shared::doDailyRoutine();
         }
@@ -146,6 +154,31 @@ abstract class Routines
                 Proxy\Shared::syncOnlineMeeting( array(), $appointment );
                 Utils\Common::syncWithCalendars( $appointment );
             }
+        }
+    }
+
+    public static function handleAiJobsWatchdog()
+    {
+        $stale_before = date_create( current_time( 'mysql' ) )->modify( '-5 minutes' )->format( 'Y-m-d H:i:s' );
+
+        /** @var AiJob[] $stuck */
+        $stuck = AiJob::query()
+            ->where( 'status', AiJob::STATUS_RUNNING )
+            ->whereLt( 'heartbeat_at', $stale_before )
+            ->find();
+
+        foreach ( $stuck as $job ) {
+            if ( $job->getAttempts() >= 3 ) {
+                $job->setStatus( AiJob::STATUS_FAILED )->save();
+                $conversation = AiConversation::find( $job->getConversationId() );
+                if ( $conversation ) {
+                    $conversation->setStatus( AiConversation::STATUS_ERROR )->save();
+                }
+                continue;
+            }
+
+            $job->setStatus( AiJob::STATUS_QUEUED )->save();
+            Ai\Ajax::spawnWorker( $job );
         }
     }
 
@@ -276,6 +309,13 @@ abstract class Routines
     protected static function clearSmsLog()
     {
         SmsLog::query()->delete()
+            ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 1 MONTH)', array() )
+            ->execute();
+    }
+
+    protected static function clearAiConversations()
+    {
+        AiConversation::query()->delete()
             ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 1 MONTH)', array() )
             ->execute();
     }
