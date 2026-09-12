@@ -389,6 +389,7 @@ class QueryBuilder
     {
         return array(
             'bookly_ai_conversations.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_ai_conversations.token' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "UNI" ),
             'bookly_ai_conversations.status' => array( 'type' => "enum('active','processing','done','error')", 'is_nullabe' => 0, 'extra' => "", 'default' => "active", 'key' => "" ),
             'bookly_ai_conversations.error_code' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_conversations.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),

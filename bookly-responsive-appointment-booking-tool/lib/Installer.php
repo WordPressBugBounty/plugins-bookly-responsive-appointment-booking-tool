@@ -1169,10 +1169,12 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\AiConversation::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
                 `status` ENUM("active","processing","done","error") NOT NULL DEFAULT "active",
                 `error_code` VARCHAR(64) DEFAULT NULL,
                 `created_at` DATETIME NOT NULL,
-                `updated_at` DATETIME NOT NULL
+                `updated_at` DATETIME NOT NULL,
+                UNIQUE KEY `token` (`token`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );

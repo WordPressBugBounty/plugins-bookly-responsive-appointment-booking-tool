@@ -3,6 +3,20 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+
+    function update_28_2()
+    {
+        if ( ! $this->existsColumn( 'bookly_ai_conversations', 'token' ) ) {
+            $this->alterTables( array(
+                'bookly_ai_conversations' => array(
+                    'ALTER TABLE `%s` ADD `token` VARCHAR(255) NOT NULL AFTER `id`',
+                    'UPDATE `%s` SET `token` = MD5(CONCAT(`id`, RAND(), UNIX_TIMESTAMP()))',
+                    'ALTER TABLE `%s` ADD UNIQUE KEY `token` (`token`)',
+                ),
+            ) );
+        }
+    }
+
     function update_28_1()
     {
         $disposable_options = array();

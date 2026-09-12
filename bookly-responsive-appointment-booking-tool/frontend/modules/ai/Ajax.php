@@ -44,21 +44,25 @@ class Ajax extends Lib\Base\Ajax
      * Start (or continue) a conversation: persists the user's message,
      * queues an AiJob, and fires a fire-and-forget loopback request to run
      * it (spawnWorker()) — then returns immediately. The browser is expected
-     * to start polling aiPoll() with the returned conversation_id.
+     * to start polling aiPoll() with the returned token.
      *
-     * Expects (via json_data): message, conversation_id (optional).
+     * Expects (via json_data): message, token (optional).
      */
     public static function aiSendMessage()
     {
-        $text            = trim( (string) self::parameter( 'message', '' ) );
-        $conversation_id = (int) self::parameter( 'conversation_id', 0 );
+        $text  = trim( (string) self::parameter( 'message', '' ) );
+        $token = (string) self::parameter( 'token', '' );
 
         if ( $text === '' ) {
             wp_send_json( array( 'success' => false, 'error' => 'ERROR_EMPTY_MESSAGE' ) );
         }
 
-        $conversation = $conversation_id ? Lib\Entities\AiConversation::find( $conversation_id ) : false;
-        if ( ! $conversation ) {
+        if ( $token !== '' ) {
+            $conversation = self::authorizeConversation();
+            if ( ! $conversation ) {
+                wp_send_json( array( 'success' => false, 'error' => 'ERROR_UNKNOWN_CONVERSATION' ) );
+            }
+        } else {
             $conversation = new Lib\Entities\AiConversation();
         }
         $conversation->setStatus( Lib\Entities\AiConversation::STATUS_PROCESSING )->save();
@@ -80,7 +84,7 @@ class Ajax extends Lib\Base\Ajax
 
         wp_send_json( array(
             'success'         => true,
-            'conversation_id' => $conversation->getId(),
+            'token'           => $conversation->getToken(),
             'last_message_id' => $message->getId(),
         ) );
     }
@@ -209,17 +213,16 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function aiPoll()
     {
-        $conversation_id = (int) self::parameter( 'conversation_id', 0 );
-        $after_id        = (int) self::parameter( 'after_id', 0 );
+        $after_id = (int) self::parameter( 'after_id', 0 );
 
-        $conversation = Lib\Entities\AiConversation::find( $conversation_id );
+        $conversation = self::authorizeConversation();
         if ( ! $conversation ) {
             wp_send_json( array( 'success' => false, 'error' => 'ERROR_UNKNOWN_CONVERSATION' ) );
         }
 
         /** @var Lib\Entities\AiMessage[] $messages */
         $messages = Lib\Entities\AiMessage::query()
-            ->where( 'conversation_id', $conversation_id )
+            ->where( 'conversation_id', $conversation->getId() )
             ->whereGt( 'id', $after_id )
             ->where( 'role', Lib\Entities\AiMessage::ROLE_ASSISTANT )
             ->sortBy( 'id' )
@@ -236,6 +239,31 @@ class Ajax extends Lib\Base\Ajax
                 );
             }, $messages ),
         ) );
+    }
+
+    /**
+     * The conversation this request is allowed to touch, or null.
+     *
+     * Conversation ids are sequential, so they never leave the server - and a transcript
+     * holds a name, a phone number and an email address. The token issued with the first
+     * message (bookly_ai_conversations.token, UNIQUE) is the only handle the browser gets,
+     * and is what proves this browser owns the conversation.
+     *
+     * @return Lib\Entities\AiConversation|null
+     */
+    private static function authorizeConversation()
+    {
+        $token = (string) self::parameter( 'token', '' );
+
+        if ( $token === '' ) {
+            return null;
+        }
+
+        $conversation = new Lib\Entities\AiConversation();
+
+        return $conversation->loadBy( array( 'token' => $token ) )
+            ? $conversation
+            : null;
     }
 
     /**

@@ -10,6 +10,8 @@ class AiConversation extends Lib\Base\Entity
     const STATUS_ERROR      = 'error';
 
     /** @var string */
+    protected $token;
+    /** @var string */
     protected $status;
     /** @var string */
     protected $error_code;
@@ -22,6 +24,7 @@ class AiConversation extends Lib\Base\Entity
 
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
+        'token' => array( 'format' => '%s' ),
         'status' => array( 'format' => '%s' ),
         'error_code' => array( 'format' => '%s' ),
         'created_at' => array( 'format' => '%s' ),
@@ -120,6 +123,29 @@ class AiConversation extends Lib\Base\Entity
         return $this;
     }
 
+    /**
+     * Get token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return $this
+     */
+    public function setToken( $token )
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
     /**************************************************************************
      * Overridden Methods                                                     *
      **************************************************************************/
@@ -131,6 +157,9 @@ class AiConversation extends Lib\Base\Entity
     {
         if ( $this->getId() == null ) {
             $this->setCreatedAt( current_time( 'mysql' ) );
+            if ( $this->getToken() === null ) {
+                $this->setToken( Lib\Utils\Common::generateToken( get_class( $this ), 'token' ) );
+            }
         }
         $this->setUpdatedAt( current_time( 'mysql' ) );
 
