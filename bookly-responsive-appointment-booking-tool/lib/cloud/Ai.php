@@ -1,6 +1,8 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
+use Bookly\Lib\Plugin;
+
 class Ai extends Product
 {
     const ACTIVATE                = '/1.0/users/%token%/products/ai/activate';               // POST
@@ -22,7 +24,8 @@ class Ai extends Product
             'sslverify' => false,
             'headers'   => array(
                 'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
+                'Accept' => 'application/json',
+                'Bookly-Version' => Plugin::getVersion(),
             ),
             'body' => wp_json_encode( $payload ),
         ) );

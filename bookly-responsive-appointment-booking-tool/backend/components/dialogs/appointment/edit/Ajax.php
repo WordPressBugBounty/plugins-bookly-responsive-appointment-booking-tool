@@ -214,7 +214,9 @@ class Ajax extends Lib\Base\Ajax
         $response = array( 'success' => false, 'data' => array( 'customers' => array() ) );
 
         $appointment = new Appointment();
-        if ( $appointment->load( self::parameter( 'id' ) ) ) {
+        if ( $appointment->load( self::parameter( 'id' ) )
+            && Common::currentUserCanManageStaff( $appointment->getStaffId() )
+        ) {
             $response['success'] = true;
 
             // Determine display time zone
@@ -250,6 +252,12 @@ class Ajax extends Lib\Base\Ajax
             $response['data']['internal_note'] = $appointment->getInternalNote();
             $response['data']['location_id'] = (int) $appointment->getLocationId();
             $response['data']['online_meeting_start_url'] = Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $appointment );
+            // Creation date is shown by the appointment card and is unused by the edit form.
+            $created_at = $appointment->getCreatedAt();
+            if ( $created_at && $display_tz !== $wp_tz ) {
+                $created_at = DateTime::convertTimeZone( $created_at, $wp_tz, $display_tz );
+            }
+            $response['data']['created_at'] = $created_at;
 
             $customers = CustomerAppointment::query( 'ca' )
                 ->select( 'ca.id,
@@ -317,6 +325,11 @@ class Ajax extends Lib\Base\Ajax
                 $response['data']['customers'][] = array(
                     'id' => (int) $customer['customer_id'],
                     'ca_id' => $customer['id'],
+                    // Contacts are also delivered separately from the combined `name` above:
+                    // the appointment card shows name, phone and email as independent fields.
+                    'full_name' => $customer['full_name'],
+                    'email' => $customer['email'],
+                    'phone' => $customer['phone'],
                     'series_id' => $customer['series_id'],
                     'package_id' => $customer['package_id'],
                     'collaborative_service' => $collaborative_service,
@@ -334,6 +347,10 @@ class Ajax extends Lib\Base\Ajax
                         ? ( $customer['payment'] != $customer['payment_total'] ? 'partial' : 'full' )
                         : null,
                     'payment_title' => $payment_title,
+                    // Raw amounts next to the ready-made `payment_title`: the card renders
+                    // its own "paid of total" chip and keeps type and status apart from it.
+                    'paid' => $customer['payment'] !== null ? (float) $customer['payment'] : null,
+                    'total' => $customer['payment_total'] !== null ? (float) $customer['payment_total'] : null,
                     'group_id' => $customer['group_id'],
                     'status' => $customer['status'],
                     'timezone' => Lib\Proxy\Pro::getCustomerTimezone( $customer['time_zone'], $customer['time_zone_offset'] ),
@@ -351,6 +368,10 @@ class Ajax extends Lib\Base\Ajax
                     $response['data']['service'] = array(
                         'id' => (int) $service->getId(),
                         'name' => sprintf( '%s (%s)', $service->getTitle(), DateTime::secondsToInterval( $service->getDuration() ) ),
+                        // Title and duration apart from the combined `name` above: the card
+                        // shows them as two fields, each with its own visibility toggle.
+                        'title' => $service->getTranslatedTitle(),
+                        'duration_title' => DateTime::secondsToInterval( $service->getDuration() ),
                         'category' => $category,
                         'duration' => (int) $service->getDuration(),
                         'units_min' => (int) $service->getUnitsMin(),
@@ -406,6 +427,19 @@ class Ajax extends Lib\Base\Ajax
         $internal_note = self::parameter( 'internal_note' );
         $created_from = self::parameter( 'created_from' );
 
+        // Both ends of the change are checked: the appointment being edited and the staff
+        // member it is assigned to, so that an appointment can neither be taken from nor
+        // handed to a colleague.
+        $permitted = Common::currentUserCanManageStaff( $staff_id );
+        if ( $permitted && $appointment_id ) {
+            $appointment = new Appointment();
+            $permitted = $appointment->load( $appointment_id )
+                && Common::currentUserCanManageStaff( $appointment->getStaffId() );
+        }
+        if ( ! $permitted ) {
+            wp_send_json_error( array( 'message' => __( 'You are not allowed to manage this appointment.', 'bookly-responsive-appointment-booking-tool' ) ) );
+        }
+
         $response = Lib\Utils\Appointment::save(
             $appointment_id,
             $staff_id,
@@ -433,6 +467,12 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function checkAppointmentErrors()
     {
+        // The answer tells when a staff member is busy — not another staff member's business.
+        // No staff member chosen yet reveals nothing and is let through.
+        if ( self::parameter( 'staff_id' ) && ! Common::currentUserCanManageStaff( self::parameter( 'staff_id' ) ) ) {
+            wp_send_json_error();
+        }
+
         $result = Lib\Utils\Appointment::checkTime(
             (int) self::parameter( 'appointment_id' ),
             self::parameter( 'start_date' ),
@@ -451,6 +491,11 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getDaySchedule()
     {
+        // Same as checkAppointmentErrors: another staff member's day is not to be read.
+        if ( self::parameter( 'staff_id' ) && ! Common::currentUserCanManageStaff( self::parameter( 'staff_id' ) ) ) {
+            wp_send_json_error();
+        }
+
         $result = Lib\Utils\Appointment::getDaySchedule(
             array( self::parameter( 'staff_id' ) ),
             self::parameter( 'service_id' ),

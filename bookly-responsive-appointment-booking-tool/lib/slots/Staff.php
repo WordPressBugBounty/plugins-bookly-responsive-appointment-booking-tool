@@ -79,6 +79,21 @@ class Staff
     }
 
     /**
+     * Add a day excluded from a repeating holiday.
+     *
+     * @param string $date Format Y-m-d
+     * @return $this
+     */
+    public function addHolidayException( $date )
+    {
+        foreach ( $this->schedule as $schedule ) {
+            $schedule->addHolidayException( $date );
+        }
+
+        return $this;
+    }
+
+    /**
      * @param array $day
      * @return $this
      */

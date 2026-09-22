@@ -50,6 +50,13 @@ class General extends Base
                 if ( isset( $response['wizard'] ) ) {
                     update_option( 'bookly_setup_wizard_config', $response['wizard'] );
                 }
+                if ( isset( $response['plugins'] ) ) {
+                    // The products catalogue goes to rows rather than to an option:
+                    // licensing selects on them, and the seen flag behind the menu
+                    // counter is this site's own state, which has no place in a copy of
+                    // somebody else's answer.
+                    \Bookly\Backend\Modules\Shop\Catalogue::save( $response['plugins'] );
+                }
 
                 $this->info_is_loaded = true;
                 $this->api->dispatch( Events::GENERAL_INFO_LOADED, $response );

@@ -443,13 +443,32 @@ class Appointment
         return $response;
     }
 
+    /**
+     * Delete an appointment with everything booked in it.
+     *
+     * Notifications are collected while the bookings are still there: a booking that is
+     * being deleted is first moved to the status that says what happened to it, so the
+     * customer is told the appointment was cancelled rather than silently losing it.
+     *
+     * By default the collected messages go to the persistent queue and the caller gets a
+     * token to show the queue dialog. A caller that means to send them itself passes its
+     * own list in `$collect` — then nothing is written to the queue and the response
+     * carries no token, because the messages are that caller's to dispatch and report.
+     *
+     * @param int $appointment_id
+     * @param bool $notification
+     * @param string|null $reason
+     * @param NotificationList|null $collect
+     * @return array
+     */
     public static function delete(
         $appointment_id,
         $notification = true,
-        $reason = null
+        $reason = null,
+        NotificationList $collect = null
     )
     {
-        $queue = new NotificationList();
+        $queue = $collect ?: new NotificationList();
 
         if ( $notification ) {
             $ca_list = Lib\Entities\CustomerAppointment::query()
@@ -488,7 +507,7 @@ class Appointment
 
         $response = array();
         $list = $queue->getList();
-        if ( $list ) {
+        if ( $list && $collect === null ) {
             $db_queue = new Lib\Entities\NotificationQueue();
             $db_queue
                 ->setData( json_encode( array( 'all' => $list ) ) )
@@ -500,6 +519,101 @@ class Appointment
         return array(
             'success' => true,
             'data' => $response,
+        );
+    }
+
+    /**
+     * The cascade an appointment belongs to, if it is a stage of a compound service or a
+     * part of a collaborative one.
+     *
+     * Such an appointment is one of several tied by a shared token — the cascade has no
+     * record of its own. Whoever asks what to do with it, move it or delete it, asks the
+     * same question — this stage or all of them — and the answer needs both the stages and
+     * the PARENT service: a whole cascade is searched for by the parent (the search then
+     * returns its stages as legs, exactly as when the cascade was created).
+     *
+     * A token belongs to one booking of one customer, so `ca_id` on a stage is that
+     * customer's booking in it — what a booking-level operation works with, while an
+     * appointment-level one takes the stage appointment whole.
+     *
+     * @param Entities\Appointment $appointment
+     * @param CustomerAppointment|null $ca Whose cascade, when the appointment holds several
+     * @return array|null
+     */
+    public static function cascadeContext( Entities\Appointment $appointment, CustomerAppointment $ca = null )
+    {
+        $row = $ca
+            ? array(
+                'compound_token' => $ca->getCompoundToken(),
+                'compound_service_id' => $ca->getCompoundServiceId(),
+                'collaborative_token' => $ca->getCollaborativeToken(),
+                'collaborative_service_id' => $ca->getCollaborativeServiceId(),
+            )
+            : CustomerAppointment::query( 'ca' )
+                ->select( 'ca.compound_token, ca.compound_service_id, ca.collaborative_token, ca.collaborative_service_id' )
+                ->where( 'ca.appointment_id', $appointment->getId() )
+                ->fetchRow();
+        if ( ! $row ) {
+            return null;
+        }
+        // Compound and collaborative differ in how their stages sit in time — one after
+        // another versus all at once — but not in how they are stored or moved.
+        if ( $row['compound_token'] ) {
+            $kind = 'compound';
+            $token_field = 'ca.compound_token';
+            $token = $row['compound_token'];
+            $service_id = (int) $row['compound_service_id'];
+        } elseif ( $row['collaborative_token'] ) {
+            $kind = 'collaborative';
+            $token_field = 'ca.collaborative_token';
+            $token = $row['collaborative_token'];
+            $service_id = (int) $row['collaborative_service_id'];
+        } else {
+            return null;
+        }
+
+        $stages = CustomerAppointment::query( 'ca' )
+            ->select( 'DISTINCT ca.id AS ca_id, ca.appointment_id, a.start_date, a.end_date, a.staff_id, a.service_id' )
+            ->innerJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+            ->where( $token_field, $token )
+            ->whereNot( 'a.start_date', null )
+            ->sortBy( 'a.start_date' )
+            ->fetchArray();
+
+        $display_tz = Common::getCurrentUserTimeZone();
+        $wp_tz = Lib\Config::getWPTimeZone();
+        $list = array();
+        $seen = array();
+        foreach ( $stages as $stage ) {
+            // A token holds one booking per stage, so a second row for the same stage says
+            // the data is not what it is assumed to be — the stage is listed once.
+            if ( isset( $seen[ $stage['appointment_id'] ] ) ) {
+                continue;
+            }
+            $seen[ $stage['appointment_id'] ] = true;
+            $service = Service::find( (int) $stage['service_id'] );
+            $list[] = array(
+                'ca_id' => (int) $stage['ca_id'],
+                'appointment_id' => (int) $stage['appointment_id'],
+                'service_id' => (int) $stage['service_id'],
+                'title' => $service ? $service->getTranslatedTitle() : '',
+                'datetime' => $stage['start_date'],
+                'display' => $display_tz === $wp_tz
+                    ? $stage['start_date']
+                    : DateTime::convertTimeZone( $stage['start_date'], $wp_tz, $display_tz ),
+                'staff_id' => (int) $stage['staff_id'],
+                'current' => (int) $stage['appointment_id'] === (int) $appointment->getId(),
+            );
+        }
+        if ( count( $list ) < 2 ) {
+            // One stage is an ordinary appointment: the question has a single answer.
+            return null;
+        }
+
+        return array(
+            'kind' => $kind,
+            'service_id' => $service_id,
+            'stages' => $list,
         );
     }
 

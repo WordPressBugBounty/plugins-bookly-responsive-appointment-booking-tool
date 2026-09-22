@@ -7,6 +7,7 @@ use Bookly\Lib;
  * @method static array  booklyFormOptions( array $bookly_options ) Modify Bookly form options.
  * @method static array  stepOptions( array $options, string $step, Lib\UserBookingData $userData ) Modify options for given step.
  * @method static array  enqueueBookingScripts( array $depends ) Enqueue scripts for booking form. @params $depends as array of registered script handles this script depends on.
+ * @method static string|null externalCheckoutAction( string|null $action, string $payment_step, Lib\CartInfo $cart_info, Lib\UserBookingData $userData ) Get AJAX action which hands the order over to an external checkout instead of the payment step.
  * @method static array  prepareCartItemInfoText( array $data, Lib\CartItem $cart_item, Lib\UserBookingData $userData ) Prepare array for replacing in Cart items.
  * @method static array  prepareChainItemInfoText( array $data, Lib\ChainItem $chain_item ) Prepare array for replacing in Chain items.
  * @method static array  prepareInfoTextCodes( array $codes, array $data ) Prepare array for replacing on booking steps.

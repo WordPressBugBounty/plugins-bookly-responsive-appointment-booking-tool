@@ -5,13 +5,20 @@ use Bookly\Lib;
 
 class Holiday extends Lib\Base\Entity
 {
+    /** Day off on the date of the row. */
+    const TYPE_ONCE = 0;
+    /** Day off on the month and the day of the row in every year. */
+    const TYPE_YEARLY = 1;
+    /** Working day on the date of the row despite the yearly day off. */
+    const TYPE_EXCEPTION = 2;
+
     /** @var  int */
     protected $staff_id;
     /** @var  int */
     protected $parent_id;
     /** @var  string */
     protected $date;
-    /** @var  int */
+    /** @var  int One of the TYPE_* constants */
     protected $repeat_event;
 
     protected static $table = 'bookly_holidays';

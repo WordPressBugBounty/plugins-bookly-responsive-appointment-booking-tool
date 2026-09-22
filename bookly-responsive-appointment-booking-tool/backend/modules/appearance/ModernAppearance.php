@@ -77,7 +77,17 @@ class ModernAppearance extends Lib\Base\Component
             'show_notice' => get_user_meta( get_current_user_id(), Lib\Plugin::getPrefix() . 'dismiss_modern_appearance_notice', true ) ? 0 : 1,
             'appearances' => $appearances,
             'images' => plugins_url( 'frontend/resources/images/', Lib\Plugin::getMainFile() ),
+            'moment_format_date' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
             'moment_format_time' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
+            'format_price' => Lib\Utils\Price::formatOptions(),
+            'sample_service' => 'Crown and Bridge',
+            'sample_staff' => 'Nick Knight',
+            'payment_systems' => Lib\Config::payLocallyEnabled() ? array(
+                Lib\Entities\Payment::TYPE_LOCAL => array(
+                    'title' => Lib\Entities\Payment::typeToString( Lib\Entities\Payment::TYPE_LOCAL ),
+                    'image' => Lib\Entities\Payment::typeToImage( Lib\Entities\Payment::TYPE_LOCAL ),
+                ),
+            ) : array(),
             'cloud_products_url' => add_query_arg(
                 array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
                 admin_url( 'admin.php' )
@@ -114,26 +124,38 @@ class ModernAppearance extends Lib\Base\Component
                 'ai_activation_trust' => __( 'Takes under 2 minutes', 'bookly-responsive-appointment-booking-tool' ),
             ),
             'fields' => array(
-                'form_title' => __( 'Form title', 'bookly-responsive-appointment-booking-tool' ),
-                'form_slug' => __( 'Slug', 'bookly-responsive-appointment-booking-tool' ),
-                'main_color' => __( 'Main color', 'bookly-responsive-appointment-booking-tool' ),
-                'display_mode' => __( 'Display mode', 'bookly-responsive-appointment-booking-tool' ),
-                'display_mode_floating' => __( 'Floating bubble', 'bookly-responsive-appointment-booking-tool' ),
-                'display_mode_embedded' => __( 'Embedded', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_reset_chat_tooltip' => __( 'Tooltip', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_close_chat_tooltip' => __( 'Tooltip', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_open_chat_tooltip' => __( 'Tooltip', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_send_tooltip' => __( 'Tooltip', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_error_messages_hint' => __( 'Shown inside the conversation when something goes wrong.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_answer_bubble_color' => __( 'Answer bubble', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_business_description' => __( 'What the assistant should know', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_business_description_hint' => __( 'In your own words, share anything you\'d like the AI assistant to use when talking to customers, applying it whenever possible.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_card_image' => Lib\Entities\Payment::typeToImage( Lib\Entities\Payment::TYPE_CLOUD_STRIPE ),
                 'ai_error_label' => __( 'Message send failed', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_error_quota_label' => __( 'Assistant unavailable', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_error_messages_hint' => __( 'Shown inside the conversation when something goes wrong.', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_error_quota_hint' => __( 'Shown to all visitors once your AI usage limit is reached.', 'bookly-responsive-appointment-booking-tool' ),
-                // 'Question bubble'
-                'ai_question_bubble_color' => __( 'Color', 'bookly-responsive-appointment-booking-tool' ),
-                // 'Answer bubble'
-                'ai_answer_bubble_color' => __( 'Color', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_preview_question' => 'Do you have any openings tomorrow morning?',
-                'ai_preview_answer' => 'Yes, 10:00 and 11:30 are free. Would you like me to book one for you?',
+                'ai_error_quota_label' => __( 'Assistant unavailable', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_awaiting_label' => __( 'Payment not confirmed yet', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_choose_label' => __( 'Prompt to choose a method', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_completed_label' => __( 'Payment received', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_due_now_label' => __( 'Deposit', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_failed_label' => __( 'Payment failed or cancelled', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_messages_hint' => __( 'Completed, awaiting & failed payment messages', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_pending_label' => __( 'Pay in person', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_placeholders_hint' => __( 'Use {service_name}, {staff_name}, {appointment_date} and {appointment_time} to include the booking that was paid for.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_popup_blocked_label' => __( 'Payment window blocked', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_processing_label' => __( 'While the payment is in progress', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_slot_taken_label' => __( 'Visible when the chosen time slot has been already booked', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_title_label' => __( 'Title', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_payment_total_label' => __( 'Total', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_preview_answer' => __( 'Yes, 10:00 and 11:30 are free. Would you like me to book one for you?', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_preview_payment_gateway' => __( 'I will pay now with Credit Card', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_preview_question' => __( 'Do you have any openings tomorrow morning?', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_question_bubble_color' => __( 'Question bubble', 'bookly-responsive-appointment-booking-tool' ),
+                'display_mode' => __( 'Display mode', 'bookly-responsive-appointment-booking-tool' ),
+                'display_mode_embedded' => __( 'Embedded', 'bookly-responsive-appointment-booking-tool' ),
+                'display_mode_floating' => __( 'Floating bubble', 'bookly-responsive-appointment-booking-tool' ),
+                'form_slug' => __( 'Slug', 'bookly-responsive-appointment-booking-tool' ),
+                'form_title' => __( 'Form title', 'bookly-responsive-appointment-booking-tool' ),
+                'main_color' => __( 'Main color', 'bookly-responsive-appointment-booking-tool' ),
+                'tooltip' => __( 'Tooltip', 'bookly-responsive-appointment-booking-tool' ),
             ),
         );
 
@@ -157,6 +179,8 @@ class ModernAppearance extends Lib\Base\Component
         $appearance = array();
         if ( $token && $data = Lib\Entities\Form::query()->where( 'token', $token )->fetchRow() ) {
             $appearance = $data;
+        } elseif ( ! $token && $form_type && $data = Lib\Entities\Form::query()->where( 'type', $form_type )->sortBy( 'id' )->fetchRow() ) {
+            $appearance = $data;
         }
 
         return self::prepareAppearanceSettings( $form_type, $appearance ?: null );
@@ -175,6 +199,24 @@ class ModernAppearance extends Lib\Base\Component
                 break;
             case Lib\Entities\Form::TYPE_AI_ASSISTANT:
                 $appearance = self::getAiAssistantDefaults();
+                if ( Lib\Config::payLocallyEnabled() ) {
+                    $appearance['l10n'][ 'payment_system_' . Lib\Entities\Payment::TYPE_LOCAL ] =
+                        __( 'I will pay locally', 'bookly-responsive-appointment-booking-tool' );
+                }
+                if ( Lib\Config::stripeCloudEnabled() ) {
+                    $appearance['l10n'][ 'payment_system_' . Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] =
+                        __( 'I will pay now with Credit Card', 'bookly-responsive-appointment-booking-tool' );
+                }
+                if ( Lib\Config::wooCommerceEnabled() ) {
+                    $appearance['l10n'][ 'payment_system_' . Lib\Entities\Payment::TYPE_WOOCOMMERCE ] =
+                        __( 'I will pay at the checkout', 'bookly-responsive-appointment-booking-tool' );
+                }
+                foreach ( array_keys( Proxy\Shared::paymentGateways( array() ) ) as $gateway ) {
+                    if ( $gateway !== Lib\Entities\Payment::TYPE_WOOCOMMERCE && get_option( 'bookly_' . $gateway . '_enabled' ) ) {
+                        $appearance['l10n'][ 'payment_system_' . $gateway ] =
+                            __( 'I will pay now with Credit Card', 'bookly-responsive-appointment-booking-tool' );
+                    }
+                }
                 break;
             default:
                 $appearance = Proxy\Pro::getAppearanceDefaults( $form_type ) ?: array();
@@ -225,15 +267,16 @@ class ModernAppearance extends Lib\Base\Component
     }
 
     /**
+     * Public so Checkout::getResultText() can fall back to the same wording instead of
+     * keeping its own hardcoded copy of these strings.
+     *
      * @return array
      */
-    protected static function getAiAssistantDefaults()
+    public static function getAiAssistantDefaults()
     {
         return array(
-            'main_color' => '#F4662F',
-            // Customer bubble follows the widget's main color until it is set
-            // explicitly (null keeps the CSS fallback in Bubble.svelte alive),
-            // the assistant bubble is the neutral surface the theme ships with.
+            'main_color' => get_option( 'bookly_app_color', '#F4662F' ),
+            'business_description' => '',
             'question_bubble_color' => null,
             'answer_bubble_color' => '#F1F5F9',
             'display_mode' => 'floating',
@@ -249,6 +292,17 @@ class ModernAppearance extends Lib\Base\Component
                 'send'         => __( 'Send', 'bookly-responsive-appointment-booking-tool' ),
                 'error'        => __( 'Something went wrong. Please try again.', 'bookly-responsive-appointment-booking-tool' ),
                 'errorQuotaExceeded' => __( 'Our chat assistant is temporarily unavailable. Please try again later, or contact us directly to book your appointment.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentTitle'     => __( 'Complete your booking', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentTotal'     => __( 'Total', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentDueNow'    => __( 'Due now', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentHint'      => __( 'Please tell us how you would like to pay', 'bookly-responsive-appointment-booking-tool' ) .':',
+                'paymentProcessing' => __( 'Waiting for your payment…', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentCompleted' => __( 'Payment received — your booking is confirmed: {service_name} with {staff_name} on {appointment_date} at {appointment_time}.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentPending'   => __( 'Your booking is confirmed: {service_name} with {staff_name} on {appointment_date} at {appointment_time}. You can pay in person at your appointment.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentAwaiting'  => __( 'Your booking is confirmed: {service_name} with {staff_name} on {appointment_date} at {appointment_time}. Your payment is still being processed.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentFailed'    => __( 'The payment did not go through, so nothing was booked. You can pick a payment method and try again.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentPopupBlocked' => __( 'Your browser blocked the payment window. Allow pop-ups for this site and try again.', 'bookly-responsive-appointment-booking-tool' ),
+                'paymentSlotTaken' => __( 'The selected time is not available anymore. Please, choose another time slot.', 'bookly-responsive-appointment-booking-tool' ),
             ),
         );
     }

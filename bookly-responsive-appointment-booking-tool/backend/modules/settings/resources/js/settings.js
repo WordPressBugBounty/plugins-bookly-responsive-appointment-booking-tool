@@ -325,6 +325,7 @@ jQuery(function ($) {
         dow: BooklyL10n.days,
         ml: BooklyL10n.months,
         we_are_not_working: BooklyL10n.we_are_not_working,
+        excluded_from_repeat: BooklyL10n.excluded_from_repeat,
         repeat: BooklyL10n.repeat,
         close: BooklyL10n.close
     });

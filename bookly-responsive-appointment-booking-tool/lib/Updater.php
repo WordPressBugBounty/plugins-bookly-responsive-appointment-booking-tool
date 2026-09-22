@@ -3,6 +3,19 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_28_3()
+    {
+        $this->alterTables( array(
+            'bookly_ai_conversations' => array(
+                'ALTER TABLE `%s` ADD `order_id` INT UNSIGNED DEFAULT NULL AFTER `error_code`',
+                'ALTER TABLE `%s` ADD `booking_status` ENUM("pending","processing","awaiting","paid","failed") DEFAULT NULL AFTER `error_code`',
+                'ALTER TABLE `%s` ADD `booking_data` TEXT DEFAULT NULL AFTER `error_code`',
+            ),
+            'bookly_shop' => array(
+                'ALTER TABLE `%s` ADD COLUMN `content` TEXT DEFAULT NULL AFTER `license`',
+            ),
+        ) );
+    }
 
     function update_28_2()
     {

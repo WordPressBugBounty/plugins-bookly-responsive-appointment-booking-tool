@@ -18,6 +18,7 @@ use Bookly\Lib;
  * @method static array  prepareCategoryServiceStaffLocation( array $location_data, array $row ) Prepare Category Service Staff Location data by row
  * @method static array  prepareCategoryService( array $result, array $row ) Prepare Category Service data by row
  * @method static array  prepareCustomerAppointmentCodes( array $codes, Lib\Entities\CustomerAppointment $customer_appointment, string $format ) Prepare codes for given customer appointment.
+ * @method static array  prepareFormTypes( array $types ) Register the add-on's own Lib\Entities\Form::TYPE_* constants. Only types added here exist for the plugin: an add-on that is switched off contributes nothing, and its forms stop being offered anywhere.
  * @method static string prepareIcsEventTemplate( string $template, Lib\Utils\Ics\Event $event ) Prepare template for ICS.
  * @method static array  prepareNotificationTitles( array $titles ) Prepare notification titles.
  * @method static array  prepareNotificationTypes( array $types, string $gateway ) Prepare notification type IDs.

@@ -51,14 +51,18 @@ class Ajax extends Lib\Base\Ajax
             try {
                 switch ( $request->get( 'bookly_event' ) ) {
                     case Lib\Base\Gateway::EVENT_CANCEL:
-                        $gateway->fail();
+                        if ( $request->isRollbackAllowed() ) {
+                            $gateway->fail();
+                        }
                         break;
                     case Lib\Base\Gateway::EVENT_RETRIEVE:
                         $gateway->retrieve();
                         break;
                 }
             } catch ( \Exception $e ) {
-                $gateway->fail();
+                if ( $request->isRollbackAllowed() ) {
+                    $gateway->fail();
+                }
             }
         }
 
@@ -71,7 +75,12 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function rollbackOrder()
     {
-        Request::getInstance()->getGateway()->fail();
+        $request = Request::getInstance();
+        // A bare order token must not be enough to delete an appointment: only the
+        // session that created a still-pending online payment may roll it back.
+        if ( $request->isRollbackAllowed() ) {
+            $request->getGateway()->fail();
+        }
         wp_send_json_success();
     }
 

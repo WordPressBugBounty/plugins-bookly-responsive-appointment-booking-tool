@@ -124,6 +124,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                     </div>
                     <div class="bookly-js-calendar"></div>
                     <?php Components\Dialogs\Appointment\Edit\Dialog::render() ?>
+                    <?php Components\Dialogs\Appointment\Card\Dialog::render() ?>
                     <?php Proxy\Shared::renderAddOnsComponents() ?>
                 <?php elseif ( Bookly\Lib\Config::proActive() ) : ?>
                     <?php Components\Notices\Proxy\Pro::renderWelcome() ?>

@@ -9,6 +9,7 @@ class Connections extends Test
 {
     protected $slug = 'check-external-connections';
     public static $query = 'query';
+    public $ajax_methods = array( 'ajax' );
     public $ignore_csrf = array( 'ajax' );
 
     public function __construct()

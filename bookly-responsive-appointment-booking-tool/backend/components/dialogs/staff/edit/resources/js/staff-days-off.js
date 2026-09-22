@@ -18,6 +18,7 @@
             dow: obj.options.l10n.days,
             ml: obj.options.l10n.months,
             we_are_not_working: obj.options.l10n.we_are_not_working,
+            excluded_from_repeat: obj.options.l10n.excluded_from_repeat,
             repeat: obj.options.l10n.repeat,
             close: obj.options.l10n.close
         });

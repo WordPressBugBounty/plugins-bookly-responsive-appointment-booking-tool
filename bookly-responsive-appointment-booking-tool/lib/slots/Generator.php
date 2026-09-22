@@ -51,6 +51,8 @@ class Generator implements \Iterator
     protected $past_slots;
     /** @var bool|null  Whether equal-preference staff are picked randomly for the service */
     protected $staff_preference_random;
+    /** @var bool  Keep candidates of every state, not only the best one (see keepAllCandidates) */
+    protected $keep_all_candidates = false;
 
     /**
      * Constructor.
@@ -300,6 +302,10 @@ class Generator implements \Iterator
      */
     private function _resolveCandidates( array $slots )
     {
+        if ( $this->keep_all_candidates ) {
+            return $this->_resolveAllCandidates( $slots );
+        }
+
         // Group by state tier: 3 = available/partially booked, 2 = waiting list started,
         // 1 = fully booked. Keep only the candidates of the best available tier.
         $best = array();
@@ -327,9 +333,68 @@ class Generator implements \Iterator
             $best = $this->_shuffleEqualPreference( $best );
         }
 
-        $slot = array_pop( $best );
-        while ( ! empty( $best ) ) {
-            $prev = array_pop( $best );
+        return $this->_chainAlternatives( $best );
+    }
+
+    /**
+     * Keep every candidate of a timestamp or only the best ones.
+     *
+     * By default a timestamp resolves to the candidates in the best state, so a free staff
+     * member hides one whose time is on the waiting list or fully booked. That is what a
+     * customer needs: somebody free. A screen that lists every staff member with their own
+     * state — the backend booking wizard — needs them all, or it cannot offer the waiting
+     * list or a double booking of the staff member the operator asked for.
+     *
+     * @param bool $keep
+     * @return $this
+     */
+    public function keepAllCandidates( $keep )
+    {
+        $this->keep_all_candidates = (bool) $keep;
+
+        return $this;
+    }
+
+    /**
+     * Resolve candidates into one slot keeping every one of them: the best state leads, the
+     * rest follow as alternatives — waiting list before fully booked, and within a state the
+     * staff preference order they arrived in.
+     *
+     * @param Range[] $slots
+     * @return Range
+     */
+    private function _resolveAllCandidates( array $slots )
+    {
+        $tiers = array( 3 => array(), 2 => array(), 1 => array() );
+        foreach ( $slots as $slot ) {
+            $tiers[ $slot->fullyBooked() ? 1 : ( $slot->waitingListStarted() ? 2 : 3 ) ][] = $slot;
+        }
+
+        $ordered = array();
+        foreach ( $tiers as $tier_slots ) {
+            if ( count( $tier_slots ) > 1 && $this->_staffPreferenceRandom() ) {
+                $tier_slots = $this->_shuffleEqualPreference( $tier_slots );
+            }
+            $ordered = array_merge( $ordered, $tier_slots );
+        }
+
+        return count( $ordered ) == 1 ? $ordered[0] : $this->_chainAlternatives( $ordered );
+    }
+
+    /**
+     * Link candidates into one slot with an alternatives chain, in the order given.
+     *
+     * Built in one linear pass from the tail: sorting or re-linking per timestamp would
+     * re-create O(N²) Range copies and dominate search time for services with many staff.
+     *
+     * @param Range[] $ordered
+     * @return Range
+     */
+    private function _chainAlternatives( array $ordered )
+    {
+        $slot = array_pop( $ordered );
+        while ( ! empty( $ordered ) ) {
+            $prev = array_pop( $ordered );
             $slot = $prev->replaceAltSlot( $slot->replacePrevAltSlot( $prev ) );
         }
 

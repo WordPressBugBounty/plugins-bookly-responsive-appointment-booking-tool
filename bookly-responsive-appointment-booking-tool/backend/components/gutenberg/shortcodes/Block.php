@@ -3,15 +3,6 @@ namespace Bookly\Backend\Components\Gutenberg\Shortcodes;
 
 use Bookly\Lib;
 
-/**
- * Generic Gutenberg picker for any non-classic form type that has saved
- * appearances — core, not Pro-gated, since which types actually exist to
- * show up here already comes from the properly core/Pro-split
- * Lib\Entities\Form::getTypes(): without Pro this ends up with nothing to
- * offer (both $exists_appearance and $forms come back empty for the
- * excluded types below) and simply registers no blocks — harmless no-op,
- * not a reason to gate the whole mechanism behind Pro like it used to be.
- */
 class Block extends Lib\Base\Block
 {
     /**
@@ -19,25 +10,23 @@ class Block extends Lib\Base\Block
      */
     public static function registerBlockType()
     {
+        // Registered types minus the ones with a dedicated block of their own.
+        $types = array_values( array_diff( Lib\Entities\Form::getTypes(), array(
+            Lib\Entities\Form::TYPE_BOOKLY_FORM,
+            Lib\Entities\Form::TYPE_AI_ASSISTANT,
+        ) ) );
+
+        if ( ! $types ) {
+            return;
+        }
+
         self::enqueueScripts( array(
             'module' => array(
                 'js/shortcodes-block.js' => array( 'wp-blocks', 'wp-components', 'wp-element', 'wp-editor' ),
             ),
         ) );
 
-        // AI assistant is excluded here — it has its own dedicated block
-        // (Backend\Components\Gutenberg\BooklyAiAssistant\Block); including
-        // it in this generic picker too would just duplicate that with a
-        // second, confusing way to insert the same shortcode. Same reason
-        // TYPE_BOOKLY_FORM is excluded (its own bookly_form block).
-        $excluded_types = array( Lib\Entities\Form::TYPE_BOOKLY_FORM, Lib\Entities\Form::TYPE_AI_ASSISTANT );
-
-        $exists_appearance = array();
-        foreach ( Lib\Entities\Form::getTypes() as $type ) {
-            if ( ! in_array( $type, $excluded_types, true ) ) {
-                $exists_appearance[ $type ] = false;
-            }
-        }
+        $exists_appearance = array_fill_keys( $types, false );
 
         $name = __( 'Default', 'bookly-responsive-appointment-booking-tool' );
         $token = '';
@@ -47,7 +36,7 @@ class Block extends Lib\Base\Block
         $forms = Lib\Entities\Form::query()
             ->select( 'type, name, token, settings' )
             ->sortBy( 'type, name' )
-            ->whereNotIn( 'type', $excluded_types )
+            ->whereIn( 'type', $types )
             ->fetchArray();
         foreach ( $forms as &$form ) {
             $exists_appearance[ $form['type'] ] = true;
@@ -55,6 +44,7 @@ class Block extends Lib\Base\Block
             $form['color'] = isset( $settings['main_color'] ) ? $settings['main_color'] : $color;
             unset( $form['settings'] );
         }
+        unset( $form );
 
         $block = array();
         foreach ( $exists_appearance as $type => $exists ) {

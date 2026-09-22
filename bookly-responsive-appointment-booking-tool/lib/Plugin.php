@@ -47,6 +47,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Cloud\Account\Ajax::init();
         Backend\Components\Cloud\Recharge\Ajax::init();
         Backend\Components\Dashboard\Appointments\Ajax::init();
+        Backend\Components\Dialogs\Appointment\Card\Ajax::init();
         Backend\Components\Dialogs\Appointment\Delete\Ajax::init();
         Backend\Components\Dialogs\Appointment\Edit\Ajax::init();
         Backend\Components\Dialogs\BookingWizard\Ajax::init();

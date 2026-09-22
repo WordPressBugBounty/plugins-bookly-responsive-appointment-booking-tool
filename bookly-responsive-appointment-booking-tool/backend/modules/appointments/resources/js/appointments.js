@@ -456,19 +456,45 @@ jQuery(function ($) {
         columns: columns,
         tableSettings: Object.assign({}, BooklyL10n.datatables[table], {l10n: Object.assign({}, BooklyL10n.datatables.l10n, {zeroRecords: BooklyL10n.zeroRecords})}),
         edit: function (row) {
-            BooklyAppointmentDialog.showDialog(
-                row.id,
-                null,
-                null,
-                function (event) {
-                    bt.reload();
+            const reload = function () {
+                bt.reload();
+            };
+            // The card and the wizard are one interface and are switched on together: the
+            // card's own actions — rescheduling, adding a customer, giving a task a time —
+            // are the wizard's, and a card without them is the classic form one click
+            // further away. With the wizard off a click opens the classic form, as it
+            // always did.
+            if (!wizardEnabled()) {
+                BooklyAppointmentDialog.showDialog(row.id, null, null, reload);
+
+                return;
+            }
+            // A click on a row opens the appointment card — a view of the whole
+            // appointment, from which the classic form and the wizard are reached. A row
+            // here is a single booking, the card shows all of them; deleting is the card's
+            // own operation and takes the appointment with every booking in it.
+            BooklyAppointmentCard.showCard(
+                getBooklyModalContainer('bookly-appointment-card'),
+                {
+                    appointmentId: row.id,
+                    onEdit: function () {
+                        BooklyAppointmentDialog.showDialog(row.id, null, null, reload);
+                    },
+                    onChanged: function () {
+                        bt.reload();
+                    },
+                    onDeleted: function () {
+                        bt.reload();
+                    },
                 }
-            )
+            );
         },
         rowActions: function (row) {
             if (!wizardEnabled()) return [];
             return [{
-                label: 'Reschedule',
+                // A row without a time is a task: the wizard gives it one instead of
+                // moving it, and the button promises that. Same wording in the card.
+                label: row.timeless ? BooklyL10n.setTime : BooklyL10n.reschedule,
                 icon: 'calendar',
                 variant: 'outline',
                 click: function (r) {

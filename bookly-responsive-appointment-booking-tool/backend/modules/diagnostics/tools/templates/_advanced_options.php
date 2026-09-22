@@ -1,6 +1,8 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 
 /** @var array $list */
+/** @var array $known_options */
+/** @var bool $can_write */
 ?>
 <div class="accordion" role="tablist" aria-multiselectable="true">
     <?php if ( $list ) : ?>
@@ -13,10 +15,12 @@
                                 <?php echo esc_html( $option ) ?>
                             </span>
                         </div>
-                        <div class="col-auto">
-                            <button class="btn btn-success ladda-button" type="button" data-action="set-default-option" data-option="<?php echo esc_attr( $option ) ?>" data-spinner-size="40" data-style="zoom-in"><span class="ladda-label">Set default</span>
-                            </button>
-                        </div>
+                        <?php if ( $can_write ) : ?>
+                            <div class="col-auto">
+                                <button class="btn btn-success ladda-button" type="button" data-action="set-default-option" data-option="<?php echo esc_attr( $option ) ?>" data-spinner-size="40" data-style="zoom-in"><span class="ladda-label">Set default</span>
+                                </button>
+                            </div>
+                        <?php endif ?>
                     </div>
                 </div>
                 <div class="card-body bookly-collapse p-0" id="advanced-options-<?php echo esc_attr( $option ) ?>">
@@ -42,13 +46,18 @@
     <div class="form-group">
         <label for="bookly-advanced-options-option-name">Option name</label>
         <div class="input-group mb-3 bookly-js-advanced-options-option-name">
-            <input value="" id="bookly-advanced-options-option-name" class="form-control" type="text"/>
+            <input value="" id="bookly-advanced-options-option-name" class="form-control" type="text" list="bookly-advanced-options-known"/>
+            <datalist id="bookly-advanced-options-known">
+                <?php foreach ( $known_options as $known_option ) : ?>
+                    <option value="<?php echo esc_attr( $known_option ) ?>"></option>
+                <?php endforeach ?>
+            </datalist>
             <div class="input-group-append">
                 <button class="btn btn-default ladda-button" type="button" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">View</button>
             </div>
         </div>
     </div>
-    <div class="bookly-collapse bookly-js-advanced-options-set-option">
+    <div class="bookly-collapse bookly-js-advanced-options-view-option">
         <div class="form-group">
             <label for="bookly-advanced-options-option-current-value">Current value</label>
             <textarea class="form-control" id="bookly-advanced-options-option-current-value" readonly></textarea>
@@ -57,12 +66,16 @@
             <label for="bookly-advanced-options-option-default-value">Default value</label>
             <textarea class="form-control" id="bookly-advanced-options-option-default-value" readonly></textarea>
         </div>
-        <div class="form-group">
-            <label for="bookly-advanced-options-option-value">New value</label>
-            <textarea class="form-control" id="bookly-advanced-options-option-value"></textarea>
-        </div>
-        <div class="w-100 text-right">
-            <button class="btn btn-success ladda-button" type="button" data-spinner-size="40" data-style="zoom-in"><span class="ladda-label">Set new value</button>
-        </div>
+        <?php if ( $can_write ) : ?>
+            <div class="bookly-js-advanced-options-set-option">
+                <div class="form-group">
+                    <label for="bookly-advanced-options-option-value">New value</label>
+                    <textarea class="form-control" id="bookly-advanced-options-option-value"></textarea>
+                </div>
+                <div class="w-100 text-right">
+                    <button class="btn btn-success ladda-button" type="button" data-spinner-size="40" data-style="zoom-in"><span class="ladda-label">Set new value</span></button>
+                </div>
+            </div>
+        <?php endif ?>
     </div>
 </div>

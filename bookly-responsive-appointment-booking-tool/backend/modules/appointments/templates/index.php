@@ -19,6 +19,7 @@ use Bookly\Backend\Modules\Appointments\Proxy;
     <?php Dialogs\Appointment\Delete\Dialog::render() ?>
     <?php Dialogs\TableSettings\Dialog::render() ?>
     <?php Dialogs\Appointment\Edit\Dialog::render() ?>
+    <?php Dialogs\Appointment\Card\Dialog::render() ?>
     <?php Dialogs\Queue\Dialog::render() ?>
     <?php Proxy\Shared::renderAddOnsComponents() ?>
 </div>

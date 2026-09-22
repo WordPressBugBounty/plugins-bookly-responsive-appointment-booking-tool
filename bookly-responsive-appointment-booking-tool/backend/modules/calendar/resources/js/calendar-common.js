@@ -388,35 +388,62 @@
                     } else {
                         visible_staff_id = obj.options.getCurrentStaffId();
                     }
-                    BooklyAppointmentDialog.showDialog(
-                        arg.event.id,
-                        null,
-                        null,
-                        function (event) {
-                            if (event == 'refresh') {
-                                calendar.refetchEvents();
+                    // What the classic form reports back: the saved appointment, a task with
+                    // no time, or a plain refresh. Kept as it was — the card only changes
+                    // what opens first, not what happens after the form is saved.
+                    let onAppointmentSaved = function (event) {
+                        if (event == 'refresh') {
+                            calendar.refetchEvents();
+                        } else {
+                            if (event.start === null) {
+                                // Task
+                                calendar.removeEventById(event.id);
                             } else {
-                                if (event.start === null) {
-                                    // Task
+                                if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
+                                    // Update event in calendar.
                                     calendar.removeEventById(event.id);
+                                    calendar.addEvent(event);
                                 } else {
-                                    if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
-                                        // Update event in calendar.
-                                        calendar.removeEventById(event.id);
-                                        calendar.addEvent(event);
-                                    } else {
-                                        // Switch to the event owner tab.
-                                        jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
-                                    }
+                                    // Switch to the event owner tab.
+                                    jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
                                 }
                             }
-
-                            if (locationChanged) {
-                                calendar.refetchEvents();
-                                locationChanged = false;
-                            }
                         }
-                    );
+
+                        if (locationChanged) {
+                            calendar.refetchEvents();
+                            locationChanged = false;
+                        }
+                    };
+
+                    // The card and the wizard are one interface and are switched on
+                    // together: the card's own actions are the wizard's, and without them it
+                    // is the classic form one click further away. Screens that have neither
+                    // — the calendars outside wp-admin — keep the classic form as well.
+                    if (typeof BooklyAppointmentCard !== 'undefined' && typeof BooklyBookingWizard !== 'undefined' && BooklyL10n.createWithWizard) {
+                        // A click on an appointment opens the card — a view of the whole
+                        // appointment, from which the classic form and the wizard are
+                        // reached.
+                        BooklyAppointmentCard.showCard(
+                            getBooklyModalContainer('bookly-appointment-card'),
+                            {
+                                appointmentId: arg.event.id,
+                                onEdit: function () {
+                                    BooklyAppointmentDialog.showDialog(arg.event.id, null, null, onAppointmentSaved);
+                                },
+                                // A series is deleted by the card too: its delete window asks
+                                // how far the deletion reaches — this visit, this and the
+                                // later ones, the whole series — in the same words the
+                                // wizard asks before moving one. Nothing is handed over.
+                                // Deleting may take other appointments with it, so the
+                                // calendar is refetched rather than told to drop one event.
+                                onDeleted: function () { calendar.refetchEvents(); },
+                                onChanged: function () { calendar.refetchEvents(); },
+                            }
+                        );
+                    } else {
+                        BooklyAppointmentDialog.showDialog(arg.event.id, null, null, onAppointmentSaved);
+                    }
                 }
             }
         }

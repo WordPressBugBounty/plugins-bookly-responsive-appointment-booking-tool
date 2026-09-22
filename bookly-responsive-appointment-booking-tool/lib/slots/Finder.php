@@ -26,6 +26,8 @@ class Finder
     protected $single_slot_per_day;
     /** @var bool */
     protected $waiting_list_enabled;
+    /** @var bool  Keep every staff member's slot for a time (see keepAllCandidates) */
+    protected $keep_all_candidates = false;
     /** @var array */
     protected $ignore_appointments = array();
     /** @var callable */
@@ -100,6 +102,25 @@ class Finder
         } else {
             $this->callback_stop = array( $this, '_stopDefault' );
         }
+    }
+
+    /**
+     * Keep every staff member's slot for a time, not only the best available ones.
+     *
+     * By default a time resolves to the candidates in the best state: a free staff member
+     * hides one whose time is on the waiting list or fully booked. That is right for a
+     * customer, who needs somebody free. A screen that lists every staff member with their
+     * own state needs them all — the best stay first, the rest follow as alternatives.
+     * Takes effect on the next load().
+     *
+     * @param bool $keep
+     * @return $this
+     */
+    public function keepAllCandidates( $keep = true )
+    {
+        $this->keep_all_candidates = (bool) $keep;
+
+        return $this;
     }
 
     /**
@@ -209,6 +230,7 @@ class Finder
                             $generator,
                             $connection
                         );
+                        $generator->keepAllCandidates( $this->keep_all_candidates );
                         $spare_time = 0;
                         if ( $is_collaborative ) {
                             // Change connection type for collaborative services.
@@ -600,13 +622,17 @@ class Finder
 
         // Holidays.
         $holidays = Lib\Entities\Holiday::query( 'h' )
-            ->select( 'IF(h.repeat_event, DATE_FORMAT(h.date, \'%%m-%%d\'), h.date) as date, h.staff_id' )
+            ->select( 'IF(h.repeat_event = ' . Lib\Entities\Holiday::TYPE_YEARLY . ', DATE_FORMAT(h.date, \'%%m-%%d\'), h.date) as date, h.repeat_event, h.staff_id' )
             ->whereIn( 'h.staff_id', array_keys( $this->staff ) )
-            ->whereRaw( 'h.repeat_event = 1 OR h.date >= %s', array( $this->start_dp->format( 'Y-m-d' ) ) )
+            ->whereRaw( 'h.repeat_event = %d OR h.date >= %s', array( Lib\Entities\Holiday::TYPE_YEARLY, $this->start_dp->format( 'Y-m-d' ) ) )
             ->fetchArray();
 
         foreach ( $holidays as $holiday ) {
-            $this->staff[ $holiday['staff_id'] ]->addHoliday( $holiday['date'] );
+            if ( $holiday['repeat_event'] == Lib\Entities\Holiday::TYPE_EXCEPTION ) {
+                $this->staff[ $holiday['staff_id'] ]->addHolidayException( $holiday['date'] );
+            } else {
+                $this->staff[ $holiday['staff_id'] ]->addHoliday( $holiday['date'] );
+            }
         }
 
         // Special days.

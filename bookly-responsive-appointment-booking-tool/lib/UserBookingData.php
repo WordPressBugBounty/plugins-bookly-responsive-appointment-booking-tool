@@ -105,6 +105,8 @@ class UserBookingData
     protected $verification_resend_count = 0;
     /** @var string|null Recipient (phone/email) already verified in this session */
     protected $verification_verified_recipient;
+    /** @var int Number of consecutive wrong verification code entries */
+    protected $verification_attempt_count = 0;
 
     // Private
 
@@ -317,6 +319,7 @@ class UserBookingData
         $this->session['verification_code_sent_at'] = $this->verification_code_sent_at;
         $this->session['verification_resend_count'] = $this->verification_resend_count;
         $this->session['verification_verified_recipient'] = $this->verification_verified_recipient;
+        $this->session['verification_attempt_count'] = $this->verification_attempt_count;
         $this->session['order_id'] = $this->order_id;
 
         FormSession::saveSession( $this->form_id, $this->session );
@@ -357,6 +360,7 @@ class UserBookingData
                 $this->verification_code_sent_at = isset( $this->session['verification_code_sent_at'] ) ? $this->session['verification_code_sent_at'] : 0;
                 $this->verification_resend_count = isset( $this->session['verification_resend_count'] ) ? $this->session['verification_resend_count'] : 0;
                 $this->verification_verified_recipient = isset( $this->session['verification_verified_recipient'] ) ? $this->session['verification_verified_recipient'] : null;
+                $this->verification_attempt_count = isset( $this->session['verification_attempt_count'] ) ? $this->session['verification_attempt_count'] : 0;
                 $this->order_id = isset( $this->session['order_id'] ) ? $this->session['order_id'] : null;
                 $this->applyTimeZone();
 
@@ -599,11 +603,40 @@ class UserBookingData
                 case 'cart':
                     $validator->validateCart( $field_value, $data['form_id'] );
                     break;
+                case 'chain':
+                    $validator->validateChain( $field_name, $field_value );
+                    break;
+                case 'extras':
+                    $validator->validateExtras( $field_name, $field_value, $this );
+                    break;
                 default:
             }
         }
-        // Post validators.
-        if ( isset ( $data['phone'] ) || isset ( $data['email'] ) ) {
+        // Post validators run only for a request that submits contact details. Every other
+        // step (service, time, cart) carries no customer data, and a returning visitor whose
+        // remembered details differ from the record would otherwise get the duplicate data
+        // error there, where the form has no place to show it.
+        if ( ! isset ( $data['phone'] ) && ! isset ( $data['email'] ) ) {
+            return $validator->getErrors();
+        }
+        // The customer a booking ends up on is resolved from the identifiers held by the
+        // session, which may come from an earlier step or from the cookies, not only from the
+        // fields submitted now. Identifiers missing from the submission are taken from the
+        // session so that the check runs against the same record the booking will be saved
+        // to, and an absent field is not read as a differing one.
+        $identifiers = array( 'phone' => $this->getPhone(), 'email' => $this->getEmail() );
+        $names = Config::showFirstLastName()
+            ? array( 'first_name' => $this->getFirstName(), 'last_name' => $this->getLastName() )
+            : array( 'full_name' => $this->getFullName() );
+        foreach ( $identifiers + $names as $field => $session_value ) {
+            if ( ! isset ( $data[ $field ] ) ) {
+                $data[ $field ] = (string) $session_value;
+            }
+        }
+        if ( ! isset ( $data['verification_code'] ) ) {
+            $data['verification_code'] = '';
+        }
+        if ( $data['phone'] != '' || $data['email'] != '' ) {
             $validator->postValidateCustomer( $data, $this );
         }
 
@@ -621,76 +654,100 @@ class UserBookingData
         // Customer.
         $customer = $this->getCustomer();
 
+        // An existing record is matched by phone or email alone, which the booking pipeline
+        // accepts from anyone. Its filled in personal data therefore stays untouched unless
+        // the session proves it owns the record; empty fields are still filled in.
+        $rewrite = ! $customer->isLoaded() || $this->customerIdentityConfirmed( $customer );
+
         // Overwrite only if value is not empty.
-        if ( $this->getFacebookId() ) {
+        if ( $this->getFacebookId() && ( $rewrite || ! $customer->getFacebookId() ) ) {
             $customer->setFacebookId( $this->getFacebookId() );
         }
-        if ( $this->getFullName() != '' ) {
+        if ( $this->getFullName() != '' && ( $rewrite || $customer->getFullName() == '' ) ) {
             $customer->setFullName( $this->getFullName() );
         }
-        if ( $this->getFirstName() != '' ) {
+        if ( $this->getFirstName() != '' && ( $rewrite || $customer->getFirstName() == '' ) ) {
             $customer->setFirstName( $this->getFirstName() );
         }
-        if ( $this->getLastName() != '' ) {
+        if ( $this->getLastName() != '' && ( $rewrite || $customer->getLastName() == '' ) ) {
             $customer->setLastName( $this->getLastName() );
         }
-        if ( $this->getPhone() != '' ) {
+        if ( $this->getPhone() != '' && ( $rewrite || $customer->getPhone() == '' ) ) {
             $customer->setPhone( $this->getPhone() );
         }
-        if ( $this->getEmail() != '' ) {
+        if ( $this->getEmail() != '' && ( $rewrite || $customer->getEmail() == '' ) ) {
             $customer->setEmail( trim( $this->getEmail() ) );
         }
-        if ( $this->getBirthdayYmd() != '' ) {
+        if ( $this->getBirthdayYmd() != '' && ( $rewrite || ! $customer->getBirthday() ) ) {
             $customer->setBirthday( $this->getBirthdayYmd() );
         }
-        // Set address fields.
-        if ( $this->getCountry() !== $customer->getCountry() ||
-            $this->getState() !== $customer->getState() ||
-            $this->getPostcode() !== $customer->getPostcode() ||
-            $this->getCity() !== $customer->getCity() ||
-            $this->getStreet() !== $customer->getStreet() ||
-            $this->getStreetNumber() !== $customer->getStreetNumber() ||
-            $this->getAdditionalAddress() !== $customer->getAdditionalAddress()
-        ) {
-            // Clear all address fields if some field changed.
-            $customer
-                ->setCountry( '' )
-                ->setState( '' )
-                ->setPostcode( '' )
-                ->setCity( '' )
-                ->setStreet( '' )
-                ->setStreetNumber( '' )
-                ->setAdditionalAddress( '' );
-        }
-        if ( $this->getCountry() != '' ) {
-            $customer->setCountry( $this->getCountry() );
-        }
-        if ( $this->getState() != '' ) {
-            $customer->setState( $this->getState() );
-        }
-        if ( $this->getPostcode() != '' ) {
-            $customer->setPostcode( $this->getPostcode() );
-        }
-        if ( $this->getCity() != '' ) {
-            $customer->setCity( $this->getCity() );
-        }
-        if ( $this->getStreet() != '' ) {
-            $customer->setStreet( $this->getStreet() );
-        }
-        if ( $this->getStreetNumber() != '' ) {
-            $customer->setStreetNumber( $this->getStreetNumber() );
-        }
-        if ( $this->getAdditionalAddress() != '' ) {
-            $customer->setAdditionalAddress( $this->getAdditionalAddress() );
-        }
-        if ( $this->getFullAddress() !== '' ) {
-            $customer->setFullAddress( $this->getFullAddress() );
+        // Address is stored as one whole: a single changed part clears the rest, so a record
+        // that already holds an address is left alone unless the session owns it.
+        $address_empty = $customer->getCountry() == ''
+            && $customer->getState() == ''
+            && $customer->getPostcode() == ''
+            && $customer->getCity() == ''
+            && $customer->getStreet() == ''
+            && $customer->getStreetNumber() == ''
+            && $customer->getAdditionalAddress() == '';
+
+        if ( $rewrite || $address_empty ) {
+            // Set address fields.
+            if ( $this->getCountry() !== $customer->getCountry() ||
+                $this->getState() !== $customer->getState() ||
+                $this->getPostcode() !== $customer->getPostcode() ||
+                $this->getCity() !== $customer->getCity() ||
+                $this->getStreet() !== $customer->getStreet() ||
+                $this->getStreetNumber() !== $customer->getStreetNumber() ||
+                $this->getAdditionalAddress() !== $customer->getAdditionalAddress()
+            ) {
+                // Clear all address fields if some field changed.
+                $customer
+                    ->setCountry( '' )
+                    ->setState( '' )
+                    ->setPostcode( '' )
+                    ->setCity( '' )
+                    ->setStreet( '' )
+                    ->setStreetNumber( '' )
+                    ->setAdditionalAddress( '' );
+            }
+            if ( $this->getCountry() != '' ) {
+                $customer->setCountry( $this->getCountry() );
+            }
+            if ( $this->getState() != '' ) {
+                $customer->setState( $this->getState() );
+            }
+            if ( $this->getPostcode() != '' ) {
+                $customer->setPostcode( $this->getPostcode() );
+            }
+            if ( $this->getCity() != '' ) {
+                $customer->setCity( $this->getCity() );
+            }
+            if ( $this->getStreet() != '' ) {
+                $customer->setStreet( $this->getStreet() );
+            }
+            if ( $this->getStreetNumber() != '' ) {
+                $customer->setStreetNumber( $this->getStreetNumber() );
+            }
+            if ( $this->getAdditionalAddress() != '' ) {
+                $customer->setAdditionalAddress( $this->getAdditionalAddress() );
+            }
+            if ( $this->getFullAddress() !== '' ) {
+                $customer->setFullAddress( $this->getFullAddress() );
+            }
         }
 
         // Customer information fields.
-        $customer->setInfoFields( json_encode( Proxy\CustomerInformation::prepareVisibleInfoFields( $this->getInfoFields(), $customer ) ) );
+        $info_fields = $customer->getInfoFields();
+        if ( $rewrite || $info_fields === null || $info_fields === '' || $info_fields === '[]' ) {
+            $customer->setInfoFields( json_encode( Proxy\CustomerInformation::prepareVisibleInfoFields( $this->getInfoFields(), $customer ) ) );
+        }
 
-        Proxy\Pro::createWPUser( $customer );
+        // A WP account must not be created for, or tied to, a record the session does not own:
+        // the credentials would grant access to someone else's booking history.
+        if ( $rewrite ) {
+            Proxy\Pro::createWPUser( $customer );
+        }
 
         $customer->save();
         Proxy\Files::attachCIFiles( $this->getInfoFields() ?: array(), $customer );
@@ -709,13 +766,37 @@ class UserBookingData
         if ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
 
             $expire = time() + YEAR_IN_SECONDS;
-            $fields = $customer->getFields();
             $keys = array( 'full_name', 'first_name', 'last_name', 'phone', 'email', 'birthday', 'country', 'state', 'postcode', 'city', 'street', 'street_number', 'additional_address', );
+            if ( $rewrite ) {
+                $fields = $customer->getFields();
+                $info_fields = $customer->getInfoFields();
+            } else {
+                // The record was matched by a phone or email anyone can type and was not
+                // overwritten, so it still holds another person's data. Remembering the record
+                // would hand that data to this browser; what was typed in is remembered instead.
+                $fields = array(
+                    'full_name' => $this->getFullName(),
+                    'first_name' => $this->getFirstName(),
+                    'last_name' => $this->getLastName(),
+                    'phone' => $this->getPhone(),
+                    'email' => trim( $this->getEmail() ),
+                    'birthday' => $this->getBirthdayYmd(),
+                    'country' => $this->getCountry(),
+                    'state' => $this->getState(),
+                    'postcode' => $this->getPostcode(),
+                    'city' => $this->getCity(),
+                    'street' => $this->getStreet(),
+                    'street_number' => $this->getStreetNumber(),
+                    'additional_address' => $this->getAdditionalAddress(),
+                );
+                // Only the fields shown in the form: hidden ones would be taken from the record.
+                $info_fields = json_encode( $this->getInfoFields() ?: array() );
+            }
             foreach ( $keys as $key ) {
                 $fields[ $key ] != '' && setcookie( 'bookly-customer-' . str_replace( '_', '-', $key ), $fields[ $key ], $expire, '/' );
             }
             if ( Config::customerInformationActive() ) {
-                setcookie( 'bookly-customer-info-fields', $customer->getInfoFields(), $expire, '/' );
+                setcookie( 'bookly-customer-info-fields', $info_fields, $expire, '/' );
             }
         }
 
@@ -1923,6 +2004,54 @@ class UserBookingData
         $this->verification_verified_recipient = $value;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVerificationAttemptCount()
+    {
+        return (int) $this->verification_attempt_count;
+    }
+
+    /**
+     * @param int $value
+     * @return $this
+     */
+    public function setVerificationAttemptCount( $value )
+    {
+        $this->verification_attempt_count = (int) $value;
+
+        return $this;
+    }
+
+    /**
+     * Whether the booking session has proven control over the given existing customer.
+     *
+     * A booking may be attached to a customer matched by phone or email, but the personal
+     * data of an already existing record must not be rewritten unless the session proves
+     * it owns that record: either the record belongs to the logged in WP user, or the
+     * customer's phone/email was confirmed with a verification code in this session.
+     *
+     * @param Entities\Customer $customer
+     * @return bool
+     */
+    public function customerIdentityConfirmed( Entities\Customer $customer )
+    {
+        if ( $this->wp_user_id > 0 && (int) $customer->getWpUserId() === (int) $this->wp_user_id ) {
+            return true;
+        }
+
+        $verified = $this->getVerifiedRecipient();
+        if ( $verified !== null && $verified !== '' ) {
+            $phone = Cloud\SMS::normalizePhoneNumber( (string) $customer->getPhone() );
+            $email = strtolower( trim( (string) $customer->getEmail() ) );
+            if ( ( $phone !== '' && $verified === $phone ) || ( $email !== '' && $verified === $email ) ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

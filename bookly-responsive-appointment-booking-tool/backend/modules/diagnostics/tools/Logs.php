@@ -10,6 +10,8 @@ class Logs extends Tool
     protected $title = 'Logs';
     public $position = 30;
 
+    protected $bookly_methods = array( 'enableLogs', 'restore' );
+
     public function render()
     {
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::LOGS );

@@ -62,6 +62,7 @@ class Dialog extends Lib\Base\Component
             'holidays' => array(
                 'close' => esc_attr__( 'Close', 'bookly-responsive-appointment-booking-tool' ),
                 'days' => array_values( $wp_locale->weekday_abbrev ),
+                'excluded_from_repeat' => esc_attr__( 'This day is excluded from the repeating day off', 'bookly-responsive-appointment-booking-tool' ),
                 'firstDay' => (int) get_option( 'start_of_week' ),
                 'loading_img' => plugins_url( 'bookly-responsive-appointment-booking-tool/backend/resources/images/loading.gif' ),
                 'months' => array_values( $wp_locale->month ),

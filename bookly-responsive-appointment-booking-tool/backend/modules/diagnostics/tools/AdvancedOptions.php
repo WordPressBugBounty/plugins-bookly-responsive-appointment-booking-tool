@@ -8,8 +8,12 @@ class AdvancedOptions extends Tool
     protected $slug = 'advanced-options';
     protected $hidden = true;
     protected $list;
+    /** @var array Raw default values, keyed by option name */
+    protected $defaults = array();
 
     public $position = 40;
+
+    protected $bookly_methods = array( 'getOption' );
 
     protected $excluded_options = array(
         'bookly_cloud_account_products',
@@ -22,11 +26,6 @@ class AdvancedOptions extends Tool
         'bookly_cst_phone_default_country',
     );
 
-    protected $white_list = array(
-        'cron',
-        'active_plugins'
-    );
-
     public function __construct()
     {
         $this->title = 'Advanced options';
@@ -36,8 +35,10 @@ class AdvancedOptions extends Tool
     {
         $this->getList();
         $list = $this->getErrorsList();
+        $known_options = array_keys( $this->list );
+        $can_write = current_user_can( 'manage_options' );
 
-        return self::renderTemplate( '_advanced_options', compact( 'list' ), false );
+        return self::renderTemplate( '_advanced_options', compact( 'list', 'known_options', 'can_write' ), false );
     }
 
     /**
@@ -64,7 +65,10 @@ class AdvancedOptions extends Tool
                 /** @var Lib\Base\Installer $installer */
                 $installer = new $installer_class();
                 foreach ( $installer->getOptions() as $option => $value ) {
-                    $list_value = array( 'current' => maybe_serialize( get_option( $option, 'not-exists' ) ), 'default' => maybe_serialize( $value ) );
+                    $this->defaults[ $option ] = $value;
+                    $list_value = self::isProtected( $option )
+                        ? array( 'current' => '', 'default' => '' )
+                        : array( 'current' => self::formatValue( get_option( $option, 'not-exists' ) ), 'default' => self::formatValue( $value ) );
                     if ( ! $this->verifyOption( $option, $value ) ) {
                         $list_value['incorrect'] = true;
                     }
@@ -133,10 +137,12 @@ class AdvancedOptions extends Tool
     {
         $this->getList();
 
-        $option = self::parameter( 'option' );
-        if ( isset( $this->list[ $option ] ) ) {
-            update_option( $option, maybe_unserialize( $this->list[ $option ]['default'] ) );
+        $option = trim( self::parameter( 'option' ) );
+        if ( ! isset( $this->list[ $option ] ) ) {
+            wp_send_json_error();
         }
+
+        $this->updateOption( $option, $this->defaults[ $option ] );
 
         wp_send_json_success();
     }
@@ -148,21 +154,22 @@ class AdvancedOptions extends Tool
      */
     public function getOption()
     {
-        $option = trim( self::parameter( 'option' ) );
+        $this->getList();
 
-        if ( ! $this->isOptionValid( $option ) ) {
+        $option = trim( self::parameter( 'option' ) );
+        if ( ! isset( $this->list[ $option ] ) ) {
             wp_send_json_error();
         }
 
-        $this->getList();
-        $result = array( 'current' => maybe_serialize( get_option( $option, 'not-exists' ) ), 'default' => null );
-
-        if ( isset( $this->list[ $option ] ) ) {
-            $result['default'] = $this->list[ $option ]['default'];
+        if ( self::isProtected( $option ) ) {
+            wp_send_json_success( array( 'current' => '', 'default' => '', 'protected' => true ) );
         }
 
-
-        wp_send_json_success( $result );
+        wp_send_json_success( array(
+            'current' => self::formatValue( get_option( $option, 'not-exists' ) ),
+            'default' => $this->list[ $option ]['default'],
+            'protected' => false,
+        ) );
     }
 
     /**
@@ -172,20 +179,44 @@ class AdvancedOptions extends Tool
      */
     public function setOption()
     {
-        $option = trim( self::parameter( 'option' ) );
+        $this->getList();
 
-        if ( ! $this->isOptionValid( $option ) ) {
+        $option = trim( self::parameter( 'option' ) );
+        if ( ! isset( $this->list[ $option ] ) ) {
             wp_send_json_error();
         }
-        $option_value = maybe_unserialize( self::parameter( 'value' ) );
 
-        update_option( $option, $option_value );
-
-        if ( strncmp( $option, 'bookly_l10n_', 12 ) === 0 ) {
-            do_action( 'wpml_register_single_string', 'bookly', $option, $option_value );
+        $raw_value = (string) self::parameter( 'value' );
+        if ( is_array( $this->defaults[ $option ] ) ) {
+            // Arrays are passed as JSON. Raw input is never unserialized, that would allow object injection.
+            $value = json_decode( $raw_value, true );
+            if ( ! is_array( $value ) ) {
+                wp_send_json_error( array( 'message' => 'The value of this option must be a valid JSON array' ) );
+            }
+        } else {
+            $value = $raw_value;
         }
 
+        $this->updateOption( $option, $value );
+
         wp_send_json_success();
+    }
+
+    /**
+     * Write the option and leave an audit record.
+     *
+     * @param string $option
+     * @param mixed  $value
+     */
+    private function updateOption( $option, $value )
+    {
+        update_option( $option, $value );
+
+        if ( strncmp( $option, 'bookly_l10n_', 12 ) === 0 ) {
+            do_action( 'wpml_register_single_string', 'bookly', $option, $value );
+        }
+
+        Lib\Utils\Log::put( Lib\Utils\Log::ACTION_UPDATE, $option, null, self::formatValue( $value ), null, 'Advanced options' );
     }
 
     private function getErrorsList()
@@ -193,9 +224,30 @@ class AdvancedOptions extends Tool
         return array_filter( $this->list, static function( $val ) { return isset( $val['incorrect'] ) && $val['incorrect']; } );
     }
 
-    private function isOptionValid( $option )
+    /**
+     * Check whether the option value must be hidden from the current user.
+     *
+     * @param string $option
+     * @return bool
+     */
+    private static function isProtected( $option )
     {
-        return in_array( $option, $this->white_list, true ) || strpos( $option, 'bookly_' ) === 0;
+        return in_array( $option, self::getSensitiveOptions(), true ) && ! current_user_can( 'manage_options' );
+    }
+
+    /**
+     * Cast an option value to the text shown in the UI and accepted back from it.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private static function formatValue( $value )
+    {
+        if ( is_array( $value ) || is_object( $value ) ) {
+            return json_encode( $value );
+        }
+
+        return (string) $value;
     }
 
     private function isJson( $string )

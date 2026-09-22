@@ -12,7 +12,7 @@
         var form = BooklyAiAssistantBlockL10n.forms.filter(function (f) {
             return f.token === token;
         })[0];
-        return (form || BooklyAiAssistantBlockL10n.forms[0] || {}).color || '#F4662F';
+        return (form || {}).color || BooklyAiAssistantBlockL10n.defaultColor;
     }
 
     function icon(color) {
@@ -51,10 +51,12 @@
             }
         },
         edit: function (props) {
-            var token = props.attributes.token;
+            var token = props.attributes.token,
+                children = []
+            ;
 
-            return [
-                el(InspectorControls, {key: 'inspector'},
+            if (BooklyAiAssistantBlockL10n.forms.length > 1) {
+                children.push(el(InspectorControls, {key: 'inspector'},
                     el(components.SelectControl, {
                         label: BooklyAiAssistantBlockL10n.selectForm,
                         value: token,
@@ -65,15 +67,19 @@
                             props.setAttributes({token: value});
                         }
                     })
-                ),
-                el('div', {
+                ));
+            }
+
+            children.push(el('div', {
                     key: 'preview',
                     style: {display: 'flex', alignItems: 'center', gap: '0.5em', padding: '1em', border: '1px dashed #ccc'}
                 },
                     icon(colorForToken(token)),
                     el('span', {}, shortCode(token))
                 )
-            ];
+            );
+
+            return children;
         },
         save: function (props) {
             return el('div', {}, shortCode(props.attributes.token));

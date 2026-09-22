@@ -57,6 +57,10 @@ class Form extends Lib\Base\Entity
                 return __( 'Services form', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_STAFF_FORM:
                 return __( 'Staff form', 'bookly-responsive-appointment-booking-tool' );
+            case self::TYPE_TAGS_FORM:
+                return __( 'Tags form', 'bookly-responsive-appointment-booking-tool' );
+            case self::TYPE_EVENTS_FORM:
+                return __( 'Events form', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_CHECKOUT_FORM:
                 return __( 'Checkout form', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_AI_ASSISTANT:
@@ -87,6 +91,8 @@ class Form extends Lib\Base\Entity
                 return __( 'A custom block for displaying staff form', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_TAGS_FORM:
                 return __( 'A custom block for displaying tags form', 'bookly-responsive-appointment-booking-tool' );
+            case self::TYPE_EVENTS_FORM:
+                return __( 'A custom block for displaying events form', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_AI_ASSISTANT:
                 return __( 'A custom block for displaying AI assistant form', 'bookly-responsive-appointment-booking-tool' );
             default:
@@ -95,22 +101,14 @@ class Form extends Lib\Base\Entity
     }
 
     /**
-     * Core types only (TYPE_BOOKLY_FORM, TYPE_AI_ASSISTANT — always
-     * available) merged with whatever the Pro add-on contributes
-     * (TYPE_SEARCH_FORM etc. — empty when Pro is inactive, see
-     * Lib\Proxy\Pro::getFormTypes()). Previously a flat hardcoded list
-     * including the Pro-only types unconditionally, which was harmless only
-     * because both call sites (in bookly-addon-pro) already require Pro to
-     * even run — but a landmine for any future core-only caller.
-     *
      * @return string[]
      */
     public static function getTypes()
     {
-        return array_merge( array(
+        return Lib\Proxy\Shared::prepareFormTypes( array(
             self::TYPE_BOOKLY_FORM,
             self::TYPE_AI_ASSISTANT,
-        ), Lib\Proxy\Pro::getFormTypes() ?: array() );
+        ) );
     }
 
     /**************************************************************************

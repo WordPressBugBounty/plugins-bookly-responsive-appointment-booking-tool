@@ -19,6 +19,18 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Stop the request when the payment belongs to another staff member.
+     *
+     * @param int $payment_id
+     */
+    private static function denyForeignPayment( $payment_id )
+    {
+        if ( ! Lib\Utils\Common::currentUserCanManagePayment( $payment_id ) ) {
+            wp_send_json_error( array( 'message' => __( 'Payment is not found.', 'bookly-responsive-appointment-booking-tool' ) ) );
+        }
+    }
+
+    /**
      * Get payment details.
      */
     public static function getPaymentDetails()
@@ -120,6 +132,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function completePayment()
     {
+        self::denyForeignPayment( self::parameter( 'payment_id' ) );
         $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
         $details = $payment->getDetailsData();
         $details->setData(
@@ -174,6 +187,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function refundPayment()
     {
+        self::denyForeignPayment( self::parameter( 'payment_id' ) );
         $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
         if ( $payment->getStatus() != Lib\Entities\Payment::STATUS_REFUNDED ) {
             try {
@@ -228,6 +242,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $payment = null;
         if ( self::hasParameter( 'payment_id' ) ) {
+            self::denyForeignPayment( self::parameter( 'payment_id' ) );
             $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
             if ( ! $payment ) {
                 wp_send_json_error( array( 'message' => __( 'Payment is not found.', 'bookly-responsive-appointment-booking-tool' ) ) );

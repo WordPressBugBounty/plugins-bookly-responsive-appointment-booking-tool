@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer bookly-preflight, theme;
@@ -38,6 +39,8 @@
     --bookly-color-green-900: oklch(39.3% 0.095 152.535);
     --bookly-color-emerald-50: oklch(97.9% 0.021 166.113);
     --bookly-color-emerald-100: oklch(95% 0.052 163.051);
+    --bookly-color-emerald-200: oklch(90.5% 0.093 164.15);
+    --bookly-color-emerald-600: oklch(59.6% 0.145 163.225);
     --bookly-color-emerald-700: oklch(50.8% 0.118 165.612);
     --bookly-color-emerald-800: oklch(43.2% 0.095 166.913);
     --bookly-color-cyan-500: oklch(71.5% 0.143 215.221);
@@ -50,7 +53,11 @@
     --bookly-color-blue-600: oklch(54.6% 0.245 262.881);
     --bookly-color-blue-700: oklch(48.8% 0.243 264.376);
     --bookly-color-blue-800: oklch(42.4% 0.199 265.638);
+    --bookly-color-violet-50: oklch(96.9% 0.016 293.756);
+    --bookly-color-violet-100: oklch(94.3% 0.029 294.588);
+    --bookly-color-violet-200: oklch(89.4% 0.057 293.283);
     --bookly-color-violet-600: oklch(54.1% 0.281 293.009);
+    --bookly-color-violet-700: oklch(49.1% 0.27 292.581);
     --bookly-color-purple-100: oklch(94.6% 0.033 307.174);
     --bookly-color-purple-200: oklch(90.2% 0.063 306.703);
     --bookly-color-purple-800: oklch(43.8% 0.218 303.724);
@@ -88,7 +95,7 @@
     --bookly-container-xl: 36rem;
     --bookly-container-2xl: 42rem;
     --bookly-container-3xl: 48rem;
-    --bookly-container-6xl: 72rem;
+    --bookly-container-4xl: 56rem;
     --bookly-text-xs: 0.8125rem;
     --bookly-text-xs--line-height: calc(1 / 0.75);
     --bookly-text-sm: 1rem;
@@ -108,6 +115,7 @@
     --bookly-font-weight-semibold: 600;
     --bookly-font-weight-bold: 700;
     --bookly-font-weight-extrabold: 800;
+    --bookly-tracking-tight: -0.025em;
     --bookly-tracking-wide: 0.025em;
     --bookly-leading-tight: 1.25;
     --bookly-leading-snug: 1.375;
@@ -139,6 +147,8 @@
     --bookly-color-link: #0d6efd;
     --bookly-color-primary: #059669;
     --bookly-color-primary-foreground: hsl(210 40% 98%);
+    --bookly-color-brand: #f4662f;
+    --bookly-color-brand-foreground: #ffffff;
     --bookly-color-secondary: hsl(210 40% 96.1%);
     --bookly-color-secondary-foreground: hsl(222.2 47.4% 11.2%);
     --bookly-color-muted: hsl(210 40% 96.1%);
@@ -395,6 +405,9 @@
   container-type: inline-size !important;
   container-name: main !important;
 }
+.bookly-css-root .bookly\:\@container {
+  container-type: inline-size !important;
+}
 .bookly-css-root .bookly\:pointer-events-auto {
   pointer-events: auto !important;
 }
@@ -466,11 +479,17 @@
 .bookly-css-root .bookly\:-top-1\.5 {
   top: calc(var(--bookly-spacing) * -1.5) !important;
 }
+.bookly-css-root .bookly\:-top-4 {
+  top: calc(var(--bookly-spacing) * -4) !important;
+}
 .bookly-css-root .bookly\:-top-px {
   top: -1px !important;
 }
 .bookly-css-root .bookly\:top-0 {
   top: 0px !important;
+}
+.bookly-css-root .bookly\:top-0\.5 {
+  top: calc(var(--bookly-spacing) * 0.5) !important;
 }
 .bookly-css-root .bookly\:top-1 {
   top: var(--bookly-spacing) !important;
@@ -480,6 +499,9 @@
 }
 .bookly-css-root .bookly\:top-2 {
   top: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:top-2\.5 {
+  top: calc(var(--bookly-spacing) * 2.5) !important;
 }
 .bookly-css-root .bookly\:top-4 {
   top: calc(var(--bookly-spacing) * 4) !important;
@@ -493,11 +515,20 @@
 .bookly-css-root .bookly\:right-0 {
   right: 0px !important;
 }
+.bookly-css-root .bookly\:right-1 {
+  right: var(--bookly-spacing) !important;
+}
 .bookly-css-root .bookly\:right-1\.5 {
   right: calc(var(--bookly-spacing) * 1.5) !important;
 }
 .bookly-css-root .bookly\:right-2 {
   right: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:right-2\.5 {
+  right: calc(var(--bookly-spacing) * 2.5) !important;
+}
+.bookly-css-root .bookly\:right-8 {
+  right: calc(var(--bookly-spacing) * 8) !important;
 }
 .bookly-css-root .bookly\:-bottom-0\.5 {
   bottom: calc(var(--bookly-spacing) * -0.5) !important;
@@ -507,6 +538,9 @@
 }
 .bookly-css-root .bookly\:-bottom-6 {
   bottom: calc(var(--bookly-spacing) * -6) !important;
+}
+.bookly-css-root .bookly\:-bottom-px {
+  bottom: -1px !important;
 }
 .bookly-css-root .bookly\:bottom-0 {
   bottom: 0px !important;
@@ -520,6 +554,9 @@
 .bookly-css-root .bookly\:left-0 {
   left: 0px !important;
 }
+.bookly-css-root .bookly\:left-1 {
+  left: var(--bookly-spacing) !important;
+}
 .bookly-css-root .bookly\:left-1\/2 {
   left: 50% !important;
 }
@@ -531,6 +568,9 @@
 }
 .bookly-css-root .bookly\:left-3 {
   left: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:left-\[5\%\] {
+  left: 5% !important;
 }
 .bookly-css-root .bookly\:isolate {
   isolation: isolate !important;
@@ -580,6 +620,12 @@
 .bookly-css-root .bookly\:z-\[100061\] {
   z-index: 100061 !important;
 }
+.bookly-css-root .bookly\:z-\[100062\] {
+  z-index: 100062 !important;
+}
+.bookly-css-root .bookly\:z-\[100063\] {
+  z-index: 100063 !important;
+}
 .bookly-css-root .bookly\:z-\[100065\] {
   z-index: 100065 !important;
 }
@@ -625,6 +671,9 @@
 .bookly-css-root .bookly\:-mx-4 {
   margin-inline: calc(var(--bookly-spacing) * -4) !important;
 }
+.bookly-css-root .bookly\:-mx-5 {
+  margin-inline: calc(var(--bookly-spacing) * -5) !important;
+}
 .bookly-css-root .bookly\:mx-1 {
   margin-inline: var(--bookly-spacing) !important;
 }
@@ -636,6 +685,12 @@
 }
 .bookly-css-root .bookly\:mx-auto {
   margin-inline: auto !important;
+}
+.bookly-css-root .bookly\:-my-0\.5 {
+  margin-block: calc(var(--bookly-spacing) * -0.5) !important;
+}
+.bookly-css-root .bookly\:-my-1 {
+  margin-block: calc(var(--bookly-spacing) * -1) !important;
 }
 .bookly-css-root .bookly\:my-0 {
   margin-block: 0px !important;
@@ -654,6 +709,9 @@
 }
 .bookly-css-root .bookly\:my-4 {
   margin-block: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:my-auto {
+  margin-block: auto !important;
 }
 .bookly-css-root .bookly\:-ms-1 {
   margin-inline-start: calc(var(--bookly-spacing) * -1) !important;
@@ -718,11 +776,23 @@
 .bookly-css-root .bookly\:mt-4 {
   margin-top: calc(var(--bookly-spacing) * 4) !important;
 }
+.bookly-css-root .bookly\:mt-5 {
+  margin-top: calc(var(--bookly-spacing) * 5) !important;
+}
+.bookly-css-root .bookly\:mt-6 {
+  margin-top: calc(var(--bookly-spacing) * 6) !important;
+}
 .bookly-css-root .bookly\:mt-36 {
   margin-top: calc(var(--bookly-spacing) * 36) !important;
 }
 .bookly-css-root .bookly\:mt-auto {
   margin-top: auto !important;
+}
+.bookly-css-root .bookly\:mt-px {
+  margin-top: 1px !important;
+}
+.bookly-css-root .bookly\:-mr-px {
+  margin-right: -1px !important;
 }
 .bookly-css-root .bookly\:-mb-2 {
   margin-bottom: calc(var(--bookly-spacing) * -2) !important;
@@ -734,6 +804,9 @@
   margin-bottom: -1px !important;
 }
 .bookly-css-root .bookly\:mb-0 {
+  margin-bottom: 0px !important;
+}
+.bookly-css-root .bookly\:mb-0\! {
   margin-bottom: 0px !important;
 }
 .bookly-css-root .bookly\:mb-0\.5 {
@@ -763,6 +836,9 @@
 .bookly-css-root .bookly\:ml-2 {
   margin-left: calc(var(--bookly-spacing) * 2) !important;
 }
+.bookly-css-root .bookly\:ml-4 {
+  margin-left: calc(var(--bookly-spacing) * 4) !important;
+}
 .bookly-css-root .bookly\:ml-auto {
   margin-left: auto !important;
 }
@@ -771,6 +847,12 @@
 }
 .bookly-css-root .bookly\:box-content {
   box-sizing: content-box !important;
+}
+.bookly-css-root .bookly\:line-clamp-3 {
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
 }
 .bookly-css-root .bookly\:line-clamp-6 {
   overflow: hidden !important;
@@ -807,6 +889,9 @@
 }
 .bookly-css-root .bookly\:field-sizing-content {
   field-sizing: content !important;
+}
+.bookly-css-root .bookly\:aspect-2\/1 {
+  aspect-ratio: 2/1 !important;
 }
 .bookly-css-root .bookly\:aspect-square {
   aspect-ratio: 1/1 !important;
@@ -855,6 +940,14 @@
   width: calc(var(--bookly-spacing) * 9) !important;
   height: calc(var(--bookly-spacing) * 9) !important;
 }
+.bookly-css-root .bookly\:size-10 {
+  width: calc(var(--bookly-spacing) * 10) !important;
+  height: calc(var(--bookly-spacing) * 10) !important;
+}
+.bookly-css-root .bookly\:size-12 {
+  width: calc(var(--bookly-spacing) * 12) !important;
+  height: calc(var(--bookly-spacing) * 12) !important;
+}
 .bookly-css-root .bookly\:size-13 {
   width: calc(var(--bookly-spacing) * 13) !important;
   height: calc(var(--bookly-spacing) * 13) !important;
@@ -863,9 +956,21 @@
   width: calc(var(--bookly-spacing) * 14) !important;
   height: calc(var(--bookly-spacing) * 14) !important;
 }
+.bookly-css-root .bookly\:size-24 {
+  width: calc(var(--bookly-spacing) * 24) !important;
+  height: calc(var(--bookly-spacing) * 24) !important;
+}
 .bookly-css-root .bookly\:size-\[7px\] {
   width: 7px !important;
   height: 7px !important;
+}
+.bookly-css-root .bookly\:size-\[72px\] {
+  width: 72px !important;
+  height: 72px !important;
+}
+.bookly-css-root .bookly\:size-\[88px\] {
+  width: 88px !important;
+  height: 88px !important;
 }
 .bookly-css-root .bookly\:size-full {
   width: 100% !important;
@@ -907,6 +1012,9 @@
 .bookly-css-root .bookly\:h-7 {
   height: calc(var(--bookly-spacing) * 7) !important;
 }
+.bookly-css-root .bookly\:h-7\! {
+  height: calc(var(--bookly-spacing) * 7) !important;
+}
 .bookly-css-root .bookly\:h-8 {
   height: calc(var(--bookly-spacing) * 8) !important;
 }
@@ -946,11 +1054,14 @@
 .bookly-css-root .bookly\:h-\[24px\] {
   height: 24px !important;
 }
+.bookly-css-root .bookly\:h-\[26px\] {
+  height: 26px !important;
+}
 .bookly-css-root .bookly\:h-\[34px\] {
   height: 34px !important;
 }
-.bookly-css-root .bookly\:h-\[63px\] {
-  height: 63px !important;
+.bookly-css-root .bookly\:h-\[70px\] {
+  height: 70px !important;
 }
 .bookly-css-root .bookly\:h-\[280px\] {
   height: 280px !important;
@@ -960,6 +1071,9 @@
 }
 .bookly-css-root .bookly\:h-\[calc\(100\%-1rem\)\] {
   height: calc(100% - 1rem) !important;
+}
+.bookly-css-root .bookly\:h-\[min\(70vh\,560px\)\] {
+  height: min(70vh, 560px) !important;
 }
 .bookly-css-root .bookly\:h-\[var\(--bits-select-anchor-height\)\] {
   height: var(--bits-select-anchor-height) !important;
@@ -1012,6 +1126,9 @@
 .bookly-css-root .bookly\:max-h-\[calc\(100\%-1rem\)\] {
   max-height: calc(100% - 1rem) !important;
 }
+.bookly-css-root .bookly\:max-h-\[calc\(100\%-32px\)\] {
+  max-height: calc(100% - 32px) !important;
+}
 .bookly-css-root .bookly\:max-h-\[var\(--bits-popover-content-available-height\)\] {
   max-height: var(--bits-popover-content-available-height) !important;
 }
@@ -1020,6 +1137,9 @@
 }
 .bookly-css-root .bookly\:min-h-3 {
   min-height: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:min-h-6 {
+  min-height: calc(var(--bookly-spacing) * 6) !important;
 }
 .bookly-css-root .bookly\:min-h-7 {
   min-height: calc(var(--bookly-spacing) * 7) !important;
@@ -1036,8 +1156,14 @@
 .bookly-css-root .bookly\:min-h-10 {
   min-height: calc(var(--bookly-spacing) * 10) !important;
 }
+.bookly-css-root .bookly\:min-h-11 {
+  min-height: calc(var(--bookly-spacing) * 11) !important;
+}
 .bookly-css-root .bookly\:min-h-16 {
   min-height: calc(var(--bookly-spacing) * 16) !important;
+}
+.bookly-css-root .bookly\:min-h-\[120px\] {
+  min-height: 120px !important;
 }
 .bookly-css-root .bookly\:min-h-full {
   min-height: 100% !important;
@@ -1069,6 +1195,9 @@
 .bookly-css-root .bookly\:w-6\! {
   width: calc(var(--bookly-spacing) * 6) !important;
 }
+.bookly-css-root .bookly\:w-7 {
+  width: calc(var(--bookly-spacing) * 7) !important;
+}
 .bookly-css-root .bookly\:w-8 {
   width: calc(var(--bookly-spacing) * 8) !important;
 }
@@ -1080,6 +1209,9 @@
 }
 .bookly-css-root .bookly\:w-12 {
   width: calc(var(--bookly-spacing) * 12) !important;
+}
+.bookly-css-root .bookly\:w-14 {
+  width: calc(var(--bookly-spacing) * 14) !important;
 }
 .bookly-css-root .bookly\:w-15 {
   width: calc(var(--bookly-spacing) * 15) !important;
@@ -1128,6 +1260,18 @@
 }
 .bookly-css-root .bookly\:w-\[24px\] {
   width: 24px !important;
+}
+.bookly-css-root .bookly\:w-\[26px\] {
+  width: 26px !important;
+}
+.bookly-css-root .bookly\:w-\[34px\] {
+  width: 34px !important;
+}
+.bookly-css-root .bookly\:w-\[90\%\] {
+  width: 90% !important;
+}
+.bookly-css-root .bookly\:w-\[92\%\] {
+  width: 92% !important;
 }
 .bookly-css-root .bookly\:w-\[130px\] {
   width: 130px !important;
@@ -1239,6 +1383,9 @@
 }
 .bookly-css-root .bookly\:min-w-48 {
   min-width: calc(var(--bookly-spacing) * 48) !important;
+}
+.bookly-css-root .bookly\:min-w-52 {
+  min-width: calc(var(--bookly-spacing) * 52) !important;
 }
 .bookly-css-root .bookly\:min-w-56 {
   min-width: calc(var(--bookly-spacing) * 56) !important;
@@ -1380,6 +1527,9 @@
 .bookly-css-root .bookly\:cursor-text {
   cursor: text !important;
 }
+.bookly-css-root .bookly\:cursor-wait {
+  cursor: wait !important;
+}
 .bookly-css-root .bookly\:resize-none {
   resize: none !important;
 }
@@ -1416,8 +1566,29 @@
 .bookly-css-root .bookly\:grid-cols-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 }
+.bookly-css-root .bookly\:grid-cols-\[260px_minmax\(0\,1fr\)\] {
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+}
 .bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(190px\,1fr\)\)\] {
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(196px\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(252px\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fill, minmax(252px, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(clamp\(252px\,17cqw\,320px\)\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fill, minmax(clamp(252px, 17cqw, 320px), 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(min\(100\%\,320px\)\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fit\,minmax\(168px\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fit\,minmax\(280px\,1fr\)\)\] {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
 }
 .bookly-css-root .bookly\:flex-col {
   flex-direction: column !important;
@@ -1545,6 +1716,18 @@
 .bookly-css-root .bookly\:gap-x-3 {
   column-gap: calc(var(--bookly-spacing) * 3) !important;
 }
+.bookly-css-root .bookly\:gap-x-4 {
+  column-gap: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:gap-x-6 {
+  column-gap: calc(var(--bookly-spacing) * 6) !important;
+}
+.bookly-css-root .bookly\:gap-x-7 {
+  column-gap: calc(var(--bookly-spacing) * 7) !important;
+}
+.bookly-css-root .bookly\:gap-x-12 {
+  column-gap: calc(var(--bookly-spacing) * 12) !important;
+}
 .bookly-css-root .bookly\:gap-y-0\.5 {
   row-gap: calc(var(--bookly-spacing) * 0.5) !important;
 }
@@ -1553,6 +1736,18 @@
 }
 .bookly-css-root .bookly\:gap-y-2 {
   row-gap: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:gap-y-2\.5 {
+  row-gap: calc(var(--bookly-spacing) * 2.5) !important;
+}
+.bookly-css-root .bookly\:gap-y-4 {
+  row-gap: calc(var(--bookly-spacing) * 4) !important;
+}
+:where(.bookly-css-root .bookly\:divide-x > :not(:last-child)) {
+  --tw-divide-x-reverse: 0 !important;
+  border-inline-style: var(--tw-border-style) !important;
+  border-inline-start-width: calc(1px * var(--tw-divide-x-reverse)) !important;
+  border-inline-end-width: calc(1px * (1 - var(--tw-divide-x-reverse))) !important;
 }
 :where(.bookly-css-root .bookly\:divide-y > :not(:last-child)) {
   --tw-divide-y-reverse: 0 !important;
@@ -1563,6 +1758,14 @@
 }
 :where(.bookly-css-root .bookly\:divide-border > :not(:last-child)) {
   border-color: var(--bookly-color-border) !important;
+}
+:where(.bookly-css-root .bookly\:divide-border\/50 > :not(:last-child)) {
+  border-color: var(--bookly-color-border) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  :where(.bookly-css-root .bookly\:divide-border\/50 > :not(:last-child)) {
+    border-color: color-mix(in oklab, var(--bookly-color-border) 50%, transparent) !important;
+  }
 }
 .bookly-css-root .bookly\:self-end {
   align-self: flex-end !important;
@@ -1611,6 +1814,12 @@
 .bookly-css-root .bookly\:rounded-\[4px\] {
   border-radius: 4px !important;
 }
+.bookly-css-root .bookly\:rounded-\[7px\] {
+  border-radius: 7px !important;
+}
+.bookly-css-root .bookly\:rounded-\[14px\] {
+  border-radius: 14px !important;
+}
 .bookly-css-root .bookly\:rounded-full {
   border-radius: calc(infinity * 1px) !important;
 }
@@ -1658,6 +1867,10 @@
   border-top-left-radius: var(--bookly-radius) !important;
   border-top-right-radius: var(--bookly-radius) !important;
 }
+.bookly-css-root .bookly\:rounded-t-\[14px\] {
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
 .bookly-css-root .bookly\:rounded-t-xl {
   border-top-left-radius: var(--bookly-radius-xl) !important;
   border-top-right-radius: var(--bookly-radius-xl) !important;
@@ -1670,12 +1883,22 @@
   border-bottom-right-radius: var(--bookly-radius) !important;
   border-bottom-left-radius: var(--bookly-radius) !important;
 }
+.bookly-css-root .bookly\:rounded-b-\[14px\] {
+  border-bottom-right-radius: 14px !important;
+  border-bottom-left-radius: 14px !important;
+}
 .bookly-css-root .bookly\:rounded-b-xl {
   border-bottom-right-radius: var(--bookly-radius-xl) !important;
   border-bottom-left-radius: var(--bookly-radius-xl) !important;
 }
+.bookly-css-root .bookly\:rounded-br-\[4px\] {
+  border-bottom-right-radius: 4px !important;
+}
 .bookly-css-root .bookly\:rounded-br-sm {
   border-bottom-right-radius: var(--bookly-radius-sm) !important;
+}
+.bookly-css-root .bookly\:rounded-bl-\[4px\] {
+  border-bottom-left-radius: 4px !important;
 }
 .bookly-css-root .bookly\:rounded-bl-sm {
   border-bottom-left-radius: var(--bookly-radius-sm) !important;
@@ -1752,6 +1975,10 @@
   --tw-border-style: dashed !important;
   border-style: dashed !important;
 }
+.bookly-css-root .bookly\:border-dotted {
+  --tw-border-style: dotted !important;
+  border-style: dotted !important;
+}
 .bookly-css-root .bookly\:border-none {
   --tw-border-style: none !important;
   border-style: none !important;
@@ -1759,6 +1986,15 @@
 .bookly-css-root .bookly\:border-solid {
   --tw-border-style: solid !important;
   border-style: solid !important;
+}
+.bookly-css-root .bookly\:border-\[\#dee2e6\] {
+  border-color: #dee2e6 !important;
+}
+.bookly-css-root .bookly\:border-\[\#f1f2f4\] {
+  border-color: #f1f2f4 !important;
+}
+.bookly-css-root .bookly\:border-\[lightblue\] {
+  border-color: lightblue !important;
 }
 .bookly-css-root .bookly\:border-\[oklch\(0\.88_0\.06_30\)\] {
   border-color: oklch(88% 0.06 30deg) !important;
@@ -1781,6 +2017,9 @@
 .bookly-css-root .bookly\:border-border {
   border-color: var(--bookly-color-border) !important;
 }
+.bookly-css-root .bookly\:border-brand {
+  border-color: var(--bookly-color-brand) !important;
+}
 .bookly-css-root .bookly\:border-default-border {
   border-color: var(--bookly-color-default-border) !important;
 }
@@ -1797,6 +2036,9 @@
 }
 .bookly-css-root .bookly\:border-emerald-100 {
   border-color: var(--bookly-color-emerald-100) !important;
+}
+.bookly-css-root .bookly\:border-emerald-200 {
+  border-color: var(--bookly-color-emerald-200) !important;
 }
 .bookly-css-root .bookly\:border-gray-200 {
   border-color: var(--bookly-color-gray-200) !important;
@@ -1833,6 +2075,22 @@
 .bookly-css-root .bookly\:border-primary {
   border-color: var(--bookly-color-primary) !important;
 }
+.bookly-css-root .bookly\:border-primary-foreground\/25 {
+  border-color: var(--bookly-color-primary-foreground) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:border-primary-foreground\/25 {
+    border-color: color-mix(in oklab, var(--bookly-color-primary-foreground) 25%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:border-primary\/50 {
+  border-color: var(--bookly-color-primary) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:border-primary\/50 {
+    border-color: color-mix(in oklab, var(--bookly-color-primary) 50%, transparent) !important;
+  }
+}
 .bookly-css-root .bookly\:border-purple-200 {
   border-color: var(--bookly-color-purple-200) !important;
 }
@@ -1857,6 +2115,9 @@
 .bookly-css-root .bookly\:border-slate-200 {
   border-color: var(--bookly-color-slate-200) !important;
 }
+.bookly-css-root .bookly\:border-slate-300 {
+  border-color: var(--bookly-color-slate-300) !important;
+}
 .bookly-css-root .bookly\:border-slate-300\! {
   border-color: var(--bookly-color-slate-300) !important;
 }
@@ -1872,6 +2133,12 @@
 .bookly-css-root .bookly\:border-transparent\! {
   border-color: transparent !important;
 }
+.bookly-css-root .bookly\:border-violet-200 {
+  border-color: var(--bookly-color-violet-200) !important;
+}
+.bookly-css-root .bookly\:bg-\[\#f1f3f5\] {
+  background-color: #f1f3f5 !important;
+}
 .bookly-css-root .bookly\:bg-\[oklch\(0\.9_0\.15_40\)\] {
   background-color: oklch(90% 0.15 40deg) !important;
 }
@@ -1883,6 +2150,9 @@
 }
 .bookly-css-root .bookly\:bg-\[oklch\(0\.97_0\.03_30\)\] {
   background-color: oklch(97% 0.03 30deg) !important;
+}
+.bookly-css-root .bookly\:bg-\[rgba\(15\,23\,42\,0\.35\)\] {
+  background-color: rgba(15, 23, 42, 0.35) !important;
 }
 .bookly-css-root .bookly\:bg-accent {
   background-color: var(--bookly-color-accent) !important;
@@ -1959,6 +2229,17 @@
 .bookly-css-root .bookly\:bg-border {
   background-color: var(--bookly-color-border) !important;
 }
+.bookly-css-root .bookly\:bg-brand {
+  background-color: var(--bookly-color-brand) !important;
+}
+.bookly-css-root .bookly\:bg-brand\/10 {
+  background-color: var(--bookly-color-brand) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-brand\/10 {
+    background-color: color-mix(in oklab, var(--bookly-color-brand) 10%, transparent) !important;
+  }
+}
 .bookly-css-root .bookly\:bg-card {
   background-color: var(--bookly-color-card) !important;
 }
@@ -1987,8 +2268,14 @@
 .bookly-css-root .bookly\:bg-emerald-50 {
   background-color: var(--bookly-color-emerald-50) !important;
 }
+.bookly-css-root .bookly\:bg-emerald-600 {
+  background-color: var(--bookly-color-emerald-600) !important;
+}
 .bookly-css-root .bookly\:bg-filter-bg {
   background-color: var(--bookly-color-filter-bg) !important;
+}
+.bookly-css-root .bookly\:bg-foreground {
+  background-color: var(--bookly-color-foreground) !important;
 }
 .bookly-css-root .bookly\:bg-gray-100 {
   background-color: var(--bookly-color-gray-100) !important;
@@ -2030,6 +2317,14 @@
     background-color: color-mix(in oklab, var(--bookly-color-muted) 20%, transparent) !important;
   }
 }
+.bookly-css-root .bookly\:bg-muted\/25 {
+  background-color: var(--bookly-color-muted) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-muted\/25 {
+    background-color: color-mix(in oklab, var(--bookly-color-muted) 25%, transparent) !important;
+  }
+}
 .bookly-css-root .bookly\:bg-muted\/30 {
   background-color: var(--bookly-color-muted) !important;
 }
@@ -2065,6 +2360,14 @@
 }
 .bookly-css-root .bookly\:bg-primary {
   background-color: var(--bookly-color-primary) !important;
+}
+.bookly-css-root .bookly\:bg-primary\/5 {
+  background-color: var(--bookly-color-primary) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-primary\/5 {
+    background-color: color-mix(in oklab, var(--bookly-color-primary) 5%, transparent) !important;
+  }
 }
 .bookly-css-root .bookly\:bg-primary\/10 {
   background-color: var(--bookly-color-primary) !important;
@@ -2111,14 +2414,6 @@
 .bookly-css-root .bookly\:bg-slate-50 {
   background-color: var(--bookly-color-slate-50) !important;
 }
-.bookly-css-root .bookly\:bg-slate-50\/25 {
-  background-color: var(--bookly-color-slate-50) !important;
-}
-@supports (color: color-mix(in lab, red, red)) {
-  .bookly-css-root .bookly\:bg-slate-50\/25 {
-    background-color: color-mix(in oklab, var(--bookly-color-slate-50) 25%, transparent) !important;
-  }
-}
 .bookly-css-root .bookly\:bg-slate-100 {
   background-color: var(--bookly-color-slate-100) !important;
 }
@@ -2131,8 +2426,14 @@
 .bookly-css-root .bookly\:bg-slate-400 {
   background-color: var(--bookly-color-slate-400) !important;
 }
+.bookly-css-root .bookly\:bg-slate-500 {
+  background-color: var(--bookly-color-slate-500) !important;
+}
 .bookly-css-root .bookly\:bg-transparent {
   background-color: transparent !important;
+}
+.bookly-css-root .bookly\:bg-violet-50 {
+  background-color: var(--bookly-color-violet-50) !important;
 }
 .bookly-css-root .bookly\:bg-violet-600 {
   background-color: var(--bookly-color-violet-600) !important;
@@ -2151,12 +2452,36 @@
     background-color: color-mix(in oklab, var(--bookly-color-white) 15%, transparent) !important;
   }
 }
+.bookly-css-root .bookly\:bg-white\/18 {
+  background-color: var(--bookly-color-white) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-white\/18 {
+    background-color: color-mix(in oklab, var(--bookly-color-white) 18%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:bg-white\/22 {
+  background-color: var(--bookly-color-white) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-white\/22 {
+    background-color: color-mix(in oklab, var(--bookly-color-white) 22%, transparent) !important;
+  }
+}
 .bookly-css-root .bookly\:bg-white\/50 {
   background-color: var(--bookly-color-white) !important;
 }
 @supports (color: color-mix(in lab, red, red)) {
   .bookly-css-root .bookly\:bg-white\/50 {
     background-color: color-mix(in oklab, var(--bookly-color-white) 50%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:bg-white\/90 {
+  background-color: var(--bookly-color-white) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-white\/90 {
+    background-color: color-mix(in oklab, var(--bookly-color-white) 90%, transparent) !important;
   }
 }
 .bookly-css-root .bookly\:bg-white\/95 {
@@ -2259,6 +2584,12 @@
 .bookly-css-root .bookly\:p-10 {
   padding: calc(var(--bookly-spacing) * 10) !important;
 }
+.bookly-css-root .bookly\:p-\[2px\] {
+  padding: 2px !important;
+}
+.bookly-css-root .bookly\:p-\[3px\] {
+  padding: 3px !important;
+}
 .bookly-css-root .bookly\:px-\(--cell-size\) {
   padding-inline: var(--cell-size) !important;
 }
@@ -2291,6 +2622,12 @@
 }
 .bookly-css-root .bookly\:px-8 {
   padding-inline: calc(var(--bookly-spacing) * 8) !important;
+}
+.bookly-css-root .bookly\:px-\[0\.625rem\] {
+  padding-inline: 0.625rem !important;
+}
+.bookly-css-root .bookly\:px-\[10px\] {
+  padding-inline: 10px !important;
 }
 .bookly-css-root .bookly\:py-0 {
   padding-block: 0px !important;
@@ -2327,6 +2664,12 @@
 }
 .bookly-css-root .bookly\:py-8 {
   padding-block: calc(var(--bookly-spacing) * 8) !important;
+}
+.bookly-css-root .bookly\:py-16 {
+  padding-block: calc(var(--bookly-spacing) * 16) !important;
+}
+.bookly-css-root .bookly\:py-\[7px\] {
+  padding-block: 7px !important;
 }
 .bookly-css-root .bookly\:py-px {
   padding-block: 1px !important;
@@ -2376,6 +2719,9 @@
 .bookly-css-root .bookly\:pt-2 {
   padding-top: calc(var(--bookly-spacing) * 2) !important;
 }
+.bookly-css-root .bookly\:pt-2\.5 {
+  padding-top: calc(var(--bookly-spacing) * 2.5) !important;
+}
 .bookly-css-root .bookly\:pt-3 {
   padding-top: calc(var(--bookly-spacing) * 3) !important;
 }
@@ -2423,6 +2769,9 @@
 }
 .bookly-css-root .bookly\:pb-6 {
   padding-bottom: calc(var(--bookly-spacing) * 6) !important;
+}
+.bookly-css-root .bookly\:pb-\[10px\] {
+  padding-bottom: 10px !important;
 }
 .bookly-css-root .bookly\:pl-1\.5 {
   padding-left: calc(var(--bookly-spacing) * 1.5) !important;
@@ -2518,6 +2867,9 @@
 .bookly-css-root .bookly\:text-\[10px\] {
   font-size: 10px !important;
 }
+.bookly-css-root .bookly\:text-\[11px\] {
+  font-size: 11px !important;
+}
 .bookly-css-root .bookly\:text-\[13px\] {
   font-size: 13px !important;
 }
@@ -2572,12 +2924,19 @@
   --tw-font-weight: var(--bookly-font-weight-semibold) !important;
   font-weight: var(--bookly-font-weight-semibold) !important;
 }
+.bookly-css-root .bookly\:tracking-tight {
+  --tw-tracking: var(--bookly-tracking-tight) !important;
+  letter-spacing: var(--bookly-tracking-tight) !important;
+}
 .bookly-css-root .bookly\:tracking-wide {
   --tw-tracking: var(--bookly-tracking-wide) !important;
   letter-spacing: var(--bookly-tracking-wide) !important;
 }
 .bookly-css-root .bookly\:text-nowrap {
   text-wrap: nowrap !important;
+}
+.bookly-css-root .bookly\:text-pretty {
+  text-wrap: pretty !important;
 }
 .bookly-css-root .bookly\:text-wrap {
   text-wrap: wrap !important;
@@ -2597,8 +2956,17 @@
 .bookly-css-root .bookly\:whitespace-nowrap {
   white-space: nowrap !important;
 }
+.bookly-css-root .bookly\:whitespace-pre-line {
+  white-space: pre-line !important;
+}
 .bookly-css-root .bookly\:whitespace-pre-wrap {
   white-space: pre-wrap !important;
+}
+.bookly-css-root .bookly\:text-\[\#6c757d\] {
+  color: #6c757d !important;
+}
+.bookly-css-root .bookly\:text-\[\#495057\] {
+  color: #495057 !important;
 }
 .bookly-css-root .bookly\:text-\[oklch\(0\.32_0\.14_280\)\] {
   color: oklch(32% 0.14 280deg) !important;
@@ -2621,14 +2989,26 @@
 .bookly-css-root .bookly\:text-amber-900 {
   color: var(--bookly-color-amber-900) !important;
 }
+.bookly-css-root .bookly\:text-background {
+  color: var(--bookly-color-background) !important;
+}
 .bookly-css-root .bookly\:text-black {
   color: var(--bookly-color-black) !important;
 }
 .bookly-css-root .bookly\:text-blue-500 {
   color: var(--bookly-color-blue-500) !important;
 }
+.bookly-css-root .bookly\:text-blue-700 {
+  color: var(--bookly-color-blue-700) !important;
+}
 .bookly-css-root .bookly\:text-blue-800 {
   color: var(--bookly-color-blue-800) !important;
+}
+.bookly-css-root .bookly\:text-brand {
+  color: var(--bookly-color-brand) !important;
+}
+.bookly-css-root .bookly\:text-brand-foreground {
+  color: var(--bookly-color-brand-foreground) !important;
 }
 .bookly-css-root .bookly\:text-current {
   color: currentcolor !important;
@@ -2638,6 +3018,9 @@
 }
 .bookly-css-root .bookly\:text-destructive-foreground {
   color: var(--bookly-color-destructive-foreground) !important;
+}
+.bookly-css-root .bookly\:text-emerald-600 {
+  color: var(--bookly-color-emerald-600) !important;
 }
 .bookly-css-root .bookly\:text-emerald-700 {
   color: var(--bookly-color-emerald-700) !important;
@@ -2654,6 +3037,14 @@
 @supports (color: color-mix(in lab, red, red)) {
   .bookly-css-root .bookly\:text-foreground\/80 {
     color: color-mix(in oklab, var(--bookly-color-foreground) 80%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:text-foreground\/90 {
+  color: var(--bookly-color-foreground) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:text-foreground\/90 {
+    color: color-mix(in oklab, var(--bookly-color-foreground) 90%, transparent) !important;
   }
 }
 .bookly-css-root .bookly\:text-gray-200 {
@@ -2745,6 +3136,12 @@
 .bookly-css-root .bookly\:text-slate-600 {
   color: var(--bookly-color-slate-600) !important;
 }
+.bookly-css-root .bookly\:text-slate-700 {
+  color: var(--bookly-color-slate-700) !important;
+}
+.bookly-css-root .bookly\:text-violet-700 {
+  color: var(--bookly-color-violet-700) !important;
+}
 .bookly-css-root .bookly\:text-white {
   color: var(--bookly-color-white) !important;
 }
@@ -2809,8 +3206,14 @@
 .bookly-css-root .bookly\:opacity-25 {
   opacity: 25% !important;
 }
+.bookly-css-root .bookly\:opacity-30 {
+  opacity: 30% !important;
+}
 .bookly-css-root .bookly\:opacity-40 {
   opacity: 40% !important;
+}
+.bookly-css-root .bookly\:opacity-45 {
+  opacity: 45% !important;
 }
 .bookly-css-root .bookly\:opacity-50 {
   opacity: 50% !important;
@@ -2824,18 +3227,28 @@
 .bookly-css-root .bookly\:opacity-80 {
   opacity: 80% !important;
 }
+.bookly-css-root .bookly\:opacity-90 {
+  opacity: 90% !important;
+}
 .bookly-css-root .bookly\:shadow-lg\/4 {
   --tw-shadow-alpha: 4% !important;
   --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, oklab(from rgb(0 0 0 / 0.1) l a b / 4%)), 0 4px 6px -4px var(--tw-shadow-color, oklab(from rgb(0 0 0 / 0.1) l a b / 4%)) !important;
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
 }
-.bookly-css-root .bookly\:shadow-lg\/20 {
-  --tw-shadow-alpha: 20% !important;
-  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, oklab(from rgb(0 0 0 / 0.1) l a b / 20%)), 0 4px 6px -4px var(--tw-shadow-color, oklab(from rgb(0 0 0 / 0.1) l a b / 20%)) !important;
-  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
-}
 .bookly-css-root .bookly\:shadow-2xl {
   --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-\[0_8px_20px_rgba\(0\,0\,0\,0\.25\)\] {
+  --tw-shadow: 0 8px 20px var(--tw-shadow-color, rgba(0,0,0,0.25)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-\[0_10px_30px_rgba\(0\,0\,0\,0\.12\)\] {
+  --tw-shadow: 0 10px 30px var(--tw-shadow-color, rgba(0,0,0,0.12)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-\[0_16px_40px_rgba\(0\,0\,0\,0\.28\)\] {
+  --tw-shadow: 0 16px 40px var(--tw-shadow-color, rgba(0,0,0,0.28)) !important;
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
 }
 .bookly-css-root .bookly\:shadow-lg {
@@ -3011,9 +3424,17 @@
   --tw-outline-style: none !important;
   outline-style: none !important;
 }
+.bookly-css-root .bookly\:select-all {
+  -webkit-user-select: all !important;
+  user-select: all !important;
+}
 .bookly-css-root .bookly\:select-none {
   -webkit-user-select: none !important;
   user-select: none !important;
+}
+.bookly-css-root .bookly\:select-text {
+  -webkit-user-select: text !important;
+  user-select: text !important;
 }
 .bookly-css-root .bookly\:\[--cell-radius\:var\(--radius-md\)\] {
   --cell-radius: var(--radius-md) !important;
@@ -3077,6 +3498,11 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:group-hover\:text-brand:is(:where(.bookly\:group):hover *) {
+    color: var(--bookly-color-brand) !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:group-hover\:opacity-70:is(:where(.bookly\:group):hover *) {
     opacity: 70% !important;
   }
@@ -3087,8 +3513,23 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:group-hover\/block\:opacity-100:is(:where(.bookly\:group\/block):hover *) {
+    opacity: 100% !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:group-hover\/pay\:opacity-80:is(:where(.bookly\:group\/pay):hover *) {
     opacity: 80% !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:group-hover\/row\:bg-background:is(:where(.bookly\:group\/row):hover *) {
+    background-color: var(--bookly-color-background) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:group-hover\/sub\:opacity-100:is(:where(.bookly\:group\/sub):hover *) {
+    opacity: 100% !important;
   }
 }
 .bookly-css-root .bookly\:group-focus-visible\:opacity-100:is(:where(.bookly\:group):focus-visible *) {
@@ -3185,6 +3626,17 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:border-solid:hover {
+    --tw-border-style: solid !important;
+    border-style: solid !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:border-\[var\(--accent\)\]:hover {
+    border-color: var(--accent) !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:hover\:border-amber-500:hover {
     border-color: var(--bookly-color-amber-500) !important;
   }
@@ -3192,6 +3644,16 @@
 @media (hover: hover) {
   .bookly-css-root .bookly\:hover\:border-destructive:hover {
     border-color: var(--bookly-color-destructive) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:border-foreground\/40:hover {
+    border-color: var(--bookly-color-foreground) !important;
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .bookly-css-root .bookly\:hover\:border-foreground\/40:hover {
+      border-color: color-mix(in oklab, var(--bookly-color-foreground) 40%, transparent) !important;
+    }
   }
 }
 @media (hover: hover) {
@@ -3220,8 +3682,23 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-amber-100:hover {
+    background-color: var(--bookly-color-amber-100) !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:hover\:bg-background:hover {
     background-color: var(--bookly-color-background) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-blue-100:hover {
+    background-color: var(--bookly-color-blue-100) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-brand:hover {
+    background-color: var(--bookly-color-brand) !important;
   }
 }
 @media (hover: hover) {
@@ -3241,6 +3718,21 @@
   @supports (color: color-mix(in lab, red, red)) {
     .bookly-css-root .bookly\:hover\:bg-destructive\/20:hover {
       background-color: color-mix(in oklab, var(--bookly-color-destructive) 20%, transparent) !important;
+    }
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-emerald-100:hover {
+    background-color: var(--bookly-color-emerald-100) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-foreground\/90:hover {
+    background-color: var(--bookly-color-foreground) !important;
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .bookly-css-root .bookly\:hover\:bg-foreground\/90:hover {
+      background-color: color-mix(in oklab, var(--bookly-color-foreground) 90%, transparent) !important;
     }
   }
 }
@@ -3305,6 +3797,11 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-red-100:hover {
+    background-color: var(--bookly-color-red-100) !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:hover\:bg-secondary\/80:hover {
     background-color: var(--bookly-color-secondary) !important;
   }
@@ -3317,11 +3814,6 @@
 @media (hover: hover) {
   .bookly-css-root .bookly\:hover\:bg-slate-50:hover {
     background-color: var(--bookly-color-slate-50) !important;
-  }
-}
-@media (hover: hover) {
-  .bookly-css-root .bookly\:hover\:bg-slate-100:hover {
-    background-color: var(--bookly-color-slate-100) !important;
   }
 }
 @media (hover: hover) {
@@ -3342,6 +3834,11 @@
 @media (hover: hover) {
   .bookly-css-root .bookly\:hover\:bg-transparent:hover {
     background-color: transparent !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-violet-100:hover {
+    background-color: var(--bookly-color-violet-100) !important;
   }
 }
 @media (hover: hover) {
@@ -3367,6 +3864,11 @@
 @media (hover: hover) {
   .bookly-css-root .bookly\:hover\:text-accent-foreground:hover {
     color: var(--bookly-color-accent-foreground) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-background:hover {
+    color: var(--bookly-color-background) !important;
   }
 }
 @media (hover: hover) {
@@ -3461,6 +3963,12 @@
   }
 }
 @media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:brightness-95:hover {
+    --tw-brightness: brightness(95%) !important;
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, ) !important;
+  }
+}
+@media (hover: hover) {
   .bookly-css-root .bookly\:not-data-selected\:hover\:bg-accent\/50:not(*[data-selected]):hover {
     background-color: var(--bookly-color-accent) !important;
   }
@@ -3546,12 +4054,19 @@
 .bookly-css-root .bookly\:focus-visible\:border-transparent:focus-visible {
   border-color: transparent !important;
 }
+.bookly-css-root .bookly\:focus-visible\:opacity-100:focus-visible {
+  opacity: 100% !important;
+}
 .bookly-css-root .bookly\:focus-visible\:ring-0:focus-visible {
   --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor) !important;
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
 }
 .bookly-css-root .bookly\:focus-visible\:ring-2:focus-visible {
   --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:focus-visible\:ring-\[3px\]:focus-visible {
+  --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor) !important;
   box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
 }
 .bookly-css-root .bookly\:focus-visible\:ring-\[length\:var\(--bookly-ring-width\)\]:focus-visible {
@@ -3580,6 +4095,9 @@
 .bookly-css-root .bookly\:focus-visible\:outline-none:focus-visible {
   --tw-outline-style: none !important;
   outline-style: none !important;
+}
+.bookly-css-root .bookly\:active\:cursor-grabbing:active {
+  cursor: grabbing !important;
 }
 .bookly-css-root .bookly\:active\:shadow-md:active {
   --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1)) !important;
@@ -3955,11 +4473,6 @@
   }
 }
 @media (width < 40rem) {
-  .bookly-css-root .bookly\:max-sm\:mt-2 {
-    margin-top: calc(var(--bookly-spacing) * 2) !important;
-  }
-}
-@media (width < 40rem) {
   .bookly-css-root .bookly\:max-sm\:mb-2 {
     margin-bottom: calc(var(--bookly-spacing) * 2) !important;
   }
@@ -3972,11 +4485,6 @@
 @media (width < 40rem) {
   .bookly-css-root .bookly\:max-sm\:block {
     display: block !important;
-  }
-}
-@media (width < 40rem) {
-  .bookly-css-root .bookly\:max-sm\:flex {
-    display: flex !important;
   }
 }
 @media (width < 40rem) {
@@ -3997,11 +4505,6 @@
 @media (width < 40rem) {
   .bookly-css-root .bookly\:max-sm\:flex-row {
     flex-direction: row !important;
-  }
-}
-@media (width < 40rem) {
-  .bookly-css-root .bookly\:max-sm\:justify-center {
-    justify-content: center !important;
   }
 }
 @media (width < 40rem) {
@@ -4098,11 +4601,6 @@
     text-align: center !important;
   }
 }
-@media (width < 40rem) {
-  .bookly-css-root .bookly\:max-sm\:text-right {
-    text-align: right !important;
-  }
-}
 @media (width >= 40rem) {
   .bookly-css-root .bookly\:sm\:inset-auto {
     inset: auto !important;
@@ -4194,8 +4692,13 @@
   }
 }
 @media (width >= 40rem) {
-  .bookly-css-root .bookly\:sm\:max-w-6xl {
-    max-width: var(--bookly-container-6xl) !important;
+  .bookly-css-root .bookly\:sm\:max-w-3xl {
+    max-width: var(--bookly-container-3xl) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:max-w-4xl {
+    max-width: var(--bookly-container-4xl) !important;
   }
 }
 @media (width >= 40rem) {
@@ -4330,6 +4833,11 @@
   }
 }
 @media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:items-center {
+    align-items: center !important;
+  }
+}
+@media (width >= 40rem) {
   .bookly-css-root .bookly\:sm\:justify-end {
     justify-content: flex-end !important;
   }
@@ -4342,6 +4850,11 @@
 @media (width >= 40rem) {
   .bookly-css-root .bookly\:sm\:gap-2\.5 {
     gap: calc(var(--bookly-spacing) * 2.5) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:gap-4 {
+    gap: calc(var(--bookly-spacing) * 4) !important;
   }
 }
 @media (width >= 40rem) {
@@ -4439,6 +4952,12 @@
   }
 }
 @media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-t-0 {
+    border-top-style: var(--tw-border-style) !important;
+    border-top-width: 0px !important;
+  }
+}
+@media (width >= 40rem) {
   .bookly-css-root .bookly\:sm\:border-r {
     border-right-style: var(--tw-border-style) !important;
     border-right-width: 1px !important;
@@ -4454,6 +4973,12 @@
   .bookly-css-root .bookly\:sm\:border-b-0 {
     border-bottom-style: var(--tw-border-style) !important;
     border-bottom-width: 0px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-l {
+    border-left-style: var(--tw-border-style) !important;
+    border-left-width: 1px !important;
   }
 }
 @media (width >= 40rem) {
@@ -4474,6 +4999,16 @@
 @media (width >= 40rem) {
   .bookly-css-root .bookly\:sm\:px-4 {
     padding-inline: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:pt-0 {
+    padding-top: 0px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:pl-2 {
+    padding-left: calc(var(--bookly-spacing) * 2) !important;
   }
 }
 @media (width >= 40rem) {
@@ -4508,23 +5043,8 @@
   }
 }
 @media (width >= 48rem) {
-  .bookly-css-root .bookly\:min-md\:float-left {
-    float: left !important;
-  }
-}
-@media (width >= 48rem) {
   .bookly-css-root .bookly\:md\:mx-1 {
     margin-inline: var(--bookly-spacing) !important;
-  }
-}
-@media (width >= 48rem) {
-  .bookly-css-root .bookly\:min-md\:ms-2 {
-    margin-inline-start: calc(var(--bookly-spacing) * 2) !important;
-  }
-}
-@media (width >= 48rem) {
-  .bookly-css-root .bookly\:md\:me-4 {
-    margin-inline-end: calc(var(--bookly-spacing) * 4) !important;
   }
 }
 @media (width >= 48rem) {
@@ -4595,11 +5115,6 @@
 @media (width >= 48rem) {
   .bookly-css-root .bookly\:md\:shrink {
     flex-shrink: 1 !important;
-  }
-}
-@media (width >= 48rem) {
-  .bookly-css-root .bookly\:md\:shrink-0 {
-    flex-shrink: 0 !important;
   }
 }
 @media (width >= 48rem) {
@@ -4692,6 +5207,11 @@
   }
 }
 @media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:pt-4 {
+    padding-top: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width >= 48rem) {
   .bookly-css-root .bookly\:md\:pt-6 {
     padding-top: calc(var(--bookly-spacing) * 6) !important;
   }
@@ -4770,6 +5290,36 @@
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   }
 }
+@container (width < 56rem) {
+  .bookly-css-root .bookly\:\@max-4xl\:flex {
+    display: flex !important;
+  }
+}
+@container (width < 56rem) {
+  .bookly-css-root .bookly\:\@max-4xl\:grow {
+    flex-grow: 1 !important;
+  }
+}
+@container (width < 56rem) {
+  .bookly-css-root .bookly\:\@max-4xl\:basis-full {
+    flex-basis: 100% !important;
+  }
+}
+@container (width < 56rem) {
+  .bookly-css-root .bookly\:\@max-4xl\:justify-center {
+    justify-content: center !important;
+  }
+}
+@container (width < 48rem) {
+  .bookly-css-root .bookly\:\@max-3xl\:mx-auto {
+    margin-inline: auto !important;
+  }
+}
+@container (width < 48rem) {
+  .bookly-css-root .bookly\:\@max-3xl\:max-w-lg {
+    max-width: var(--bookly-container-lg) !important;
+  }
+}
 @container main (width < 42rem) {
   .bookly-css-root .bookly\:\@max-2xl\/main\:m-4 {
     margin: calc(var(--bookly-spacing) * 4) !important;
@@ -4833,6 +5383,104 @@
 @container main (width < 36rem) {
   .bookly-css-root .bookly\:\@max-xl\/main\:text-center {
     text-align: center !important;
+  }
+}
+@container (width < 20rem) {
+  .bookly-css-root .bookly\:\@max-xs\:flex-col {
+    flex-direction: column !important;
+  }
+}
+@container (width < 20rem) {
+  .bookly-css-root .bookly\:\@max-xs\:items-start {
+    align-items: flex-start !important;
+  }
+}
+@container (width >= 300px) {
+  .bookly-css-root .bookly\:\@min-\[300px\]\:size-12 {
+    width: calc(var(--bookly-spacing) * 12) !important;
+    height: calc(var(--bookly-spacing) * 12) !important;
+  }
+}
+@container (width >= 300px) {
+  .bookly-css-root .bookly\:\@min-\[300px\]\:p-5 {
+    padding: calc(var(--bookly-spacing) * 5) !important;
+  }
+}
+@container (width >= 300px) {
+  .bookly-css-root .bookly\:\@min-\[300px\]\:text-sm {
+    font-size: var(--bookly-text-sm) !important;
+    line-height: var(--tw-leading, var(--bookly-text-sm--line-height)) !important;
+  }
+}
+@container (width >= 300px) {
+  .bookly-css-root .bookly\:\@min-\[300px\]\:text-xl {
+    font-size: var(--bookly-text-xl) !important;
+    line-height: var(--tw-leading, var(--bookly-text-xl--line-height)) !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:top-\[5\%\] {
+    top: 5% !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:left-0 {
+    left: 0px !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:h-\[90\%\] {
+    height: 90% !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:w-72 {
+    width: calc(var(--bookly-spacing) * 72) !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:w-px {
+    width: 1px !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:shrink-0 {
+    flex-shrink: 0 !important;
+  }
+}
+@container (width >= 42rem) {
+  .bookly-css-root .bookly\:\@2xl\:basis-auto {
+    flex-basis: auto !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:w-2\/5 {
+    width: 40% !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:max-w-\[590px\] {
+    max-width: 590px !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:flex-row {
+    flex-direction: row !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:items-start {
+    align-items: flex-start !important;
+  }
+}
+@container (width >= 48rem) {
+  .bookly-css-root .bookly\:\@3xl\:gap-7 {
+    gap: calc(var(--bookly-spacing) * 7) !important;
   }
 }
 .bookly-css-root .bookly\:ltr\:right-0:where(:dir(ltr), [dir=ltr], [dir=ltr] *) {
@@ -4976,6 +5624,15 @@
 .bookly-css-root .bookly\:\[\&\>span\]\:opacity-70 > span {
   opacity: 70% !important;
 }
+.bookly-css-root .bookly\:\[\&\>span\+span\]\:before\:mr-2 > span + span::before {
+  content: var(--tw-content);
+  margin-right: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:\[\&\>span\+span\]\:before\:content-\[\'·\'\] > span + span::before {
+  content: var(--tw-content);
+  --tw-content: '·' !important;
+  content: var(--tw-content) !important;
+}
 .bookly-css-root .bookly\:\[\&\>svg\]\:size-3\.5 > svg {
   width: calc(var(--bookly-spacing) * 3.5) !important;
   height: calc(var(--bookly-spacing) * 3.5) !important;
@@ -5010,6 +5667,26 @@
 }
 .bookly-css-root .bookly\:\[\&\[data-today\]\[data-disabled\]\]\:text-muted-foreground[data-today][data-disabled] {
   color: var(--bookly-color-muted-foreground) !important;
+}
+@media (min-height: 800px) {
+  .bookly-css-root .bookly\:\[\@media\(min-height\:800px\)\]\:min-h-0 {
+    min-height: 0px !important;
+  }
+}
+@media (min-height: 800px) {
+  .bookly-css-root .bookly\:\[\@media\(min-height\:800px\)\]\:min-h-32 {
+    min-height: calc(var(--bookly-spacing) * 32) !important;
+  }
+}
+@media (min-height: 800px) {
+  .bookly-css-root .bookly\:\[\@media\(min-height\:800px\)\]\:flex-1 {
+    flex: 1 !important;
+  }
+}
+@media (min-height: 800px) {
+  .bookly-css-root .bookly\:\[\@media\(min-height\:800px\)\]\:overflow-y-auto {
+    overflow-y: auto !important;
+  }
 }
 [data-slot=popover-content] .bookly-css-root .bookly\:\[\[data-slot\=popover-content\]_\&\]\:bg-transparent {
   background-color: transparent !important;
@@ -6579,7 +7256,7 @@ div[id^=bookly-][id$=-datatables]:empty::after, .bookly-dt-initial-loading::afte
   inherits: false;
   initial-value: 0;
 }
-@property --tw-divide-y-reverse {
+@property --tw-divide-x-reverse {
   syntax: "*";
   inherits: false;
   initial-value: 0;
@@ -6588,6 +7265,11 @@ div[id^=bookly-][id$=-datatables]:empty::after, .bookly-dt-initial-loading::afte
   syntax: "*";
   inherits: false;
   initial-value: solid;
+}
+@property --tw-divide-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
 }
 @property --tw-gradient-position {
   syntax: "*";
@@ -6830,11 +7512,6 @@ div[id^=bookly-][id$=-datatables]:empty::after, .bookly-dt-initial-loading::afte
   initial-value: "";
   inherits: false;
 }
-@property --tw-divide-x-reverse {
-  syntax: "*";
-  inherits: false;
-  initial-value: 0;
-}
 @property --tw-scale-x {
   syntax: "*";
   inherits: false;
@@ -6898,8 +7575,9 @@ div[id^=bookly-][id$=-datatables]:empty::after, .bookly-dt-initial-loading::afte
       --tw-translate-y: 0;
       --tw-translate-z: 0;
       --tw-space-y-reverse: 0;
-      --tw-divide-y-reverse: 0;
+      --tw-divide-x-reverse: 0;
       --tw-border-style: solid;
+      --tw-divide-y-reverse: 0;
       --tw-gradient-position: initial;
       --tw-gradient-from: #0000;
       --tw-gradient-via: #0000;
@@ -6956,7 +7634,6 @@ div[id^=bookly-][id$=-datatables]:empty::after, .bookly-dt-initial-loading::afte
       --tw-duration: initial;
       --tw-ease: initial;
       --tw-content: "";
-      --tw-divide-x-reverse: 0;
       --tw-scale-x: 1;
       --tw-scale-y: 1;
       --tw-scale-z: 1;

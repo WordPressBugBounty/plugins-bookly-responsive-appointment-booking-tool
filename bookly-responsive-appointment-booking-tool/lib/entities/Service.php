@@ -260,6 +260,104 @@ class Service extends Lib\Base\Entity
     }
 
     /**
+     * Get extras which a booking of this service can be made with, indexed by extra id.
+     *
+     * A compound or collaborative service is booked with the extras of its sub services,
+     * and an extra with a non positive maximum quantity is not offered at all.
+     *
+     * @return \BooklyServiceExtras\Lib\Entities\ServiceExtra[]
+     */
+    public function getAvailableExtras()
+    {
+        $extras = array();
+        $services = $this->withSubServices() ? $this->getSubServices() : array( $this );
+        foreach ( $services as $service ) {
+            foreach ( $service->getExtras() as $extra ) {
+                if ( $extra->getMaxQuantity() > 0 ) {
+                    $extras[ $extra->getId() ] = $extra;
+                }
+            }
+        }
+
+        return $extras;
+    }
+
+    /**
+     * Get the range of persons a booking of this service can be made for.
+     *
+     * Without the group booking add-on a booking always stands for a single person. With
+     * "any staff" a booking carries several staff members, so the widest range among them is
+     * allowed; the capacity of the one actually booked is enforced when the slot is taken.
+     *
+     * @param array $staff_ids
+     * @param int $location_id
+     * @return array [ min, max ]
+     */
+    public function getPersonsRange( array $staff_ids = array(), $location_id = 0 )
+    {
+        if ( ! Lib\Config::groupBookingActive() ) {
+            return array( 1, 1 );
+        }
+
+        $min = max( 1, (int) $this->getCapacityMin() );
+        $max = max( $min, (int) $this->getCapacityMax() );
+        foreach ( $staff_ids as $staff_id ) {
+            $staff_service = $this->getStaffService( $staff_id, $location_id );
+            if ( $staff_service ) {
+                $min = min( $min, max( 1, (int) $staff_service->getCapacityMin() ) );
+                $max = max( $max, (int) $staff_service->getCapacityMax() );
+            }
+        }
+
+        return array( $min, $max );
+    }
+
+    /**
+     * Staff service record this service is booked by, at the given location.
+     *
+     * A staff member may hold custom settings for the chosen location (their own capacity
+     * among them); the booking uses those, so they are read here, falling back to the general
+     * settings the same way the cart does.
+     *
+     * @param int $staff_id
+     * @param int $location_id
+     * @return StaffService|null
+     */
+    private function getStaffService( $staff_id, $location_id = 0 )
+    {
+        $staff_service = new StaffService();
+        if ( $location_id ) {
+            $staff_location_id = Lib\Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null;
+            $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $this->getId(), 'location_id' => $staff_location_id ) );
+            if ( ! $staff_service->isLoaded() && $staff_location_id !== null ) {
+                $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $this->getId(), 'location_id' => null ) );
+            }
+        } else {
+            $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $this->getId() ) );
+        }
+
+        return $staff_service->isLoaded() ? $staff_service : null;
+    }
+
+    /**
+     * Get the range of units a booking of this service can be made for.
+     *
+     * Without the multiply appointments add-on a booking always stands for a single unit.
+     *
+     * @return array [ min, max ]
+     */
+    public function getUnitsRange()
+    {
+        if ( ! Lib\Config::multiplyAppointmentsActive() ) {
+            return array( 1, 1 );
+        }
+
+        $min = max( 1, (int) $this->getUnitsMin() );
+
+        return array( $min, max( $min, (int) $this->getUnitsMax() ) );
+    }
+
+    /**
      * Check if given customer has reached the appointments limit for this service.
      *
      * @param int $customer_id

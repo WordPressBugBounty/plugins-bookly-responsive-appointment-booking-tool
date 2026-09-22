@@ -24,6 +24,7 @@ class BooklyForm extends Lib\Base\Component
             ),
             'wp' => array( 'wp-color-picker', ),
             'module' => array( 'css/appearance.css' => array( 'bookly-backend-globals' ) ),
+            'bookly' => array( 'backend/resources/css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ) ),
         ) );
 
         self::enqueueScripts( array(

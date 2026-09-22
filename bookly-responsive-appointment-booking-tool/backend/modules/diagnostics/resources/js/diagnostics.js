@@ -350,13 +350,15 @@ jQuery(function ($) {
                     $('#bookly-advanced-options-option-current-value').val(response.data.current);
                     $('#bookly-advanced-options-option-default-value').val(response.data.default);
                     $('#bookly-advanced-options-option-value').val(response.data.current);
-                    $('.bookly-js-advanced-options-set-option').show();
+                    $('.bookly-js-advanced-options-view-option').show();
+                    // The option holds credentials and is not shown to users without 'manage_options'.
+                    $('.bookly-js-advanced-options-set-option').toggle(!response.data.protected);
                 } else {
                     $('#bookly-advanced-options-option-current-value').val('');
                     $('#bookly-advanced-options-option-default-value').val('');
                     $('#bookly-advanced-options-option-value').val('');
-                    $('.bookly-js-advanced-options-set-option').hide();
-                    booklyAlert({error: ['Failed']});
+                    $('.bookly-js-advanced-options-view-option').hide();
+                    booklyAlert({error: [response.data && response.data.message || 'Unknown option']});
                 }
             }
         });
@@ -375,9 +377,13 @@ jQuery(function ($) {
                 csrf_token: BooklyL10nGlobal.csrf_token
             },
             dataType: 'json',
-            success: function () {
+            success: function (response) {
                 ladda.stop();
-                $('#bookly-advanced-options-option-current-value').val($('#bookly-advanced-options-option-value').val());
+                if (response.success) {
+                    $('#bookly-advanced-options-option-current-value').val($('#bookly-advanced-options-option-value').val());
+                } else {
+                    booklyAlert({error: [response.data && response.data.message || 'Failed']});
+                }
             }
         });
     });

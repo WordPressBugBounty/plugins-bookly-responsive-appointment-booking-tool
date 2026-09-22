@@ -1,4 +1,4 @@
-const booklyJsVersion="28.2";
+const booklyJsVersion="28.3";
 /*!*/
 var bookly = (function ($) {
 	'use strict';
@@ -6842,7 +6842,7 @@ var bookly = (function ($) {
 	  }).then(response => {
 	    // If payment step is disabled.
 	    if (response.disabled) {
-	      save(params.form_id);
+	      response.ajax_action ? redirectToExternalCheckout(response.ajax_action, params.form_id) : save(params.form_id);
 	      return;
 	    }
 	    $container.html(response.html);
@@ -7026,7 +7026,10 @@ var bookly = (function ($) {
 	          // Do nothing
 	        }
 	      }
-	      if ($gateway_checked.val() === 'card') {
+	      let ajax_action = $gateway_checked.data('ajax-action');
+	      if (ajax_action) {
+	        redirectToExternalCheckout(ajax_action, params.form_id, ladda);
+	      } else if ($gateway_checked.val() === 'card') {
 	        let gateway = $gateway_checked.data('gateway');
 	        if (gateway === 'authorize_net') {
 	          booklyAjax({
@@ -7136,6 +7139,30 @@ var bookly = (function ($) {
 	    if (response.error == 'cart_item_not_available') {
 	      handleErrorCartItemNotAvailable(response, form_id);
 	    }
+	  });
+	}
+
+	/**
+	 * Hand the order over to a checkout provided by an add-on.
+	 *
+	 * @param action
+	 * @param form_id
+	 * @param ladda
+	 */
+	function redirectToExternalCheckout(action, form_id, ladda) {
+	  booklyAjax({
+	    type: 'POST',
+	    data: {
+	      action: action,
+	      form_id: form_id
+	    }
+	  }).then(response => {
+	    window.location.href = response.data.target_url;
+	  }).catch(response => {
+	    if (ladda) {
+	      ladda.stop();
+	    }
+	    handleErrorCartItemNotAvailable(response.data, form_id);
 	  });
 	}
 
@@ -14548,11 +14575,10 @@ var bookly = (function ($) {
 	 * @param {{ bubbles?: boolean, cancelable?: boolean }} [options]
 	 * @returns {CustomEvent<T>}
 	 */
-	function custom_event(type, detail) {
-	  let {
-	    bubbles = false,
-	    cancelable = false
-	  } = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+	function custom_event(type, detail, {
+	  bubbles = false,
+	  cancelable = false
+	} = {}) {
 	  return new CustomEvent(type, {
 	    detail,
 	    bubbles,
@@ -14625,8 +14651,7 @@ var bookly = (function ($) {
 	 * @param {number} uid
 	 * @returns {string}
 	 */
-	function create_rule(node, a, b, duration, delay, ease, fn) {
-	  let uid = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 0;
+	function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
 	  const step = 16.666 / duration;
 	  let keyframes = '{\n';
 	  for (let p = 0; p <= 1; p += step) {
@@ -14719,10 +14744,9 @@ var bookly = (function ($) {
 	 */
 	function createEventDispatcher() {
 	  const component = get_current_component();
-	  return function (type, detail) {
-	    let {
-	      cancelable = false
-	    } = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+	  return (type, detail, {
+	    cancelable = false
+	  } = {}) => {
 	    const callbacks = component.$$.callbacks[type];
 	    if (callbacks) {
 	      var _context;
@@ -15562,9 +15586,7 @@ var bookly = (function ($) {
 	 *
 	 * @returns {void}
 	 */
-	function init(component, options, instance, create_fragment, not_equal, props) {
-	  let append_styles = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : null;
-	  let dirty = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : [-1];
+	function init(component, options, instance, create_fragment, not_equal, props, append_styles = null, dirty = [-1]) {
 	  const parent_component = current_component;
 	  set_current_component(component);
 	  /** @type {import('./private.js').T$$} */
@@ -15591,8 +15613,8 @@ var bookly = (function ($) {
 	  };
 	  append_styles && append_styles($$.root);
 	  let ready = false;
-	  $$.ctx = instance ? instance(component, options.props || {}, function (i, ret) {
-	    const value = (arguments.length <= 2 ? 0 : arguments.length - 2) ? arguments.length <= 2 ? undefined : arguments[2] : ret;
+	  $$.ctx = instance ? instance(component, options.props || {}, (i, ret, ...rest) => {
+	    const value = rest.length ? rest[0] : ret;
 	    if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
 	      if (!$$.skip_bound && $$.bound[i]) $$.bound[i](value);
 	      if (ready) make_dirty(component, i);
@@ -15636,7 +15658,7 @@ var bookly = (function ($) {
 	   *
 	   * @type {any}
 	   */
-	  $$ = (() => undefined)();
+	  $$ = undefined;
 	  /**
 	   * ### PRIVATE API
 	   *
@@ -15644,7 +15666,7 @@ var bookly = (function ($) {
 	   *
 	   * @type {any}
 	   */
-	  $$set = (() => undefined)();
+	  $$set = undefined;
 
 	  /** @returns {void} */
 	  $destroy() {
@@ -15723,13 +15745,12 @@ var bookly = (function ($) {
 	 * @param {import('./public').SlideParams} [params]
 	 * @returns {import('./public').TransitionConfig}
 	 */
-	function slide(node) {
-	  let {
-	    delay = 0,
-	    duration = 400,
-	    easing = cubicOut,
-	    axis = 'y'
-	  } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	function slide(node, {
+	  delay = 0,
+	  duration = 400,
+	  easing = cubicOut,
+	  axis = 'y'
+	} = {}) {
 	  const style = getComputedStyle(node);
 	  const opacity = +style.opacity;
 	  const primary_property = axis === 'y' ? 'height' : 'width';
@@ -15782,8 +15803,7 @@ var bookly = (function ($) {
 	      append(svg, path0);
 	      append(svg, path1);
 	    },
-	    p(ctx, _ref) {
-	      let [dirty] = _ref;
+	    p(ctx, [dirty]) {
 	      if (dirty & /*full_size*/2 && svg_class_value !== (svg_class_value = "bookly:inline bookly:text-gray-200 bookly:animate-spin fill-bookly " + (/*full_size*/ctx[1] ? 'bookly:absolute bookly:inset-0 bookly:h-full bookly:w-full' : 'bookly:w-8 bookly:h-8'))) {
 	        attr(svg, "class", svg_class_value);
 	      }
@@ -16349,8 +16369,7 @@ var bookly = (function ($) {
 	      insert(target, if_block_anchor, anchor);
 	      current = true;
 	    },
-	    p(ctx, _ref) {
-	      let [dirty] = _ref;
+	    p(ctx, [dirty]) {
 	      let previous_block_index = current_block_type_index;
 	      current_block_type_index = select_block_type(ctx);
 	      if (current_block_type_index === previous_block_index) {
@@ -18894,7 +18913,6 @@ var bookly = (function ($) {
 	    scrollTo($container, params.form_id);
 	    let intlTelInput = response.intlTelInput,
 	      update_details_dialog = response.update_details_dialog,
-	      woocommerce = response.woocommerce,
 	      customJS = response.custom_js,
 	      custom_fields_conditions = response.custom_fields_conditions || [],
 	      terms_error = response.l10n.terms_error;
@@ -19482,25 +19500,9 @@ var bookly = (function ($) {
 	          type: 'POST',
 	          data: data
 	        }).then(response => {
-	          if (woocommerce.enabled) {
-	            var data = {
-	              action: 'bookly_pro_add_to_woocommerce_cart',
-	              form_id: params.form_id
-	            };
-	            booklyAjax({
-	              type: 'POST',
-	              data: data
-	            }).then(response => {
-	              window.location.href = response.data.target_url;
-	            }).catch(response => {
-	              ladda.stop();
-	              handleErrorCartItemNotAvailable(response.data, params.form_id);
-	            });
-	          } else {
-	            stepPayment({
-	              form_id: params.form_id
-	            });
-	          }
+	          stepPayment({
+	            form_id: params.form_id
+	          });
 	        }).catch(response => {
 	          var $scroll_to = null;
 	          if (response.appointments_limit_reached) {
@@ -21646,8 +21648,7 @@ var bookly = (function ($) {
 	        mounted = true;
 	      }
 	    },
-	    p(ctx, _ref) {
-	      let [dirty] = _ref;
+	    p(ctx, [dirty]) {
 	      if (dirty & /*label*/4) set_data(t0, /*label*/ctx[2]);
 	      if (/*placeholder*/ctx[3]) {
 	        if (if_block0) {
@@ -23770,8 +23771,7 @@ var bookly = (function ($) {
 	      insert(target, if_block_anchor, anchor);
 	      current = true;
 	    },
-	    p(ctx, _ref) {
-	      let [dirty] = _ref;
+	    p(ctx, [dirty]) {
 	      if (dirty & /*data, items, multiple, els, onDropItem, dispatch*/95) {
 	        each_value = ensure_array_like(/*items*/ctx[0]);
 	        group_outros();

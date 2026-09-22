@@ -1191,7 +1191,7 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "appointments",
-        "title": "Create appointments with the booking wizard",
+        "title": "Use the booking wizard",
         "anchor": "bookly_appointments_create_with_wizard",
         "addon": "core",
         "weight": 30
@@ -2432,6 +2432,16 @@
         "tab": "payments",
         "title": "Location ID",
         "anchor": "bookly_cloud_square_api_location_id",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Notification URL",
+        "anchor": "bookly-notification-url",
         "addon": "bookly-addon-square",
         "group": "Square",
         "weight": 30

@@ -438,6 +438,27 @@ class Cart
     }
 
     /**
+     * Whether the staff member provides the service.
+     *
+     * @param int $staff_id
+     * @param int $service_id
+     * @return bool
+     */
+    private static function staffProvidesService( $staff_id, $service_id )
+    {
+        static $cache = array();
+
+        if ( ! isset ( $cache[ $staff_id ][ $service_id ] ) ) {
+            $cache[ $staff_id ][ $service_id ] = Entities\StaffService::query()
+                    ->where( 'staff_id', $staff_id )
+                    ->where( 'service_id', $service_id )
+                    ->count() > 0;
+        }
+
+        return $cache[ $staff_id ][ $service_id ];
+    }
+
+    /**
      * Return cart_key for not available appointment or NULL.
      *
      * @return int|null
@@ -454,6 +475,15 @@ class Cart
             if ( $cart_item->getService() ) {
                 $service = $cart_item->getService();
                 $with_sub_services = $service->withSubServices();
+                // The staff member of a slot is the one the booking form picked among those
+                // providing the service, and the price of the booking comes from that pair.
+                foreach ( (array) $cart_item->getSlots() as $slot ) {
+                    foreach ( (array) $slot[1] as $slot_staff_id ) {
+                        if ( (int) $slot_staff_id > 0 && ! self::staffProvidesService( $slot_staff_id, $slot[0] ) ) {
+                            return $cart_key;
+                        }
+                    }
+                }
                 foreach ( $cart_item->getSlots() as $slot ) {
                     if ( $waiting_list_enabled && isset ( $slot[4] ) && $slot[4] === 'w' ) {
                         // Booking is always available for slots being placed on waiting list.

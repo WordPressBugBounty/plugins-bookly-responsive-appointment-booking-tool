@@ -21,6 +21,8 @@ class Request extends Lib\Base\Component
     protected $gateway_name;
     /** @var Lib\Base\Gateway */
     protected $gateway;
+    /** @var string */
+    protected $response_action;
 
     protected function __construct()
     {
@@ -93,9 +95,91 @@ class Request extends Lib\Base\Component
      */
     public function isBookingForm()
     {
+        // A caller that supplied its own return endpoint (setResponseAction()) also supplied
+        // its own UserBookingData - there is no FormSession behind it, so every
+        // sessionSave() the booking-form branch does would write to nothing.
+        if ( $this->response_action !== null ) {
+            return false;
+        }
+
         return ! $this->get( 'modern_booking_form' ) || $this->get( 'bookly_fid' );
     }
 
+    /**
+     * Route the payment system's success/cancel redirect to $action instead of the
+     * booking-form or modern-form endpoint. For callers that drive a checkout with their own
+     * UserBookingData and their own return page - see Lib\Base\Gateway::getResponseUrl().
+     *
+     * @param string $action admin-ajax action name
+     * @return $this
+     */
+    public function setResponseAction( $action )
+    {
+        $this->response_action = $action;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getResponseAction()
+    {
+        return $this->response_action;
+    }
+
+    /**
+     * Whether the current request may roll back (delete) the order behind its token.
+     *
+     * A rollback is only legitimate right after an online payment intent was created and
+     * the customer failed or abandoned it before confirmation - the payment then still
+     * hangs in "pending". It must never reach a completed booking, a pay-locally booking
+     * (local/free stay "pending" until the admin marks them paid) or an order without a
+     * payment: the order token travels in calendar links and payment-system return URLs,
+     * so a bare token must not be enough to delete someone's appointment.
+     *
+     * For the booking form the order is additionally bound to the form session that
+     * created it, so a token alone - even for an otherwise eligible order - cannot be
+     * rolled back from another session.
+     *
+     * @return bool
+     */
+    public function isRollbackAllowed()
+    {
+        $token = $this->get( 'bookly_order' );
+        if ( ! $token ) {
+            return false;
+        }
+
+        /** @var Entities\Payment $payment */
+        $payment = Entities\Payment::query( 'p' )
+            ->leftJoin( 'Order', 'o', 'o.id = p.order_id' )
+            ->where( 'o.token', $token )
+            ->findOne();
+
+        // Only an online payment still awaiting confirmation may be rolled back.
+        if ( ! $payment
+            || $payment->getStatus() !== Entities\Payment::STATUS_PENDING
+            || in_array( $payment->getType(), array( Entities\Payment::TYPE_LOCAL, Entities\Payment::TYPE_FREE ), true )
+        ) {
+            return false;
+        }
+
+        // Booking form: the order must belong to the session behind this form_id.
+        if ( $this->isBookingForm() ) {
+            $form_id = $this->getFormId() ?: $this->get( 'bookly_fid' );
+            if ( ! $form_id ) {
+                return false;
+            }
+            $session = Lib\FormSession::loadSession( $form_id );
+            $session_order_id = isset( $session['order_id'] ) ? $session['order_id'] : null;
+            if ( $session_order_id === null || (int) $session_order_id !== (int) $payment->getOrderId() ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * @param Lib\UserBookingData $userData
@@ -210,6 +294,10 @@ class Request extends Lib\Base\Component
                                 $cart_item->setCartTypeId( $item['gift_card_type'] );
                                 break;
                         }
+
+                        // The cart is rebuilt here from the request, so the values it carries
+                        // are the ones the client sent.
+                        $cart_item->applyServiceLimits();
 
                         $this->userData->cart->add( $cart_item );
                     }

@@ -107,6 +107,6 @@ class SlotGrid
             return $service->getDuration();
         }
 
-        return (int) $slot_length * MINUTE_IN_SECONDS;
+        return (int) $slot_length;
     }
 }

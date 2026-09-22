@@ -6,6 +6,9 @@ use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 
 class Validator
 {
+    /** Consecutive wrong verification code entries after which the stored code is discarded. */
+    const MAX_VERIFICATION_ATTEMPTS = 5;
+
     private $errors = array();
 
     /**
@@ -273,12 +276,32 @@ class Validator
                         if ( ! empty ( $diff ) ) {
                             if ( $verify_customer_details === 'on_update' ) {
                                 // force_update_customer is client-supplied and must never bypass code verification.
-                                if ( $data['verification_code'] != $userData->getVerificationCode() ) {
+                                // A code only counts for the recipient it was issued to, so a code obtained
+                                // for one contact cannot authorise a change to another person's record.
+                                $recipient = $identifier === 'phone'
+                                    ? Cloud\SMS::normalizePhoneNumber( (string) $customer->getPhone() )
+                                    : strtolower( trim( (string) $customer->getEmail() ) );
+                                $sent_recipient = $identifier === 'phone'
+                                    ? Cloud\SMS::normalizePhoneNumber( (string) $userData->getVerificationCodeRecipient() )
+                                    : strtolower( trim( (string) $userData->getVerificationCodeRecipient() ) );
+                                if ( self::verificationCodeMatches( $data['verification_code'], $userData->getVerificationCode() )
+                                    && $recipient !== ''
+                                    && $sent_recipient === $recipient
+                                ) {
+                                    $userData->setVerifiedRecipient( $recipient );
+                                    $userData->setVerificationAttemptCount( 0 );
+                                } else {
+                                    $this->registerVerificationAttempt( $data, $userData );
                                     $this->errors['verify'] = $identifier;
                                 }
                             } elseif ( ! isset ( $data['force_update_customer'] ) ) {
+                                // Update rewrites the record only for a session that owns it; for anyone
+                                // else it keeps the stored details and fills in the empty ones, and the
+                                // message must not promise more than that.
                                 $this->errors['customer'] = sprintf(
-                                    __( 'Your %s: %s is already associated with another %s.<br/>Press Update if we should update your user data, or press Cancel to edit entered data.', 'bookly-responsive-appointment-booking-tool' ),
+                                    $userData->customerIdentityConfirmed( $customer )
+                                        ? __( 'Your %s: %s is already associated with another %s.<br/>Press Update if we should update your user data, or press Cancel to edit entered data.', 'bookly-responsive-appointment-booking-tool' )
+                                        : __( 'Your %s: %s is already associated with another %s.<br/>Press Update to continue: the details we already have remain unchanged, and only missing details are added. Press Cancel to edit the entered data.', 'bookly-responsive-appointment-booking-tool' ),
                                     $fields[ $identifier ],
                                     $data[ $identifier ],
                                     implode( ', ', $diff )
@@ -313,8 +336,7 @@ class Validator
                 }
                 if ( $verify_recipient !== '' && $userData->getVerifiedRecipient() === $verify_recipient ) {
                     // This recipient was already verified earlier in the session — do not ask again.
-                } elseif ( $data['verification_code'] !== ''
-                    && $data['verification_code'] == $userData->getVerificationCode()
+                } elseif ( self::verificationCodeMatches( $data['verification_code'], $userData->getVerificationCode() )
                     && $sent_recipient === $verify_recipient ) {
                     // Correct code entered for the recipient it was actually sent to —
                     // remember it so this recipient is not asked to verify again this session.
@@ -324,7 +346,9 @@ class Validator
                     // verification round (e.g. a new number) starts fresh at the first interval.
                     $userData->setVerificationResendCount( 0 );
                     $userData->setVerificationCodeSentAt( 0 );
+                    $userData->setVerificationAttemptCount( 0 );
                 } else {
+                    $this->registerVerificationAttempt( $data, $userData );
                     $this->errors['verify'] = $verify_customer_details === 'always_phone' ? 'phone' : 'email';
                 }
             }
@@ -381,6 +405,188 @@ class Validator
                 if ( $service_data['service']->appointmentsLimitReached( $customer->getId(), $service_data['dates'] ) ) {
                     $this->errors['appointments_limit_reached'] = true;
                     break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Check a submitted verification code against the one stored in the session.
+     *
+     * The submitted value comes from the client and may arrive as any JSON type. A loose
+     * comparison would accept boolean true for any stored code, so only a string or an
+     * integer made of digits is compared, and it is compared as a string.
+     *
+     * @param mixed $submitted
+     * @param mixed $expected
+     * @return bool
+     */
+    protected static function verificationCodeMatches( $submitted, $expected )
+    {
+        if ( is_int( $submitted ) ) {
+            $submitted = (string) $submitted;
+        }
+        if ( is_int( $expected ) ) {
+            $expected = (string) $expected;
+        }
+        if ( ! is_string( $submitted ) || ! is_string( $expected ) ) {
+            return false;
+        }
+        $submitted = trim( $submitted );
+        if ( $expected === '' || ! preg_match( '/^\d+$/', $submitted ) ) {
+            return false;
+        }
+
+        return hash_equals( $expected, $submitted );
+    }
+
+    /**
+     * Count a wrong verification code entry.
+     *
+     * A code stays in the session until its recipient changes, so without a cap the
+     * six-digit value could be searched by repeated submissions. On reaching the cap the
+     * stored code is replaced by a value that is never sent, so every guess is worthless
+     * until the customer requests a new code.
+     *
+     * @param array $data
+     * @param UserBookingData $userData
+     */
+    protected function registerVerificationAttempt( $data, UserBookingData $userData )
+    {
+        if ( ! isset ( $data['verification_code'] ) || $data['verification_code'] === '' ) {
+            // The step is only being opened, no code entered yet.
+            return;
+        }
+
+        $attempts = $userData->getVerificationAttemptCount() + 1;
+        if ( $attempts >= self::MAX_VERIFICATION_ATTEMPTS ) {
+            $userData->setVerificationCode( mt_rand( 100000, 999999 ) );
+            $userData->setVerificationAttemptCount( 0 );
+        } else {
+            $userData->setVerificationAttemptCount( $attempts );
+        }
+    }
+
+    /**
+     * Validate the multipliers of every chain item against the range its service allows.
+     *
+     * Number of persons, units and quantity all scale the order total, so a value outside
+     * the range the booking form offers is refused rather than quietly adjusted: the saved
+     * order then always matches what the customer was shown.
+     *
+     * @param string $field
+     * @param array $chain
+     */
+    public function validateChain( $field, $chain )
+    {
+        if ( ! is_array( $chain ) ) {
+            $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+
+            return;
+        }
+
+        $max_quantity = max( 1, (int) get_option( 'bookly_multiply_appointments_quantity_max', 10 ) );
+
+        foreach ( $chain as $item ) {
+            if ( ! is_array( $item ) ) {
+                continue;
+            }
+            $service = isset ( $item['service_id'] ) ? Entities\Service::find( $item['service_id'] ) : null;
+            $staff_ids = isset ( $item['staff_ids'] ) ? (array) $item['staff_ids'] : array();
+            $number_of_persons = isset ( $item['number_of_persons'] ) ? $item['number_of_persons'] : null;
+            $units = isset ( $item['units'] ) ? $item['units'] : null;
+            $location_id = isset ( $item['location_id'] ) ? (int) $item['location_id'] : 0;
+
+            if ( ! $this->multipliersInRange( $service, $staff_ids, $number_of_persons, $units, $location_id ) ) {
+                $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+            }
+
+            if ( isset ( $item['quantity'] ) ) {
+                $quantity = (int) $item['quantity'];
+                if ( $quantity < 1 || $quantity > $max_quantity ) {
+                    $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+                }
+            }
+        }
+    }
+
+    /**
+     * Whether the multipliers of a booked item stay within the range its service allows.
+     *
+     * Number of persons and units both scale the price and the duration of a booking, and
+     * both reach the server as plain request values, so every booking form checks them
+     * against the service before the item is priced. A null value is not submitted at all
+     * and needs no check.
+     *
+     * @param Entities\Service|null $service
+     * @param array $staff_ids
+     * @param int|null $number_of_persons
+     * @param int|null $units
+     * @param int $location_id
+     * @return bool
+     */
+    public function multipliersInRange( $service, array $staff_ids, $number_of_persons, $units, $location_id = 0 )
+    {
+        if ( $number_of_persons !== null ) {
+            list ( $min, $max ) = $service ? $service->getPersonsRange( $staff_ids, $location_id ) : array( 1, 1 );
+            $number_of_persons = (int) $number_of_persons;
+            if ( $number_of_persons < $min || $number_of_persons > $max ) {
+                return false;
+            }
+        }
+
+        if ( $units !== null ) {
+            list ( $min, $max ) = $service ? $service->getUnitsRange() : array( 1, 1 );
+            $units = (int) $units;
+            if ( $units < $min || $units > $max ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate the extras submitted for every chain item against the ones its service offers.
+     *
+     * Extras scale both the price and the duration of a booking, so an extra which belongs to
+     * another service, or a quantity outside the range the extras step offers, is refused
+     * rather than quietly adjusted: the saved order then always matches what the customer
+     * was shown.
+     *
+     * @param string $field
+     * @param array $extras [chain key => JSON encoded [extra id => quantity]]
+     * @param UserBookingData $userData
+     */
+    public function validateExtras( $field, $extras, UserBookingData $userData )
+    {
+        if ( ! is_array( $extras ) ) {
+            $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+
+            return;
+        }
+
+        $chain_items = $userData->chain->getItems();
+        foreach ( $extras as $key => $value ) {
+            $items = is_array( $value ) ? $value : json_decode( (string) $value, true );
+            $service = isset ( $chain_items[ $key ] ) ? $chain_items[ $key ]->getService() : null;
+            if ( ! is_array( $items ) || ! $service ) {
+                $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+                continue;
+            }
+
+            $available = $service->getAvailableExtras();
+            foreach ( $items as $extra_id => $quantity ) {
+                if ( ! isset ( $available[ $extra_id ] ) ) {
+                    $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
+                    continue;
+                }
+                $extra = $available[ $extra_id ];
+                $quantity = (int) $quantity;
+                // Zero stands for an extra which was not taken, any other quantity is the one
+                // the extras step lets the customer pick.
+                if ( $quantity !== 0 && ( $quantity < max( 1, (int) $extra->getMinQuantity() ) || $quantity > (int) $extra->getMaxQuantity() ) ) {
+                    $this->errors[ $field ] = __( 'Invalid number', 'bookly-responsive-appointment-booking-tool' );
                 }
             }
         }

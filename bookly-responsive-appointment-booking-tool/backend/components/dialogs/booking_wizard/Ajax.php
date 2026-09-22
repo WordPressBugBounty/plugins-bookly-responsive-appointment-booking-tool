@@ -32,21 +32,15 @@ class Ajax extends Lib\Base\Ajax
     /**
      * Staff members the current user may act on. A supervisor (or admin) has no
      * restriction; a plain staff member is confined to their own staff record —
-     * the same scope the calendar and the classic appointment dialog apply. The
-     * UI hides other staff, but every endpoint below must enforce it server-side:
-     * the client can forge any staff_id in the request.
+     * the same scope the calendar, the classic appointment dialog and the appointment
+     * card apply. The UI hides other staff, but every endpoint below must enforce it
+     * server-side: the client can forge any staff_id in the request.
      *
      * @return int[]|null Allowed staff ids, or null for no restriction.
      */
     private static function allowedStaffIds()
     {
-        if ( Lib\Utils\Common::isCurrentUserSupervisor() ) {
-            return null;
-        }
-
-        return array_map( 'intval', Lib\Entities\Staff::query()
-            ->where( 'wp_user_id', get_current_user_id() )
-            ->fetchCol( 'id' ) );
+        return Lib\Utils\Common::getCurrentUserStaffIds();
     }
 
     /**
@@ -60,9 +54,20 @@ class Ajax extends Lib\Base\Ajax
     {
         $l10n = array(
             'newAppointment'        => __( 'New appointment', 'bookly-responsive-appointment-booking-tool' ),
-            'openClassicForm'       => __( 'Open classic form', 'bookly-responsive-appointment-booking-tool' ),
+            'openClassicForm'       => __( 'Open classic form', 'boaokly-responsive-appointment-booking-tool' ),
             'rescheduleAppointment' => __( 'Reschedule appointment', 'bookly-responsive-appointment-booking-tool' ),
             'multiStageReschedule'  => __( 'This appointment is a part of a multi-stage service — reschedule it in the appointment form.', 'bookly-responsive-appointment-booking-tool' ),
+            // Adding a customer to an appointment that already exists: the visit is fixed,
+            // only who joins it and on what terms is chosen.
+            'addCustomer'           => __( 'Add customer', 'bookly-responsive-appointment-booking-tool' ),
+            'adding'                => __( 'Adding', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'addingTo'              => __( 'Adding to', 'bookly-responsive-appointment-booking-tool' ),
+            'customerAdded'         => __( 'Customer added to the appointment.', 'bookly-responsive-appointment-booking-tool' ),
+            'customerAddedFor'      => __( '%s was added to the appointment.', 'bookly-responsive-appointment-booking-tool' ),
+            'seatsTaken'            => __( 'Seats: %1$s of %2$s', 'bookly-responsive-appointment-booking-tool' ),
+            'noSeatsLeft'           => __( 'This appointment is full.', 'bookly-responsive-appointment-booking-tool' ),
+            'visitGetsLonger'       => __( 'These extras make the visit longer — the appointment will be extended for all participants.', 'bookly-responsive-appointment-booking-tool' ),
+            'multiStageAdd'         => __( 'This appointment is a part of a multi-stage service — add a customer to it in the appointment form.', 'bookly-responsive-appointment-booking-tool' ),
             'catalogFailed'         => __( 'Failed to load the services catalog.', 'bookly-responsive-appointment-booking-tool' ),
             'search'                => __( 'Search', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'noResults'             => __( 'No results', 'bookly-responsive-appointment-booking-tool' ),
@@ -94,9 +99,10 @@ class Ajax extends Lib\Base\Ajax
             'collapseOrder'         => __( 'Collapse order', 'bookly-responsive-appointment-booking-tool' ),
             'reschedule'            => __( 'Reschedule', 'bookly-responsive-appointment-booking-tool' ),
             'doubleBooking'         => __( 'double booking', 'bookly-responsive-appointment-booking-tool' ),
+            'staffTimeLimit'        => __( 'exceeds the working hours limit for the staff member', 'bookly-responsive-appointment-booking-tool' ),
+            'customerBookingsLimit' => __( 'the customer has reached the limit of bookings for this service', 'bookly-responsive-appointment-booking-tool' ),
             'notifyCustomersChange' => __( 'Notify customers about this change', 'bookly-responsive-appointment-booking-tool' ),
             'rescheduling'          => __( 'Rescheduling', 'bookly-responsive-appointment-booking-tool' ) . '…',
-            'pickAnotherSlot'       => __( 'Pick another slot', 'bookly-responsive-appointment-booking-tool' ),
             'emptyOrderLine1'       => __( 'Click a slot to add it here.', 'bookly-responsive-appointment-booking-tool' ),
             'emptyOrderLine2'       => __( 'Several services can be combined into one order.', 'bookly-responsive-appointment-booking-tool' ),
             'timeWasTaken'          => __( 'time was taken — pick another slot', 'bookly-responsive-appointment-booking-tool' ),
@@ -108,7 +114,6 @@ class Ajax extends Lib\Base\Ajax
             'durH'                  => __( '%d h', 'bookly-responsive-appointment-booking-tool' ),
             'durMin'                => __( '%d min', 'bookly-responsive-appointment-booking-tool' ),
             'showBooked'            => __( 'Show booked', 'bookly-responsive-appointment-booking-tool' ),
-            // Строки CustomerSelect — группой, как у attendees-диалога (spread в проп l10n).
             'customerSelector'      => array(
                 'placeholder'   => __( 'Search for customer', 'bookly-responsive-appointment-booking-tool' ),
                 'noResults'     => __( 'No results found', 'bookly-responsive-appointment-booking-tool' ),
@@ -156,10 +161,30 @@ class Ajax extends Lib\Base\Ajax
             'evening'               => __( 'Evening', 'bookly-responsive-appointment-booking-tool' ),
             'night'                 => __( 'Night', 'bookly-responsive-appointment-booking-tool' ),
             'customRange'           => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            // An appointment can be stored without a time at all; where the wizard shows
+            // when an existing appointment is, that is the answer.
+            'noTime'                => __( 'No time', 'bookly-responsive-appointment-booking-tool' ),
+            // Same screen as rescheduling, different promise: an appointment without a
+            // time is not moved anywhere, it is given one.
+            'setTime'               => __( 'Set time', 'bookly-responsive-appointment-booking-tool' ),
+            'setTimeTitle'          => __( 'Set appointment time', 'bookly-responsive-appointment-booking-tool' ),
+            'savingTime'            => __( 'Saving', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'timeSet'               => __( 'Appointment time set.', 'bookly-responsive-appointment-booking-tool' ),
+            'timeSetFor'            => __( 'Time set for %s.', 'bookly-responsive-appointment-booking-tool' ),
+            // Buttons shared by the wizard's screens. Words that belong to a feature —
+            // repeating, tasks — come from the add-on that brings the feature.
+            'change'                => __( 'Change', 'bookly-responsive-appointment-booking-tool' ),
+            'apply'                 => __( 'Apply', 'bookly-responsive-appointment-booking-tool' ),
+            'cancel'                => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
+            'days'                  => __( 'days', 'bookly-responsive-appointment-booking-tool' ),
+            'saving'                => __( 'Saving', 'bookly-responsive-appointment-booking-tool' ) . '…',
             // Save/error messages.
             'groupMoveNote'         => __( 'Only this customer will be moved — the rest of the group keeps its time.', 'bookly-responsive-appointment-booking-tool' ),
             'errTimeTaken'          => __( 'This time was just taken. Pick another slot.', 'bookly-responsive-appointment-booking-tool' ),
             'errReschedule'         => __( 'Failed to reschedule. Please try again.', 'bookly-responsive-appointment-booking-tool' ),
+            'errStagesMismatch'     => __( 'The selected time slot has a different set of stages. Pick another time.', 'bookly-responsive-appointment-booking-tool' ),
+            'errCascadePartial'     => __( 'Only some stages were moved. Check the times of the other stages in the appointment form.', 'bookly-responsive-appointment-booking-tool' ),
+            'errNoDuration'         => __( 'This appointment has no duration — set its time in the appointment form.', 'bookly-responsive-appointment-booking-tool' ),
             'errSlotsTaken'         => __( 'Some time slots were taken while you were choosing. Remove the highlighted items and pick another time.', 'bookly-responsive-appointment-booking-tool' ),
             'errCreate'             => __( 'Failed to create appointments. Please try again.', 'bookly-responsive-appointment-booking-tool' ),
         );
@@ -632,6 +657,10 @@ class Ajax extends Lib\Base\Ajax
             // so the request cache key stays the same when the toggle flips.
             true
         );
+        // Every staff member with their own state, not only the best one per time: a free
+        // colleague must not hide the waiting list or a double booking of the staff member
+        // the operator asked for.
+        $finder->keepAllCandidates();
         $finder->prepare();
         foreach ( $custom_bookings as $custom_booking ) {
             $finder->addStaffBooking( $custom_booking[0], $custom_booking[1] );
@@ -773,6 +802,124 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Warnings for the order being composed: limits the plugin sets, which the operator is
+     * told about but not stopped by.
+     *
+     * The classic appointment form does exactly that — it warns when a customer has used up
+     * the bookings allowed for a service and when a staff member would work past their daily
+     * limit, and still saves. An operator booking by phone may know better than the limit,
+     * so the wizard warns in the same two cases and leaves the decision to them.
+     *
+     * The order is checked as a whole, not item by item: two items for the same staff member
+     * on one day add up against their limit, and several visits of one service count against
+     * the customer's limit together, just as they will once saved.
+     *
+     * Answers `warnings`: order item index → list of codes (`staff_time_limit`,
+     * `customer_bookings_limit`); the words are the wizard's own.
+     */
+    public static function getBookingWizardWarnings()
+    {
+        $items = json_decode( self::parameter( 'items', '[]' ), true );
+        $customer_id = (int) self::parameter( 'customer_id' );
+        $warnings = array();
+        if ( ! is_array( $items ) ) {
+            wp_send_json_success( array( 'warnings' => (object) $warnings ) );
+        }
+
+        // A repeating item stands for every visit of its series: each one takes the staff
+        // member's time and counts against the customer's limit. Expanded the same way the
+        // save expands it, each visit keeping the index of the item it came from.
+        $visits = array();
+        foreach ( $items as $index => $item ) {
+            if ( ! is_array( $item ) ) {
+                continue;
+            }
+            foreach ( Proxy\Shared::expandOrderItem( array( $item ), $item ) as $visit ) {
+                $visits[] = array( $index, $visit );
+            }
+        }
+
+        $allowed_staff = self::allowedStaffIds();
+        $consider_extras = (bool) Lib\Proxy\ServiceExtras::considerDuration();
+        $workload = array();      // staff_id|day => seconds already asked for by earlier items
+        $service_dates = array(); // service_id => array( datetime, … ) for the customer limit
+        $service_items = array(); // service_id => item indexes
+        foreach ( $visits as $pair ) {
+            list( $index, $item ) = $pair;
+            if ( empty( $item['datetime'] ) ) {
+                continue;
+            }
+            $units = max( 1, (int) ( isset( $item['units'] ) ? $item['units'] : 1 ) );
+            $extras_duration = $consider_extras
+                ? (int) Lib\Proxy\ServiceExtras::getTotalDuration( (array) ( isset( $item['extras'] ) ? $item['extras'] : array() ) )
+                : 0;
+            $legs = isset( $item['legs'] ) && is_array( $item['legs'] ) && $item['legs']
+                ? $item['legs']
+                : array( array( 'service_id' => isset( $item['service_id'] ) ? $item['service_id'] : null, 'staff_id' => isset( $item['staff_id'] ) ? $item['staff_id'] : 0, 'datetime' => $item['datetime'] ) );
+
+            foreach ( $legs as $leg_index => $leg ) {
+                $staff_id = (int) ( isset( $leg['staff_id'] ) ? $leg['staff_id'] : 0 );
+                if ( ! $staff_id || empty( $leg['datetime'] ) || ( $allowed_staff !== null && ! in_array( $staff_id, $allowed_staff, true ) ) ) {
+                    continue;
+                }
+                $staff = Lib\Entities\Staff::find( $staff_id );
+                if ( ! $staff ) {
+                    continue;
+                }
+                if ( ! empty( $leg['service_id'] ) ) {
+                    $leg_service = Lib\Entities\Service::find( (int) $leg['service_id'] );
+                    $duration = $leg_service ? $leg_service->getDuration() * ( count( $legs ) > 1 ? 1 : $units ) : 0;
+                } else {
+                    $duration = isset( $item['custom']['duration'] ) ? (int) $item['custom']['duration'] : 0;
+                }
+                // Extras lengthen the visit once, not every stage of it.
+                if ( $leg_index === 0 ) {
+                    $duration += $extras_duration;
+                }
+                if ( $duration <= 0 ) {
+                    continue;
+                }
+                $start = $leg['datetime'];
+                $end = date( 'Y-m-d H:i:s', strtotime( $start ) + $duration );
+                // The limit is a day of the staff member, so it is counted in their time zone.
+                $staff_tz = $staff->getTimeZone();
+                if ( $staff_tz ) {
+                    $wp_tz = Lib\Config::getWPTimeZone();
+                    $start = Lib\Utils\DateTime::convertTimeZone( $start, $wp_tz, $staff_tz );
+                    $end = Lib\Utils\DateTime::convertTimeZone( $end, $wp_tz, $staff_tz );
+                }
+                $key = $staff_id . '|' . substr( $start, 0, 10 );
+                $earlier = isset( $workload[ $key ] ) ? $workload[ $key ] : 0;
+                if ( Lib\Proxy\Pro::getWorkingTimeLimitError( $staff, $start, $end, $earlier + $duration, null ) ) {
+                    $warnings[ $index ][] = 'staff_time_limit';
+                }
+                $workload[ $key ] = $earlier + $duration;
+            }
+
+            if ( $customer_id && ! empty( $item['service_id'] ) ) {
+                $service_id = (int) $item['service_id'];
+                $service_dates[ $service_id ][] = $item['datetime'];
+                $service_items[ $service_id ][] = $index;
+            }
+        }
+
+        foreach ( $service_dates as $service_id => $dates ) {
+            $service = Lib\Entities\Service::find( $service_id );
+            if ( $service && $service->appointmentsLimitReached( $customer_id, $dates ) ) {
+                foreach ( $service_items[ $service_id ] as $index ) {
+                    $warnings[ $index ][] = 'customer_bookings_limit';
+                }
+            }
+        }
+
+        foreach ( $warnings as $index => $codes ) {
+            $warnings[ $index ] = array_values( array_unique( $codes ) );
+        }
+
+        wp_send_json_success( array( 'warnings' => (object) $warnings ) );
+    }
+
+    /**
      * Save the wizard visit: one order for the picked customer.
      *
      * Availability is re-checked with the same engine right before saving — a slot
@@ -830,15 +977,27 @@ class Ajax extends Lib\Base\Ajax
 
         $conflicts = array();
         foreach ( $items as $index => $item ) {
-            if ( $no_customer && ( ! empty( $item['waiting_list'] ) || count( (array) $item['legs'] ) > 1 ) ) {
-                // A queue entry is for somebody, and multi-stage cascades need the cart —
-                // both require a customer.
+            if ( $no_customer && ( ! empty( $item['waiting_list'] ) || ! empty( $item['series'] ) || count( (array) $item['legs'] ) > 1 ) ) {
+                // A queue entry is for somebody, a series belongs to somebody, and
+                // multi-stage cascades need the cart — all three require a customer.
                 wp_send_json_error( array( 'error' => 'customer_required' ) );
             }
-            // Earlier items of the same order are passed along: each item must fit
-            // both the database AND the order composed so far (mutual overlaps).
-            if ( empty( $item['overbook'] ) && ! self::slotStillAvailable( $item, array(), ! empty( $item['waiting_list'] ), array_slice( $items, 0, $index ) ) ) {
-                $conflicts[] = $index;
+            // An item may hold no time at all — then there is no slot to lose while the
+            // operator was choosing, and availability simply does not apply to it.
+            if ( ! Proxy\Shared::itemHoldsTime( true, $item ) ) {
+                continue;
+            }
+            // One item may stand for many visits — that is what an add-on does with it
+            // (a repeating booking is the same item said several times). The core checks
+            // whatever it is handed back: one entry for an ordinary item, several for a
+            // repeating one.
+            foreach ( Proxy\Shared::expandOrderItem( array( $item ), $item ) as $visit ) {
+                // Earlier items of the same order are passed along: each item must fit
+                // both the database AND the order composed so far (mutual overlaps).
+                if ( empty( $visit['overbook'] ) && ! self::slotStillAvailable( $visit, array(), ! empty( $visit['waiting_list'] ), array_slice( $items, 0, $index ) ) ) {
+                    $conflicts[] = $index;
+                    break;
+                }
             }
         }
         if ( $conflicts ) {
@@ -855,40 +1014,49 @@ class Ajax extends Lib\Base\Ajax
         if ( $regular ) {
             $userData = new Lib\UserBookingData( null );
             $cart_items = array();
-            foreach ( $regular as $item ) {
-                $location_id = (int) ( isset( $item['location_id'] ) ? $item['location_id'] : 0 ) ?: null;
-                $extras = array();
-                foreach ( (array) ( isset( $item['extras'] ) ? $item['extras'] : array() ) as $extra_id => $qty ) {
-                    if ( (int) $qty > 0 ) {
-                        $extras[ (int) $extra_id ] = (int) $qty;
+            foreach ( $regular as $index => $item ) {
+                // An item may stand for several visits — a repeating booking is the same
+                // item said many times. What that means, and how the resulting cart items
+                // belong together, is the add-on's business: the core only builds them.
+                $visits = Proxy\Shared::expandOrderItem( array( $item ), $item );
+                foreach ( $visits as $n => $visit ) {
+                    $location_id = (int) ( isset( $visit['location_id'] ) ? $visit['location_id'] : 0 ) ?: null;
+                    $extras = array();
+                    foreach ( (array) ( isset( $visit['extras'] ) ? $visit['extras'] : array() ) as $extra_id => $qty ) {
+                        if ( (int) $qty > 0 ) {
+                            $extras[ (int) $extra_id ] = (int) $qty;
+                        }
                     }
-                }
-                // Slots as the cart expects them: one row per leg (multi-stage services
-                // come from the search with the full legs cascade). The 5th element 'w'
-                // is the cart's waiting-list marker: CartItem::toBePutOnWaitingList() —
-                // the CA is created with the waitlisted status and CartInfo diverts the
-                // price to waiting_list_total, keeping it out of the payable amount.
-                $slots = array();
-                foreach ( (array) $item['legs'] as $leg ) {
-                    $slot = array( (int) $leg['service_id'], (int) $leg['staff_id'], $leg['datetime'], $location_id );
-                    if ( ! empty( $item['waiting_list'] ) ) {
-                        $slot[4] = 'w';
+                    // Slots as the cart expects them: one row per leg (multi-stage services
+                    // come from the search with the full legs cascade). The 5th element 'w'
+                    // is the cart's waiting-list marker: CartItem::toBePutOnWaitingList() —
+                    // the CA is created with the waitlisted status and CartInfo diverts the
+                    // price to waiting_list_total, keeping it out of the payable amount.
+                    $slots = array();
+                    foreach ( (array) $visit['legs'] as $leg ) {
+                        $slot = array( (int) $leg['service_id'], (int) $leg['staff_id'], $leg['datetime'], $location_id );
+                        if ( ! empty( $visit['waiting_list'] ) ) {
+                            $slot[4] = 'w';
+                        }
+                        $slots[] = $slot;
                     }
-                    $slots[] = $slot;
+                    $cart_item = new Lib\CartItem();
+                    $cart_item
+                        ->setType( Lib\CartItem::TYPE_APPOINTMENT )
+                        ->setStaffIds( array( (int) $visit['staff_id'] ) )
+                        ->setServiceId( (int) $visit['service_id'] )
+                        ->setNumberOfPersons( max( 1, (int) ( isset( $visit['nop'] ) ? $visit['nop'] : 1 ) ) )
+                        ->setLocationId( $location_id )
+                        ->setUnits( max( 1, (int) ( isset( $visit['units'] ) ? $visit['units'] : 1 ) ) )
+                        ->setExtras( $extras )
+                        ->setCustomFields( array() )
+                        ->setSlots( $slots );
+                    // Ties between cart items of one order (a series is such a tie) are put
+                    // on by whoever owns the meaning of that tie.
+                    Proxy\Shared::linkCartItem( $cart_item, $item, $index, $n );
+                    $userData->cart->add( $cart_item );
+                    $cart_items[] = $cart_item;
                 }
-                $cart_item = new Lib\CartItem();
-                $cart_item
-                    ->setType( Lib\CartItem::TYPE_APPOINTMENT )
-                    ->setStaffIds( array( (int) $item['staff_id'] ) )
-                    ->setServiceId( (int) $item['service_id'] )
-                    ->setNumberOfPersons( max( 1, (int) ( isset( $item['nop'] ) ? $item['nop'] : 1 ) ) )
-                    ->setLocationId( $location_id )
-                    ->setUnits( max( 1, (int) ( isset( $item['units'] ) ? $item['units'] : 1 ) ) )
-                    ->setExtras( $extras )
-                    ->setCustomFields( array() )
-                    ->setSlots( $slots );
-                $userData->cart->add( $cart_item );
-                $cart_items[] = $cart_item;
             }
             // The customer is picked by id, so UserBookingData::save() is bypassed on
             // purpose: it overwrites the customer's personal data (name, email, address)
@@ -913,6 +1081,9 @@ class Ajax extends Lib\Base\Ajax
             $order = Lib\DataHolders\Booking\Order::create( $customer );
             $order->setPayment( $payment );
             $order = $userData->cart->save( $order, $userData->getTimeZone(), $userData->getTimeZoneOffset() );
+            // Whatever an add-on has to write onto the saved order — a repeat rule onto
+            // its series, for one — happens here, once the entities exist.
+            Proxy\Shared::orderSaved( $order, $regular );
             // Details/order_id snapshot once the order exists — this JSON is what the
             // payment dialog and invoices render.
             $payment->setDetailsFromOrder( $order, $cart_info )->save();
@@ -1063,35 +1234,7 @@ class Ajax extends Lib\Base\Ajax
             $payment->setTotal( $payment->getTotal() + $custom_sum )->save();
         }
 
-        // Checkout link(s) so the customer can pay this pending payment online — the
-        // same links the Payments dialog offers. The Pro proxy adds 'checkout_urls'
-        // (one per checkout form placed on a page); without Pro or a configured form
-        // the list is empty and a hint explains what to set up.
-        $created['checkout_urls'] = array();
-        $created['payment_hints'] = array();
-        if ( $payment ) {
-            $created['payment_id'] = $payment->getId();
-            $checkout = \Bookly\Backend\Components\Dialogs\Payment\Proxy\Shared::preparePaymentDetails( array(), $payment );
-            $created['checkout_urls'] = isset( $checkout['checkout_urls'] ) ? $checkout['checkout_urls'] : array();
-
-            // Instructional hints — Bookly is a large system and not every Pro user knows
-            // every part of it. Point out what is missing for the customer to actually pay
-            // online: an enabled online payment method and a checkout form to link to.
-            $hints = array();
-            if ( ! Lib\Config::proActive() ) {
-                $hints[] = __( 'Online payment links require Bookly Pro with a checkout form.', 'bookly-responsive-appointment-booking-tool' );
-            } else {
-                $online_gateways = Lib\Utils\Common::getGateways();
-                unset( $online_gateways[ Lib\Entities\Payment::TYPE_LOCAL ], $online_gateways[ Lib\Entities\Payment::TYPE_FREE ] );
-                if ( ! $online_gateways ) {
-                    $hints[] = __( 'No online payment method is enabled — turn one on in Bookly → Settings → Payments so customers can pay online.', 'bookly-responsive-appointment-booking-tool' );
-                }
-                if ( ! $created['checkout_urls'] ) {
-                    $hints[] = __( 'No checkout form is set up — place one on a page to share a payment link.', 'bookly-responsive-appointment-booking-tool' );
-                }
-            }
-            $created['payment_hints'] = $hints;
-        }
+        self::addPaymentCheckout( $created, $payment );
 
         $created['notifications'] = array();
         if ( $notify ) {
@@ -1109,10 +1252,37 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * How long an appointment occupies its staff member.
+     *
+     * An appointment may have no time at all — that is how a task is stored, with empty
+     * dates. There is nothing to subtract then, so the length comes from where creation
+     * takes it: the service duration times the booked units. Extras are NOT added — they
+     * live in `extras_duration` beside `end_date` rather than inside it (see Cart::save).
+     *
+     * A task on a custom service has no length anywhere: the record keeps a custom name
+     * and price, never a duration. Such an appointment gets 0 and is refused a time —
+     * see `saveBookingWizardReschedule`.
+     *
+     * @param Lib\Entities\Appointment $appointment
+     * @param int $units
+     * @return int Seconds.
+     */
+    private static function appointmentDuration( $appointment, $units = 1 )
+    {
+        if ( $appointment->getStartDate() ) {
+            return strtotime( $appointment->getEndDate() ) - strtotime( $appointment->getStartDate() );
+        }
+
+        $service = $appointment->getServiceId()
+            ? Lib\Entities\Service::find( (int) $appointment->getServiceId() )
+            : null;
+
+        return $service ? max( 1, (int) $units ) * (int) $service->getDuration() : 0;
+    }
+
+    /**
      * Get the context of an appointment being rescheduled: the locked position
-     * (service or custom, params) and the "was" card data. Multi-stage appointments
-     * (a leg of a compound/collaborative cascade) are declined — moving the whole
-     * cascade is out of scope, the classic form handles those.
+     * (service or custom, params) and the "was" card data.
      */
     public static function getBookingWizardRescheduleData()
     {
@@ -1149,7 +1319,7 @@ class Ajax extends Lib\Base\Ajax
         $extras = array();
         $customers = array();
         $ca_list = Lib\Entities\CustomerAppointment::query( 'ca' )
-            ->select( 'ca.id, ca.customer_id, ca.status, ca.number_of_persons, ca.units, ca.extras, ca.compound_service_id, ca.collaborative_service_id, c.full_name' )
+            ->select( 'ca.id, ca.customer_id, ca.status, ca.number_of_persons, ca.units, ca.extras, ca.series_id, ca.compound_service_id, ca.collaborative_service_id, c.full_name' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
             ->where( 'ca.appointment_id', $appointment->getId() )
             ->fetchArray();
@@ -1157,9 +1327,6 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json_error( array( 'error' => 'no_customers' ) );
         }
         foreach ( $ca_list as $ca_row ) {
-            if ( $ca_row['compound_service_id'] || $ca_row['collaborative_service_id'] ) {
-                wp_send_json_error( array( 'error' => 'multi_stage' ) );
-            }
             $customers[] = $ca_row['full_name'];
             $units = max( $units, (int) $ca_row['units'] );
             if ( in_array( $ca_row['status'], $busy_statuses ) ) {
@@ -1171,13 +1338,32 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        $duration = strtotime( $appointment->getEndDate() ) - strtotime( $appointment->getStartDate() ) - (int) $appointment->getExtrasDuration();
+        $duration = self::appointmentDuration( $appointment, $units ) - (int) $appointment->getExtrasDuration();
+
+        // The series this booking belongs to, if any: the wizard asks WHAT to move — this
+        // visit, this one and the ones after it, or the whole series — and needs the visits
+        // themselves to show what each answer would do.
+        //
+        // For a whole-appointment move the series is offered only when every booking in the
+        // appointment sits in the SAME series: a group where participants repeat on their
+        // own schedules has no single series to move.
+        // Приправить контекст переноса тем, что знают о записи аддоны: для повторяющейся
+        // записи это её серия — из неё визард строит вопрос «что именно переносим».
+        $extra = Lib\Proxy\RecurringAppointments::seriesContext( array(), $appointment, $ca );
+        // Каскад составной услуги — знание ядра, а не аддона: токены лежат в его таблице,
+        // собирает каскад его корзина, а ищет его слоты его же движок. Аддоны приносят
+        // только слова (см. `compoundOfN` / `collaborativeOfN`).
+        $cascade = Lib\Utils\Appointment::cascadeContext( $appointment, $ca );
+        if ( $cascade ) {
+            $extra['cascade'] = $cascade;
+        }
 
         // The "was" card shows the old time in the operator's display time zone
         // (staff members may have a personal one); `datetime` stays the WP-tz value.
         $display_tz = Lib\Utils\Common::getCurrentUserTimeZone();
         $wp_tz = Lib\Config::getWPTimeZone();
-        $display_datetime = $display_tz === $wp_tz
+        // A task has no start at all — nothing to convert, and the card says so in words.
+        $display_datetime = ! $appointment->getStartDate() || $display_tz === $wp_tz
             ? $appointment->getStartDate()
             : Lib\Utils\DateTime::convertTimeZone( $appointment->getStartDate(), $wp_tz, $display_tz );
 
@@ -1221,7 +1407,7 @@ class Ajax extends Lib\Base\Ajax
                 'units' => max( 1, (int) $ca_row['units'] ),
                 'extras' => (array) json_decode( (string) $ca_row['extras'], true ),
                 'customers' => array( $ca_row['full_name'] ),
-            ) );
+            ) + $extra );
         }
 
         // Participants summary for the "was" card — "N × Status" badges where N is
@@ -1241,7 +1427,11 @@ class Ajax extends Lib\Base\Ajax
             'mode' => 'appointment',
             'appointment_id' => $appointment->getId(),
             'statuses' => $statuses,
-            'persons' => max( 1, $nop ),
+            // Seats the appointment holds right now — what "add a customer" subtracts from
+            // the capacity. Not `nop`: that one is a search parameter and never drops below
+            // one person, while an appointment whose bookings are all cancelled, rejected or
+            // waitlisted holds no seat at all and has room for the next customer.
+            'taken' => $nop,
             'service_id' => $appointment->getServiceId() ? (int) $appointment->getServiceId() : null,
             'custom' => $appointment->getServiceId() ? null : array(
                 'name' => $appointment->getCustomServiceName(),
@@ -1256,7 +1446,274 @@ class Ajax extends Lib\Base\Ajax
             'units' => $units,
             'extras' => $extras,
             'customers' => $customers,
+        ) + $extra );
+    }
+
+    /**
+     * Add one more customer to an appointment that already exists.
+     *
+     * Deliberately not the ordinary save: that one goes through the cart, and the cart
+     * decides for itself which appointment a booking lands in — it looks for a row with
+     * the same service, staff and start/end and creates a new one when it finds none
+     * (Lib\Cart::save). For "add to THIS appointment" that is a guess where an answer is
+     * already known, and it guesses wrong for a custom service (no service to match on)
+     * or a different duration. So the booking is attached here, to the appointment the
+     * operator had open, and nothing else can be attached to instead.
+     *
+     * What the cart does compute is the money, and that is reused: the same CartInfo the
+     * gateways use, so taxes, discounts and customer-group pricing come out right by
+     * construction. It is asked for the total only — nothing of it is saved.
+     *
+     * Notifications follow the wizard: sent right away and reported back, rather than
+     * queued for a second window to confirm.
+     */
+    public static function saveBookingWizardJoin()
+    {
+        $appointment = Lib\Entities\Appointment::find( (int) self::parameter( 'appointment_id' ) );
+        if ( ! $appointment ) {
+            wp_send_json_error( array( 'error' => 'not_found' ) );
+        }
+
+        // Permission scope: a plain staff member may only act on their own appointments.
+        $allowed_staff = self::allowedStaffIds();
+        if ( $allowed_staff !== null && ! in_array( (int) $appointment->getStaffId(), $allowed_staff, true ) ) {
+            wp_send_json_error( array( 'error' => 'forbidden' ) );
+        }
+
+        $customer = Lib\Entities\Customer::find( (int) self::parameter( 'customer_id' ) );
+        if ( ! $customer ) {
+            wp_send_json_error( array( 'error' => 'customer_required' ) );
+        }
+
+        $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
+            Lib\Entities\CustomerAppointment::STATUS_PENDING,
+            Lib\Entities\CustomerAppointment::STATUS_APPROVED,
         ) );
+        $ca_list = Lib\Entities\CustomerAppointment::query( 'ca' )
+            ->select( 'ca.status, ca.number_of_persons, ca.units, ca.compound_service_id, ca.collaborative_service_id' )
+            ->where( 'ca.appointment_id', $appointment->getId() )
+            ->fetchArray();
+        $taken = 0;
+        $units = 1;
+        foreach ( $ca_list as $ca_row ) {
+            // A stage of a compound or collaborative service is booked as a cascade, not
+            // as a seat in one appointment — the same limit the reschedule mode states.
+            if ( $ca_row['compound_service_id'] || $ca_row['collaborative_service_id'] ) {
+                wp_send_json_error( array( 'error' => 'multi_stage' ) );
+            }
+            $units = max( $units, (int) $ca_row['units'] );
+            if ( in_array( $ca_row['status'], $busy_statuses ) ) {
+                $taken += max( 1, (int) $ca_row['number_of_persons'] );
+            }
+        }
+
+        $nop = max( 1, (int) self::parameter( 'nop', 1 ) );
+        $service = $appointment->getServiceId() ? Service::find( $appointment->getServiceId() ) : null;
+        $location_id = $appointment->getLocationId() ? (int) $appointment->getLocationId() : null;
+
+        // Capacity is a hard limit, as in the classic form: seats are taken by the
+        // bookings that hold them, and there is no "book anyway" for a group service.
+        if ( $service ) {
+            $capacity = self::staffServiceCapacity( (int) $appointment->getStaffId(), $service->getId(), $location_id );
+            if ( $taken + $nop > $capacity ) {
+                wp_send_json_error( array( 'error' => 'capacity', 'capacity' => $capacity, 'taken' => $taken ) );
+            }
+        }
+
+        $extras = array();
+        foreach ( (array) json_decode( self::parameter( 'extras', '{}' ), true ) as $extra_id => $qty ) {
+            if ( (int) $qty > 0 ) {
+                $extras[ (int) $extra_id ] = (int) $qty;
+            }
+        }
+        $notes = trim( (string) self::parameter( 'notes', '' ) );
+        $notify = (bool) self::parameter( 'notify' );
+        update_user_meta( get_current_user_id(), 'bookly_appointment_form_send_notifications', $notify ? '1' : '0' );
+
+        // Every booking belongs to an order, including one made of a single booking:
+        // that is what the payment, its details and the invoices are keyed by.
+        $orders_entity = new Lib\Entities\Order();
+        $orders_entity
+            ->setToken( Lib\Utils\Common::generateToken( get_class( $orders_entity ), 'token' ) )
+            ->save();
+
+        $cart_info = null;
+        $payment = new Lib\Entities\Payment();
+        if ( $service ) {
+            // The cart is built and asked for the total, then dropped: `getInfo` reads,
+            // `save` is what writes, and only the first one is called.
+            $user_data = new Lib\UserBookingData( null );
+            $cart_item = new Lib\CartItem();
+            $cart_item
+                ->setType( Lib\CartItem::TYPE_APPOINTMENT )
+                ->setStaffIds( array( (int) $appointment->getStaffId() ) )
+                ->setServiceId( $service->getId() )
+                ->setNumberOfPersons( $nop )
+                ->setLocationId( $location_id )
+                ->setUnits( $units )
+                ->setExtras( $extras )
+                ->setCustomFields( array() )
+                ->setSlots( array( array( $service->getId(), (int) $appointment->getStaffId(), $appointment->getStartDate(), $location_id ) ) );
+            $user_data->cart->add( $cart_item );
+            $user_data->setCustomer( $customer );
+            $cart_info = $user_data->cart->getInfo( Lib\Entities\Payment::TYPE_LOCAL );
+            $payment
+                ->setCartInfo( $cart_info )
+                ->setCustomerId( $customer->getId() )
+                ->save();
+        } else {
+            // A custom service has no price list behind it — the appointment carries its
+            // price, and it is the price of the visit rather than of a seat in it.
+            $total = (float) $appointment->getCustomServicePrice();
+            $payment
+                ->setType( Lib\Entities\Payment::TYPE_LOCAL )
+                ->setStatus( Lib\Entities\Payment::STATUS_PENDING )
+                ->setCustomerId( $customer->getId() )
+                ->setPaid( 0 )
+                ->setTax( 0 )
+                ->setTotal( $total )
+                ->save();
+        }
+
+        $ca = new Lib\Entities\CustomerAppointment();
+        $ca
+            ->setCustomer( $customer )
+            ->setAppointment( $appointment )
+            ->setPaymentId( $payment->getId() )
+            ->setOrderId( $orders_entity->getId() )
+            ->setNumberOfPersons( $nop )
+            ->setUnits( $units )
+            ->setNotes( $notes )
+            ->setExtras( json_encode( $extras ) )
+            ->setCustomFields( json_encode( array() ) )
+            ->setStatus( Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), $customer->getGroupId() ) )
+            ->setCreatedFrom( 'backend' )
+            ->setCreatedAt( current_time( 'mysql' ) )
+            ->save();
+
+        $order = Lib\DataHolders\Booking\Order::create( $customer );
+        $order->setPayment( $payment );
+        $order->setOrderId( $orders_entity->getId() );
+        $item = Lib\DataHolders\Booking\Simple::create( $ca )->setAppointment( $appointment );
+        if ( $service ) {
+            $item->setService( $service );
+        }
+        $order->addItem( 0, $item );
+
+        if ( $cart_info ) {
+            $payment->setDetailsFromOrder( $order, $cart_info )->save();
+        } else {
+            $details = $payment->getDetailsData();
+            $details->setCustomer( $customer )->setData( array( 'from_backend' => true ) );
+            $app_details = new Lib\DataHolders\Details\Appointment();
+            $app_details->setCa( $ca )->setPrice( (float) $payment->getTotal() );
+            $details->addDetails( $app_details );
+            $payment->setOrderId( $orders_entity->getId() )->save();
+        }
+
+        // Extras may make the visit longer, and the appointment lasts as long as its
+        // longest booking — the same rule the card applies when a booking is edited.
+        if ( Lib\Proxy\ServiceExtras::considerDuration() ) {
+            $appointment
+                ->setExtrasDuration( $appointment->getMaxExtrasDuration() )
+                ->save();
+        }
+        Lib\Proxy\Shared::syncOnlineMeeting( array(), $appointment );
+        Lib\Utils\Common::syncWithCalendars( $appointment );
+
+        $notifications = array();
+        if ( $notify ) {
+            $notify_list = new NotificationList();
+            // `true` — this is a new booking, not a change to an existing one: the
+            // customer is told they are booked, not that something moved.
+            Lib\Notifications\Booking\Sender::sendForOrder( $order, array(), true, $notify_list );
+            $notify_list->send();
+            $notifications = $notify_list->getInfo();
+        }
+
+        $created = array(
+            'appointment_id' => $appointment->getId(),
+            'ca_id' => $ca->getId(),
+            'notifications' => $notifications,
+            'notified' => $notify,
+        );
+        self::addPaymentCheckout( $created, $payment );
+
+        wp_send_json_success( $created );
+    }
+
+    /**
+     * Checkout link(s) so the customer can pay this pending payment online — the same
+     * links the Payments dialog offers. The Pro proxy adds 'checkout_urls' (one per
+     * checkout form placed on a page); without Pro or a configured form the list is
+     * empty and a hint explains what to set up.
+     *
+     * The hints are instructional on purpose: Bookly is a large system and not every Pro
+     * user knows every part of it, so what is missing for the customer to actually pay is
+     * named rather than left as an empty list.
+     *
+     * @param array $created
+     * @param Lib\Entities\Payment|null $payment
+     * @return void
+     */
+    protected static function addPaymentCheckout( array &$created, $payment )
+    {
+        $created['checkout_urls'] = array();
+        $created['payment_hints'] = array();
+        if ( ! $payment ) {
+            return;
+        }
+
+        $created['payment_id'] = $payment->getId();
+        $checkout = \Bookly\Backend\Components\Dialogs\Payment\Proxy\Shared::preparePaymentDetails( array(), $payment );
+        $created['checkout_urls'] = isset( $checkout['checkout_urls'] ) ? $checkout['checkout_urls'] : array();
+
+        $hints = array();
+        if ( ! Lib\Config::proActive() ) {
+            $hints[] = __( 'Online payment links require Bookly Pro with a checkout form.', 'bookly-responsive-appointment-booking-tool' );
+        } else {
+            $online_gateways = Lib\Utils\Common::getGateways();
+            unset( $online_gateways[ Lib\Entities\Payment::TYPE_LOCAL ], $online_gateways[ Lib\Entities\Payment::TYPE_FREE ] );
+            if ( ! $online_gateways ) {
+                $hints[] = __( 'No online payment method is enabled — turn one on in Bookly → Settings → Payments so customers can pay online.', 'bookly-responsive-appointment-booking-tool' );
+            }
+            if ( ! $created['checkout_urls'] ) {
+                $hints[] = __( 'No checkout form is set up — place one on a page to share a payment link.', 'bookly-responsive-appointment-booking-tool' );
+            }
+        }
+        $created['payment_hints'] = $hints;
+    }
+
+    /**
+     * Seats a staff member's service holds at a location, falling back to the base row
+     * when the location has no override — the lookup the classic form's capacity check
+     * does before it refuses to overflow an appointment.
+     *
+     * @param int $staff_id
+     * @param int $service_id
+     * @param int|null $location_id
+     * @return int
+     */
+    protected static function staffServiceCapacity( $staff_id, $service_id, $location_id )
+    {
+        $query = StaffService::query( 'ss' )
+            ->select( 'ss.capacity_max, ss.location_id' )
+            ->where( 'ss.staff_id', $staff_id )
+            ->where( 'ss.service_id', $service_id );
+        $rows = $query->fetchArray();
+        $capacity = 1;
+        $found_base = false;
+        foreach ( $rows as $row ) {
+            if ( $location_id && (int) $row['location_id'] === (int) $location_id ) {
+                return max( 1, (int) $row['capacity_max'] );
+            }
+            if ( $row['location_id'] === null && ! $found_base ) {
+                $found_base = true;
+                $capacity = max( 1, (int) $row['capacity_max'] );
+            }
+        }
+
+        return $capacity;
     }
 
     /**
@@ -1297,10 +1754,13 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json_error( array( 'error' => 'forbidden' ) );
         }
 
-        // Keep the exact duration of the original appointment (units and considered
-        // extras are already inside).
-        $duration = strtotime( $appointment->getEndDate() ) - strtotime( $appointment->getStartDate() );
-        $end_datetime = date( 'Y-m-d H:i:s', strtotime( $datetime ) + $duration );
+        // Whole cascade: the chosen slot carries the stages of the new time (`legs`), and
+        // every stage travels to its own. The appointments are UPDATED, not recreated —
+        // bookings, payments, statuses and the token itself survive the move.
+        $legs = json_decode( (string) self::parameter( 'legs', '' ), true );
+        if ( is_array( $legs ) && count( $legs ) > 1 ) {
+            self::rescheduleCascade( $appointment, $legs, $notify );
+        }
 
         $ca_list = Lib\Entities\CustomerAppointment::query( 'ca' )
             ->where( 'ca.appointment_id', $appointment->getId() )
@@ -1326,9 +1786,6 @@ class Ajax extends Lib\Base\Ajax
         $merged_extras = array();
         $units = 1;
         foreach ( $ca_list as $ca ) {
-            if ( $ca['compound_service_id'] || $ca['collaborative_service_id'] ) {
-                wp_send_json_error( array( 'error' => 'multi_stage' ) );
-            }
             $units = max( $units, (int) $ca['units'] );
             $extras = (array) json_decode( (string) $ca['extras'], true );
             $customers[] = array(
@@ -1354,6 +1811,17 @@ class Ajax extends Lib\Base\Ajax
                 }
             }
         }
+
+        // Length of the moved appointment. Computed after the roster is read, because a
+        // task has no dates to measure and its length comes from the service times the
+        // booked units — and units are known only once the bookings are in hand.
+        $duration = self::appointmentDuration( $appointment, $units );
+        if ( $duration <= 0 ) {
+            // A custom service keeps no duration on the appointment, so a task made of
+            // one cannot be given a time here — there is nothing to reserve.
+            wp_send_json_error( array( 'error' => 'no_duration' ) );
+        }
+        $end_datetime = date( 'Y-m-d H:i:s', strtotime( $datetime ) + $duration );
 
         if ( ! $overbook ) {
             self::$require_unjoined = true;
@@ -1411,7 +1879,163 @@ class Ajax extends Lib\Base\Ajax
             $sent = array_values( $response['queue']['all'] );
         }
 
-        wp_send_json_success( array( 'appointment_id' => $appointment->getId(), 'notifications' => $sent ) );
+        wp_send_json_success( array(
+            'appointment_id' => $appointment->getId(),
+            'notifications' => $sent,
+        ) );
+    }
+
+    /**
+     * Move every stage of a cascade to the times of the chosen slot. Sends the response.
+     *
+     * Stages are matched to legs by order — the search returns them the way they happen,
+     * and the cascade is read the same way. A slot with a different set of stages is a
+     * different service, not a new time for this booking, and is refused.
+     *
+     * Each stage keeps its own length: it already accounts for units and extras, while a
+     * leg carries only when the stage starts.
+     *
+     * @param Lib\Entities\Appointment $appointment  Any stage of the cascade.
+     * @param array $legs
+     * @param bool $notify
+     */
+    private static function rescheduleCascade( $appointment, array $legs, $notify )
+    {
+        $row = Lib\Entities\CustomerAppointment::query( 'ca' )
+            ->select( 'ca.compound_token, ca.collaborative_token' )
+            ->where( 'ca.appointment_id', $appointment->getId() )
+            ->fetchRow();
+        $token_field = null;
+        if ( $row && $row['compound_token'] ) {
+            $token_field = 'ca.compound_token';
+            $token = $row['compound_token'];
+        } elseif ( $row && $row['collaborative_token'] ) {
+            $token_field = 'ca.collaborative_token';
+            $token = $row['collaborative_token'];
+        }
+        if ( ! $token_field ) {
+            wp_send_json_error( array( 'error' => 'not_in_cascade' ) );
+        }
+
+        $stages = Lib\Entities\CustomerAppointment::query( 'ca' )
+            ->select( 'DISTINCT ca.appointment_id, a.start_date, a.end_date, a.service_id' )
+            ->innerJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+            ->where( $token_field, $token )
+            ->whereNot( 'a.start_date', null )
+            ->sortBy( 'a.start_date' )
+            ->fetchArray();
+        if ( count( $stages ) !== count( $legs ) ) {
+            wp_send_json_error( array( 'error' => 'stages_mismatch' ) );
+        }
+        // Every stage is checked before any of them moves: a mismatch found halfway would
+        // leave the earlier stages at the new time and the rest at the old one.
+        foreach ( $stages as $i => $stage ) {
+            if ( ! isset( $legs[ $i ]['service_id'], $legs[ $i ]['staff_id'], $legs[ $i ]['datetime'] )
+                || (int) $legs[ $i ]['service_id'] !== (int) $stage['service_id']
+            ) {
+                wp_send_json_error( array( 'error' => 'stages_mismatch' ) );
+            }
+        }
+
+        $moved = array();
+        $sent = array();
+        foreach ( $stages as $i => $stage ) {
+            $leg = $legs[ $i ];
+            $duration = strtotime( $stage['end_date'] ) - strtotime( $stage['start_date'] );
+            $stage_sent = self::moveWholeAppointment(
+                (int) $stage['appointment_id'],
+                (int) $leg['staff_id'],
+                $leg['datetime'],
+                $duration,
+                $notify
+            );
+            if ( $stage_sent === null ) {
+                // Часть каскада уже переехала: расписание клиента сейчас разорвано, и
+                // молчать об этом нельзя.
+                wp_send_json_error( array( 'error' => 'cascade_partial', 'moved' => $moved ) );
+            }
+            $moved[] = (int) $stage['appointment_id'];
+            $sent = array_merge( $sent, $stage_sent );
+        }
+
+        wp_send_json_success( array(
+            'appointment_id' => $appointment->getId(),
+            'moved' => $moved,
+            'notifications' => $sent,
+        ) );
+    }
+
+    /**
+     * Move one appointment with everything booked in it.
+     *
+     * @param int $appointment_id
+     * @param int $staff_id
+     * @param string $datetime
+     * @param int $duration
+     * @param bool $notify
+     * @return array|null  Notifications sent, or null when the save failed.
+     */
+    private static function moveWholeAppointment( $appointment_id, $staff_id, $datetime, $duration, $notify )
+    {
+        $appointment = Lib\Entities\Appointment::find( $appointment_id );
+        if ( ! $appointment ) {
+            return null;
+        }
+
+        $customers = array();
+        foreach ( Lib\Entities\CustomerAppointment::query( 'ca' )->where( 'ca.appointment_id', $appointment_id )->fetchArray() as $ca ) {
+            $customers[] = array(
+                'ca_id' => (int) $ca['id'],
+                'id' => (int) $ca['customer_id'],
+                'status' => $ca['status'],
+                'number_of_persons' => (int) $ca['number_of_persons'],
+                'extras' => (array) json_decode( (string) $ca['extras'], true ),
+                'custom_fields' => (array) json_decode( (string) $ca['custom_fields'], true ),
+                'notes' => (string) $ca['notes'],
+                'payment_id' => $ca['payment_id'] ? (int) $ca['payment_id'] : null,
+                'timezone' => null,
+                'payment_for' => null,
+                'payment_action' => null,
+                'series_id' => $ca['series_id'] ? (int) $ca['series_id'] : null,
+            );
+        }
+        if ( ! $customers ) {
+            return null;
+        }
+
+        list ( $save_start, $save_end ) = self::toDisplayTz( array(
+            $datetime,
+            date( 'Y-m-d H:i:s', strtotime( $datetime ) + $duration ),
+        ) );
+        $response = Lib\Utils\Appointment::save(
+            $appointment_id,
+            $staff_id,
+            (int) $appointment->getServiceId(),
+            (string) $appointment->getCustomServiceName(),
+            (string) $appointment->getCustomServicePrice(),
+            (int) $appointment->getLocationId(),
+            0,
+            $save_start,
+            $save_end,
+            array(),
+            array(),
+            'current',
+            $customers,
+            $notify ? 1 : 0,
+            $appointment->getInternalNote(),
+            'backend'
+        );
+        if ( ! empty( $response['errors'] ) ) {
+            return null;
+        }
+
+        $sent = array();
+        if ( ! empty( $response['queue']['token'] ) ) {
+            Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( array_keys( $response['queue']['all'] ), 'all', $response['queue']['token'] );
+            $sent = array_values( $response['queue']['all'] );
+        }
+
+        return $sent;
     }
 
     /**
@@ -1439,7 +2063,12 @@ class Ajax extends Lib\Base\Ajax
         $nop = max( 1, (int) $move_ca->getNumberOfPersons() );
         $units = max( 1, (int) $move_ca->getUnits() );
         $extras = (array) json_decode( (string) $move_ca->getExtras(), true );
-        $duration = strtotime( $appointment->getEndDate() ) - strtotime( $appointment->getStartDate() );
+        // Units of THIS participant: a task takes its length from the service, and one
+        // participant may have booked a different number of units than the rest.
+        $duration = self::appointmentDuration( $appointment, $units );
+        if ( $duration <= 0 ) {
+            wp_send_json_error( array( 'error' => 'no_duration' ) );
+        }
 
         // Same staff and time — nothing to move.
         if ( (int) $appointment->getStaffId() === $staff_id && $appointment->getStartDate() === $datetime ) {
@@ -1581,7 +2210,9 @@ class Ajax extends Lib\Base\Ajax
     {
         $custom_bookings = array();
         foreach ( $items as $item ) {
-            if ( ! is_array( $item ) || ! empty( $item['waiting_list'] ) ) {
+            // An item that holds no time cannot make another item of the same order
+            // unavailable — it has nothing to overlap with.
+            if ( ! is_array( $item ) || ! empty( $item['waiting_list'] ) || ! Proxy\Shared::itemHoldsTime( true, $item ) ) {
                 continue;
             }
             $location_id = (int) ( isset( $item['location_id'] ) ? $item['location_id'] : 0 ) ?: null;
@@ -1707,6 +2338,10 @@ class Ajax extends Lib\Base\Ajax
             $ignore_appointments,
             true
         );
+        // The check looks for the chosen staff member in the alternatives chain, so it has to
+        // see the same candidates the feed offered: without this a queue entry for a staff
+        // member whose colleague is free would be refused here as "time was taken".
+        $finder->keepAllCandidates();
         $finder->prepare();
         foreach ( $custom_bookings as $custom_booking ) {
             $finder->addStaffBooking( $custom_booking[0], $custom_booking[1] );

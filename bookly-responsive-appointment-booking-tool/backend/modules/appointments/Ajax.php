@@ -153,7 +153,7 @@ class Ajax extends Lib\Base\Ajax
                 c.full_address AS customer_full_address,
                 st.full_name AS staff_name,
                 st.visibility AS staff_visibility,
-                p.paid       AS payment,
+                p.paid + p.child_paid AS payment,
                 p.total      AS payment_total,
                 p.type       AS payment_type,
                 p.status     AS payment_status,
@@ -350,6 +350,9 @@ class Ajax extends Lib\Base\Ajax
                 'start_date' => $row['start_date'] === null
                     ? __( 'N/A', 'bookly-responsive-appointment-booking-tool' )
                     : ( $export ? $row['start_date'] : Lib\Utils\DateTime::formatDate( $row['start_date'] ) ),
+                // An appointment without a time — a task. Told apart as a flag rather than
+                // by comparing the cell against the "N/A" it was translated into.
+                'timeless' => $row['start_date'] === null,
                 'start_time' => $row['start_date'] === null || $export ? '' : Lib\Utils\DateTime::formatTime( $row['start_date'] ),
                 'staff' => array(
                     'name' => $row['staff_name'] . ( $row['staff_any'] ? $postfix_any : '' ) . ( $row['staff_visibility'] == 'archive' ? $postfix_archived : '' ),

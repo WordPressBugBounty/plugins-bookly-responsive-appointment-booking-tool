@@ -27,31 +27,9 @@ class ShortCode extends Lib\Base\ShortCode
     {
         self::enqueueScripts( array(
             'module' => array(
-                'js/ai-assistant.js' => array( 'bookly-frontend-globals', 'bookly-bookly-core.js' ),
+                'js/ai-assistant.js' => array( 'bookly-frontend-globals', 'bookly-bookly-core.js', 'moment' ),
             ),
         ) );
-    }
-
-    /**
-     * Widget texts, color and display mode for one shortcode instance,
-     * editable via the "AI assistant" appearance (Bookly → Forms → AI
-     * assistant; see ModernAppearance::getAiAssistantDefaults() — core, not
-     * Pro-gated). Delegates to the same ModernAppearance::getAppearance()
-     * every other appearance type uses, keyed by $token — same convention
-     * as [bookly-search-form TOKEN] etc.
-     *
-     * @param string|null $token
-     * @return array
-     */
-    protected static function getAppearance( $token )
-    {
-        $appearance = ModernAppearance::getAppearance( Lib\Entities\Form::TYPE_AI_ASSISTANT, $token );
-
-        if ( ! $token ) {
-            $appearance['main_color'] = get_option( 'bookly_app_color', '#F4662F' );
-        }
-
-        return $appearance;
     }
 
     /**
@@ -104,7 +82,7 @@ class ShortCode extends Lib\Base\ShortCode
         // Same convention as Cancellation/Search form shortcodes: the
         // shortcode's own (non key=value) word is the target form's token.
         $token = is_array( $attributes ) ? current( $attributes ) : null;
-        $appearance = self::getAppearance( is_string( $token ) ? $token : null );
+        $appearance = ModernAppearance::getAppearance( Lib\Entities\Form::TYPE_AI_ASSISTANT, is_string( $token ) ? $token : null );
         $form_id = uniqid( 'bookly-ai-assistant-app-', false );
         $css_vars = self::getCssVars( $appearance );
 

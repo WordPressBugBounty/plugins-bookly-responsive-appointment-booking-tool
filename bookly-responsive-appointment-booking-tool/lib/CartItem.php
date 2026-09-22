@@ -86,8 +86,19 @@ class CartItem
      */
     public function setData( array $data )
     {
+        // Fields that multiply the price or the duration are assigned through their setters,
+        // which keep them within the allowed range.
+        $bounded = array(
+            'number_of_persons' => 'setNumberOfPersons',
+            'units' => 'setUnits',
+            'extras' => 'setExtras',
+        );
         foreach ( $data as $name => $value ) {
-            $this->{$name} = $value;
+            if ( isset ( $bounded[ $name ] ) ) {
+                $this->{$bounded[ $name ]}( $value );
+            } else {
+                $this->{$name} = $value;
+            }
         }
 
         return $this;
@@ -101,6 +112,56 @@ class CartItem
     public function getAppointment()
     {
         return Entities\Appointment::find( $this->appointment_id );
+    }
+
+    /**
+     * Bring the multipliers and the extras of the item within the range its service allows.
+     *
+     * A booking form which builds its cart from the request carries the values as the client
+     * sent them, and each of them scales the price and the duration of the item, so they are
+     * brought back into the range the form offers before the item is priced. An item booked
+     * for a package keeps its number of persons and units: they come from the package and
+     * not from the service.
+     *
+     * @return $this
+     */
+    public function applyServiceLimits()
+    {
+        $service = in_array( $this->type, array( self::TYPE_APPOINTMENT, self::TYPE_PACKAGE ) )
+            ? $this->getService()
+            : null;
+        if ( ! $service ) {
+            return $this;
+        }
+
+        if ( $this->type === self::TYPE_APPOINTMENT ) {
+            list ( $min, $max ) = $service->getPersonsRange( (array) $this->staff_ids, (int) $this->location_id );
+            $this->number_of_persons = min( max( (int) $this->number_of_persons, $min ), $max );
+
+            list ( $min, $max ) = $service->getUnitsRange();
+            $this->units = min( max( (int) $this->units, $min ), $max );
+        }
+
+        // A booked item takes one slot, or one slot per sub service of a compound or a
+        // collaborative service: every slot of the item turns into an appointment of its own,
+        // while the price of the item is the price of the service booked once.
+        $slots_count = $service->withSubServices() ? count( $service->getSubServices() ) : 1;
+        if ( is_array( $this->slots ) && count( $this->slots ) > $slots_count ) {
+            $this->slots = array_slice( $this->slots, 0, $slots_count );
+        }
+
+        $available = $service->getAvailableExtras();
+        $extras = array();
+        foreach ( $this->extras as $extra_id => $quantity ) {
+            $quantity = (int) $quantity;
+            if ( $quantity > 0 && isset ( $available[ $extra_id ] ) ) {
+                $extra = $available[ $extra_id ];
+                $extras[ $extra_id ] = min( max( $quantity, max( 1, (int) $extra->getMinQuantity() ) ), (int) $extra->getMaxQuantity() );
+            }
+        }
+        $this->extras = $extras;
+
+        return $this;
     }
 
     /**
@@ -169,7 +230,14 @@ class CartItem
                     if ( ! $staff_service->isLoaded() ) {
                         $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
                     }
-                    $_service_price = $staff_service->getPrice();
+                    if ( $staff_service->isLoaded() ) {
+                        $_service_price = $staff_service->getPrice();
+                    } else {
+                        // A staff member who does not provide the service has no price of their
+                        // own, and the service is then worth what it costs everywhere else.
+                        $slot_service = $service->withSubServices() ? Entities\Service::find( $service_id ) : $service;
+                        $_service_price = $slot_service ? $slot_service->getPrice() : 0;
+                    }
                     if ( $this->slots && $date_time ) {
                         $_service_price = Proxy\SpecialHours::adjustPrice( $_service_price, $staff_id, $service_id, $location_id, $service_start, date( 'w', strtotime( $date_time ) ) + 1 );
                     }
@@ -483,7 +551,8 @@ class CartItem
      */
     public function setNumberOfPersons( $number_of_persons )
     {
-        $this->number_of_persons = $number_of_persons;
+        // The value multiplies the item price, so it never drops below a single person.
+        $this->number_of_persons = max( 1, (int) $number_of_persons );
 
         return $this;
     }
@@ -506,7 +575,8 @@ class CartItem
      */
     public function setUnits( $units )
     {
-        $this->units = $units;
+        // Units multiply both the price and the duration of the item.
+        $this->units = max( 1, (int) $units );
 
         return $this;
     }
@@ -621,7 +691,12 @@ class CartItem
      */
     public function setExtras( $extras )
     {
-        $this->extras = $extras;
+        // Quantities multiply the price and the duration of the item, so an extra is either
+        // taken a whole number of times or not taken at all.
+        $this->extras = array();
+        foreach ( (array) $extras as $extra_id => $quantity ) {
+            $this->extras[ (int) $extra_id ] = max( 0, (int) $quantity );
+        }
 
         return $this;
     }

@@ -207,13 +207,21 @@ class Staff extends Lib\Base\Entity
      */
     public function isOnHoliday( \DateTime $day )
     {
-        $query = Holiday::query()
-            ->whereRaw( '( DATE_FORMAT( date, %s ) = %s AND repeat_event = 1 ) OR date = %s', array( '%m-%d', $day->format( 'm-d' ), $day->format( 'Y-m-d' ) ) )
+        $types = Holiday::query()
+            ->whereRaw(
+                '( DATE_FORMAT( date, %s ) = %s AND repeat_event = %d ) OR ( date = %s AND repeat_event <> %d )',
+                array( '%m-%d', $day->format( 'm-d' ), Holiday::TYPE_YEARLY, $day->format( 'Y-m-d' ), Holiday::TYPE_YEARLY )
+            )
             ->where( 'staff_id', $this->getId() )
-            ->limit( 1 );
-        $rows = $query->execute();
+            ->fetchCol( 'repeat_event' );
+        $types = array_map( 'intval', $types );
 
-        return $rows != 0;
+        if ( in_array( Holiday::TYPE_ONCE, $types, true ) ) {
+            return true;
+        }
+
+        // The repeating holiday does not apply to the days excluded from it.
+        return in_array( Holiday::TYPE_YEARLY, $types, true ) && ! in_array( Holiday::TYPE_EXCEPTION, $types, true );
     }
 
     /**
@@ -283,8 +291,12 @@ class Staff extends Lib\Base\Entity
                 'd' => (int) $d,
             );
             // if not repeated holiday, add the year
-            if ( ! $holiday['repeat_event'] ) {
+            if ( $holiday['repeat_event'] != Holiday::TYPE_YEARLY ) {
                 $holidays[ $holiday['id'] ]['y'] = (int) $Y;
+            }
+            // the day is excluded from a repeated holiday
+            if ( $holiday['repeat_event'] == Holiday::TYPE_EXCEPTION ) {
+                $holidays[ $holiday['id'] ]['exception'] = true;
             }
         }
 

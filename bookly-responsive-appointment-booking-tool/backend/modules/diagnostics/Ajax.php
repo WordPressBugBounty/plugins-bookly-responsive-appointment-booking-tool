@@ -33,8 +33,9 @@ class Ajax extends Lib\Base\Ajax
         $method = self::parameter( 'ajax' );
         $class = self::getClassInstance( self::parameter( 'test' ), '\Bookly\Backend\Modules\Diagnostics\Tests\\' );
         if ( $class instanceof Test ) {
-            if ( is_callable( array( $class, $method ) ) && ! in_array( $method, array( 'execute', 'run' ) ) ) {
-                if ( in_array( $method, $class->ignore_csrf, false ) || parent::csrfTokenValid( __FUNCTION__ ) ) {
+            // This branch is reachable without authentication, so only explicitly published methods are callable.
+            if ( in_array( $method, $class->ajax_methods, true ) ) {
+                if ( in_array( $method, $class->ignore_csrf, true ) || parent::csrfTokenValid( __FUNCTION__ ) ) {
                     $class->$method( self::parameters() );
                 }
             }
@@ -42,6 +43,9 @@ class Ajax extends Lib\Base\Ajax
             $class = self::getClassInstance( $tool_name, '\Bookly\Backend\Modules\Diagnostics\Tools\\' );
             if ( $class instanceof Tool ) {
                 if ( $method !== 'render' && method_exists( $class, $method ) && parent::csrfTokenValid( __FUNCTION__ ) ) {
+                    if ( ! $class->isMethodAllowed( $method ) ) {
+                        wp_send_json_error( array( 'message' => __( 'You do not have sufficient permissions to access this page.', 'bookly-responsive-appointment-booking-tool' ) ) );
+                    }
                     $class->$method( self::parameters() );
                 }
             }
@@ -123,7 +127,8 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        if ( self::parameter( 'safe', false ) ) {
+        // Credentials of the site owner are stripped for everyone but a full administrator.
+        if ( self::parameter( 'safe', false ) || ! current_user_can( 'manage_options' ) ) {
             $result = self::makeSafe( $result );
         }
 
@@ -136,6 +141,11 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function importData()
     {
+        // The import drops every Bookly table and changes the state of the plugins, which is a site wide action.
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( array( 'message' => array( __( 'You do not have sufficient permissions to access this page.', 'bookly-responsive-appointment-booking-tool' ) ) ) );
+        }
+
         /** @global \wpdb $wpdb */
         global $wpdb;
         $fs = Lib\Utils\Common::getFilesystem();
@@ -296,19 +306,7 @@ class Ajax extends Lib\Base\Ajax
      */
     protected static function makeSafe( $data )
     {
-        $unsafe_options = array(
-            'bookly_gc_client_id',
-            'bookly_gc_client_secret',
-            'bookly_oc_app_id',
-            'bookly_oc_app_secret',
-            'bookly_zoom_oauth_client_id',
-            'bookly_zoom_oauth_client_secret',
-            'bookly_smtp_host',
-            'bookly_smtp_port',
-            'bookly_smtp_user',
-            'bookly_smtp_password',
-            'bookly_cloud_token',
-        );
+        $unsafe_options = Tool::getSensitiveOptions();
 
         $unsafe_entities = array(
             'Bookly\Lib\Entities\Staff' => array(

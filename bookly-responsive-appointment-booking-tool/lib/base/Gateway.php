@@ -387,7 +387,12 @@ abstract class Gateway
      */
     protected function getResponseUrl( $event )
     {
-        if ( $this->request->isBookingForm() ) {
+        if ( $this->request->getResponseAction() !== null ) {
+            // Caller-supplied return endpoint (AI chat, and anything else driving a checkout
+            // with its own UserBookingData). Nothing else is needed here: bookly_order below
+            // is enough for that endpoint to resolve the order and the gateway.
+            $data = array( 'action' => $this->request->getResponseAction() );
+        } elseif ( $this->request->isBookingForm() ) {
             $data = array(
                 'action' => 'bookly_back_from_payment_system',
                 'bookly_fid' => $this->request->getFormId(),

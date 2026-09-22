@@ -64,8 +64,20 @@ class ChainItem
      */
     public function setData( array $data )
     {
+        // Fields that multiply the price, the duration or the number of created items are
+        // assigned through their setters, which keep them within the allowed range.
+        $bounded = array(
+            'number_of_persons' => 'setNumberOfPersons',
+            'units' => 'setUnits',
+            'quantity' => 'setQuantity',
+            'extras' => 'setExtras',
+        );
         foreach ( $data as $name => $value ) {
-            $this->{$name} = $value;
+            if ( isset ( $bounded[ $name ] ) ) {
+                $this->{$bounded[ $name ]}( $value );
+            } else {
+                $this->{$name} = $value;
+            }
         }
     }
 
@@ -275,7 +287,9 @@ class ChainItem
      */
     public function setNumberOfPersons( $number_of_persons )
     {
-        $this->number_of_persons = $number_of_persons;
+        // The value multiplies the order total, so a booking always counts at least one
+        // person no matter what the request carried.
+        $this->number_of_persons = max( 1, (int) $number_of_persons );
 
         return $this;
     }
@@ -298,7 +312,10 @@ class ChainItem
      */
     public function setQuantity( $quantity )
     {
-        $this->quantity = $quantity;
+        // Each unit of quantity turns into its own cart item, so the value is kept within
+        // the range the booking form offers.
+        $max = (int) get_option( 'bookly_multiply_appointments_quantity_max', 10 );
+        $this->quantity = max( 1, min( (int) $quantity, max( 1, $max ) ) );
 
         return $this;
     }
@@ -321,7 +338,12 @@ class ChainItem
      */
     public function setExtras( $extras )
     {
-        $this->extras = $extras;
+        // Quantities multiply the price and the duration of the booking, so an extra is
+        // either taken a whole number of times or not taken at all.
+        $this->extras = array();
+        foreach ( (array) $extras as $extra_id => $quantity ) {
+            $this->extras[ (int) $extra_id ] = max( 0, (int) $quantity );
+        }
 
         return $this;
     }
@@ -386,7 +408,8 @@ class ChainItem
      */
     public function setUnits( $units )
     {
-        $this->units = $units;
+        // Units multiply both the price and the duration of the booking.
+        $this->units = max( 1, (int) $units );
 
         return $this;
     }

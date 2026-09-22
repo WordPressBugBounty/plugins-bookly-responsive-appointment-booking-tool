@@ -53,6 +53,8 @@ class Roles extends Tool
      */
     public function fixRoles()
     {
+        self::verifyCapability( array( 'create_users', 'edit_users', 'promote_users' ) );
+
         $base_capabilities = array();
         if ( $subscriber = get_role( 'subscriber' ) ) {
             $base_capabilities = $subscriber->capabilities;

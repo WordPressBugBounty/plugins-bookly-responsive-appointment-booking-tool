@@ -83,6 +83,10 @@ class Page extends Lib\Base\Component
                 'statuses' => $statuses,
             ),
             'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'reschedule' => __( 'Reschedule', 'bookly-responsive-appointment-booking-tool' ),
+            // An appointment without a time is a task: the wizard does not move it, it
+            // gives it a time.
+            'setTime' => __( 'Set time', 'bookly-responsive-appointment-booking-tool' ),
             'export' => __( 'Export', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'print' => __( 'Print', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'reorder' => _x( 'Reorder', 'order of elements', 'bookly-responsive-appointment-booking-tool' ),

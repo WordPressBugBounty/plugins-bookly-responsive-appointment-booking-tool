@@ -13,6 +13,13 @@ abstract class Test
     protected $title;
     /** @var string */
     protected $description;
+    /**
+     * Methods callable over ajax. This branch of the dispatcher is open to unauthenticated
+     * requests, so a method is reachable only while it is listed here.
+     *
+     * @var array
+     */
+    public $ajax_methods = array();
     /** @var array */
     public $ignore_csrf = array();
     /** @var string */

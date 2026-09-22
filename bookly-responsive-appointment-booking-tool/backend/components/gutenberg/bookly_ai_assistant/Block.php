@@ -35,9 +35,6 @@ class Block extends Lib\Base\Block
             unset( $form['settings'] );
         }
         unset( $form );
-        if ( ! $forms ) {
-            $forms = array( array( 'name' => __( 'Default', 'bookly-responsive-appointment-booking-tool' ), 'token' => '', 'color' => $default_color ) );
-        }
 
         wp_localize_script( 'bookly-ai-assistant-block.js', 'BooklyAiAssistantBlockL10n', array(
             'block' => array(
@@ -45,6 +42,7 @@ class Block extends Lib\Base\Block
                 'description' => __( 'A custom block for displaying AI assistant form', 'bookly-responsive-appointment-booking-tool' ),
             ),
             'forms' => $forms,
+            'defaultColor' => $default_color,
             'selectForm' => __( 'Appearance form name', 'bookly-responsive-appointment-booking-tool' ),
         ) );
 

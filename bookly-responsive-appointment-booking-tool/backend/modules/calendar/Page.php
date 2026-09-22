@@ -150,7 +150,7 @@ class Page extends Lib\Base\Ajax
                 ca.notes AS appointment_notes,
                 ct.name AS category_name,
                 c.full_name AS client_name, c.first_name AS client_first_name, c.last_name AS client_last_name, c.phone AS client_phone, c.email AS client_email, c.id AS customer_id, c.birthday AS client_birthday, c.notes AS client_note,
-                p.total, p.type AS payment_gateway, p.status AS payment_status, p.paid,
+                p.total, p.type AS payment_gateway, p.status AS payment_status, p.paid + p.child_paid AS paid,
                 (SELECT SUM(ca.number_of_persons) FROM ' . CustomerAppointment::getTableName() . ' ca WHERE ca.appointment_id = a.id AND ca.status = "waitlisted") AS on_waiting_list'
             )
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )

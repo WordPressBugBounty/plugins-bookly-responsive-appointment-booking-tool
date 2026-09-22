@@ -10,6 +10,8 @@ class Endpoints extends Tool
     protected $hidden = true;
     protected $troubles;
 
+    protected $bookly_methods = array( 'updateEndPoint' );
+
     public function __construct()
     {
         $this->title = __( 'End points', 'bookly-responsive-appointment-booking-tool' );

@@ -66,7 +66,13 @@ abstract class Component extends Cache
      */
     protected static function csrfTokenValid( $action = null )
     {
-        return isset( $_REQUEST['csrf_token'] ) && wp_verify_nonce( $_REQUEST['csrf_token'], 'bookly' ) == 1;
+        // Any result but false, the way core does it: wp_verify_nonce() answers 1 for a
+        // nonce under 12 hours old and 2 for one between 12 and 24, and both are valid —
+        // check_ajax_referer() rejects only false. Accepting 1 alone made every request
+        // from a tab that had been open across a nonce tick (00:00 and 12:00 UTC) fail
+        // with "insufficient permissions", which names the wrong cause: the token is
+        // still bound to this user, this session and this action, it is merely older.
+        return isset( $_REQUEST['csrf_token'] ) && wp_verify_nonce( $_REQUEST['csrf_token'], 'bookly' ) !== false;
     }
 
     /**

@@ -105,7 +105,9 @@ class PluginsUpdater
      */
     public static function updateAddon()
     {
-        if ( wp_verify_nonce( $_POST['csrf_token'], 'bookly' ) == 1 ) {
+        // Not "== 1": a nonce from the previous tick verifies as 2 and is still valid —
+        // see Base\Component::csrfTokenValid().
+        if ( isset( $_POST['csrf_token'] ) && wp_verify_nonce( $_POST['csrf_token'], 'bookly' ) !== false ) {
             if ( ! function_exists( 'plugins_api' ) ) {
                 require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
             }
@@ -150,7 +152,10 @@ class PluginsUpdater
     public static function getAddonsUpdatingData()
     {
         $update = array();
-        if ( wp_verify_nonce( $_POST['csrf_token'], 'bookly' ) == 1 ) {
+        // Not "== 1": a nonce from the previous tick verifies as 2 and is still valid —
+        // see Base\Component::csrfTokenValid(). With "== 1" a page open across a tick
+        // reported "no updates available" instead of failing.
+        if ( isset( $_POST['csrf_token'] ) && wp_verify_nonce( $_POST['csrf_token'], 'bookly' ) !== false ) {
             $slug = $_POST['slug'];
             $bookly_plugins = apply_filters( 'bookly_plugins', array() );
             if ( $slug === 'bookly-responsive-appointment-booking-tool' ) {

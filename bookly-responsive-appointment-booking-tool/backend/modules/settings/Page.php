@@ -197,6 +197,7 @@ class Page extends Lib\Base\Ajax
             'close' => __( 'Close', 'bookly-responsive-appointment-booking-tool' ),
             'repeat' => __( 'Repeat every year', 'bookly-responsive-appointment-booking-tool' ),
             'we_are_not_working' => __( 'We are not working on this day', 'bookly-responsive-appointment-booking-tool' ),
+            'excluded_from_repeat' => __( 'This day is excluded from the repeating day off', 'bookly-responsive-appointment-booking-tool' ),
             'sample_price' => number_format_i18n( 10, 3 ),
             'are_you_sure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
@@ -252,8 +253,12 @@ class Page extends Lib\Base\Ajax
                     'd' => (int) date( 'd', strtotime( $holiday['date'] ) ),
                 );
                 // If not repeated holiday, add the year
-                if ( ! $holiday['repeat_event'] ) {
+                if ( $holiday['repeat_event'] != Lib\Entities\Holiday::TYPE_YEARLY ) {
                     $holidays[ $holiday['id'] ]['y'] = (int) date( 'Y', strtotime( $holiday['date'] ) );
+                }
+                // The day is excluded from a repeated holiday
+                if ( $holiday['repeat_event'] == Lib\Entities\Holiday::TYPE_EXCEPTION ) {
+                    $holidays[ $holiday['id'] ]['exception'] = true;
                 }
             }
         }

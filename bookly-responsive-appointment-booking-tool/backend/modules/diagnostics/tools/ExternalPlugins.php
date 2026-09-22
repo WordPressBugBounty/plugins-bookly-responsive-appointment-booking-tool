@@ -46,6 +46,8 @@ class ExternalPlugins extends Tool
 
     public function install()
     {
+        self::verifyCapability( array( 'install_plugins', 'activate_plugins' ) );
+
         $plugin = self::parameter( 'plugin' );
         if ( array_key_exists( $plugin, $this->plugins ) ) {
             if ( ! file_exists( WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . $this->plugins[ $plugin ]['basename'] ) ) {
@@ -87,6 +89,8 @@ class ExternalPlugins extends Tool
 
     public function delete()
     {
+        self::verifyCapability( array( 'delete_plugins' ) );
+
         $plugin = self::parameter( 'plugin' );
         if ( array_key_exists( $plugin, $this->plugins ) ) {
             deactivate_plugins( array( $this->plugins[ $plugin ]['basename'] ) );
@@ -101,6 +105,8 @@ class ExternalPlugins extends Tool
 
     public function activate()
     {
+        self::verifyCapability( array( 'activate_plugins' ) );
+
         $plugin = self::parameter( 'plugin' );
         if ( array_key_exists( $plugin, $this->plugins ) ) {
             $state = activate_plugin( $this->plugins[ $plugin ]['basename'] );

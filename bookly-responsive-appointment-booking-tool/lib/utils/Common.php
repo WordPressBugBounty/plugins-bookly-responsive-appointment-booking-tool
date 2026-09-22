@@ -280,6 +280,87 @@ abstract class Common extends Lib\Base\Cache
     }
 
     /**
+     * Staff members whose records the current user is allowed to work with.
+     *
+     * Supervisors and administrators work with every staff member, which is reported as
+     * null so that callers can skip filtering altogether.
+     *
+     * @return int[]|null
+     */
+    public static function getCurrentUserStaffIds()
+    {
+        if ( self::isCurrentUserSupervisor() ) {
+            return null;
+        }
+
+        return array_map( 'intval', Lib\Entities\Staff::query()
+            ->where( 'wp_user_id', get_current_user_id() )
+            ->fetchCol( 'id' ) );
+    }
+
+    /**
+     * Whether the current user may read and change records of the given staff member.
+     *
+     * A staff member without supervisor rights is limited to their own records, so that the
+     * appointments, customers and payments of a colleague stay out of reach.
+     *
+     * @param int $staff_id
+     * @return bool
+     */
+    public static function currentUserCanManageStaff( $staff_id )
+    {
+        $allowed = self::getCurrentUserStaffIds();
+
+        return $allowed === null || in_array( (int) $staff_id, $allowed, true );
+    }
+
+    /**
+     * Whether the current user may read and change the given payment.
+     *
+     * A payment is reachable through the appointments it pays for, so it belongs to every
+     * staff member serving those appointments and is available only when all of them are
+     * within reach. A payment that pays for nothing has no owner among the staff, and a
+     * follow-up payment is judged by the parent it extends.
+     *
+     * @param int $payment_id
+     * @return bool
+     */
+    public static function currentUserCanManagePayment( $payment_id )
+    {
+        $allowed = self::getCurrentUserStaffIds();
+        if ( $allowed === null ) {
+            return true;
+        }
+        if ( ! $allowed || ! $payment_id ) {
+            return false;
+        }
+
+        $staff_ids = array();
+        $seen = array();
+        while ( $payment_id && ! isset ( $seen[ $payment_id ] ) ) {
+            $seen[ $payment_id ] = true;
+            $staff_ids = Lib\Entities\CustomerAppointment::query( 'ca' )
+                ->select( 'a.staff_id' )
+                ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
+                ->where( 'ca.payment_id', $payment_id )
+                ->fetchCol( 'staff_id' );
+            if ( $staff_ids ) {
+                break;
+            }
+            $payment = Lib\Entities\Payment::find( $payment_id );
+            $payment_id = $payment ? $payment->getParentId() : null;
+        }
+
+        foreach ( $staff_ids as $staff_id ) {
+            if ( ! in_array( (int) $staff_id, $allowed, true ) ) {
+                return false;
+            }
+        }
+
+        return $staff_ids !== array();
+    }
+
+    /**
      * Check whether the current user is customer or not.
      *
      * @return bool

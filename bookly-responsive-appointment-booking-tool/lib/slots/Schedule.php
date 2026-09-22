@@ -9,6 +9,8 @@ class Schedule
     protected $special_days = array();
     /** @var array */
     protected $holidays = array();
+    /** @var array */
+    protected $holiday_exceptions = array();
 
     /**
      * Add schedule for a day of the week.
@@ -64,6 +66,39 @@ class Schedule
         $this->holidays[ $date ] = true;
 
         return $this;
+    }
+
+    /**
+     * Add a day excluded from a repeating holiday.
+     *
+     * @param string $date Format Y-m-d
+     * @return $this
+     */
+    public function addHolidayException( $date )
+    {
+        $this->holiday_exceptions[ $date ] = true;
+
+        return $this;
+    }
+
+    /**
+     * Check whether given day is a holiday.
+     *
+     * @param DatePoint $dp
+     * @return bool
+     */
+    public function isHoliday( DatePoint $dp )
+    {
+        $date_Ymd = $dp->format( 'Y-m-d' );
+        if ( isset ( $this->holidays[ $date_Ymd ] ) ) {
+            return true;
+        }
+        // Check for repeating holiday.
+        if ( isset ( $this->holidays[ $dp->format( 'm-d' ) ] ) ) {
+            return ! isset ( $this->holiday_exceptions[ $date_Ymd ] );
+        }
+
+        return false;
     }
 
     /**
@@ -200,12 +235,8 @@ class Schedule
             // Check for weekday.
             if ( isset ( $this->days[ $dp->format( 'w' ) ] ) ) {
                 // Check for holiday.
-                if ( ! isset ( $this->holidays[ $date_Ymd ] ) ) {
-                    // Check for repeating holiday.
-                    $date_md = $dp->format( 'm-d' );
-                    if ( ! isset ( $this->holidays[ $date_md ] ) ) {
-                        return false;
-                    }
+                if ( ! $this->isHoliday( $dp ) ) {
+                    return false;
                 }
             }
         }
@@ -243,25 +274,14 @@ class Schedule
                     $new_day = $new_day->merge( $day->intersect( $range ) );
                 }
             } else {
-                do {
-                    $dp = DatePoint::fromStr( $date );
-                    $day_of_week = $dp->format( 'w' );
-                    // Check for weekday.
-                    if ( $schedule->hasDay( $day_of_week ) ) {
-                        // Check for holiday.
-                        if ( ! isset ( $schedule->holidays[ $date ] ) ) {
-                            // Check for repeating holiday.
-                            $date_md = $dp->format( 'm-d' );
-                            if ( ! isset ( $schedule->holidays[ $date_md ] ) ) {
-                                foreach ( $schedule->days[ $day_of_week ]->all() as $range ) {
-                                    $new_day = $new_day->merge( $day->intersect( $range ) );
-                                }
-                                break;
-                            }
-                        }
+                $dp = DatePoint::fromStr( $date );
+                $day_of_week = $dp->format( 'w' );
+                // Check for weekday and holiday.
+                if ( $schedule->hasDay( $day_of_week ) && ! $schedule->isHoliday( $dp ) ) {
+                    foreach ( $schedule->days[ $day_of_week ]->all() as $range ) {
+                        $new_day = $new_day->merge( $day->intersect( $range ) );
                     }
-                    continue;
-                } while ( false );
+                }
             }
             $new_schedule->special_days[ $date ] = $new_day;
         }
@@ -275,31 +295,21 @@ class Schedule
                     $new_day = $new_day->merge( $day->intersect( $range ) );
                 }
             } else {
-                do {
-                    $dp = DatePoint::fromStr( $date );
-                    $day_of_week = $dp->format( 'w' );
-                    // Check for weekday.
-                    if ( $this->hasDay( $day_of_week ) ) {
-                        // Check for holiday.
-                        if ( ! isset ( $this->holidays[ $date ] ) ) {
-                            // Check for repeating holiday.
-                            $date_md = $dp->format( 'm-d' );
-                            if ( ! isset ( $this->holidays[ $date_md ] ) ) {
-                                foreach ( $this->days[ $day_of_week ]->all() as $range ) {
-                                    $new_day = $new_day->merge( $day->intersect( $range ) );
-                                }
-                                break;
-                            }
-                        }
+                $dp = DatePoint::fromStr( $date );
+                $day_of_week = $dp->format( 'w' );
+                // Check for weekday and holiday.
+                if ( $this->hasDay( $day_of_week ) && ! $this->isHoliday( $dp ) ) {
+                    foreach ( $this->days[ $day_of_week ]->all() as $range ) {
+                        $new_day = $new_day->merge( $day->intersect( $range ) );
                     }
-                    continue;
-                } while ( false );
+                }
             }
             $new_schedule->special_days[ $date ] = $new_day;
         }
 
         // Holidays.
         $new_schedule->holidays = array_merge( $this->holidays, $schedule->holidays );
+        $new_schedule->holiday_exceptions = array_merge( $this->holiday_exceptions, $schedule->holiday_exceptions );
 
         return $new_schedule;
     }

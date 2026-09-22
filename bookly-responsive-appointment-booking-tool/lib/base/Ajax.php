@@ -14,7 +14,7 @@ abstract class Ajax extends Component
             /** @var static $called_class */
             $called_class  = get_called_class();
             $plugin_prefix = call_user_func( array( Lib\Base\Plugin::getPluginFor( $called_class ), 'getPrefix' ) );
-            $anonymous     = in_array( 'anonymous', $called_class::permissions() );
+            $permissions   = $called_class::permissions();
 
             foreach ( static::reflection()->getMethods( \ReflectionMethod::IS_PUBLIC ) as $method ) {
                 if ( $method->class !== $called_class ) {
@@ -27,7 +27,11 @@ abstract class Ajax extends Component
                     $called_class::forward( $method->name, true, true );
                 };
                 add_action( sprintf( 'wp_ajax_%s%s', $plugin_prefix, $action ), $function );
-                if ( $anonymous ) {
+                // Only an action that is anonymous itself is exposed to unauthenticated requests.
+                $security = isset( $permissions[ $method->name ] )
+                    ? $permissions[ $method->name ]
+                    : ( isset( $permissions['_default'] ) ? $permissions['_default'] : array() );
+                if ( in_array( 'anonymous', (array) $security, true ) ) {
                     add_action( sprintf( 'wp_ajax_nopriv_%s%s', $plugin_prefix, $action ), $function );
                 }
             }

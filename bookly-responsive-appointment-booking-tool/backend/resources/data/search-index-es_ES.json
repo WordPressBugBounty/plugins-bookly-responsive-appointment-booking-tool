@@ -1313,11 +1313,11 @@
         "type": "label",
         "page": "bookly-settings",
         "tab": "appointments",
-        "title": "Crear citas con el asistente de reservas",
+        "title": "Utilizar el asistente de reservas",
         "anchor": "bookly_appointments_create_with_wizard",
         "addon": "core",
         "weight": 30,
-        "alt": "Create appointments with the booking wizard"
+        "alt": "Use the booking wizard"
     },
     {
         "type": "label",
@@ -2676,6 +2676,17 @@
         "group": "Square",
         "weight": 30,
         "alt": "Location ID"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "Notificación URL",
+        "anchor": "bookly-notification-url",
+        "addon": "bookly-addon-square",
+        "group": "Square",
+        "weight": 30,
+        "alt": "Notification URL"
     },
     {
         "type": "label",

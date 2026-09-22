@@ -240,10 +240,17 @@
     function drawEvents($target, month, opt) {
         // remove old events
         $('.holidayDay', $target).removeClass('holidayDay').removeClass('repeatDay').removeAttr('title');
+        $('.exceptionDay', $target).removeClass('exceptionDay').removeAttr('title');
+        var exceptions = [];
         // and add new
         for (var i in events) {
             if (events.hasOwnProperty(i)) {
                 if (events[i].m == month) {
+                    if (events[i].exception) {
+                        // the day is excluded from a repeating holiday, drawn after all the holidays
+                        exceptions.push(events[i]);
+                        continue;
+                    }
                     var isRepeat = !events[i].hasOwnProperty('y');
                     var tooltip = opt.we_are_not_working || '';
                     if (isRepeat && opt.repeat) {
@@ -256,6 +263,14 @@
                 }
             }
         }
+        // the excluded days are working days regardless of the repeating holiday
+        for (var e = 0; e < exceptions.length; e++) {
+            $target.find(getEventSelector(exceptions[e]))
+                .removeClass('holidayDay')
+                .removeClass('repeatDay')
+                .addClass('exceptionDay')
+                .attr('title', opt.excluded_from_repeat || '');
+        }
     }
 
     // create a selector string by event
@@ -263,15 +278,33 @@
         return 'div[id^=c12d_' + event.m + '_' + event.d + '_' + (event.hasOwnProperty('y') ? (event.y + ']') : ']');
     }
 
+    // check whether the day is covered by a repeating holiday, no matter whether it is excluded from it
+    function isRepeating(date) {
+        for (var i in events) {
+            if (events.hasOwnProperty(i)
+                && !events[i].hasOwnProperty('y')
+                && events[i].m == date.getMonth() + 1
+                && events[i].d == date.getDate()
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // draw the popup on click to day
     function drawPopup($target, opt, div, range) {
         $('.bookly-popover').booklyPopover('hide');
         let $div = $(div);
+        // the day is covered by a repeating holiday, even if it is excluded from it
+        let repeating = isRepeating(range[0]);
         $first = $target.find('div[id*=d_' + (range[0].getMonth() + 1) + '_' + range[0].getDate() + '_' + range[0].getFullYear() + ']'),
             // checked or not on draw
             ch = $first.hasClass('holidayDay') ? 'checked="checked"' : '',
+            // "every year" tells whether the current state of the day applies to all the years
             ch2 = $first.hasClass('repeatDay') ? 'checked="checked"' : '',
-            di = ch ? '' : 'disabled="disabled"';
+            di = ch || repeating ? '' : 'disabled="disabled"';
 
         var $popup = $('<div class="text-center">' +
             '<div class="custom-control custom-checkbox">' +
@@ -309,14 +342,17 @@
         $('#bookly-holidays-day-off, #bookly-holidays-repeat', $popup).on('change', function () {
             var $this      = $(this),
                 day_off    = $day_off.prop('checked'),
-                repeat     = $repeat.prop('checked'),
                 $container = $target.closest('.jCal-wrap');
 
-            if (day_off) {
-                $repeat.prop('disabled', false);
-            } else {
-                $repeat.prop('checked', false).prop('disabled', true);
+            if ($this.is($day_off) && !day_off) {
+                // by default a day becomes a working day for its own year only, checking
+                // "every year" after that is what cancels the repeating holiday
+                $repeat.prop('checked', false);
             }
+            // "every year" applies the new state of the day to all the years, there is nothing
+            // to apply on a working day which is not covered by a repeating holiday
+            $repeat.prop('disabled', !day_off && !repeating);
+            var repeat = $repeat.prop('checked');
 
             if (range[0].getTime() > range[1].getTime()) {
                 let start = range[1];
@@ -346,11 +382,15 @@
                         $this.prop('disabled', false).removeClass('bookly-checkbox-loading');
                         // refresh events from server
                         events = response.data;
+                        repeating = isRepeating(range[0]);
                         for (let m = range[0].getMonth(); m <= range[1].getMonth(); m++) {
                             let $target = $('[data-index=' + m + ']', $container);
                             $('.day', $target).removeClass('selectedDay');
                             drawEvents($target, m + 1, opt);
                         }
+                        // the checkboxes are left as the user has set them: checking "every year"
+                        // after the day off is what applies the change to every year of that day
+                        $repeat.prop('disabled', !$day_off.prop('checked') && !repeating);
                     }
                 },
                 'json'

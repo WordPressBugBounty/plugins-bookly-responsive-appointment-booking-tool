@@ -185,49 +185,16 @@ class Ajax extends Lib\Base\Ajax
         $interval = self::parameter( 'range', array() );
         $range = new Lib\Slots\Range( Lib\Slots\DatePoint::fromStr( $interval[0] ), Lib\Slots\DatePoint::fromStr( $interval[1] )->modify( 1 ) );
         if ( self::$staff ) {
+            $days = array();
+            foreach ( $range->split( DAY_IN_SECONDS ) as $r ) {
+                $days[] = $r->start()->value()->format( 'Y-m-d' );
+            }
+
+            $repeat = self::parameter( 'repeat' ) == 'true';
             if ( self::parameter( 'holiday' ) == 'true' ) {
-                $repeat = (int) ( self::parameter( 'repeat' ) == 'true' );
-                if ( ! $repeat ) {
-                    Lib\Entities\Holiday::query( 'h' )
-                        ->update()
-                        ->set( 'h.repeat_event', 0 )
-                        ->where( 'h.staff_id', self::$staff->getId() )
-                        ->where( 'h.repeat_event', 1 )
-                        ->whereRaw( 'CONVERT(DATE_FORMAT(h.date, \'1%%m%%d\'),UNSIGNED INTEGER) BETWEEN %d AND %d', array( $range->start()->value()->format( '1md' ), $range->end()->value()->format( '1md' ) ) )
-                        ->execute();
-                }
-
-                $holidays = Lib\Entities\Holiday::query()
-                    ->whereBetween( 'date', $range->start()->value()->format( 'Y-m-d' ), $range->end()->value()->format( 'Y-m-d' ) )
-                    ->where( 'staff_id', self::$staff->getId() )
-                    ->indexBy( 'date' )
-                    ->find();
-                foreach ( $range->split( DAY_IN_SECONDS ) as $r ) {
-                    $day = $r->start()->value()->format( 'Y-m-d' );
-                    if ( array_key_exists( $day, $holidays ) ) {
-                        $holiday = $holidays[ $day ];
-                    } else {
-                        $holiday = new Lib\Entities\Holiday();
-                    }
-                    $holiday
-                        ->setDate( $day )
-                        ->setRepeatEvent( $repeat )
-                        ->setStaffId( self::$staff->getId() )
-                        ->save();
-                }
+                Lib\Utils\Holidays::setDaysOff( $days, self::$staff->getId(), $repeat );
             } else {
-                Lib\Entities\Holiday::query( 'h' )
-                    ->delete()
-                    ->where( 'h.staff_id', self::$staff->getId() )
-                    ->where( 'h.repeat_event', 1 )
-                    ->whereRaw( 'CONVERT(DATE_FORMAT(h.date, \'1%%m%%d\'),UNSIGNED INTEGER) BETWEEN %d AND %d', array( $range->start()->value()->format( '1md' ), $range->end()->value()->format( '1md' ) ) )
-                    ->execute();
-
-                Lib\Entities\Holiday::query()
-                    ->delete()
-                    ->whereBetween( 'date', $range->start()->value()->format( 'Y-m-d' ), $range->end()->value()->format( 'Y-m-d' ) )
-                    ->where( 'staff_id', self::$staff->getId() )
-                    ->execute();
+                Lib\Utils\Holidays::setWorkingDays( $days, self::$staff->getId(), $repeat );
             }
             // And return refreshed events.
             wp_send_json_success( self::$staff->getHolidays() );

@@ -6,6 +6,8 @@ class ShortCodes extends Tool
     protected $slug = 'short-codes';
     protected $hidden = true;
 
+    protected $bookly_methods = array( 'find' );
+
     public function __construct()
     {
         $this->title = 'Bookly shortcodes';

@@ -43,10 +43,43 @@ class Ajax extends Lib\Base\Ajax
         }
         if ( ! $form_processed ) {
             $form_id = Lib\FormSession::createSession();
-            Lib\FormSession::saveSession( $form_id, self::parameter( 'form_data' ) );
+            Lib\FormSession::saveSession( $form_id, self::_prepareFormData( self::parameter( 'form_data' ) ) );
         }
 
         wp_send_json( array( 'success' => true, 'form_id' => $form_id, 'status' => $status ) );
+    }
+
+    /**
+     * Keep only the form settings the booking form sends on start.
+     * The rest of the form session (order, payment, verification, captcha)
+     * is written by the server and must not come from the request.
+     *
+     * @param mixed $form_data
+     * @return array
+     */
+    private static function _prepareFormData( $form_data )
+    {
+        if ( ! is_array( $form_data ) ) {
+            $form_data = array();
+        }
+
+        $result = array();
+        foreach ( array( 'skip_service_step', 'hide_service_part1', 'hide_service_part2' ) as $name ) {
+            $result[ $name ] = empty( $form_data[ $name ] ) ? 0 : 1;
+        }
+
+        if ( isset( $form_data['defaults'] ) && is_array( $form_data['defaults'] ) ) {
+            $defaults = $form_data['defaults'];
+            $result['defaults'] = array();
+            foreach ( array( 'service_id', 'staff_id', 'location_id', 'category_id', 'units' ) as $name ) {
+                $result['defaults'][ $name ] = isset( $defaults[ $name ] ) ? (int) $defaults[ $name ] : 0;
+            }
+            foreach ( array( 'date_from', 'time_from', 'time_to' ) as $name ) {
+                $result['defaults'][ $name ] = isset( $defaults[ $name ] ) && is_scalar( $defaults[ $name ] ) ? (string) $defaults[ $name ] : 0;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -610,6 +643,16 @@ class Ajax extends Lib\Base\Ajax
                 $payment_step = $cart_info->hasDiscount() ? 'show-100%-discount' : 'skip';
             }
 
+            $external_checkout = Proxy\Shared::externalCheckoutAction( null, $payment_step, $cart_info, $userData );
+            if ( $external_checkout !== null ) {
+                $userData->sessionSave();
+                wp_send_json( array(
+                    'success' => true,
+                    'disabled' => true,
+                    'ajax_action' => $external_checkout,
+                ) );
+            }
+
             if ( $payment_step !== 'skip' ) {
                 $progress_tracker = self::_prepareProgressTracker( Steps::PAYMENT, $userData );
                 $payment_options = array();
@@ -754,8 +797,9 @@ class Ajax extends Lib\Base\Ajax
             if ( $userData->load() ) {
                 $parameters = self::parameters();
                 if ( array_key_exists( 'cart', $parameters ) ) {
+                    $parameters['cart'] = self::_prepareCartData( $parameters['cart'] );
                     $first = current( $parameters['cart'] );
-                    if ( array_key_exists( 'custom_fields', $first ) ) {
+                    if ( is_array( $first ) && array_key_exists( 'custom_fields', $first ) ) {
                         $cf_data = Lib\Proxy\CustomFields::getWhichHaveData();
                         foreach ( $parameters['cart'] as &$value ) {
                             foreach ( $value['custom_fields'] as &$field ) {
@@ -830,6 +874,30 @@ class Ajax extends Lib\Base\Ajax
         $errors['success'] = empty( $errors );
 
         wp_send_json( $errors );
+    }
+
+    /**
+     * Keep only the custom fields the details step sends for cart items.
+     * The rest of a cart item (appointment, payment, booking number, slots)
+     * is set by the server and must not come from the request.
+     *
+     * @param mixed $cart
+     * @return array
+     */
+    private static function _prepareCartData( $cart )
+    {
+        $result = array();
+        if ( is_array( $cart ) ) {
+            foreach ( $cart as $key => $item ) {
+                $result[ $key ] = array(
+                    'custom_fields' => is_array( $item ) && isset( $item['custom_fields'] ) && is_array( $item['custom_fields'] )
+                        ? $item['custom_fields']
+                        : array(),
+                );
+            }
+        }
+
+        return $result;
     }
 
     /**

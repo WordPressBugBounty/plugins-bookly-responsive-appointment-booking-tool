@@ -29,18 +29,41 @@ class Shop extends Lib\Base\Entity
     protected $price;
     /** @var string */
     protected $sub_price;
-    /** @var int */
+    /**
+     * @deprecated Marketplace listing figures. The catalogue no longer has a source for
+     *             them and the showcase does not show them; still filled from the feed
+     *             so that nothing which reads them breaks.
+     * @var int
+     */
     protected $sales;
-    /** @var float */
+    /**
+     * @deprecated See $sales.
+     * @var float
+     */
     protected $rating;
-    /** @var int */
+    /**
+     * @deprecated See $sales.
+     * @var int
+     */
     protected $reviews;
     /** @var  string */
     protected $published;
     /** @var  int */
     protected $seen = 0;
-    /** @var  string */
+    /**
+     * @deprecated Carries an Envato purchase code between two updates, and Bookly Pro
+     *             writes to it directly on its own version chain. Nothing reads it.
+     * @var string
+     */
     protected $license;
+    /**
+     * Everything the catalogue says about the product beyond what identifies it, as
+     * JSON: `shared` for what does not depend on language, `i18n` keyed by locale for
+     * what does.
+     *
+     * @var string
+     */
+    protected $content;
     /** @var  string */
     protected $bundle_plugins;
     /** @var  int */
@@ -70,6 +93,7 @@ class Shop extends Lib\Base\Entity
         'published' => array( 'format' => '%s' ),
         'seen' => array( 'format' => '%d' ),
         'license' => array( 'format' => '%s' ),
+        'content' => array( 'format' => '%s' ),
         'bundle_plugins' => array( 'format' => '%s' ),
         'visible' => array( 'format' => '%d' ),
         'created_at' => array( 'format' => '%s' ),
@@ -358,6 +382,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Gets sales
      *
+     * @deprecated
      * @return int
      */
     public function getSales()
@@ -368,6 +393,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Sets sales
      *
+     * @deprecated
      * @param int $sales
      * @return $this
      */
@@ -381,6 +407,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Gets rating
      *
+     * @deprecated
      * @return float
      */
     public function getRating()
@@ -391,6 +418,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Sets rating
      *
+     * @deprecated
      * @param float $rating
      * @return $this
      */
@@ -404,6 +432,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Gets reviews
      *
+     * @deprecated
      * @return int
      */
     public function getReviews()
@@ -414,6 +443,7 @@ class Shop extends Lib\Base\Entity
     /**
      * Sets reviews
      *
+     * @deprecated
      * @param int $reviews
      * @return $this
      */
@@ -489,6 +519,25 @@ class Shop extends Lib\Base\Entity
     public function setCreatedAt( $created_at )
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     * @return Shop
+     */
+    public function setContent( $content )
+    {
+        $this->content = $content;
 
         return $this;
     }

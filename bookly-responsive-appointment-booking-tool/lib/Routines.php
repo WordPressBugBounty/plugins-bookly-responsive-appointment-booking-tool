@@ -194,41 +194,13 @@ abstract class Routines
         $data = API::getInfo( $date['max_date'] );
 
         if ( is_array( $data ) ) {
-            if ( isset ( $data['plugins'] ) ) {
-                $seen = Entities\Shop::query()->count() ? 0 : 1;
-                foreach ( $data['plugins'] as $plugin ) {
-                    $shop = new Entities\Shop();
-                    if ( $plugin['id'] ) {
-                        $shop->loadBy( array( 'plugin_id' => $plugin['id'] ) );
-                        $shop
-                            ->setPluginId( $plugin['id'] )
-                            ->setHighlighted( $plugin['highlighted'] ?: 0 )
-                            ->setPriority( $plugin['priority'] ?: 0 )
-                            ->setDemoUrl( $plugin['demo_url'] )
-                            ->setTitle( $plugin['title'] )
-                            ->setSlug( $plugin['slug'] )
-                            ->setDescription( $plugin['description'] )
-                            ->setUrl( $plugin['sale_url'] )
-                            ->setIcon( $plugin['icon'] )
-                            ->setImage( $plugin['image'] ?: '' )
-                            ->setLifeTimePrice( $plugin['lt_price'] )
-                            ->setSubscriptionPrice( $plugin['sub_price'] ?: '' )
-                            ->setSales( $plugin['sales'] ?: 0 )
-                            ->setRating( $plugin['rating'] ?: 5 )
-                            ->setReviews( $plugin['reviews'] )
-                            ->setPublished( isset ( $plugin['published_at']['date'] )
-                                ? date_create( $plugin['published_at']['date'] )->format( 'Y-m-d H:i:s' )
-                                : current_time( 'mysql' )
-                            )
-                            ->setCreatedAt( current_time( 'mysql' ) )
-                            ->setSeen( $shop->isLoaded() ? $shop->getSeen() : $seen )
-                            ->setBundlePlugins( $plugin['bundle_plugins'] ? json_encode( $plugin['bundle_plugins'] ) : null )
-                            ->setVisible( $plugin['visible'] )
-                            ->save();
-                    }
-                }
-            }
-
+            // The catalogue is not read from here. Hub still serves it under the same
+            // `plugins` key, but for installations too old to know about Cloud — this
+            // one takes it from Cloud, in a richer shape, and taking both would make the
+            // product name change once a day: Hub carries the marketplace listing, Cloud
+            // the clean name and our own artwork.
+            //
+            // News stay: they are a Hub mailing and have no Cloud counterpart.
             if ( isset( $data['news'] ) ) {
                 foreach ( $data['news'] as $incoming_news ) {
                     $news = new Entities\News();

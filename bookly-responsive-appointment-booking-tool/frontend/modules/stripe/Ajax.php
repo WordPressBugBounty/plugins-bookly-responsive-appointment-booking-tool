@@ -16,15 +16,21 @@ class Ajax extends Lib\Base\Ajax
     public static function cloudStripeNotify()
     {
         $response_code = 200;
+        $payment = null;
         if ( Lib\Cloud\API::getInstance()->account->productActive( 'stripe' ) ) {
             try {
-                self::notify();
+                $payment = self::notify();
             } catch ( \Exception $e ) {
                 Lib\Utils\Log::error( $e->getMessage(), $e->getFile(), $e->getLine() );
                 $response_code = 400;
             }
         }
-        Lib\Utils\Common::emptyResponse( $response_code );
+        wp_send_json( array(
+            'event_id' => $_POST['event_id'],
+            'payment_id' => $payment ? $payment->getId() : null,
+            'order_id' => $payment ? $payment->getOrderId() : null,
+            'status' => $payment ? $payment->getStatus() : null,
+        ), $response_code );
     }
 
     /**
@@ -37,10 +43,10 @@ class Ajax extends Lib\Base\Ajax
         $event = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->retrieveEvent( $_POST['event_id'] );
         switch ( $event['type'] ) {
             case 'checkout.session.completed':
-                self::processCheckoutSessionCompleted( $event );
+                return self::processCheckoutSessionCompleted( $event );
                 break;
             case 'charge.refunded':
-                self::processChargeRefunded( $event );
+                return self::processChargeRefunded( $event );
                 break;
         }
     }
@@ -49,6 +55,7 @@ class Ajax extends Lib\Base\Ajax
      * Process Stripe event checkout.session.completed
      *
      * @param array $event
+     * @return Lib\Entities\Payment
      */
     private static function processCheckoutSessionCompleted( $event )
     {
@@ -65,12 +72,15 @@ class Ajax extends Lib\Base\Ajax
             }
             $gateway->setPayment( $payment )->retrieve();
         }
+
+        return $payment;
     }
 
     /**
      * Process Stripe charge.refunded
      *
      * @param array $data
+     * @return Lib\Entities\Payment
      */
     private static function processChargeRefunded( $data )
     {
@@ -85,6 +95,8 @@ class Ajax extends Lib\Base\Ajax
                 ->setStatus( Lib\Entities\Payment::STATUS_REFUNDED )
                 ->save();
         }
+
+        return $payment;
     }
 
     /**

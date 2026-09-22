@@ -1011,6 +1011,7 @@ class Installer extends Base\Installer
                 `published`   DATETIME NOT NULL,
                 `seen`        TINYINT(1) NOT NULL DEFAULT 0,
                 `license`     VARCHAR(32) DEFAULT NULL,
+                `content`     TEXT DEFAULT NULL,
                 `bundle_plugins` TEXT DEFAULT NULL,
                 `visible`     TINYINT DEFAULT 1,
                 `created_at`  DATETIME NOT NULL
@@ -1172,6 +1173,9 @@ class Installer extends Base\Installer
                 `token` VARCHAR(255) NOT NULL,
                 `status` ENUM("active","processing","done","error") NOT NULL DEFAULT "active",
                 `error_code` VARCHAR(64) DEFAULT NULL,
+                `booking_data` TEXT DEFAULT NULL,
+                `booking_status` ENUM("pending","processing","awaiting","paid","failed") DEFAULT NULL,
+                `order_id` INT UNSIGNED DEFAULT NULL,
                 `created_at` DATETIME NOT NULL,
                 `updated_at` DATETIME NOT NULL,
                 UNIQUE KEY `token` (`token`)
