@@ -326,14 +326,14 @@ class Generator implements \Iterator
         }
 
         // Candidates arrive already ordered by staff preference (see the per-day staff
-        // sort in current()), so the alternatives chain is built in one linear pass from
-        // the tail. Sorting here per timestamp would re-create O(N²) Range copies and
+        // sort in current()), so the alternatives chain is built in one linear pass.
+        // Sorting here per timestamp would re-create O(N²) Range copies and
         // dominate search time for services with many staff.
         if ( $this->_staffPreferenceRandom() ) {
             $best = $this->_shuffleEqualPreference( $best );
         }
 
-        return $this->_chainAlternatives( $best );
+        return RangeData::linkAlternatives( $best );
     }
 
     /**
@@ -378,27 +378,9 @@ class Generator implements \Iterator
             $ordered = array_merge( $ordered, $tier_slots );
         }
 
-        return count( $ordered ) == 1 ? $ordered[0] : $this->_chainAlternatives( $ordered );
-    }
-
-    /**
-     * Link candidates into one slot with an alternatives chain, in the order given.
-     *
-     * Built in one linear pass from the tail: sorting or re-linking per timestamp would
-     * re-create O(N²) Range copies and dominate search time for services with many staff.
-     *
-     * @param Range[] $ordered
-     * @return Range
-     */
-    private function _chainAlternatives( array $ordered )
-    {
-        $slot = array_pop( $ordered );
-        while ( ! empty( $ordered ) ) {
-            $prev = array_pop( $ordered );
-            $slot = $prev->replaceAltSlot( $slot->replacePrevAltSlot( $prev ) );
-        }
-
-        return $slot;
+        return count( $ordered ) == 1
+            ? $ordered[0]
+            : RangeData::linkAlternatives( $ordered );
     }
 
     /**

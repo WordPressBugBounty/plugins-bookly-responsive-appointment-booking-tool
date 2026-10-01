@@ -296,4 +296,38 @@ class RangeData
     {
         return new static( $this->service_id, $this->staff_id, $this->location_id, $this->state, $this->on_waiting_list, $this->capacity, $this->nop, $this->next_slot, $this->alt_slot, $new_prev_alt_slot, $this->next_connection );
     }
+
+    /**
+     * Link ranges into a doubly linked list of alternatives, in the order given.
+     *
+     * Every node must point to the already linked neighbours: Range::mayBeAltSlot() rewinds
+     * from any node through prev_alt_slot and then walks forward through alt_slot. Linking
+     * with replace*() copies leaves prev_alt_slot pointing to a copy made before its alt_slot
+     * was set, so a rewind from the middle of the list loses the alternatives. Fresh copies
+     * are wired here instead, before anybody else can see them.
+     *
+     * One linear pass: re-linking or sorting per timestamp would re-create O(N²) Range
+     * copies and dominate search time for services with many staff.
+     *
+     * @param Range[] $ranges
+     * @return Range the head of the list
+     */
+    public static function linkAlternatives( array $ranges )
+    {
+        $linked = array();
+        foreach ( $ranges as $range ) {
+            $linked[] = $range->replaceData( clone $range->data() );
+        }
+        $last = count( $linked ) - 1;
+        foreach ( $linked as $i => $range ) {
+            if ( $i > 0 ) {
+                $range->data()->prev_alt_slot = $linked[ $i - 1 ];
+            }
+            if ( $i < $last ) {
+                $range->data()->alt_slot = $linked[ $i + 1 ];
+            }
+        }
+
+        return $linked[0];
+    }
 }

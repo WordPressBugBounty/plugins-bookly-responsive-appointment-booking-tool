@@ -60,8 +60,8 @@ $service_id = $service['id'];
                 <?php endforeach ?>
             </select>
         </div>
-        <?php Proxy\Pro::renderTags( $service ) ?>
     <?php endif ?>
+    <?php Proxy\Pro::renderTags( $service ) ?>
     <?php if ( $service['type'] == Service::TYPE_SIMPLE ) : ?>
         <div class="form-group">
             <label><?php esc_html_e( 'Color', 'bookly-responsive-appointment-booking-tool' ) ?></label>

@@ -170,26 +170,32 @@ class ChainItem
 
     /**
      * Get staff ids for sub service.
+     * Only the first sub service is limited to the chosen staff. A service may repeat
+     * among sub services, so callers that know the position pass $first explicitly:
+     * matching by id would limit every repetition of the first service.
      *
      * @param Entities\Service $sub_service
+     * @param bool|null $first
      * @return array
      */
-    public function getStaffIdsForSubService( Entities\Service $sub_service )
+    public function getStaffIdsForSubService( Entities\Service $sub_service, $first = null )
     {
         $service_id = $sub_service->getId();
+        if ( $first === null ) {
+            $sub_services = $this->getSubServices();
+            $first = $service_id == $sub_services[0]->getId();
+        }
+        if ( $first ) {
+            return $this->staff_ids;
+        }
         if ( ! isset ( $this->sub_services_staff_ids[ $service_id ] ) ) {
             $this->sub_services_staff_ids[ $service_id ] = array();
-            $sub_services = $this->getSubServices();
-            if ( $service_id == $sub_services[0]->getId() ) {
-                $this->sub_services_staff_ids[ $service_id ] = $this->staff_ids;
-            } else {
-                $res = Entities\StaffService::query()
-                    ->select( 'staff_id' )
-                    ->where( 'service_id', $service_id )
-                    ->fetchArray();
-                foreach ( $res as $item ) {
-                    $this->sub_services_staff_ids[ $service_id ][] = $item['staff_id'];
-                }
+            $res = Entities\StaffService::query()
+                ->select( 'staff_id' )
+                ->where( 'service_id', $service_id )
+                ->fetchArray();
+            foreach ( $res as $item ) {
+                $this->sub_services_staff_ids[ $service_id ][] = $item['staff_id'];
             }
         }
 

@@ -171,6 +171,83 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Remove the bookings selected in the appointments list.
+     *
+     * The list's rows are bookings, and so is what this removes: the same operation as
+     * `removeBooking`, with the same notifications and the same report, applied to a
+     * selection. A row without a customer stands for an appointment nobody is booked into,
+     * and that appointment goes — provided it is still empty.
+     *
+     * How far a removal reaches into a series or a cascade is asked only when a single
+     * booking is selected. Each booking of a wider selection has a series of its own, and
+     * one answer given for all of them would be a promise nobody has seen the cost of.
+     *
+     * Everything is checked before anything is touched: a selection that reaches an
+     * appointment of another staff member is refused as a whole.
+     */
+    public static function removeBookings()
+    {
+        $ca_ids = array_values( array_unique( array_map( 'intval', (array) self::parameter( 'ca_ids', array() ) ) ) );
+        $empty_ids = array_values( array_unique( array_map( 'intval', (array) self::parameter( 'appointment_ids', array() ) ) ) );
+
+        $victims = array();
+        if ( count( $ca_ids ) === 1 && ! $empty_ids ) {
+            $ca = CustomerAppointment::find( $ca_ids[0] );
+            if ( ! $ca ) {
+                wp_send_json_error( array( 'message' => __( 'Booking not found', 'bookly-responsive-appointment-booking-tool' ) ) );
+            }
+            self::denyForeignAppointment( $ca->getAppointmentId() );
+            $victims = self::scopedBookings( $ca );
+        } elseif ( $ca_ids ) {
+            // A booking deleted elsewhere in the meantime is already what was asked for.
+            $victims = CustomerAppointment::query()->whereIn( 'id', $ca_ids )->find();
+        }
+
+        $appointment_ids = $empty_ids;
+        foreach ( $victims as $victim ) {
+            $appointment_ids[] = $victim->getAppointmentId();
+        }
+        $appointment_ids = array_values( array_unique( array_map( 'intval', $appointment_ids ) ) );
+        foreach ( $appointment_ids as $appointment_id ) {
+            if ( Lib\Entities\Appointment::find( $appointment_id ) ) {
+                self::denyForeignAppointment( $appointment_id );
+            }
+        }
+        self::failUnlessCanManage( $appointment_ids );
+
+        $notify = (bool) self::parameter( 'notify' );
+        update_user_meta( get_current_user_id(), 'bookly_appointment_form_send_notifications', $notify ? '1' : '0' );
+
+        $reason = self::parameter( 'reason' );
+        $notify_list = $notify ? new NotificationList() : null;
+        $removed = 0;
+        foreach ( $victims as $victim ) {
+            if ( $notify_list && self::markCancelled( $victim ) ) {
+                Sender::sendForCA( $victim, null, array( 'cancellation_reason' => $reason ), false, $notify_list );
+            }
+            $victim->deleteCascade();
+            $removed ++;
+        }
+
+        // Somebody may have booked into it since the list was drawn — then it is not the
+        // empty appointment the operator chose to delete.
+        foreach ( $empty_ids as $appointment_id ) {
+            if ( ! CustomerAppointment::query()->where( 'appointment_id', $appointment_id )->count() ) {
+                Lib\Utils\Appointment::delete( $appointment_id, false );
+                $removed ++;
+            }
+        }
+
+        $notifications = array();
+        if ( $notify_list ) {
+            $notify_list->send();
+            $notifications = $notify_list->getInfo();
+        }
+
+        wp_send_json_success( array( 'notifications' => $notifications, 'notified' => $notify, 'removed' => $removed ) );
+    }
+
+    /**
      * Move a booking to the status that says what happened to it, before it goes.
      *
      * Not saved: the row is about to be deleted, and the status is set only so the message

@@ -4,21 +4,8 @@ namespace Bookly\Frontend\Modules\Ai\BookingTools;
 use Bookly\Lib;
 
 /**
- * Lists real bookable start times for one staff/service/day, so the model
- * has actual data to offer the customer instead of guessing round numbers
- * (09:00, 10:00, 11:00 ...) that then fail check_availability — reproduced
- * live: with only get_services/get_staff/check_availability/create_booking
- * registered, the model had no source for candidate times and fabricated
- * plausible-looking ones to ask "does this work?", wasting a round trip
- * whenever the guess was wrong.
- *
- * Wraps the same Lib\Slots\Finder/Generator engine the public booking widget
- * itself uses (see frontend/modules/booking/Ajax.php::renderTime()) instead
- * of reimplementing schedule/break/booking-conflict logic a second time — a
- * fresh, unsaved Lib\UserBookingData is built in memory for this one lookup
- * only (sessionSave() is never called), so this tool has no session/cart
- * side effects and never touches the customer's own in-progress booking
- * session (if any).
+ * Real bookable start times for one staff/service/day, so the model offers actual
+ * slots instead of guessing round hours that then fail check_availability.
  */
 class GetAvailableSlots implements ToolInterface
 {
@@ -43,8 +30,7 @@ class GetAvailableSlots implements ToolInterface
             'date' => array( 'type' => 'string', 'description' => 'Date to search, in the business\'s local time zone, format "YYYY-MM-DD".' ),
         );
 
-        // Only offered when the Locations addon is active — see Tools::all()'s
-        // own conditional registration of get_locations.
+        // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
             $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations. Omit if this business has a single location.' );
         }
@@ -84,8 +70,7 @@ class GetAvailableSlots implements ToolInterface
         $location_id = isset( $arguments['location_id'] ) ? (int) $arguments['location_id'] : 0;
         $extras_arg  = isset( $arguments['extras'] ) && is_array( $arguments['extras'] ) ? $arguments['extras'] : array();
 
-        // Same validation as CheckAvailability — keep both tools agreeing on
-        // what a "valid" service/staff/link looks like.
+        // Same validation as CheckAvailability.
         $service = Lib\Entities\Service::find( $service_id );
         if ( ! $service || $service->getType() !== Lib\Entities\Service::TYPE_SIMPLE || $service->getVisibility() !== Lib\Entities\Service::VISIBILITY_PUBLIC ) {
             return 'Error: unknown service_id. Call get_services to get a valid id.';
@@ -117,64 +102,7 @@ class GetAvailableSlots implements ToolInterface
             return 'Error: date must be in the format YYYY-MM-DD.';
         }
 
-        // Throwaway, unsaved booking session — built in memory for this one
-        // lookup and discarded at the end of the request. fillData()'s keys
-        // mirror frontend/modules/booking/Ajax.php::_setDataForSkippedServiceStep(),
-        // the same helper the public widget uses to seed a chain when a step
-        // is skipped.
-        $userData = new Lib\UserBookingData( 'ai-tool-slots-' . uniqid(), 0 );
-        $userData->chain->clear();
-        $chain_item = new Lib\ChainItem();
-        $chain_item
-            ->setServiceId( $service_id )
-            ->setStaffIds( array( $staff_id ) )
-            ->setNumberOfPersons( 1 )
-            ->setQuantity( 1 )
-            ->setUnits( $service->getUnitsMin() ?: 1 )
-            ->setLocationId( $location_id ?: null );
-        if ( $extras ) {
-            $chain_item->setExtras( $extras );
-        }
-        $userData->chain->add( $chain_item );
-
-        $userData->fillData( array(
-            'date_from'      => $date,
-            'days'           => array( 1, 2, 3, 4, 5, 6, 7 ),
-            'time_from'      => null,
-            'time_to'        => null,
-            'slots'          => array(),
-            'edit_cart_keys' => array(),
-        ) );
-
-        // Bound the search to just the requested day — prepare()'s $end_date
-        // becomes Finder::client_end_dp, and Finder's own default break
-        // callback (_breakDefault) stops the generator once it's reached.
-        $end_of_day = Lib\Slots\DatePoint::fromStr( $date . ' 00:00:00' )->modify( '+1 days' );
-
-        $finder = new Lib\Slots\Finder(
-            $userData,
-            function ( Lib\Slots\DatePoint $client_dp ) {
-                return $client_dp->format( 'Y-m-d' );
-            }, // single group: the requested day itself
-            function () {
-                return 0; // never stop early — the day boundary above already bounds the search
-            },
-            false, // waiting_list_enabled — a waiting-list-only opening isn't a real bookable time to offer
-            array(),
-            false, // show_blocked_slots — never offer a slot that's actually taken
-            false
-        );
-        $finder->prepare( $end_of_day )->load();
-
-        $times = array();
-        foreach ( $finder->getSlots() as $group_slots ) {
-            /** @var Lib\Slots\Range $slot */
-            foreach ( $group_slots as $slot ) {
-                if ( $slot->notFullyBooked() ) {
-                    $times[] = $slot->start()->format( 'Y-m-d H:i:s' );
-                }
-            }
-        }
+        $times = SlotLookup::slotsForDay( $service, $staff_id, $date, $location_id ?: null, $extras );
 
         $who_what = $staff->getFullName() . ' performing "' . $service->getTitle() . '"' . ( $extras ? ' with the requested extras' : '' );
 

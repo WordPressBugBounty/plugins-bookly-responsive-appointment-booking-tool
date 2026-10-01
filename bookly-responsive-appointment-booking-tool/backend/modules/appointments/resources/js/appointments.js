@@ -37,6 +37,14 @@ jQuery(function ($) {
         done:       'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
     };
     const defaultBadgeClass = 'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200';
+    // Online meeting providers by the value stored on the appointment. Brand names — not translated.
+    const meetingProviders = {
+        zoom: 'Zoom',
+        google_meet: 'Google Meet',
+        jitsi: 'Jitsi Meet',
+        bbb: 'BigBlueButton',
+        teams: 'Microsoft Teams',
+    };
 
     /**
      * Filter state — each FilterRenderer bind updates its variable through onChange;
@@ -258,23 +266,21 @@ jQuery(function ($) {
                 columns.push({data: column, render: BooklyDatatables.escapeHtml()});
                 break;
             case 'online_meeting':
+                // The same neutral badge the status column uses, named by the provider; the
+                // badge opens the meeting. The appointment card shows it the same way.
                 columns.push({
                     data: 'online_meeting_provider',
-                    render: function (data, type, row, meta) {
-                        switch (data) {
-                            case 'zoom':
-                                return '<a class="badge badge-primary" href="https://zoom.us/j/' + BooklyDatatables.escapeHtml(row.online_meeting_start_url) + '" target="_blank"><i class="fas fa-video fa-fw"></i> Zoom <i class="fas fa-external-link-alt fa-fw"></i></a>';
-                            case 'google_meet':
-                                return '<a class="badge badge-primary" href="' + BooklyDatatables.escapeHtml(row.online_meeting_start_url) + '" target="_blank"><i class="fas fa-video fa-fw"></i> Google Meet <i class="fas fa-external-link-alt fa-fw"></i></a>';
-                            case 'jitsi':
-                                return '<a class="badge badge-primary" href="' + BooklyDatatables.escapeHtml(row.online_meeting_start_url) + '" target="_blank"><i class="fas fa-video fa-fw"></i> Jitsi Meet <i class="fas fa-external-link-alt fa-fw"></i></a>';
-                            case 'bbb':
-                                return '<a class="badge badge-primary" href="' + BooklyDatatables.escapeHtml(row.online_meeting_start_url) + '" target="_blank"><i class="fas fa-video fa-fw"></i> BigBlueButton <i class="fas fa-external-link-alt fa-fw"></i></a>';
-                            case 'teams':
-                                return '<a class="badge badge-primary" href="' + BooklyDatatables.escapeHtml(row.online_meeting_start_url) + '" target="_blank"><i class="fas fa-video fa-fw"></i> Microsoft Teams <i class="fas fa-external-link-alt fa-fw"></i></a>';
-                            default:
-                                return '';
+                    badge: () => defaultBadgeClass,
+                    render: function (data, type, row) {
+                        const title = meetingProviders[data];
+                        if (!title) {
+                            return '';
                         }
+                        const url = data === 'zoom'
+                            ? 'https://zoom.us/j/' + row.online_meeting_start_url
+                            : row.online_meeting_start_url;
+                        // wp-admin paints every link in its own colour; the badge keeps its own.
+                        return '<a href="' + BooklyDatatables.escapeHtml(url) + '" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">' + title + '</a>';
                     },
                 });
                 break;
@@ -514,6 +520,25 @@ jQuery(function ($) {
                     icon: 'trash',
                     variant: 'destructive',
                     click: function (selectedRows) {
+                        // With the booking wizard on, deleting asks and reports the way the
+                        // appointment card does; a single booking is also asked how far into
+                        // its series or compound service the deletion reaches.
+                        if (wizardEnabled()) {
+                            BooklyAppointmentCard.showRemoveBookings(
+                                getBooklyModalContainer('bookly-remove-bookings'),
+                                {
+                                    rows: selectedRows.map(row => ({
+                                        caId: row.ca_id ? row.ca_id : null,
+                                        appointmentId: row.id,
+                                    })),
+                                    onDeleted: function () {
+                                        bt.reload();
+                                    },
+                                }
+                            );
+
+                            return;
+                        }
                         const data = selectedRows.map(row => ({
                             ca_id: row.ca_id ? row.ca_id : 'null',
                             id: row.id,

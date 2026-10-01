@@ -10,9 +10,7 @@ class CreateBooking implements ToolInterface
     private $conversation;
 
     /**
-     * @param Lib\Entities\AiConversation|null $conversation The chat this tool call belongs to.
-     *   Only the worker passes it (Tools::all( $conversation )); building the tool schema for
-     *   the /complete payload does not need one.
+     * @param Lib\Entities\AiConversation|null $conversation Passed by the worker only; schema building needs none.
      */
     public function __construct( $conversation = null )
     {
@@ -38,8 +36,7 @@ class CreateBooking implements ToolInterface
             'start_date' => array( 'type' => 'string', 'description' => 'Appointment start date/time, format "YYYY-MM-DD HH:MM:SS" (24-hour) — must be a slot check_availability already confirmed.' ),
         );
 
-        // Only offered when the Locations addon is active — see Tools::all()'s
-        // own conditional registration of get_locations.
+        // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
             $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations — must match the location check_availability already confirmed. Omit if this business has a single location.' );
         }
@@ -126,18 +123,15 @@ class CreateBooking implements ToolInterface
         }
         $end_date = ( clone $start )->modify( '+' . $service->getDuration() . ' seconds' )->format( 'Y-m-d H:i:s' );
 
-        // Same grid guard as CheckAvailability — defense in depth in case
-        // create_booking is ever called without a matching check_availability
-        // first (model behavior isn't guaranteed): reject an arbitrary
-        // off-grid minute the real booking widget would never offer.
-        if ( ! SlotGrid::isAligned( $service, $staff, $start, $location_id ?: null ) ) {
-            return 'Error: this business only takes bookings at fixed time slots. Call check_availability with a slot-aligned start_date first.';
+        // Re-check the slot (the model may skip check_availability, and time passes between calls),
+        // before the customer lookup so a refusal leaves no customer record behind.
+        $day_times = array();
+        if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
+            return 'Error: this slot is not available (anymore). ' . SlotLookup::describeAlternatives( $day_times ) . ' Call check_availability with the new time before booking.';
         }
 
-        // Find-or-create customer — replicates the exact-match lookup shape of
-        // Validator::postValidateCustomer() (lib/Validator.php) without the
-        // WP-account/verification-code machinery that function is entangled
-        // with, since this is an anonymous chat visitor, not a logged-in user.
+        // Find-or-create customer, same exact-match lookup as Validator::postValidateCustomer()
+        // minus the WP-account/verification machinery (anonymous chat visitor).
         $customer = new Lib\Entities\Customer();
         if ( $email !== '' ) {
             $customer->loadBy( array( 'email' => $email ) );
@@ -152,28 +146,13 @@ class CreateBooking implements ToolInterface
             return 'Error: could not save customer record.';
         }
 
-        // Same defense in depth for the slot itself, and for both ways out of this tool:
-        // a booking that goes to payment is not written here, but the draft it leaves
-        // behind is what the checkout will book, so an already taken slot has to be
-        // refused now, not after the customer has picked a gateway. (The checkout runs
-        // the booking form's own check again right before it creates the order - see
-        // Ajax::aiCheckout() - because minutes pass in between.)
-        $check = Lib\Utils\Appointment::checkTime( 0, $start_date, $end_date, $staff_id, $service_id, $location_id ?: null, array( array(
-            'id'                => $customer->getId(),
-            'status'            => Lib\Config::getDefaultAppointmentStatus(),
-            'number_of_persons' => 1,
-            'extras'            => $extras,
-        ) ) );
-        if ( $check['date_interval_not_available'] || $check['interval_not_in_staff_schedule']
-            || $check['interval_not_in_service_schedule'] || $check['staff_reaches_working_time_limit']
-            || ! empty( $check['customers_appointments_limit'] ) ) {
-            return 'Error: this slot is no longer available. Call check_availability again to find a working time.';
+        // The only rule SlotLookup can't check without a customer (Pro; no-op otherwise).
+        if ( $service->appointmentsLimitReached( $customer->getId(), array( $start_date ) ) ) {
+            return 'Error: this customer has reached the maximum number of appointments allowed for this service and cannot book another one.';
         }
 
-        // Everything the checkout will need to rebuild this booking in a later request. The
-        // draft is just the validated arguments - nothing is written to the appointment
-        // tables here; Gateway::createIntent() does that when the customer picks a gateway,
-        // exactly as it does for the booking form.
+        // Draft for the checkout to rebuild the booking later; nothing is written to the
+        // appointment tables until Gateway::createIntent() (or book() below).
         $draft = array(
             'customer_id' => $customer->getId(),
             'service_id' => $service_id,
@@ -185,13 +164,12 @@ class CreateBooking implements ToolInterface
             'number_of_persons' => 1,
         );
 
-        // No payment tracking to attach a draft to - book outright the way this tool always has.
+        // No conversation to attach a draft to - book outright.
         if ( ! $this->conversation ) {
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
 
-        // No payment system is switched on at all - there is nothing to charge, so book it
-        // outright the way this tool always has.
+        // No payment system switched on - nothing to charge.
         if ( Lib\Config::paymentStepDisabled() ) {
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
@@ -214,21 +192,16 @@ class CreateBooking implements ToolInterface
             return 'Error: this business accepts no payment method that works for this service and this staff member together. Suggest a different service or staff member.';
         }
 
-        // A service that costs nothing has no checkout to run - CartInfo priced it at zero
-        // after taxes and any discounts, so book it outright rather than show an empty card.
+        // Priced at zero after taxes/discounts - nothing to pay.
         if ( $options['pay_now_raw'] <= 0 ) {
             $this->conversation->resetBooking()->save();
 
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
 
-        // Same auto-select the modern booking form applies (BooklyPro's ModernBookingForm\Lib\
-        // Request::checkStep(), around its 'payment' step): when "pay locally" is the only
-        // gateway that works here, there is nothing to actually choose - a one-button card
-        // asking the customer to confirm what is already the only option is just friction.
-        // Coupons/gift cards are the exception: their redemption UI shares that same step, so
-        // it still has to show up while either is active, even though the gateway choice itself
-        // is a no-op.
+        // "Pay locally" as the only gateway needs no choice - same auto-select as the modern
+        // booking form (ModernBookingForm\Lib\Request::checkStep()). Coupons/gift cards share
+        // that step, so it still has to show while either is active.
         if ( count( $options['gateways'] ) === 1
             && $options['gateways'][0]['name'] === Lib\Entities\Payment::TYPE_LOCAL
             && ! Lib\Config::couponsActive()
@@ -239,8 +212,7 @@ class CreateBooking implements ToolInterface
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
 
-        // Quote the deposit and the full price separately when they differ - "pay 37.50"
-        // for a 50.00 service reads as a discount unless it says what it is.
+        // Quote deposit and full price separately, or a deposit reads as a discount.
         $amount = $options['deposit']
             ? sprintf( '%s now (deposit) of %s total', $options['due_now'], $options['total'] )
             : $options['total'];
@@ -252,8 +224,7 @@ class CreateBooking implements ToolInterface
     }
 
     /**
-     * Write the appointment straight away, with no payment attached. Used when the business
-     * takes no payments at all and when the priced total is zero.
+     * Write the appointment straight away, with no payment attached.
      *
      * @param Lib\Entities\Customer $customer
      * @param Lib\Entities\Service  $service
@@ -278,13 +249,8 @@ class CreateBooking implements ToolInterface
             'timezone'          => null,
         ) );
 
-        // The slot was re-validated in execute() a moment ago, for this path and the
-        // payment one alike; save() itself does not check.
-        //
-        // $end_date here stays the plain service-only end on purpose — save()
-        // adds extras duration internally (from $customers[0]['extras']) into
-        // its own Appointment.extras_duration column; passing an already-
-        // extended end_date here would double-count it.
+        // save() does not check the slot (execute() did) and adds extras duration itself,
+        // so $end_date must stay the plain service-only end.
         $result = Lib\Utils\Appointment::save(
             0,                        // appointment_id — 0 = create new
             $draft['staff_id'],

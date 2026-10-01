@@ -82,6 +82,10 @@ class Dialog extends Lib\Base\Component
                 'booking_removed' => __( 'Booking removed', 'bookly-responsive-appointment-booking-tool' ),
                 'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ),
                 'delete_appointment_confirm' => __( 'Delete this appointment with everything booked in it?', 'bookly-responsive-appointment-booking-tool' ),
+                // Deleting from the appointments list, where a row is a booking.
+                'delete_booking_confirm' => __( 'Delete this booking?', 'bookly-responsive-appointment-booking-tool' ),
+                'delete_bookings_confirm' => __( 'Delete the selected bookings?', 'bookly-responsive-appointment-booking-tool' ),
+                'deleted' => __( 'Deleted', 'bookly-responsive-appointment-booking-tool' ),
                 // The count is stated separately rather than inside the question: the
                 // question would have to agree with the number, and the plural forms of a
                 // number known only in the browser cannot be resolved here.

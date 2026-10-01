@@ -252,6 +252,8 @@ class Ajax extends Lib\Base\Ajax
             $response['data']['internal_note'] = $appointment->getInternalNote();
             $response['data']['location_id'] = (int) $appointment->getLocationId();
             $response['data']['online_meeting_start_url'] = Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $appointment );
+            // The appointment card names the meeting by its provider, as the appointments list does.
+            $response['data']['online_meeting_provider'] = $appointment->getOnlineMeetingProvider();
             // Creation date is shown by the appointment card and is unused by the edit form.
             $created_at = $appointment->getCreatedAt();
             if ( $created_at && $display_tz !== $wp_tz ) {

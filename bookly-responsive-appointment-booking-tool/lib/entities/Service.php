@@ -29,6 +29,9 @@ class Service extends Lib\Base\Entity
     const SLOT_LENGTH_DEFAULT = 'default';
     const SLOT_LENGTH_AS_SERVICE_DURATION = 'as_service_duration';
 
+    /** @var array [service id => [ min, max ]] persons range of compound and collaborative services */
+    private static $sub_services_persons_range = array();
+
     /** @var  int */
     protected $category_id;
     /** @var  string */
@@ -288,6 +291,8 @@ class Service extends Lib\Base\Entity
      * Without the group booking add-on a booking always stands for a single person. With
      * "any staff" a booking carries several staff members, so the widest range among them is
      * allowed; the capacity of the one actually booked is enforced when the slot is taken.
+     * A compound or a collaborative service has no staff of its own, so its range is the one
+     * every sub service can take, the same the booking form offers.
      *
      * @param array $staff_ids
      * @param int $location_id
@@ -297,6 +302,30 @@ class Service extends Lib\Base\Entity
     {
         if ( ! Lib\Config::groupBookingActive() ) {
             return array( 1, 1 );
+        }
+
+        if ( $this->withSubServices() ) {
+            // A cart built from a request checks every item, a recurring series among them,
+            // so the range is read once per service.
+            $id = $this->getId();
+            if ( ! isset ( self::$sub_services_persons_range[ $id ] ) ) {
+                $min = 1;
+                $max = PHP_INT_MAX;
+                $rows = SubService::query( 'sub' )
+                    ->select( 'MIN(ss.capacity_min) AS min_capacity, MAX(ss.capacity_max) AS max_capacity' )
+                    ->innerJoin( 'StaffService', 'ss', 'ss.service_id = sub.sub_service_id' )
+                    ->where( 'sub.service_id', $id )
+                    ->groupBy( 'sub.sub_service_id' )
+                    ->sortBy( 'sub.sub_service_id' )
+                    ->fetchArray();
+                foreach ( $rows as $row ) {
+                    $min = max( $min, (int) $row['min_capacity'] );
+                    $max = min( $max, (int) $row['max_capacity'] );
+                }
+                self::$sub_services_persons_range[ $id ] = $max === PHP_INT_MAX ? array( 1, 1 ) : array( $min, max( $min, $max ) );
+            }
+
+            return self::$sub_services_persons_range[ $id ];
         }
 
         $min = max( 1, (int) $this->getCapacityMin() );
@@ -342,13 +371,13 @@ class Service extends Lib\Base\Entity
     /**
      * Get the range of units a booking of this service can be made for.
      *
-     * Without the multiply appointments add-on a booking always stands for a single unit.
+     * Without the custom duration add-on a booking always stands for a single unit.
      *
      * @return array [ min, max ]
      */
     public function getUnitsRange()
     {
-        if ( ! Lib\Config::multiplyAppointmentsActive() ) {
+        if ( ! Lib\Config::customDurationActive() ) {
             return array( 1, 1 );
         }
 

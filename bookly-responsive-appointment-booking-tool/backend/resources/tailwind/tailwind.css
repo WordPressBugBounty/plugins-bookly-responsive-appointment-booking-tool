@@ -1129,6 +1129,9 @@
 .bookly-css-root .bookly\:max-h-\[calc\(100\%-32px\)\] {
   max-height: calc(100% - 32px) !important;
 }
+.bookly-css-root .bookly\:max-h-\[min\(60vh\,520px\)\] {
+  max-height: min(60vh, 520px) !important;
+}
 .bookly-css-root .bookly\:max-h-\[var\(--bits-popover-content-available-height\)\] {
   max-height: var(--bits-popover-content-available-height) !important;
 }
@@ -1575,17 +1578,11 @@
 .bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(196px\,1fr\)\)\] {
   grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)) !important;
 }
-.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(252px\,1fr\)\)\] {
-  grid-template-columns: repeat(auto-fill, minmax(252px, 1fr)) !important;
-}
 .bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(clamp\(252px\,17cqw\,320px\)\,1fr\)\)\] {
   grid-template-columns: repeat(auto-fill, minmax(clamp(252px, 17cqw, 320px), 1fr)) !important;
 }
 .bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fill\,minmax\(min\(100\%\,320px\)\,1fr\)\)\] {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)) !important;
-}
-.bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fit\,minmax\(168px\,1fr\)\)\] {
-  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)) !important;
 }
 .bookly-css-root .bookly\:grid-cols-\[repeat\(auto-fit\,minmax\(280px\,1fr\)\)\] {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
@@ -3062,6 +3059,9 @@
 .bookly-css-root .bookly\:text-gray-700 {
   color: var(--bookly-color-gray-700) !important;
 }
+.bookly-css-root .bookly\:text-gray-700\! {
+  color: var(--bookly-color-gray-700) !important;
+}
 .bookly-css-root .bookly\:text-gray-800 {
   color: var(--bookly-color-gray-800) !important;
 }
@@ -3183,6 +3183,9 @@
   text-decoration-line: line-through !important;
 }
 .bookly-css-root .bookly\:no-underline {
+  text-decoration-line: none !important;
+}
+.bookly-css-root .bookly\:no-underline\! {
   text-decoration-line: none !important;
 }
 .bookly-css-root .bookly\:underline {
@@ -3744,6 +3747,11 @@
 @media (hover: hover) {
   .bookly-css-root .bookly\:hover\:bg-gray-100:hover {
     background-color: var(--bookly-color-gray-100) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-gray-200:hover {
+    background-color: var(--bookly-color-gray-200) !important;
   }
 }
 @media (hover: hover) {

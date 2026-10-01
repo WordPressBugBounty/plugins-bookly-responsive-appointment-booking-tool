@@ -44,6 +44,119 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Status the operator picked for the new bookings, or null to leave the default.
+     *
+     * @return string|null
+     */
+    private static function bookingStatus()
+    {
+        $status = (string) self::parameter( 'status', '' );
+
+        return in_array( $status, Lib\Entities\CustomerAppointment::getStatuses(), true ) ? $status : null;
+    }
+
+    /**
+     * Time zone of the customer for the new bookings, or null when there is none or Pro is
+     * inactive. The value as the time zone list holds it: a zone name or a fixed offset
+     * (UTC+2, UTC-5.5); Pro::getTimeZoneOffset() turns it into what a booking stores.
+     *
+     * A zone the operator did not pick is the one the customer last booked in — the zone
+     * the classic form fills in. It is looked up here rather than sent by the wizard, so
+     * the wizard never has to wait for it before saving.
+     *
+     * @param Lib\Entities\Customer|null $customer
+     * @return string|null
+     */
+    private static function bookingTimeZone( $customer )
+    {
+        if ( ! Lib\Config::proActive() ) {
+            return null;
+        }
+        $value = (string) self::parameter( 'time_zone', '' );
+        if ( $value === '' ) {
+            return $customer ? ( Lib\Proxy\Pro::getLastCustomerTimezone( $customer->getId() ) ?: null ) : null;
+        }
+
+        return preg_match( '/^UTC[+-]\d{1,2}(\.\d+)?$/', $value ) || in_array( $value, timezone_identifiers_list(), true )
+            ? $value
+            : null;
+    }
+
+    /**
+     * Custom fields the operator filled in, as bookings store them: a list of {id, value}.
+     * Only fields this site defines are kept, and a value is a string or a list of strings.
+     *
+     * @return array
+     */
+    private static function bookingCustomFields()
+    {
+        if ( ! Lib\Config::customFieldsActive() ) {
+            return array();
+        }
+        $known = array();
+        $files_active = Lib\Config::filesActive();
+        foreach ( (array) Lib\Proxy\CustomFields::getWhichHaveData() as $field ) {
+            if ( $files_active || $field->type !== 'file' ) {
+                $known[] = (int) $field->id;
+            }
+        }
+        $result = array();
+        foreach ( (array) json_decode( self::parameter( 'custom_fields', '[]' ), true ) as $field ) {
+            if ( ! is_array( $field ) || ! isset( $field['id'], $field['value'] ) || ! in_array( (int) $field['id'], $known, true ) ) {
+                continue;
+            }
+            $value = $field['value'];
+            if ( is_array( $value ) ) {
+                $value = array_values( array_map( 'strval', array_filter( $value, 'is_scalar' ) ) );
+            } elseif ( is_scalar( $value ) ) {
+                $value = (string) $value;
+            } else {
+                continue;
+            }
+            $result[] = array( 'id' => (int) $field['id'], 'value' => $value );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Custom fields a booking of the given service keeps. A custom service is not a service
+     * fields can be attached to, so it keeps them all — as the booking details dialog shows
+     * them all for it.
+     *
+     * @param array $custom_fields
+     * @param int $service_id
+     * @return array
+     */
+    private static function customFieldsForService( array $custom_fields, $service_id )
+    {
+        if ( ! $custom_fields || ! $service_id ) {
+            return $custom_fields;
+        }
+
+        return Lib\Proxy\CustomFields::filterForService( $custom_fields, $service_id );
+    }
+
+    /**
+     * Single bookings an order item consists of: a series is made of visits, a multi-stage
+     * visit of stages.
+     *
+     * @param Lib\DataHolders\Booking\Item $item
+     * @return Lib\DataHolders\Booking\Simple[]
+     */
+    private static function orderItemLeaves( Lib\DataHolders\Booking\Item $item )
+    {
+        $leaves = array();
+        foreach ( $item->getItems() as $sub_item ) {
+            $leaves = $sub_item === $item
+                ? array_merge( $leaves, array( $item ) )
+                : array_merge( $leaves, self::orderItemLeaves( $sub_item ) );
+        }
+
+        return $leaves;
+    }
+
+    /**
      * Translatable strings for the booking wizard UI (mounted from JS, so its strings
      * are localized here rather than in a template). Ellipsis is kept out of the
      * translatable phrase; count sentences are printf-style formats resolved on the client.
@@ -54,7 +167,7 @@ class Ajax extends Lib\Base\Ajax
     {
         $l10n = array(
             'newAppointment'        => __( 'New appointment', 'bookly-responsive-appointment-booking-tool' ),
-            'openClassicForm'       => __( 'Open classic form', 'boaokly-responsive-appointment-booking-tool' ),
+            'openClassicForm'       => __( 'Open classic form', 'bookly-responsive-appointment-booking-tool' ),
             'rescheduleAppointment' => __( 'Reschedule appointment', 'bookly-responsive-appointment-booking-tool' ),
             'multiStageReschedule'  => __( 'This appointment is a part of a multi-stage service — reschedule it in the appointment form.', 'bookly-responsive-appointment-booking-tool' ),
             // Adding a customer to an appointment that already exists: the visit is fixed,
@@ -100,6 +213,7 @@ class Ajax extends Lib\Base\Ajax
             'reschedule'            => __( 'Reschedule', 'bookly-responsive-appointment-booking-tool' ),
             'doubleBooking'         => __( 'double booking', 'bookly-responsive-appointment-booking-tool' ),
             'staffTimeLimit'        => __( 'exceeds the working hours limit for the staff member', 'bookly-responsive-appointment-booking-tool' ),
+            'checkingLimits'        => __( 'Checking limits', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'customerBookingsLimit' => __( 'the customer has reached the limit of bookings for this service', 'bookly-responsive-appointment-booking-tool' ),
             'notifyCustomersChange' => __( 'Notify customers about this change', 'bookly-responsive-appointment-booking-tool' ),
             'rescheduling'          => __( 'Rescheduling', 'bookly-responsive-appointment-booking-tool' ) . '…',
@@ -178,6 +292,14 @@ class Ajax extends Lib\Base\Ajax
             'cancel'                => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
             'days'                  => __( 'days', 'bookly-responsive-appointment-booking-tool' ),
             'saving'                => __( 'Saving', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            // Booking details of the picked customer: the status and the custom fields.
+            'editBookingDetails'    => __( 'Edit booking details', 'bookly-responsive-appointment-booking-tool' ),
+            'status'                => __( 'Status', 'bookly-responsive-appointment-booking-tool' ),
+            'customFields'          => __( 'Custom fields', 'bookly-responsive-appointment-booking-tool' ),
+            'timezone'              => __( 'Timezone', 'bookly-responsive-appointment-booking-tool' ),
+            'selectCity'            => __( 'Select a city', 'bookly-responsive-appointment-booking-tool' ),
+            'remove'                => __( 'Remove', 'bookly-responsive-appointment-booking-tool' ),
+            'download'              => __( 'Download', 'bookly-responsive-appointment-booking-tool' ),
             // Save/error messages.
             'groupMoveNote'         => __( 'Only this customer will be moved — the rest of the group keeps its time.', 'bookly-responsive-appointment-booking-tool' ),
             'errTimeTaken'          => __( 'This time was just taken. Pick another slot.', 'bookly-responsive-appointment-booking-tool' ),
@@ -229,8 +351,44 @@ class Ajax extends Lib\Base\Ajax
         $customers_remote = Lib\Entities\Customer::query()->count() >= Lib\Entities\Customer::REMOTE_LIMIT;
         $result['customers'] = $customers_remote
             ? array()
-            : Lib\Entities\Customer::query( 'c' )->select( 'c.id, c.full_name, c.email, c.phone' )->sortBy( 'c.full_name' )->fetchArray();
+            : Lib\Entities\Customer::query( 'c' )
+                ->select( 'c.id, c.full_name, c.email, c.phone' )
+                ->addSelect( Lib\Config::customerGroupsActive() ? 'c.group_id' : '0 AS group_id' )
+                ->sortBy( 'c.full_name' )
+                ->fetchArray();
         $result['customers_remote'] = $customers_remote;
+
+        // Booking details the operator may set for the picked customer: the status and the
+        // custom fields. Left alone, the booking gets the status the customer's group gives
+        // it — the default the cart applies — so the default is sent per group.
+        $result['statuses'] = array();
+        foreach ( Lib\Entities\CustomerAppointment::getStatuses() as $status ) {
+            $result['statuses'][] = array( 'id' => $status, 'title' => Lib\Entities\CustomerAppointment::statusToString( $status ) );
+        }
+        $result['default_statuses'] = Lib\Proxy\CustomerGroups::prepareDefaultAppointmentStatuses( array( 0 => Lib\Config::getDefaultAppointmentStatus() ) );
+        $result['custom_fields'] = array();
+        $result['custom_fields_per_service'] = false;
+        if ( Lib\Config::customFieldsActive() ) {
+            // A file field needs the Files add-on to upload into — the same filter the
+            // booking details dialog applies.
+            $files_active = Lib\Config::filesActive();
+            foreach ( (array) Lib\Proxy\CustomFields::getWhichHaveData() as $field ) {
+                if ( $files_active || $field->type !== 'file' ) {
+                    $result['custom_fields'][] = $field;
+                }
+            }
+            $result['custom_fields_per_service'] = Lib\Config::customFieldsPerService();
+        }
+        // The customer's time zone is a Pro feature: notifications show the customer the
+        // time in it. A flat list of zone values, as the booking details dialog offers them.
+        $result['timezones'] = array();
+        if ( Lib\Config::proActive() ) {
+            foreach ( Lib\Utils\DateTime::getTimeZoneOptions() as $zones ) {
+                foreach ( array_keys( $zones ) as $zone ) {
+                    $result['timezones'][] = $zone;
+                }
+            }
+        }
 
         // Add-on–gated service types: hide compound/collaborative when their add-ons are
         // inactive (e.g. Pro disabled) — otherwise the wizard offers unbookable services.
@@ -949,6 +1107,11 @@ class Ajax extends Lib\Base\Ajax
         // One note per visit, stored on every created customer appointment — same field
         // the classic form edits and the {appointment_notes} notification code reads.
         $notes = trim( (string) self::parameter( 'notes', '' ) );
+        // Status and custom fields are one set per visit too: set once for the customer,
+        // they go to every booking the visit creates.
+        $status = self::bookingStatus();
+        $custom_fields = self::bookingCustomFields();
+        $time_zone = self::bookingTimeZone( $customer );
         // The wizard has a single explicit "notify" switch instead of the per-message
         // queue dialog: notifications from all saved items are collected in memory,
         // sent right away and reported back, so the operator sees what actually went out.
@@ -1033,12 +1196,14 @@ class Ajax extends Lib\Base\Ajax
                     // the CA is created with the waitlisted status and CartInfo diverts the
                     // price to waiting_list_total, keeping it out of the payable amount.
                     $slots = array();
+                    $multi_stage = false;
                     foreach ( (array) $visit['legs'] as $leg ) {
                         $slot = array( (int) $leg['service_id'], (int) $leg['staff_id'], $leg['datetime'], $location_id );
                         if ( ! empty( $visit['waiting_list'] ) ) {
                             $slot[4] = 'w';
                         }
                         $slots[] = $slot;
+                        $multi_stage = $multi_stage || (int) $leg['service_id'] !== (int) $visit['service_id'];
                     }
                     $cart_item = new Lib\CartItem();
                     $cart_item
@@ -1049,7 +1214,10 @@ class Ajax extends Lib\Base\Ajax
                         ->setLocationId( $location_id )
                         ->setUnits( max( 1, (int) ( isset( $visit['units'] ) ? $visit['units'] : 1 ) ) )
                         ->setExtras( $extras )
-                        ->setCustomFields( array() )
+                        // A multi-stage visit is handed every field: the cart gives each stage
+                        // the fields of its own service, and filtering by the whole visit's
+                        // service first would lose the fields attached to a stage only.
+                        ->setCustomFields( $multi_stage ? $custom_fields : self::customFieldsForService( $custom_fields, (int) $visit['service_id'] ) )
                         ->setSlots( $slots );
                     // Ties between cart items of one order (a series is such a tie) are put
                     // on by whoever owns the meaning of that tie.
@@ -1065,6 +1233,12 @@ class Ajax extends Lib\Base\Ajax
             // mutates). The order is built directly and the cart saved with no customer
             // mutation at all.
             $userData->setCustomer( $customer );
+            // The cart writes the order's time zone onto every booking it creates.
+            if ( $time_zone !== null ) {
+                $tz = Lib\Proxy\Pro::getTimeZoneOffset( $time_zone );
+                $userData->setTimeZone( $tz['time_zone'] );
+                $userData->setTimeZoneOffset( $tz['time_zone_offset'] );
+            }
 
             // Payment: a pending "local" payment built from the cart, so the visit can be
             // paid later (marked paid via the payment dialog). CartInfo computes the total
@@ -1087,6 +1261,27 @@ class Ajax extends Lib\Base\Ajax
             // Details/order_id snapshot once the order exists — this JSON is what the
             // payment dialog and invoices render.
             $payment->setDetailsFromOrder( $order, $cart_info )->save();
+            if ( $status !== null ) {
+                // The cart gives every booking the default status of the customer's group
+                // and cannot be told otherwise, so a status the operator picked is put on
+                // afterwards — through the entities, so the notifications below see it.
+                // A queue entry keeps its own status: it is a place in the queue, not a booking.
+                $changed = array();
+                foreach ( $order->getItems() as $order_item ) {
+                    foreach ( self::orderItemLeaves( $order_item ) as $leaf ) {
+                        $ca = $leaf->getCA();
+                        if ( $ca->getStatus() === Lib\Entities\CustomerAppointment::STATUS_WAITLISTED || $ca->getStatus() === $status ) {
+                            continue;
+                        }
+                        $ca->setStatus( $status )->setCreatedFrom( 'backend' )->save();
+                        $changed[ $leaf->getAppointment()->getId() ] = $leaf->getAppointment();
+                    }
+                }
+                // Calendars were synced by the cart with the default status.
+                foreach ( $changed as $changed_appointment ) {
+                    Lib\Utils\Common::syncWithCalendars( $changed_appointment );
+                }
+            }
             $ca_update = array( 'created_from' => 'backend' );
             if ( $notes !== '' ) {
                 $ca_update['notes'] = $notes;
@@ -1165,10 +1360,11 @@ class Ajax extends Lib\Base\Ajax
                     : array(
                         array(
                             'id' => $customer->getId(),
-                            'status' => Lib\Config::getDefaultAppointmentStatus(),
+                            'status' => $status !== null ? $status : Lib\Config::getDefaultAppointmentStatus(),
                             'number_of_persons' => 1,
                             'extras' => array(),
-                            'custom_fields' => array(),
+                            'custom_fields' => self::customFieldsForService( $custom_fields, $service_id ),
+                            'timezone' => $time_zone,
                             'notes' => $notes,
                             'payment_id' => null,
                         ),
@@ -1527,6 +1723,9 @@ class Ajax extends Lib\Base\Ajax
             }
         }
         $notes = trim( (string) self::parameter( 'notes', '' ) );
+        $status = self::bookingStatus();
+        $custom_fields = self::customFieldsForService( self::bookingCustomFields(), (int) $appointment->getServiceId() );
+        $time_zone = self::bookingTimeZone( $customer );
         $notify = (bool) self::parameter( 'notify' );
         update_user_meta( get_current_user_id(), 'bookly_appointment_form_send_notifications', $notify ? '1' : '0' );
 
@@ -1585,11 +1784,19 @@ class Ajax extends Lib\Base\Ajax
             ->setUnits( $units )
             ->setNotes( $notes )
             ->setExtras( json_encode( $extras ) )
-            ->setCustomFields( json_encode( array() ) )
-            ->setStatus( Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), $customer->getGroupId() ) )
+            ->setCustomFields( json_encode( $custom_fields ) )
+            ->setStatus( $status !== null ? $status : Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), $customer->getGroupId() ) )
             ->setCreatedFrom( 'backend' )
-            ->setCreatedAt( current_time( 'mysql' ) )
-            ->save();
+            ->setCreatedAt( current_time( 'mysql' ) );
+        if ( $time_zone !== null ) {
+            $tz = Lib\Proxy\Pro::getTimeZoneOffset( $time_zone );
+            $ca
+                ->setTimeZone( $tz['time_zone'] )
+                ->setTimeZoneOffset( $tz['time_zone_offset'] );
+        }
+        $ca->save();
+        // A file uploaded in the form stays unattached until the booking that refers to it is saved.
+        Lib\Proxy\Files::attachCFFiles( $custom_fields, $ca );
 
         $order = Lib\DataHolders\Booking\Order::create( $customer );
         $order->setPayment( $payment );
@@ -1888,9 +2095,10 @@ class Ajax extends Lib\Base\Ajax
     /**
      * Move every stage of a cascade to the times of the chosen slot. Sends the response.
      *
-     * Stages are matched to legs by order — the search returns them the way they happen,
-     * and the cascade is read the same way. A slot with a different set of stages is a
-     * different service, not a new time for this booking, and is refused.
+     * Stages are matched to legs by service, repeated services in time order. Time order
+     * alone is not enough: collaborative stages all start together, and a stage may have
+     * been moved on its own. A slot with a different set of stages is a different
+     * service, not a new time for this booking, and is refused.
      *
      * Each stage keeps its own length: it already accounts for units and extras, while a
      * leg carries only when the stage starts.
@@ -1929,18 +2137,29 @@ class Ajax extends Lib\Base\Ajax
         }
         // Every stage is checked before any of them moves: a mismatch found halfway would
         // leave the earlier stages at the new time and the rest at the old one.
-        foreach ( $stages as $i => $stage ) {
-            if ( ! isset( $legs[ $i ]['service_id'], $legs[ $i ]['staff_id'], $legs[ $i ]['datetime'] )
-                || (int) $legs[ $i ]['service_id'] !== (int) $stage['service_id']
-            ) {
+        $matched = array();
+        foreach ( array_values( $legs ) as $leg ) {
+            if ( ! isset( $leg['service_id'], $leg['staff_id'], $leg['datetime'] ) ) {
                 wp_send_json_error( array( 'error' => 'stages_mismatch' ) );
             }
+            $stage_key = null;
+            foreach ( $stages as $key => $stage ) {
+                if ( (int) $stage['service_id'] === (int) $leg['service_id'] ) {
+                    $stage_key = $key;
+                    break;
+                }
+            }
+            if ( $stage_key === null ) {
+                wp_send_json_error( array( 'error' => 'stages_mismatch' ) );
+            }
+            $matched[] = array( $stages[ $stage_key ], $leg );
+            unset( $stages[ $stage_key ] );
         }
 
         $moved = array();
         $sent = array();
-        foreach ( $stages as $i => $stage ) {
-            $leg = $legs[ $i ];
+        foreach ( $matched as $pair ) {
+            list ( $stage, $leg ) = $pair;
             $duration = strtotime( $stage['end_date'] ) - strtotime( $stage['start_date'] );
             $stage_sent = self::moveWholeAppointment(
                 (int) $stage['appointment_id'],

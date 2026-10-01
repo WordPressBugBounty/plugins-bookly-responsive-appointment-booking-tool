@@ -1,8 +1,15 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
+use Bookly\Lib\Utils\Common;
+
 /** @var array $appearance */
 /** @var string $form_id */
 /** @var string $css_vars */
 ?>
+<?php if ( isset( $appearance['custom_css'] ) && $appearance['custom_css'] !== '' ) : ?>
+    <style>
+        <?php echo Common::css( $appearance['custom_css'] ) ?>
+    </style>
+<?php endif ?>
 <div
     id="<?php echo esc_attr( $form_id ) ?>"
     class="bookly-ai-assistant-app"

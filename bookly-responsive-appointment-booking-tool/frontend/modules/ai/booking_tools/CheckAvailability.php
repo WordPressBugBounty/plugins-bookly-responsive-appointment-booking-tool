@@ -24,8 +24,7 @@ class CheckAvailability implements ToolInterface
             'start_date' => array( 'type' => 'string', 'description' => 'Requested start date/time in the business\'s local time zone, format "YYYY-MM-DD HH:MM:SS" (24-hour).' ),
         );
 
-        // Only offered when the Locations addon is active — see Tools::all()'s
-        // own conditional registration of get_locations.
+        // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
             $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations. Omit if this business has a single location.' );
         }
@@ -95,59 +94,21 @@ class CheckAvailability implements ToolInterface
         if ( ! $start ) {
             return 'Error: start_date must be in the format YYYY-MM-DD HH:MM:SS.';
         }
-        $end_date = ( clone $start )->modify( '+' . $service->getDuration() . ' seconds' )->format( 'Y-m-d H:i:s' );
 
-        // Parity with the public widget's own "too soon to book" rule (lib/Cart.php:474),
-        // not otherwise covered by checkTime(). Resolves to 0 (no-op) when Pro is
-        // inactive — Proxy::__callStatic() (lib/base/Proxy.php) returns null for a
-        // "get*" method when the backing addon isn't active.
+        // SlotLookup rejects "too soon" slots as well, but can't tell the model why.
         $min_prior = (int) Lib\Proxy\Pro::getMinimumTimePriorBooking( $service_id );
         if ( $min_prior > 0 && Lib\Slots\DatePoint::now()->gte( Lib\Slots\DatePoint::fromStr( $start_date )->modify( -$min_prior ) ) ) {
             return 'Not available: this slot is too soon — this service requires at least ' . round( $min_prior / 3600, 1 ) . ' hour(s) advance notice.';
         }
 
-        // checkTime() below validates overlap/schedule/duration but not
-        // whether this exact minute is one the real booking widget would
-        // ever offer (its slot picker only ever shows times on a fixed
-        // grid, e.g. every 15 minutes from the staff's schedule start) — a
-        // customer asking for an arbitrary time like 11:11 must not be
-        // treated as bookable just because nothing else conflicts with it.
-        if ( ! SlotGrid::isAligned( $service, $staff, $start, $location_id ?: null ) ) {
-            return 'Not available: this business only takes bookings at fixed time slots (not arbitrary minutes) — offer the customer the nearest slot times instead.';
-        }
-
-        $customers = array( array(
-            'id'                => 0,
-            'status'            => Lib\Entities\CustomerAppointment::STATUS_APPROVED,
-            'number_of_persons' => 1,
-            'extras'            => $extras,
-        ) );
-
-        // $end_date passed to checkTime()/save() below is always the plain
-        // service-only end — both already add extras duration internally
-        // from $customers[0]['extras'] for their own validation/persistence
-        // (Lib\Utils\Appointment::save() sets Appointment.extras_duration as
-        // its own column, it never extends end_date itself). Only what THIS
-        // tool reports back to the model needs the extras-inclusive time.
-        $result = Lib\Utils\Appointment::checkTime( 0, $start_date, $end_date, $staff_id, $service_id, $location_id ?: null, $customers );
-
-        if ( $result['date_interval_not_available'] ) {
-            return 'Not available: ' . $staff->getFullName() . ' already has an appointment at that time.';
-        }
-        if ( $result['interval_not_in_staff_schedule'] ) {
-            return 'Not available: ' . $staff->getFullName() . ' is not scheduled to work at that time.';
-        }
-        if ( $result['interval_not_in_service_schedule'] ) {
-            return 'Not available: this service cannot be booked at that time.';
-        }
-        if ( $result['staff_reaches_working_time_limit'] ) {
-            return 'Not available: this would exceed ' . $staff->getFullName() . '\'s working-time limit.';
+        $day_times = array();
+        if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
+            return 'Not available: ' . $staff->getFullName() . ' cannot take "' . $service->getTitle() . '" at ' . $start_date . '. '
+                . SlotLookup::describeAlternatives( $day_times );
         }
 
         $extras_duration = ExtrasInput::totalDuration( $extras );
-        $display_end = $extras_duration > 0
-            ? ( clone $start )->modify( '+' . ( $service->getDuration() + $extras_duration ) . ' seconds' )->format( 'Y-m-d H:i:s' )
-            : $end_date;
+        $display_end = ( clone $start )->modify( '+' . ( $service->getDuration() + $extras_duration ) . ' seconds' )->format( 'Y-m-d H:i:s' );
         $total_price = ExtrasInput::totalPriceFormatted( $service, $extras );
 
         return 'Available: ' . $staff->getFullName() . ' can perform "' . $service->getTitle() . '"'

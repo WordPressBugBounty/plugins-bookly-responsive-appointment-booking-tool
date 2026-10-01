@@ -181,6 +181,13 @@ class Finder
             }
 
             $extras_durations = array_reverse( $extras_durations );
+            // Key of the first sub service in the reversed list below.
+            $first_key = null;
+            foreach ( array_reverse( $sub_services ) as $key => $sub_service ) {
+                if ( $sub_service instanceof Lib\Entities\Service ) {
+                    $first_key = $key;
+                }
+            }
 
             for ( $q = 0; $q < $chain_item->getQuantity(); ++$q ) {
                 $spare_time = $collaborative_spare_time;
@@ -210,7 +217,7 @@ class Finder
                         $generator = new Generator(
                             $chain_item->getService()->getSameStaffForSubservices()
                                 ? array_intersect_key( $this->staff, array_flip( $chain_item->getStaffIds() ) )
-                                : array_intersect_key( $this->staff, array_flip( $chain_item->getStaffIdsForSubService( $sub_service ) ) ),
+                                : array_intersect_key( $this->staff, array_flip( $chain_item->getStaffIdsForSubService( $sub_service, $key === $first_key ) ) ),
                             isset ( $this->service_schedule[ $parent_service_id ][ $service_id ] )
                                 ? $this->service_schedule[ $parent_service_id ][ $service_id ]
                                 : null,
@@ -494,8 +501,8 @@ class Finder
                 ? $chain_item->getService()->getId()
                 : 0;
             $sub_services = $chain_item->getSubServices();
-            foreach ( $sub_services as $sub_service ) {
-                $_staff_ids = $chain_item->getStaffIdsForSubService( $sub_service );
+            foreach ( $sub_services as $position => $sub_service ) {
+                $_staff_ids = $chain_item->getStaffIdsForSubService( $sub_service, $position === 0 );
                 $service_id = $sub_service->getId();
                 if ( ! isset ( $staff_ids[ $service_id ] ) ) {
                     $staff_ids[ $service_id ] = array();

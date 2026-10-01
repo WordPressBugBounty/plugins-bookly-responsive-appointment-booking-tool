@@ -204,16 +204,19 @@ class Order
     public function completePayment()
     {
         $success_ca_status = get_option( 'bookly_successful_payment_appointment_status' );
+        $success_enabled = $success_ca_status && ( $success_ca_status !== 'disabled' );
         $default_ca_status = Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), 0 );
 
         foreach ( $this->items as $item ) {
             if ( $item->getCA() ) {
                 $set_success = ( $item->getCA()->getStatus() === CustomerAppointment::STATUS_REJECTED );
-                if ( $set_success || ( $success_ca_status && ( $success_ca_status !== 'disabled' ) ) ) {
+                if ( $set_success || $success_enabled ) {
+                    // Rejected appointment must leave the rejected status even if the success status is disabled
+                    $new_status = $success_enabled ? $success_ca_status : $default_ca_status;
                     $items = $item->getItems() ?: array( $item );
                     foreach ( $items as $sub_item ) {
                         if ( ( $ca = $sub_item->getCA() ) && ( $set_success || ( $ca->getStatus() === $default_ca_status ) ) ) {
-                            $ca->setStatus( $success_ca_status )->save();
+                            $ca->setStatus( $new_status )->save();
                         }
                     }
                 }
