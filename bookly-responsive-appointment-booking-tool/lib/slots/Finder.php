@@ -124,6 +124,45 @@ class Finder
     }
 
     /**
+     * Free slots a customer can book from $client_date on, up to the booking horizon,
+     * whatever the booking form's appearance options (calendar month, single slot,
+     * days per column). Stops after the first day that has any.
+     *
+     * @param Lib\UserBookingData $userData
+     * @param string $client_date "Y-m-d"
+     * @return static loaded, see getSlots()
+     */
+    public static function forCustomer( Lib\UserBookingData $userData, $client_date )
+    {
+        $finder = new static(
+            $userData,
+            function ( DatePoint $client_dp ) {
+                return $client_dp->format( 'Y-m-d' );
+            },
+            function ( DatePoint $client_dp, $groups_count ) {
+                return $groups_count >= 1 ? 1 : 0;
+            },
+            false,
+            array(),
+            false
+        );
+        $userData->setDateFrom( $client_date );
+        $finder->setSelectedDate( $client_date )->prepare();
+
+        // prepare() already keeps the minimum time prior booking, but fits the window
+        // to the form: single slot starts it at "now", calendar ends it with the month.
+        $client_start = DatePoint::fromStrInClientTz( $client_date );
+        if ( $finder->client_start_dp->lt( $client_start ) ) {
+            $finder->client_start_dp = $client_start;
+            $finder->start_dp = $client_start->toWpTz();
+        }
+        $finder->client_end_dp = $finder->end_dp->toClientTz();
+        $finder->load( array( $finder, '_breakDefault' ) );
+
+        return $finder;
+    }
+
+    /**
      * Prepare dates and staff data.
      *
      * @return $this

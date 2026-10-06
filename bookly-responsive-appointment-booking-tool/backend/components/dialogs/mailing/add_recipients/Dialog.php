@@ -34,8 +34,8 @@ class Dialog extends Lib\Base\Component
         $range[] = array( 365, __( 'in', 'bookly-responsive-appointment-booking-tool' ) . ' ' . __( 'year', 'bookly-responsive-appointment-booking-tool' ) );
 
         wp_localize_script( 'bookly-add-recipients.js', 'BooklyL10nAddRecipientsDialog', array(
-            'service' => Lib\Utils\Common::getServiceDataForDropDown( 's.type = "simple"' ),
-            'staff' => Lib\Config::proActive() ? Lib\Proxy\Pro::getStaffDataForDropDown() : array( array( 'name' => '', 'items' => Lib\Entities\Staff::query()->select( 'id, full_name' )->whereNot( 'visibility', 'archive' )->sortBy( 'position, id' )->fetchArray(), ), ),
+            'service' => self::getServiceData(),
+            'staff' => self::getStaffData(),
             'range' => $range,
             'l10n' => array(
                 'recipients' => __( 'Recipients', 'bookly-responsive-appointment-booking-tool' ),
@@ -58,6 +58,28 @@ class Dialog extends Lib\Base\Component
                 'custom' => __( 'Custom', 'bookly-responsive-appointment-booking-tool' ),
             ),
         ) );
+    }
+
+    /**
+     * Services for dropdown
+     *
+     * @return array
+     */
+    public static function getServiceData()
+    {
+        return Lib\Utils\Common::getServiceDataForDropDown( 's.type = "simple"' );
+    }
+
+    /**
+     * Staff for dropdown
+     *
+     * @return array
+     */
+    public static function getStaffData()
+    {
+        return Lib\Config::proActive()
+            ? Lib\Proxy\Pro::getStaffDataForDropDown()
+            : array( array( 'name' => '', 'items' => Lib\Entities\Staff::query()->select( 'id, full_name' )->whereNot( 'visibility', 'archive' )->sortBy( 'position, id' )->fetchArray(), ), );
     }
 
     /**

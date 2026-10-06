@@ -32,9 +32,7 @@ class Ajax extends Lib\Base\Ajax
             $query = Lib\Entities\Customer::query( 'c' );
             $select = 'c.full_name, c.phone';
 
-            if ( $count_of_appointments == 0 ) {
-                $customers = $query->select( $select )->fetchArray();
-            } elseif ( empty ( $services ) && empty( $providers ) ) {
+            if ( empty ( $services ) && empty( $providers ) ) {
                 $customers = $query
                     ->select( $select )
                     ->leftJoin( 'CustomerAppointment', 'ca', 'ca.customer_id = c.id' )
@@ -67,7 +65,7 @@ class Ajax extends Lib\Base\Ajax
                         LEFT JOIN ' . Lib\Entities\CustomerAppointment::getTableName() . ' ca ON ca.appointment_id = a.id
                             WHERE ca.customer_id = c.id
                     ) AS last_appointment';
-                    $raw_where[] = 'last_appointment >= ' . (int) $last_appointment;
+                    $raw_where[] = sprintf( 'last_appointment >= \'%s\'', date_create( current_time( 'mysql' ) )->modify( sprintf( '%+d days', $last_appointment ) )->format( 'Y-m-d' ) );
                 }
                 $query->select( $select );
 
@@ -96,7 +94,10 @@ class Ajax extends Lib\Base\Ajax
                 }
                 $customers = $ca->groupBy( 'ca.customer_id' )->fetchCol( 'ca.customer_id' );
 
-                $query->whereIn( 'id', $customers );
+                // Customers without appointments meet zero count only when nothing is filtered out by services and providers
+                if ( $count_of_appointments > 0 || ! self::allSelected( Dialog::getServiceData(), $services ) || ! self::allSelected( Dialog::getStaffData(), $providers ) ) {
+                    $query->whereIn( 'id', $customers );
+                }
 
                 $sql = 'SELECT result.full_name, result.phone FROM (' . $query . ') AS result';
                 if ( $raw_where ) {
@@ -119,5 +120,25 @@ class Ajax extends Lib\Base\Ajax
         }
 
         wp_send_json_success();
+    }
+
+    /**
+     * Check that all dropdown items are selected
+     *
+     * @param array $data
+     * @param array $selected
+     * @return bool
+     */
+    private static function allSelected( array $data, array $selected )
+    {
+        foreach ( $data as $category ) {
+            foreach ( $category['items'] as $item ) {
+                if ( ! in_array( $item['id'], $selected ) ) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

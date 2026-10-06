@@ -33,12 +33,12 @@ class CreateBooking implements ToolInterface
         $properties = array(
             'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from get_services.' ),
             'staff_id' => array( 'type' => 'integer', 'description' => 'Staff id, from get_staff.' ),
-            'start_date' => array( 'type' => 'string', 'description' => 'Appointment start date/time, format "YYYY-MM-DD HH:MM:SS" (24-hour) — must be a slot check_availability already confirmed.' ),
+            'start_date' => array( 'type' => 'string', 'description' => 'Appointment start date/time, format "YYYY-MM-DD HH:MM:SS" (24-hour).' ),
         );
 
         // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
-            $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations — must match the location check_availability already confirmed. Omit if this business has a single location.' );
+            $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations. Omit if this business has a single location.' );
         }
 
         $properties['full_name'] = array( 'type' => 'string', 'description' => "Customer's full name." );
@@ -47,7 +47,7 @@ class CreateBooking implements ToolInterface
         $properties['notes'] = array( 'type' => 'string', 'description' => 'Optional free-text note from the customer about this booking.' );
         $properties['extras'] = array(
             'type' => 'array',
-            'description' => 'Optional extras to include (from get_services\' "extras" list), same set already confirmed via check_availability. Omit or pass an empty array if none.',
+            'description' => 'Optional extras to include (from get_services\' "extras" list). Omit or pass an empty array if none.',
             'items' => array(
                 'type' => 'object',
                 'properties' => array(
@@ -60,7 +60,7 @@ class CreateBooking implements ToolInterface
 
         return array(
             'name' => $this->getName(),
-            'description' => 'Book an appointment, optionally with extras. Only call this after a matching check_availability call confirmed the slot (and any extras) is available, and after you have collected the customer\'s full name and at least one contact method (email or phone) from the conversation — never invent these. If this business takes payment online, this does not confirm the booking: it prices it and shows the customer payment options, and the booking is confirmed only once they have paid. Read the result carefully and tell the customer what it actually says.',
+            'description' => 'Book an appointment, optionally with extras. Only call this after a matching check_availability call confirmed the slot (and any extras) is available, and after you have collected the customer\'s full name and at least one contact method (email or phone) from the conversation — never invent these. Read the result carefully and tell the customer what it actually says.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -127,7 +127,7 @@ class CreateBooking implements ToolInterface
         // before the customer lookup so a refusal leaves no customer record behind.
         $day_times = array();
         if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
-            return 'Error: this slot is not available (anymore). ' . SlotLookup::describeAlternatives( $day_times ) . ' Call check_availability with the new time before booking.';
+            return 'Error: this slot is not available (anymore). ' . SlotLookup::describeAlternatives( $day_times, $start ) . ' Call check_availability with the new time before booking.';
         }
 
         // Find-or-create customer, same exact-match lookup as Validator::postValidateCustomer()
@@ -196,7 +196,7 @@ class CreateBooking implements ToolInterface
         if ( $options['pay_now_raw'] <= 0 ) {
             $this->conversation->resetBooking()->save();
 
-            return self::book( $customer, $service, $staff, $draft, $end_date );
+            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] );
         }
 
         // "Pay locally" as the only gateway needs no choice - same auto-select as the modern
@@ -209,7 +209,7 @@ class CreateBooking implements ToolInterface
         ) {
             $this->conversation->resetBooking()->save();
 
-            return self::book( $customer, $service, $staff, $draft, $end_date );
+            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] );
         }
 
         // Quote deposit and full price separately, or a deposit reads as a discount.
@@ -231,9 +231,10 @@ class CreateBooking implements ToolInterface
      * @param Lib\Entities\Staff    $staff
      * @param array                 $draft
      * @param string                $end_date Service-only end; save() adds extras duration itself.
+     * @param string|null           $total_price Formatted CartInfo total, when the caller already priced the cart
      * @return string
      */
-    private static function book( $customer, $service, $staff, array $draft, $end_date )
+    private static function book( $customer, $service, $staff, array $draft, $end_date, $total_price = null )
     {
         $customers = array( array(
             'id'                => $customer->getId(),
@@ -284,7 +285,9 @@ class CreateBooking implements ToolInterface
         $display_end = $extras_duration > 0
             ? date( 'Y-m-d H:i:s', strtotime( $end_date ) + $extras_duration )
             : $end_date;
-        $total_price = ExtrasInput::totalPriceFormatted( $service, $extras );
+        if ( $total_price === null ) {
+            $total_price = Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff->getId(), $draft['location_id'], $draft['start_date'], $extras ) );
+        }
 
         return sprintf(
             'Booking confirmed: appointment #%d — %s%s with %s, %s (ends %s), total price %s.',

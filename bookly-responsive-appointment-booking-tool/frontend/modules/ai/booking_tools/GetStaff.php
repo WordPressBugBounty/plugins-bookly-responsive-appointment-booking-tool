@@ -27,7 +27,7 @@ class GetStaff implements ToolInterface
      */
     public function getSchema()
     {
-        $description = 'List staff members available for booking, with id and full name. Pass service_id (from get_services) to list only staff who perform that service; pass an empty string to list everyone.';
+        $description = 'List staff members available for booking, with id and full name. Pass service_id (from get_services) to list only staff who perform that service; pass an empty string to list everyone. If this returns exactly one staff member, just use them without asking; ask only when there is more than one.';
 
         $properties = array(
             'service_id' => array(
@@ -42,8 +42,8 @@ class GetStaff implements ToolInterface
         if ( Lib\Config::locationsActive() ) {
             $description .= ' If this business has multiple locations (see get_locations), pass location_id to list only staff who work at that location.';
             $properties['location_id'] = array(
-                'type'        => 'string',
-                'description' => 'Location id (from get_locations) to filter staff who work at that location, as a string. Pass an empty string (or omit) if this business has a single location.',
+                'type'        => 'integer',
+                'description' => 'Location id (from get_locations) to filter staff who work at that location. Omit if this business has a single location.',
             );
         }
 
@@ -117,6 +117,6 @@ class GetStaff implements ToolInterface
             );
         }
 
-        return wp_json_encode( $list );
+        return wp_json_encode( $list ) . OfferChoices::hint( OfferChoices::TYPE_STAFF, count( $list ) );
     }
 }

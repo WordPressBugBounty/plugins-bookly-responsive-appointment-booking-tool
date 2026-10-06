@@ -21,7 +21,7 @@ class CheckAvailability implements ToolInterface
         $properties = array(
             'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from get_services.' ),
             'staff_id' => array( 'type' => 'integer', 'description' => 'Staff id, from get_staff.' ),
-            'start_date' => array( 'type' => 'string', 'description' => 'Requested start date/time in the business\'s local time zone, format "YYYY-MM-DD HH:MM:SS" (24-hour).' ),
+            'start_date' => array( 'type' => 'string', 'description' => 'Requested start date/time, format "YYYY-MM-DD HH:MM:SS" (24-hour).' ),
         );
 
         // Only when the Locations addon is active, same as get_locations in Tools::all().
@@ -44,7 +44,7 @@ class CheckAvailability implements ToolInterface
 
         return array(
             'name' => $this->getName(),
-            'description' => 'Check whether a specific service (with optional extras) can be booked with a specific staff member starting at a specific date/time. Call this before create_booking — do not tell the customer a slot is free unless this tool confirmed it.',
+            'description' => 'Check whether a specific service (with optional extras) can be booked with a specific staff member starting at a specific date/time, and what it costs. Do not tell the customer a slot is free unless this tool confirmed it.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -98,18 +98,18 @@ class CheckAvailability implements ToolInterface
         // SlotLookup rejects "too soon" slots as well, but can't tell the model why.
         $min_prior = (int) Lib\Proxy\Pro::getMinimumTimePriorBooking( $service_id );
         if ( $min_prior > 0 && Lib\Slots\DatePoint::now()->gte( Lib\Slots\DatePoint::fromStr( $start_date )->modify( -$min_prior ) ) ) {
-            return 'Not available: this slot is too soon — this service requires at least ' . round( $min_prior / 3600, 1 ) . ' hour(s) advance notice.';
+            return 'Not available: this slot is too soon — this service requires at least ' . round( $min_prior / 3600, 1 ) . ' hour(s) advance notice. Find a later time with get_available_slots.';
         }
 
         $day_times = array();
         if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
             return 'Not available: ' . $staff->getFullName() . ' cannot take "' . $service->getTitle() . '" at ' . $start_date . '. '
-                . SlotLookup::describeAlternatives( $day_times );
+                . SlotLookup::describeAlternatives( $day_times, $start );
         }
 
         $extras_duration = ExtrasInput::totalDuration( $extras );
         $display_end = ( clone $start )->modify( '+' . ( $service->getDuration() + $extras_duration ) . ' seconds' )->format( 'Y-m-d H:i:s' );
-        $total_price = ExtrasInput::totalPriceFormatted( $service, $extras );
+        $total_price = Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff_id, $location_id, $start_date, $extras ) );
 
         return 'Available: ' . $staff->getFullName() . ' can perform "' . $service->getTitle() . '"'
             . ( $extras ? ' with the requested extras' : '' ) . ' starting ' . $start_date

@@ -6,13 +6,9 @@ use Bookly\Lib;
 
 class SystemPrompt
 {
-    const BASE = 'Discovery: when get_staff returns exactly one match, use it without asking; ask only when it returns more than one.
-
-Scheduling: if check_availability finds the requested slot unavailable, call get_available_slots again or suggest another day/staff member.';
-
-    const PAYMENT = 'Payment: create_booking does not always confirm a booking. When this business takes payment online it prices the booking and shows the customer payment options in the chat, and its result says so — in that case tell the customer the amount and ask them to pick a payment method there, never that the booking is done, and do not call create_booking again for the same appointment. Once they pay, the confirmation appears on its own.';
-
     const DATES = 'Dates: each customer message ends with the date/time it was sent, in this business\'s local time zone — treat the one on the latest message as now, and resolve relative dates ("tomorrow", "next Friday") yourself into exact YYYY-MM-DD HH:MM:SS (YYYY-MM-DD for get_available_slots); never ask the customer what today\'s date is.';
+
+    const EXTRAS = 'Extras: if the chosen service has optional extras, proactively ask the customer which (if any) before proceeding — never invent extras outside the list get_services returned.';
 
     /**
      * Everything here has to stay stable for the whole conversation: Bookly
@@ -36,21 +32,13 @@ Scheduling: if check_availability finds the requested slot unavailable, call get
             $parts[] = $business;
         }
 
-        $parts[] = self::BASE;
-
-        if ( Checkout::anyGatewayConfigured() ) {
-            $parts[] = self::PAYMENT;
-        }
-
         $parts[] = self::DATES;
 
-        $system = implode( "\n\n", $parts );
-
         if ( Lib\Config::serviceExtrasActive() ) {
-            $system .= ' If the chosen service has optional extras, proactively ask the customer which (if any) before proceeding — never invent extras outside the list get_services returned.';
+            $parts[] = self::EXTRAS;
         }
 
-        return $system;
+        return implode( "\n\n", $parts );
     }
 
     /**

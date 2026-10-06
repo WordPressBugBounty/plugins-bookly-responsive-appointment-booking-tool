@@ -9,8 +9,6 @@ use Bookly\Lib;
  */
 class GetAvailableSlots implements ToolInterface
 {
-    const MAX_SLOTS_SHOWN = 12;
-
     /**
      * @inheritDoc
      */
@@ -27,7 +25,7 @@ class GetAvailableSlots implements ToolInterface
         $properties = array(
             'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from get_services.' ),
             'staff_id' => array( 'type' => 'integer', 'description' => 'Staff id, from get_staff.' ),
-            'date' => array( 'type' => 'string', 'description' => 'Date to search, in the business\'s local time zone, format "YYYY-MM-DD".' ),
+            'date' => array( 'type' => 'string', 'description' => 'Date to search, format "YYYY-MM-DD".' ),
         );
 
         // Only when the Locations addon is active, same as get_locations in Tools::all().
@@ -50,7 +48,7 @@ class GetAvailableSlots implements ToolInterface
 
         return array(
             'name' => $this->getName(),
-            'description' => 'List real bookable start times for a service with a specific staff member on a specific date. Call this before suggesting candidate times to the customer — never guess or invent times yourself. Still call check_availability with the exact time the customer picks before promising it or calling create_booking (a slot can be taken by someone else between this call and the booking).',
+            'description' => 'List real bookable start times for a service with a specific staff member on a specific date; if that date has none, it returns the nearest later date that has, with its times. Call this before suggesting candidate times to the customer — never guess or invent times yourself.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -106,15 +104,19 @@ class GetAvailableSlots implements ToolInterface
 
         $who_what = $staff->getFullName() . ' performing "' . $service->getTitle() . '"' . ( $extras ? ' with the requested extras' : '' );
 
+        $prefix = '';
         if ( ! $times ) {
-            return 'No available slots for ' . $who_what . ' on ' . $date . '. Try a different date or staff member.';
+            $next_day = SlotLookup::nextDayWithSlots( $service, $staff_id, $date, $location_id ?: null, $extras );
+            $times = $next_day ? SlotLookup::slotsForDay( $service, $staff_id, $next_day, $location_id ?: null, $extras ) : array();
+            if ( ! $times ) {
+                return 'No available slots for ' . $who_what . ' on ' . $date . ' or on any later date this business takes bookings for. Try a different staff member.';
+            }
+            $prefix = 'No available slots on ' . $date . '; the nearest date with available slots is ' . $next_day . '. ';
+            $date = $next_day;
         }
 
-        $shown = array_slice( $times, 0, self::MAX_SLOTS_SHOWN );
-        $more  = count( $times ) - count( $shown );
-
-        return 'Available start times for ' . $who_what . ' on ' . $date . ' (business\'s local time zone): '
-            . implode( ', ', $shown ) . ( $more > 0 ? ', and ' . $more . ' more later that day' : '' )
-            . '. Offer some of these to the customer, then call check_availability with the exact one they pick before confirming or booking.';
+        return $prefix . 'All available start times for ' . $who_what . ' on ' . $date . ': ' . SlotLookup::listTimes( $times ) . '.'
+            . ' As an id for ' . OfferChoices::NAME . ' or check_availability a time goes with its date: "' . $times[0] . '".'
+            . OfferChoices::hint( OfferChoices::TYPE_SLOT, count( $times ) );
     }
 }

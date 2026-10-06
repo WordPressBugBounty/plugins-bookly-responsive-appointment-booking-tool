@@ -187,33 +187,6 @@ class Checkout
     }
 
     /**
-     * Whether the AI chat could ever offer a payment gateway on this site - the cart-less,
-     * site-wide question SystemPrompt::build() needs to decide whether the Payment paragraph
-     * belongs in the prompt at all. Runs before a service/staff is picked, so there is no
-     * UserBookingData yet to run the rest of getGateways()'s filters (customer group, per-
-     * service/staff restrictions) against; those only matter once a specific booking exists.
-     *
-     * @return bool
-     */
-    public static function anyGatewayConfigured()
-    {
-        if ( Lib\Config::payLocallyEnabled() || Lib\Config::stripeCloudEnabled() || Lib\Config::wooCommerceEnabled() ) {
-            return true;
-        }
-
-        foreach ( AppearanceProxy\Shared::paymentGateways( array() ) as $type => $gateway ) {
-            if ( in_array( $type, self::$supported, true )
-                && $type !== Entities\Payment::TYPE_WOOCOMMERCE
-                && get_option( 'bookly_' . $type . '_enabled' )
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * What the chat shows the customer: the priced draft plus the gateways to choose from.
      * The price comes from CartInfo, so it is the same number the payment system will be
      * asked for - taxes, deposit and any discounts included.

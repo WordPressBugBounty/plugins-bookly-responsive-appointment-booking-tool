@@ -60,7 +60,10 @@ jQuery(function ($) {
                     data: column,
                     render: function (data, type, row) {
                         const disabled = ['Pending', 'Rejected', 'Cancelled reversal'].includes(row.status);
-                        if (data >= 0) {
+                        if (Number(data) === 0) {
+                            return '<span' + (disabled ? ' class="bookly:text-slate-400"' : '') + '>$' + data.replace('-', '') + '</span>';
+                        }
+                        if (data > 0) {
                             return '<span class="' + (disabled ? 'bookly:text-slate-400' : 'bookly:text-green-600') + '">+ $' + data + '</span>';
                         }
                         return '<span class="' + (disabled ? 'bookly:text-slate-400' : 'bookly:text-red-600') + '">- $' + data.substring(1) + '</span>';

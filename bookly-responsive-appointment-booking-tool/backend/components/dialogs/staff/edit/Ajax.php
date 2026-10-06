@@ -90,7 +90,6 @@ class Ajax extends Lib\Base\Ajax
                     $allow = get_option( 'bookly_gen_allow_staff_edit_profile' );
                 }
                 if ( $allow ) {
-                    unset ( $_POST['wp_user_id'] );
                     break;
                 }
                 do_action( 'admin_page_access_denied' );
@@ -105,6 +104,12 @@ class Ajax extends Lib\Base\Ajax
         }
 
         $parameters = self::parameters();
+        if ( ! Lib\Utils\Common::isCurrentUserAdmin() ) {
+            // Staff member may edit only own profile: pin id to own record and
+            // forbid wp_user_id regardless of request source ($_POST/$_GET/JSON).
+            $parameters['id'] = self::$staff->getId();
+            unset( $parameters['wp_user_id'] );
+        }
         if ( ! isset( $parameters['category_id'] ) || ! $parameters['category_id'] ) {
             $parameters['category_id'] = null;
         }

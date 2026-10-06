@@ -83,18 +83,4 @@ class ExtrasInput
 
         return (int) Lib\Proxy\ServiceExtras::getTotalDuration( $extras );
     }
-
-    /**
-     * Total price (service + extras), formatted for display.
-     *
-     * @param Lib\Entities\Service $service
-     * @param array                $extras [extra_id => quantity]
-     * @return string
-     */
-    public static function totalPriceFormatted( Lib\Entities\Service $service, array $extras )
-    {
-        $price = $extras ? Lib\Proxy\ServiceExtras::prepareServicePrice( $service->getPrice(), $service->getPrice(), 1, $extras ) : $service->getPrice();
-
-        return Lib\Utils\Price::format( $price );
-    }
 }

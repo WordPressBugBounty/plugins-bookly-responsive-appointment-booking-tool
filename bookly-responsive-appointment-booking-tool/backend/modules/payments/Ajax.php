@@ -108,8 +108,11 @@ class Ajax extends Lib\Base\Ajax
 
     private static function getPaymentQuery( $filter )
     {
+        // A payment may cover several appointments (a cart, a compound or a collaborative
+        // service), so its appointment date is the earliest of them rather than whichever
+        // row of the group the server happens to return.
         $query = Lib\Entities\Payment::query( 'p' )
-            ->select( 'p.id, p.created_at, p.type, p.paid, p.child_paid, p.total, p.status, p.details, c.full_name AS customer, st.full_name AS provider, s.title AS service, a.start_date' )
+            ->select( 'p.id, p.created_at, p.type, p.paid, p.child_paid, p.total, p.status, p.details, c.full_name AS customer, st.full_name AS provider, s.title AS service, MIN(a.start_date) AS start_date' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
             ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' );

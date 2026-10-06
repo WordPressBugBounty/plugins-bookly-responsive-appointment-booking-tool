@@ -149,6 +149,7 @@ class ModernAppearance extends Lib\Base\Component
                 'ai_preview_payment_gateway' => __( 'I will pay now with Credit Card', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_preview_question' => __( 'Do you have any openings tomorrow morning?', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_question_bubble_color' => __( 'Question bubble', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_show_avatars' => __( 'Show avatars in choices', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode' => __( 'Display mode', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode_embedded' => __( 'Embedded', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode_floating' => __( 'Floating bubble', 'bookly-responsive-appointment-booking-tool' ),
@@ -280,6 +281,7 @@ class ModernAppearance extends Lib\Base\Component
             'question_bubble_color' => null,
             'answer_bubble_color' => '#F1F5F9',
             'display_mode' => 'floating',
+            'show_avatars' => true,
             'l10n' => array(
                 'title'        => __( 'Chat with us', 'bookly-responsive-appointment-booking-tool' ),
                 'onlineStatus' => __( 'Online now', 'bookly-responsive-appointment-booking-tool' ),

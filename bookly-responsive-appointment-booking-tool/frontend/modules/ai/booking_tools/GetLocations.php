@@ -58,6 +58,6 @@ class GetLocations implements ToolInterface
             );
         }
 
-        return wp_json_encode( $list );
+        return wp_json_encode( $list ) . OfferChoices::hint( OfferChoices::TYPE_LOCATION, count( $list ) );
     }
 }

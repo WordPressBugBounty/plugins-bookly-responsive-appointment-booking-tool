@@ -365,7 +365,7 @@ class InfoText
                 );
 
                 $customer = $userData->getCustomer();
-                if ( ! $customer->getId() ) {
+                if ( ! $customer->getId() || ! $userData->customerIdentityConfirmed( $customer ) ) {
                     $codes = array_merge( $codes, array(
                         'client_address' => Lib\Proxy\Pro::getFullAddressByCustomerData( array(
                             'country' => $userData->getCountry(),

@@ -20,6 +20,7 @@ class Tools
             new BookingTools\GetAvailableSlots(),
             new BookingTools\CheckAvailability(),
             new BookingTools\CreateBooking( $conversation ),
+            new BookingTools\OfferChoices(),
         );
 
         // Single-location sites (the common case) have no use for this —

@@ -195,6 +195,7 @@ class Ajax extends Lib\Base\Ajax
             // expects one {role:"tool", tool_call_id, name, content} entry
             // per tool_call echoed back in "messages" (verified against the
             // real Cloud contract, see http/rest-ai.http in bookly-cloud).
+            $choices_only = true;
             foreach ( $body['message']['tool_calls'] as $tool_call ) {
                 $tool_result = self::executeToolForModel( $tool_call['name'], (array) $tool_call['arguments'], $conversation );
 
@@ -206,6 +207,22 @@ class Ajax extends Lib\Base\Ajax
                     ->setToolName( $tool_call['name'] )
                     ->setContent( $tool_result )
                     ->save();
+
+                $shown_choices = $tool_call['name'] === BookingTools\OfferChoices::NAME
+                    && BookingTools\OfferChoices::present( $tool_result );
+                $choices_only  = $choices_only && $shown_choices;
+            }
+
+            // The reply is already written and its options are on screen as
+            // cards - nothing is left for the model to do until the customer
+            // picks one, so end the turn here instead of paying for a round
+            // that could only repeat the text. Without text of its own (the
+            // model called the tool first) it still gets that round to write it.
+            if ( $choices_only && trim( (string) $assistant_message->getContent() ) !== '' ) {
+                self::setConversationStatus( $conversation, Lib\Entities\AiConversation::STATUS_DONE );
+                $job->setStatus( Lib\Entities\AiJob::STATUS_DONE )->save();
+
+                return;
             }
 
             if ( microtime( true ) > $deadline - self::WORKER_MARGIN ) {
@@ -240,6 +257,25 @@ class Ajax extends Lib\Base\Ajax
             ->sortBy( 'id' )
             ->find();
 
+        // Cards from the turn's offer_choices call, if it made one - read
+        // off its 'tool' message, which the transcript otherwise keeps to
+        // itself. Its id is past the assistant message that requested it, so
+        // it still comes back on the tick after that message was seen.
+        $choices = null;
+        /** @var Lib\Entities\AiMessage $choices_message */
+        $choices_message = Lib\Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->whereGt( 'id', $after_id )
+            ->where( 'role', Lib\Entities\AiMessage::ROLE_TOOL )
+            ->where( 'tool_name', BookingTools\OfferChoices::NAME )
+            ->sortBy( 'id' )
+            ->order( Lib\Query::ORDER_DESCENDING )
+            ->limit( 1 )
+            ->findOne();
+        if ( $choices_message ) {
+            $choices = BookingTools\OfferChoices::present( $choices_message->getContent() );
+        }
+
         $payment = null;
         if ( $conversation->getBookingStatus() === Lib\Entities\AiConversation::BOOKING_PENDING ) {
             $payment = Checkout::getPaymentOptions( $conversation ) ?: null;
@@ -250,6 +286,7 @@ class Ajax extends Lib\Base\Ajax
             'status'     => $conversation->getStatus(),
             'error_code' => $conversation->getStatus() === Lib\Entities\AiConversation::STATUS_ERROR ? $conversation->getErrorCode() : null,
             'payment'    => $payment,
+            'choices'    => $choices,
             'messages'   => array_map( function ( Lib\Entities\AiMessage $message ) {
                 return array(
                     'id'      => $message->getId(),

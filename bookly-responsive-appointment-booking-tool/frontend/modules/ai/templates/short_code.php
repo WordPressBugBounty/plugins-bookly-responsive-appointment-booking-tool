@@ -64,6 +64,7 @@ use Bookly\Lib\Utils\Common;
                     moment_format_date: <?php echo json_encode( \Bookly\Lib\Utils\DateTime::convertFormat( 'date', \Bookly\Lib\Utils\DateTime::FORMAT_MOMENT_JS ) ) ?>,
                     moment_format_time: <?php echo json_encode( \Bookly\Lib\Utils\DateTime::convertFormat( 'time', \Bookly\Lib\Utils\DateTime::FORMAT_MOMENT_JS ) ) ?>,
                     main_color: <?php echo json_encode( $appearance['main_color'] ) ?>,
+                    show_avatars: <?php echo json_encode( ! empty( $appearance['show_avatars'] ) ) ?>,
                     l10n: <?php echo json_encode( $appearance['l10n'] ) ?>
                 }
             );
