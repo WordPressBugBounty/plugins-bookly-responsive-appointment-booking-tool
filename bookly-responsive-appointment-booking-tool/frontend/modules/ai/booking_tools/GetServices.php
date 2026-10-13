@@ -35,9 +35,7 @@ class GetServices implements ToolInterface
             . ' A staff member can charge their own price for a service: then price is the range and price_by_staff gives each one\'s price - quote the price of the staff member the customer is booking with, never the range as if it were theirs.'
             . ( Lib\Config::serviceExtrasActive()
                 ? ' Also includes any optional extras (add-ons) available for a service, when it has any.'
-                : '' )
-            . ' Call this first to discover valid service_id values for get_staff/get_available_slots/check_availability/create_booking'
-            . ( Lib\Config::serviceExtrasActive() ? ', and valid extra_id values to pass to check_availability/create_booking.' : '.' );
+                : '' );
 
         return array(
             'name'        => $this->getName(),
@@ -79,55 +77,66 @@ class GetServices implements ToolInterface
 
         $list = array();
         foreach ( $services as $service ) {
-            $by_staff = ServicePrice::byStaff( $service );
-            $prices   = wp_list_pluck( $by_staff, 'price' );
-
-            $entry = array(
-                'id'               => $service->getId(),
-                'title'            => $service->getTitle(),
-                'duration_minutes' => round( $service->getDuration() / 60 ),
-                'price'            => ServicePrice::formatRange( $prices, $service->getPrice() ),
-            );
-
-            // Only when it matters: one price for everyone is already in 'price'.
-            if ( $prices && min( $prices ) != max( $prices ) ) {
-                $entry['price_by_staff'] = array();
-                foreach ( $by_staff as $staff_id => $staff ) {
-                    $entry['price_by_staff'][] = array(
-                        'staff_id'  => (string) $staff_id,
-                        'full_name' => $staff['full_name'],
-                        'price'     => Lib\Utils\Price::format( $staff['price'] ),
-                    );
-                }
-            }
-
-            if ( Lib\Config::serviceExtrasActive() ) {
-                $extras = array();
-                foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service->getId() ) ?: array() as $extra ) {
-                    if ( $extra->getMaxQuantity() <= 0 ) {
-                        // Same "hidden" convention the booking widget itself
-                        // uses (no dedicated active/visibility column exists
-                        // on ServiceExtra — see bookly-addon-service-extras'
-                        // own booking-step code).
-                        continue;
-                    }
-                    $extras[] = array(
-                        'id'               => $extra->getId(),
-                        'title'            => $extra->getTranslatedTitle(),
-                        'price'            => Lib\Utils\Price::format( $extra->getPrice() ),
-                        'duration_minutes' => round( $extra->getDuration() / 60 ),
-                        'min_quantity'     => max( 0, $extra->getMinQuantity() ),
-                        'max_quantity'     => $extra->getMaxQuantity(),
-                    );
-                }
-                if ( $extras ) {
-                    $entry['extras'] = $extras;
-                }
-            }
-
-            $list[] = $entry;
+            $list[] = self::describe( $service );
         }
 
         return wp_json_encode( $list ) . OfferChoices::hint( OfferChoices::TYPE_SERVICE, count( $list ) );
+    }
+
+    /**
+     * One service as get_services lists it - and the catalog (Ai\Catalog) too.
+     *
+     * @param Lib\Entities\Service $service
+     * @return array
+     */
+    public static function describe( Lib\Entities\Service $service )
+    {
+        $by_staff = ServicePrice::byStaff( $service );
+        $prices   = wp_list_pluck( $by_staff, 'price' );
+
+        $entry = array(
+            'id'               => $service->getId(),
+            'title'            => $service->getTitle(),
+            'duration_minutes' => round( $service->getDuration() / 60 ),
+            'price'            => ServicePrice::formatRange( $prices, $service->getPrice() ),
+        );
+
+        // Only when it matters: one price for everyone is already in 'price'.
+        if ( $prices && min( $prices ) != max( $prices ) ) {
+            $entry['price_by_staff'] = array();
+            foreach ( $by_staff as $staff_id => $staff ) {
+                $entry['price_by_staff'][] = array(
+                    'staff_id'  => (string) $staff_id,
+                    'full_name' => $staff['full_name'],
+                    'price'     => Lib\Utils\Price::format( $staff['price'] ),
+                );
+            }
+        }
+
+        if ( Lib\Config::serviceExtrasActive() ) {
+            $extras = array();
+            foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service->getId() ) ?: array() as $extra ) {
+                if ( $extra->getMaxQuantity() <= 0 ) {
+                    // Same "hidden" convention the booking widget itself
+                    // uses (no dedicated active/visibility column exists
+                    // on ServiceExtra — see bookly-addon-service-extras'
+                    // own booking-step code).
+                    continue;
+                }
+                $extras[] = array(
+                    'id'               => $extra->getId(),
+                    'title'            => $extra->getTranslatedTitle(),
+                    'price'            => Lib\Utils\Price::format( $extra->getPrice() ),
+                    'duration_minutes' => round( $extra->getDuration() / 60 ),
+                    'min_quantity'     => max( 0, $extra->getMinQuantity() ),
+                    'max_quantity'     => $extra->getMaxQuantity(),
+                );
+            }
+            if ( $extras ) {
+                $entry['extras'] = $extras;
+            }
+        }
+
+        return $entry;
     }
 }

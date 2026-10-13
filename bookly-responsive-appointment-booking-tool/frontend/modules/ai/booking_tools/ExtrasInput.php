@@ -29,7 +29,7 @@ class ExtrasInput
         }
 
         if ( ! Lib\Config::serviceExtrasActive() ) {
-            throw new \Exception( 'extras are not available on this booking system.' );
+            throw new \Exception( 'this booking system takes no extras. Call again without them.' );
         }
 
         $allowed = array();

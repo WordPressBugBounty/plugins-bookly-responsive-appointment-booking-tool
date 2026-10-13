@@ -1187,7 +1187,7 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\AiMessage::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `conversation_id` INT UNSIGNED NOT NULL,
-                `role` ENUM("user","assistant","tool") NOT NULL,
+                `role` ENUM("user","assistant","tool","event") NOT NULL,
                 `content` LONGTEXT NULL,
                 `tool_calls` TEXT NULL,
                 `tool_call_id` VARCHAR(64) NULL,

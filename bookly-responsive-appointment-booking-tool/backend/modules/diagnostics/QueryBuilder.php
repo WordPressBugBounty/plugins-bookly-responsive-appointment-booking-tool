@@ -407,7 +407,7 @@ class QueryBuilder
             'bookly_ai_jobs.updated_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_messages.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_ai_messages.conversation_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
-            'bookly_ai_messages.role' => array( 'type' => "enum('user','assistant','tool')", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_ai_messages.role' => array( 'type' => "enum('user','assistant','tool','event')", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_messages.content' => array( 'type' => "longtext", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_messages.tool_calls' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_messages.tool_call_id' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),

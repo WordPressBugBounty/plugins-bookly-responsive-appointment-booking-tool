@@ -11,6 +11,15 @@ class AiMessage extends Lib\Base\Entity
     const ROLE_USER      = 'user';
     const ROLE_ASSISTANT = 'assistant';
     const ROLE_TOOL      = 'tool';
+    // Something that happened in the chat outside the model's turn - a press on the payment
+    // card, a card left unpressed. Never sent on its own: Ajax::buildCompletionPayload() appends it to
+    // the next customer message, so the model and Cloud's log both see it.
+    const ROLE_EVENT     = 'event';
+
+    // tool_name of an assistant message the plugin wrote itself, not the model: a payment's
+    // outcome, a time taken from under the payment card. The customer sees it like any other
+    // reply; the model is not sent it and reads Checkout::report()'s result instead.
+    const FROM_PLUGIN = 'plugin';
 
     /** @var int */
     protected $conversation_id;

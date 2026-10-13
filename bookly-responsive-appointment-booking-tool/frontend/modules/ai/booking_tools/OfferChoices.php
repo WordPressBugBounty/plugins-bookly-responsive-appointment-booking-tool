@@ -269,8 +269,8 @@ class OfferChoices implements ToolInterface
      * card groups the times under their dates; otherwise the day is already in
      * the text and "10:00" alone is what the customer would type.
      *
-     * Availability is not re-checked here: the model still has to run
-     * check_availability on whatever comes back before booking it.
+     * Availability is not re-checked here: create_booking checks the time
+     * that comes back before it books it.
      *
      * @param array $ids
      * @return array[]

@@ -4,6 +4,7 @@ namespace Bookly\Frontend\Modules\Ai;
 use Bookly\Backend\Modules\Appearance\ModernAppearance;
 use Bookly\Backend\Modules\Appearance\Proxy as AppearanceProxy;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
+use Bookly\Frontend\Modules\Payment\Request as PaymentRequest;
 use Bookly\Lib;
 use Bookly\Lib\Entities;
 
@@ -19,6 +20,10 @@ use Bookly\Lib\Entities;
  */
 class Checkout
 {
+    // Name of the tool call the plugin puts into the history for a payment's outcome
+    // (report()). Not a real tool: the model never calls it, it only reads its result.
+    const STATUS_TOOL = 'payment_status';
+
     protected static $supported = array(
         Entities\Payment::TYPE_LOCAL,
         Entities\Payment::TYPE_CLOUD_STRIPE,
@@ -206,8 +211,21 @@ class Checkout
             return false;
         }
 
-        $cart_info = $userData->cart->getInfo();
+        // The customer named an online method in words (create_booking's pay_with): the card
+        // keeps only its button. Should it have stopped being allowed since, the card falls
+        // back to the full list rather than to none.
         $draft = $conversation->getBookingDataArray();
+        if ( ! empty( $draft['gateway'] ) ) {
+            $chosen = array();
+            foreach ( $gateways as $gateway ) {
+                if ( $gateway['name'] === $draft['gateway'] ) {
+                    $chosen[] = $gateway;
+                }
+            }
+            $gateways = $chosen ?: $gateways;
+        }
+
+        $cart_info = $userData->cart->getInfo();
         $service = Entities\Service::find( $draft['service_id'] );
         $staff = Entities\Staff::find( $draft['staff_id'] );
 
@@ -218,6 +236,8 @@ class Checkout
         $pay_now = $cart_info->getPayNow();
 
         return array(
+            // New on every create_booking call (see there); unset on drafts from before it.
+            'card' => isset( $draft['card'] ) ? $draft['card'] : null,
             'title' => $service->getTranslatedTitle(),
             'staff' => $staff->getTranslatedName(),
             'start_date' => $draft['start_date'],
@@ -306,6 +326,299 @@ class Checkout
         $defaults = ModernAppearance::getAiAssistantDefaults();
 
         return isset( $defaults['l10n'][ $key ] ) ? $defaults['l10n'][ $key ] : '';
+    }
+
+    /**
+     * Book the conversation's draft with "pay locally" for a customer who said so in words -
+     * the same order, appointment and pending payment the card's button makes through
+     * Ajax::aiCheckout() and Ajax::aiOrderStatus(), only without the browser: nothing about
+     * paying at the appointment needs a window or a redirect.
+     *
+     * @param Entities\AiConversation $conversation With a pending draft
+     * @return Lib\DataHolders\Booking\Order|false false when the checkout could not be made;
+     *                                               the draft is then pending again
+     */
+    public static function payLocally( Entities\AiConversation $conversation )
+    {
+        $userData = self::buildUserData( $conversation );
+        if ( ! $userData || ! self::claim( $conversation ) ) {
+            return false;
+        }
+
+        // The worker may book twice in one request (two services in one turn), and the
+        // payment request keeps its gateway and its priced cart from the first time.
+        PaymentRequest::deleteFromCache( 'getInstance' );
+        $request = PaymentRequest::getInstance();
+        $request->setUserData( $userData );
+        $request->setGatewayName( Entities\Payment::TYPE_LOCAL );
+        $request->setResponseAction( 'bookly_ai_checkout_response' );
+
+        $gateway = null;
+        try {
+            $gateway = $request->getGateway();
+            $gateway->createIntent();
+            $status = $gateway->retrieve();
+        } catch ( \Error $e ) {
+            Lib\Utils\Log::error( 'AI checkout failed: ' . $e->getMessage(), $e->getFile(), $e->getLine() );
+            $status = Lib\Base\Gateway::STATUS_FAILED;
+        } catch ( \Exception $e ) {
+            Lib\Utils\Log::error( 'AI checkout failed: ' . $e->getMessage(), $e->getFile(), $e->getLine() );
+            $status = Lib\Base\Gateway::STATUS_FAILED;
+        }
+
+        $order = $gateway ? $gateway->getOrder() : null;
+        if ( $status !== Lib\Base\Gateway::STATUS_COMPLETED || ! $order ) {
+            if ( $gateway ) {
+                try {
+                    $gateway->fail();
+                } catch ( \Exception $ignore ) {
+                } catch ( \Error $ignore ) {
+                }
+            }
+            self::setState( $conversation, Entities\AiConversation::BOOKING_PENDING, null );
+
+            return false;
+        }
+
+        self::setState( $conversation, Entities\AiConversation::BOOKING_PAID, $order->getOrderId() );
+
+        return $order;
+    }
+
+    /**
+     * Take the pending draft for one checkout: only the request that flips pending->processing
+     * goes on to create the order, so two of them never book the slot twice.
+     *
+     * @param Entities\AiConversation $conversation
+     * @return bool
+     */
+    public static function claim( Entities\AiConversation $conversation )
+    {
+        $claimed = Entities\AiConversation::query()
+            ->update()
+            ->set( 'booking_status', Entities\AiConversation::BOOKING_PROCESSING )
+            ->set( 'updated_at', current_time( 'mysql' ) )
+            ->where( 'id', $conversation->getId() )
+            ->where( 'booking_status', Entities\AiConversation::BOOKING_PENDING )
+            ->execute();
+        if ( $claimed ) {
+            $conversation->setBookingStatus( Entities\AiConversation::BOOKING_PROCESSING );
+        }
+
+        return (bool) $claimed;
+    }
+
+    /**
+     * Write the checkout's outcome onto the conversation without touching anything else on
+     * the row: the AI worker owns `status` on it for the whole turn, the visitor's request
+     * owns the checkout, and whichever finishes second must not undo the other.
+     *
+     * @param Entities\AiConversation $conversation
+     * @param string|null             $booking_status
+     * @param int|null                $order_id
+     */
+    public static function setState( Entities\AiConversation $conversation, $booking_status, $order_id )
+    {
+        Entities\AiConversation::query()
+            ->update()
+            ->set( 'booking_status', $booking_status )
+            ->set( 'order_id', $order_id )
+            ->set( 'updated_at', current_time( 'mysql' ) )
+            ->where( 'id', $conversation->getId() )
+            ->execute();
+
+        $conversation->setBookingStatus( $booking_status )->setOrderId( $order_id );
+    }
+
+    /**
+     * The button the card shows for a gateway, as the customer saw it.
+     *
+     * @param Entities\AiConversation $conversation
+     * @param string                  $name
+     * @return string The gateway's name when it is not on the card
+     */
+    public static function gatewayTitle( Entities\AiConversation $conversation, $name )
+    {
+        $userData = self::buildUserData( $conversation );
+        if ( $userData ) {
+            foreach ( self::getGateways( $userData ) as $gateway ) {
+                if ( $gateway['name'] === $name ) {
+                    return $gateway['title'];
+                }
+            }
+        }
+
+        return $name;
+    }
+
+    /**
+     * Note something that happened to the payment card in the conversation. The model reads it
+     * with the customer's next message (Ajax::buildCompletionPayload()), and so does Cloud's
+     * log of that request - the card's buttons work without the model, and without these a
+     * transcript cannot tell whether the customer ever pressed one.
+     *
+     * The same event right after itself is not noted again: a button pressed over and over
+     * into a blocked payment window says nothing new the second time.
+     *
+     * @param Entities\AiConversation $conversation
+     * @param string                  $text
+     */
+    public static function addEvent( Entities\AiConversation $conversation, $text )
+    {
+        $content = 'Payment card: ' . $text;
+
+        /** @var Entities\AiMessage $last */
+        $last = Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->sortBy( 'id' )
+            ->order( Lib\Query::ORDER_DESCENDING )
+            ->limit( 1 )
+            ->findOne();
+        if ( $last && $last->getRole() === Entities\AiMessage::ROLE_EVENT && $last->getContent() === $content ) {
+            return;
+        }
+
+        $event = new Entities\AiMessage();
+        $event
+            ->setConversationId( $conversation->getId() )
+            ->setRole( Entities\AiMessage::ROLE_EVENT )
+            ->setContent( $content )
+            ->save();
+    }
+
+    /**
+     * Tell the model how a payment on the card ended, as the result of a tool call
+     * (Ajax::buildCompletionPayload() puts the call in): the model takes a tool's result as
+     * fact, while a line of the chat's own it rechecks with create_booking - and then reads
+     * its own appointment holding the time as "not available".
+     *
+     * @param Entities\AiConversation $conversation
+     * @param string                  $text
+     */
+    public static function report( Entities\AiConversation $conversation, $text )
+    {
+        $message = new Entities\AiMessage();
+        $message
+            ->setConversationId( $conversation->getId() )
+            ->setRole( Entities\AiMessage::ROLE_TOOL )
+            ->setToolName( self::STATUS_TOOL )
+            ->setContent( $text )
+            ->save();
+    }
+
+    /**
+     * The booking the conversation's checkout made, as it stands now: the payment's status
+     * is read every time, since a gateway's webhook can complete it long after the checkout.
+     *
+     * @param Entities\AiConversation $conversation
+     * @return string|null null when the conversation has no booking made
+     */
+    public static function describeBooking( Entities\AiConversation $conversation )
+    {
+        $ca = new Entities\CustomerAppointment();
+        if ( ! $conversation->getOrderId() || ! $ca->loadBy( array( 'order_id' => $conversation->getOrderId() ) ) ) {
+            return null;
+        }
+        $appointment = Entities\Appointment::find( $ca->getAppointmentId() );
+        $service = $appointment ? Entities\Service::find( $appointment->getServiceId() ) : null;
+        $staff = $appointment ? Entities\Staff::find( $appointment->getStaffId() ) : null;
+        if ( ! $service || ! $staff ) {
+            return null;
+        }
+
+        $payment = new Entities\Payment();
+        if ( ! $payment->loadBy( array( 'order_id' => $conversation->getOrderId() ) ) ) {
+            $paid = 'nothing to pay';
+        } elseif ( $payment->getType() === Entities\Payment::TYPE_LOCAL && $payment->getStatus() !== Entities\Payment::STATUS_COMPLETED ) {
+            $paid = sprintf( '%s to be paid at the appointment', Lib\Utils\Price::format( $payment->getTotal() ) );
+        } elseif ( $payment->getStatus() === Entities\Payment::STATUS_PENDING ) {
+            $paid = 'the payment system has not confirmed the payment yet';
+        } elseif ( $payment->getStatus() !== Entities\Payment::STATUS_COMPLETED ) {
+            $paid = 'payment ' . $payment->getStatus();
+        } elseif ( $payment->getPaid() < $payment->getTotal() ) {
+            $paid = sprintf( '%s paid, the rest of %s total at the appointment', Lib\Utils\Price::format( $payment->getPaid() ), Lib\Utils\Price::format( $payment->getTotal() ) );
+        } else {
+            $paid = sprintf( '%s paid', Lib\Utils\Price::format( $payment->getPaid() ) );
+        }
+
+        return sprintf(
+            'appointment #%d — %s with %s at %s, %s',
+            $appointment->getId(), $service->getTitle(), $staff->getFullName(), $appointment->getStartDate(), $paid
+        );
+    }
+
+    /**
+     * Note, with the customer's message, that the booking's payment has moved on since the
+     * model last read about it - a webhook confirming the money after the checkout said
+     * "not confirmed yet", or while the payment window is still open: the conversation only
+     * learns how that window ended once it closes, and the webhook may come first. The note
+     * does not mention the window: the model reads "still open" as "not paid" whatever the
+     * payment says (conversation 91). Added at the end, never rewritten into what the model
+     * already has: the history before it stays the same for Cloud's prompt cache.
+     *
+     * @param Entities\AiConversation $conversation
+     */
+    public static function notePaymentChange( Entities\AiConversation $conversation )
+    {
+        if ( ! in_array( $conversation->getBookingStatus(), array( Entities\AiConversation::BOOKING_PROCESSING, Entities\AiConversation::BOOKING_PAID, Entities\AiConversation::BOOKING_AWAITING ), true ) ) {
+            return;
+        }
+        $booking = self::describeBooking( $conversation );
+        if ( $booking === null ) {
+            return;
+        }
+
+        // The latest the model read about this booking: the checkout's report() or an earlier note.
+        $marker = strstr( $booking, ' — ', true );
+        /** @var Entities\AiMessage $said */
+        $said = Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->whereIn( 'role', array( Entities\AiMessage::ROLE_TOOL, Entities\AiMessage::ROLE_EVENT ) )
+            ->whereLike( 'content', '%' . $marker . ' %' )
+            ->sortBy( 'id' )
+            ->order( Lib\Query::ORDER_DESCENDING )
+            ->limit( 1 )
+            ->findOne();
+        if ( $said && strpos( $said->getContent(), $booking ) !== false ) {
+            return;
+        }
+
+        self::addEvent( $conversation, 'update on the booking made - ' . $booking . '.' );
+    }
+
+    /**
+     * Note, with the customer's message, that the payment card is still unpressed. A customer
+     * who reads the buttons and types one of them has not pressed anything - which is what
+     * dialog 602 ran into six times.
+     *
+     * Once per card (one create_booking call): any event since already says where it stands -
+     * this note itself, or a press, whose outcome the transcript then carries on its own.
+     *
+     * @param Entities\AiConversation $conversation
+     */
+    public static function noteCardState( Entities\AiConversation $conversation )
+    {
+        if ( $conversation->getBookingStatus() !== Entities\AiConversation::BOOKING_PENDING ) {
+            return;
+        }
+
+        /** @var Entities\AiMessage $card */
+        $card = Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->where( 'role', Entities\AiMessage::ROLE_TOOL )
+            ->where( 'tool_name', 'create_booking' )
+            ->sortBy( 'id' )
+            ->order( Lib\Query::ORDER_DESCENDING )
+            ->limit( 1 )
+            ->findOne();
+        $noted = $card && Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->where( 'role', Entities\AiMessage::ROLE_EVENT )
+            ->whereGt( 'id', $card->getId() )
+            ->count();
+        if ( ! $noted ) {
+            self::addEvent( $conversation, 'still open, nothing pressed on it yet. The booking is not made yet.' );
+        }
     }
 
     /**

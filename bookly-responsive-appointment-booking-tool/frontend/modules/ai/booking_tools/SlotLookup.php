@@ -21,6 +21,11 @@ class SlotLookup
      */
     public static function slotsForDay( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array() )
     {
+        // Scheduler lets one day past the booking form's window through.
+        if ( $date > self::lastBookableDate() ) {
+            return array();
+        }
+
         $schedule = Lib\Utils\Appointment::getDaySchedule(
             array( (int) $staff_id ),
             $service->getId(),
@@ -76,6 +81,97 @@ class SlotLookup
     }
 
     /**
+     * The nearest day before $date with bookable start times, for when nothing
+     * is left between $date and the end of the booking window. Day by day
+     * through the week before (the customer's date is the anchor), then the
+     * first day of the window that has any.
+     *
+     * @param Lib\Entities\Service $service
+     * @param int $staff_id
+     * @param string $date "Y-m-d"
+     * @param int|null $location_id
+     * @param array $extras [extra_id => quantity], from ExtrasInput::parse()
+     * @return string|null "Y-m-d"
+     */
+    public static function previousDayWithSlots( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array() )
+    {
+        $today = Lib\Slots\DatePoint::now()->format( 'Y-m-d' );
+        $day = min( date( 'Y-m-d', strtotime( $date . ' -1 day' ) ), self::lastBookableDate() );
+        for ( $i = 0; $i < 7 && $day >= $today; $i++ ) {
+            if ( self::slotsForDay( $service, $staff_id, $day, $location_id, $extras ) ) {
+                return $day;
+            }
+            $day = date( 'Y-m-d', strtotime( $day . ' -1 day' ) );
+        }
+
+        return $day >= $today
+            ? self::nextDayWithSlots( $service, $staff_id, date( 'Y-m-d', strtotime( $today . ' -1 day' ) ), $location_id, $extras )
+            : null;
+    }
+
+    /**
+     * The last day the booking form offers: Finder ends the customer's window
+     * at midnight "number of days available for booking" ahead.
+     *
+     * @return string "Y-m-d"
+     */
+    public static function lastBookableDate()
+    {
+        return Lib\Slots\DatePoint::now()
+            ->modify( Lib\Config::getMaximumAvailableDaysForBooking() . ' days midnight' )
+            ->modify( '-1 day' )
+            ->format( 'Y-m-d' );
+    }
+
+    /**
+     * Minimum time prior booking as the customer would say it: over a day in
+     * days ("7 day(s)"), otherwise in hours, so the model doesn't relay "168 hour(s)".
+     *
+     * @param int $seconds
+     * @return string
+     */
+    public static function describeNotice( $seconds )
+    {
+        return $seconds > DAY_IN_SECONDS
+            ? round( $seconds / DAY_IN_SECONDS, 1 ) . ' day(s)'
+            : round( $seconds / HOUR_IN_SECONDS, 1 ) . ' hour(s)';
+    }
+
+    /**
+     * Why a day has no bookable times when the cause is the booking window, not
+     * a busy schedule: the service's minimum time prior booking, the business's
+     * booking horizon, or both together leaving no window at all. Neither depends
+     * on the staff member, so the model should not go through other staff.
+     *
+     * @param Lib\Entities\Service $service
+     * @param string $date "Y-m-d"
+     * @return string|null
+     */
+    public static function describeWindow( Lib\Entities\Service $service, $date )
+    {
+        $days = Lib\Config::getMaximumAvailableDaysForBooking();
+        $last = self::lastBookableDate();
+        $min_prior = (int) Lib\Proxy\Pro::getMinimumTimePriorBooking( $service->getId() );
+        $earliest = Lib\Slots\DatePoint::now()->modify( $min_prior );
+        $horizon = 'this business takes bookings at most ' . $days . ' day(s) ahead, the last bookable date is ' . $last;
+        $notice = 'this service must be booked at least ' . self::describeNotice( $min_prior ) . ' in advance';
+
+        if ( $earliest->format( 'Y-m-d' ) > $last ) {
+            return 'this service cannot be booked online on any date right now: ' . $notice . ', but ' . $horizon . '. This is the same for every staff member';
+        }
+        if ( $date > $last ) {
+            return 'the date is too far ahead: ' . $horizon . '; bookings for ' . $date . ' open on ' . date( 'Y-m-d', strtotime( $date . ' -' . ( $days - 1 ) . ' days' ) )
+                . '. This is the same for every staff member. Tell the customer bookings are taken only ' . $days . ' day(s) ahead, and offer the nearest times up to ' . $last
+                . ' (get_available_slots for ' . $last . ' finds them) rather than asking them to come back later';
+        }
+        if ( $min_prior > 0 && $date <= $earliest->format( 'Y-m-d' ) ) {
+            return $notice . ', the earliest possible start is ' . $earliest->format( 'Y-m-d H:i' );
+        }
+
+        return null;
+    }
+
+    /**
      * Whether the widget would offer a slot starting exactly at $start.
      *
      * @param Lib\Entities\Service $service
@@ -117,12 +213,17 @@ class SlotLookup
      *
      * @param string[] $day_times
      * @param \DateTime $wanted The start the customer asked for
+     * @param Lib\Entities\Service $service
      * @return string
      */
-    public static function describeAlternatives( array $day_times, \DateTime $wanted )
+    public static function describeAlternatives( array $day_times, \DateTime $wanted, Lib\Entities\Service $service )
     {
         if ( ! $day_times ) {
-            return 'There are no bookable times that day at all — suggest a different date or staff member.';
+            $why = self::describeWindow( $service, $wanted->format( 'Y-m-d' ) );
+
+            return $why
+                ? 'There are no bookable times that day: ' . $why . '.'
+                : 'There are no bookable times that day at all — suggest a different date or staff member.';
         }
 
         // "Y-m-d H:i:s" strings of one day compare in time order.

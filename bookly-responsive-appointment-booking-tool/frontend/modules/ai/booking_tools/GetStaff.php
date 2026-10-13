@@ -40,10 +40,9 @@ class GetStaff implements ToolInterface
         // Locations addon is active — see Tools::all()'s own conditional
         // registration of get_locations.
         if ( Lib\Config::locationsActive() ) {
-            $description .= ' If this business has multiple locations (see get_locations), pass location_id to list only staff who work at that location.';
             $properties['location_id'] = array(
                 'type'        => 'integer',
-                'description' => 'Location id (from get_locations) to filter staff who work at that location. Omit if this business has a single location.',
+                'description' => 'Location id (from get_locations) to filter staff who work at that location. Omit unless the customer chose a location.',
             );
         }
 

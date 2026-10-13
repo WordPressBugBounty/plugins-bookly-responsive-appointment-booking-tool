@@ -3,6 +3,15 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_28_6()
+    {
+        $this->alterTables( array(
+            'bookly_ai_messages' => array(
+                'ALTER TABLE `%s` CHANGE `role` `role` ENUM("user","assistant","tool","event") NOT NULL',
+            ),
+        ) );
+    }
+
     function update_28_3()
     {
         $this->alterTables( array(

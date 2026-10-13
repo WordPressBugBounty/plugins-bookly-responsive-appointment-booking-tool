@@ -2,6 +2,7 @@
 namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
 use Bookly\Frontend\Modules\Ai\Checkout;
+use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib;
 
 class CreateBooking implements ToolInterface
@@ -38,13 +39,23 @@ class CreateBooking implements ToolInterface
 
         // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
-            $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations. Omit if this business has a single location.' );
+            $properties['location_id'] = array( 'type' => 'integer', 'description' => GetLocations::ARGUMENT );
         }
 
         $properties['full_name'] = array( 'type' => 'string', 'description' => "Customer's full name." );
         $properties['email'] = array( 'type' => 'string', 'description' => "Customer's email address. Provide this or phone (or both)." );
         $properties['phone'] = array( 'type' => 'string', 'description' => "Customer's phone number. Provide this or email (or both)." );
         $properties['notes'] = array( 'type' => 'string', 'description' => 'Optional free-text note from the customer about this booking.' );
+        // For a customer who says how they pay instead of pressing a button on the payment
+        // card ("cash", "through Square"). Which ways a booking can be paid depends on its
+        // service, staff member and customer, so the names come from create_booking's own
+        // result for this booking, not from anything known in advance.
+        if ( ! Lib\Config::paymentStepDisabled() ) {
+            $properties['pay_with'] = array(
+                'type' => 'string',
+                'description' => 'Only when the customer has said how they want to pay, in their own words: the payment method from the previous create_booking result whose button matches what they said - "' . Lib\Entities\Payment::TYPE_LOCAL . '" for paying at the appointment, or the name of an online method. Omit otherwise.',
+            );
+        }
         $properties['extras'] = array(
             'type' => 'array',
             'description' => 'Optional extras to include (from get_services\' "extras" list). Omit or pass an empty array if none.',
@@ -60,7 +71,7 @@ class CreateBooking implements ToolInterface
 
         return array(
             'name' => $this->getName(),
-            'description' => 'Book an appointment, optionally with extras. Only call this after a matching check_availability call confirmed the slot (and any extras) is available, and after you have collected the customer\'s full name and at least one contact method (email or phone) from the conversation — never invent these. Read the result carefully and tell the customer what it actually says.',
+            'description' => 'Book an appointment, optionally with extras. Call this once the customer has picked a time and you have collected their full name and at least one contact method (email or phone) from the conversation — never invent these. Do not ask how they want to pay: whether payment is needed, how much and which ways it can be paid depends on the service, the staff member and the customer, and this tool says so; paying online is done on a payment card the chat shows, never in the conversation. This tool checks the time itself and, if it is taken, returns the nearest free times. Read the result carefully and tell the customer what it actually says.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -83,12 +94,13 @@ class CreateBooking implements ToolInterface
         $phone      = isset( $arguments['phone'] ) ? trim( (string) $arguments['phone'] ) : '';
         $notes      = isset( $arguments['notes'] ) ? trim( (string) $arguments['notes'] ) : '';
         $extras_arg = isset( $arguments['extras'] ) && is_array( $arguments['extras'] ) ? $arguments['extras'] : array();
+        $pay_with = isset( $arguments['pay_with'] ) ? trim( (string) $arguments['pay_with'] ) : '';
 
         if ( $full_name === '' ) {
-            return 'Error: full_name is required.';
+            return 'Error: the customer\'s full name is missing. Ask them for it, then call create_booking again.';
         }
         if ( $email === '' && $phone === '' ) {
-            return 'Error: at least one of email or phone is required to create a booking.';
+            return 'Error: a contact is missing. Ask the customer for their email or phone number, then call create_booking again.';
         }
 
         $service = Lib\Entities\Service::find( $service_id );
@@ -103,6 +115,10 @@ class CreateBooking implements ToolInterface
 
         if ( $location_id && ! Lib\Proxy\Locations::findById( $location_id ) ) {
             return 'Error: unknown location_id. Call get_locations to get a valid id.';
+        }
+        $not_there = GetLocations::checkStaff( $staff, $location_id );
+        if ( $not_there !== null ) {
+            return $not_there;
         }
 
         $link = new Lib\Entities\StaffService();
@@ -119,15 +135,30 @@ class CreateBooking implements ToolInterface
 
         $start = \DateTime::createFromFormat( 'Y-m-d H:i:s', $start_date );
         if ( ! $start ) {
-            return 'Error: start_date must be in the format YYYY-MM-DD HH:MM:SS.';
+            return 'Error: start_date must be in the format YYYY-MM-DD HH:MM:SS. Call create_booking again with it in that format.';
         }
         $end_date = ( clone $start )->modify( '+' . $service->getDuration() . ' seconds' )->format( 'Y-m-d H:i:s' );
 
-        // Re-check the slot (the model may skip check_availability, and time passes between calls),
-        // before the customer lookup so a refusal leaves no customer record behind.
+        // Before the slot check: the booking the payment card already made holds this very
+        // time, and the model asks for it again to check "is it booked?" - "not available"
+        // would tell the customer it is not.
+        $booked = $this->describeBooked( $service, $staff, $start_date );
+        if ( $booked !== null ) {
+            return $booked;
+        }
+
+        // Also before the slot check: the order of a payment still in its window already holds
+        // its time, and "not available" would send the customer after another one for nothing.
+        if ( $this->conversation && $this->conversation->checkoutInProgress() ) {
+            return 'Error: the customer has not finished paying for the previous booking yet, nothing new was booked. Ask them to complete or cancel that payment in its window first.';
+        }
+
+        // Check the slot here, not only in check_availability: the model is not asked to call that
+        // first, and time passes between calls. Done before the customer lookup so a refusal
+        // leaves no customer record behind.
         $day_times = array();
         if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
-            return 'Error: this slot is not available (anymore). ' . SlotLookup::describeAlternatives( $day_times, $start ) . ' Call check_availability with the new time before booking.';
+            return 'Error: this time is not available (anymore), nothing was booked. ' . SlotLookup::describeAlternatives( $day_times, $start, $service ) . ' Once the customer picks one, call create_booking again with it.';
         }
 
         // Find-or-create customer, same exact-match lookup as Validator::postValidateCustomer()
@@ -143,12 +174,12 @@ class CreateBooking implements ToolInterface
             $customer->setFullName( $full_name )->setEmail( $email )->setPhone( $phone )->save();
         }
         if ( ! $customer->getId() ) {
-            return 'Error: could not save customer record.';
+            return 'Error: the booking system could not save the customer\'s details, nothing was booked. Apologise and suggest contacting the business directly.';
         }
 
         // The only rule SlotLookup can't check without a customer (Pro; no-op otherwise).
         if ( $service->appointmentsLimitReached( $customer->getId(), array( $start_date ) ) ) {
-            return 'Error: this customer has reached the maximum number of appointments allowed for this service and cannot book another one.';
+            return 'Error: this customer has reached the maximum number of appointments allowed for this service and cannot book another one. Tell them so; they can contact the business if they need more.';
         }
 
         // Draft for the checkout to rebuild the booking later; nothing is written to the
@@ -169,14 +200,15 @@ class CreateBooking implements ToolInterface
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
 
-        // No payment system switched on - nothing to charge.
-        if ( Lib\Config::paymentStepDisabled() ) {
+        // No payment system switched on, or a customer group that skips payment (what
+        // Payment\Request::getGateway() answers with a NullGateway) - nothing to charge.
+        if ( Lib\Config::paymentStepDisabled() || BookingProxy\CustomerGroups::getSkipPayment( $customer ) ) {
             return self::book( $customer, $service, $staff, $draft, $end_date );
         }
 
-        if ( $this->conversation->checkoutInProgress() ) {
-            return 'Error: the customer has not finished paying for the previous booking yet. Ask them to complete or cancel that payment first.';
-        }
+        // Every call puts a card of its own in the chat, under the reply that explains it - also
+        // with the same details, which is how the model shows the card again when asked.
+        $draft['card'] = uniqid();
 
         $this->conversation
             ->setBookingDataArray( $draft )
@@ -212,15 +244,125 @@ class CreateBooking implements ToolInterface
             return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] );
         }
 
+        $names = wp_list_pluck( $options['gateways'], 'name' );
+        $at_appointment = in_array( Lib\Entities\Payment::TYPE_LOCAL, $names, true );
+
+        // Paying at the appointment was said in words - book it the way the card's button does.
+        if ( $pay_with === Lib\Entities\Payment::TYPE_LOCAL && $at_appointment ) {
+            $order = Checkout::payLocally( $this->conversation );
+            if ( ! $order ) {
+                return 'Error: the booking system could not save this booking, nothing was booked. Apologise and suggest trying again in a moment or contacting the business directly.';
+            }
+            $item = current( $order->getItems() );
+
+            return sprintf(
+                'Booking confirmed: appointment #%d — %s%s with %s, %s, total price %s, to be paid at the appointment.',
+                $item->getAppointment()->getId(), $service->getTitle(), ( $extras ? ' (with extras)' : '' ), $staff->getFullName(), $start_date, $options['total']
+            );
+        }
+
         // Quote deposit and full price separately, or a deposit reads as a discount.
         $amount = $options['deposit']
             ? sprintf( '%s now (deposit) of %s total', $options['due_now'], $options['total'] )
             : $options['total'];
+        $what = sprintf( '%s for %s with %s at %s', $amount, $service->getTitle(), $staff->getFullName(), $start_date );
+
+        // An online method named in words: the card keeps only its button. Paying still takes
+        // a press - the payment window may only be opened from the customer's own click.
+        if ( in_array( $pay_with, $names, true ) ) {
+            $draft['gateway'] = $pay_with;
+            $this->conversation->setBookingDataArray( $draft )->save();
+
+            return sprintf(
+                'Not booked yet — waiting for the online payment: %s. The payment card now shows just the button "%s"; ask the customer to press it and pay in the window it opens. The booking is confirmed only once the payment goes through, and the chat then says so by itself. If they change their mind, call create_booking again with the same details and the other way, or without pay_with to show all of them again.',
+                $what, self::buttonTitle( $options['gateways'], $pay_with )
+            );
+        }
+
+        $unavailable = '';
+        if ( $pay_with !== '' ) {
+            $unavailable = $pay_with === Lib\Entities\Payment::TYPE_LOCAL
+                ? 'Paying at the appointment is not possible for this booking (its service, staff member or customer does not allow it) - tell the customer so. '
+                : 'The way the customer named is not one this booking can be paid with - tell them so. ';
+        }
 
         return sprintf(
-            'Payment required before this booking is confirmed: %s for %s with %s at %s. The customer now sees payment options in the chat — ask them to choose one and complete the payment there. Do not tell them the booking is confirmed, and do not call create_booking again for this appointment; the confirmation will appear on its own once the payment goes through.',
-            $amount, $service->getTitle(), $staff->getFullName(), $start_date
+            'Not booked yet — payment needed: %s. The chat now shows a payment card where the customer chooses how to pay and pays. %sTell them the amount and to choose on the card; do not list or ask about payment methods, the card shows them. To show the card again, call create_booking again with the same details. The card\'s buttons, for matching what the customer says if they name a way to pay in words: %s. If they do, call create_booking again with the same details and pay_with set to the matching one; if their words fit more than one button, ask which of those they mean.',
+            $what,
+            $unavailable,
+            self::describeButtons( $options['gateways'] )
         );
+    }
+
+    /**
+     * The booking this conversation's checkout has made, when it is the one asked for.
+     * Also while its payment window is still open, once the webhook has completed the payment:
+     * the conversation itself only learns that when the window closes.
+     *
+     * @param Lib\Entities\Service $service
+     * @param Lib\Entities\Staff   $staff
+     * @param string               $start_date
+     * @return string|null null when the conversation has made no such booking
+     */
+    private function describeBooked( Lib\Entities\Service $service, Lib\Entities\Staff $staff, $start_date )
+    {
+        if ( ! $this->conversation || ! $this->conversation->getOrderId() ) {
+            return null;
+        }
+        if ( $this->conversation->checkoutInProgress() ) {
+            $payment = new Lib\Entities\Payment();
+            if ( ! $payment->loadBy( array( 'order_id' => $this->conversation->getOrderId() ) ) || $payment->getStatus() !== Lib\Entities\Payment::STATUS_COMPLETED ) {
+                return null;
+            }
+        } elseif ( ! in_array( $this->conversation->getBookingStatus(), array(
+            Lib\Entities\AiConversation::BOOKING_PAID,
+            Lib\Entities\AiConversation::BOOKING_AWAITING,
+        ), true ) ) {
+            return null;
+        }
+        $draft = $this->conversation->getBookingDataArray();
+        // Loose: the draft keeps the ids as the model passed them.
+        if ( $draft['service_id'] != $service->getId() || $draft['staff_id'] != $staff->getId() || $draft['start_date'] !== $start_date ) {
+            return null;
+        }
+
+        $booking = Checkout::describeBooking( $this->conversation );
+
+        return $booking === null
+            ? null
+            : 'Already booked in this conversation: ' . $booking . '. Nothing new was booked; tell the customer this booking is confirmed.';
+    }
+
+    /**
+     * The card's buttons as the model needs them to match a customer's words: the title the
+     * customer reads, the value to pass back as pay_with.
+     *
+     * @param array[] $gateways Checkout::getGateways()
+     * @return string
+     */
+    private static function describeButtons( array $gateways )
+    {
+        return implode( '; ', array_map( function ( $gateway ) {
+            return sprintf( '"%s" = %s (%s)', $gateway['title'], $gateway['name'], $gateway['name'] === Lib\Entities\Payment::TYPE_LOCAL
+                ? 'paid at the appointment, booked right away'
+                : 'online' );
+        }, $gateways ) );
+    }
+
+    /**
+     * @param array[] $gateways
+     * @param string  $name
+     * @return string
+     */
+    private static function buttonTitle( array $gateways, $name )
+    {
+        foreach ( $gateways as $gateway ) {
+            if ( $gateway['name'] === $name ) {
+                return $gateway['title'];
+            }
+        }
+
+        return $name;
     }
 
     /**
@@ -272,7 +414,9 @@ class CreateBooking implements ToolInterface
         );
 
         if ( empty( $result['success'] ) || empty( $result['appointments'] ) ) {
-            return 'Error: could not create the booking' . ( ! empty( $result['errors'] ) ? ' (' . wp_json_encode( $result['errors'] ) . ')' : '' ) . '.';
+            Lib\Utils\Log::error( 'AI create_booking failed: ' . wp_json_encode( isset( $result['errors'] ) ? $result['errors'] : $result ), __FILE__, __LINE__ );
+
+            return 'Error: the booking system could not save this booking, nothing was booked. Apologise and suggest another time or contacting the business directly.';
         }
 
         if ( ! empty( $result['queue']['token'] ) ) {

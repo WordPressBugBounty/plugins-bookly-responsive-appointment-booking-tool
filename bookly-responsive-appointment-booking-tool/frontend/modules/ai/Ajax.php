@@ -21,6 +21,7 @@ use Bookly\Lib;
  *   - wp_ajax_bookly_ai_checkout          (method aiCheckout)
  *   - wp_ajax_bookly_ai_order_status      (method aiOrderStatus)
  *   - wp_ajax_bookly_ai_checkout_response (method aiCheckoutResponse)
+ *   - wp_ajax_bookly_ai_payment_event     (method aiPaymentEvent)
  *
  * The three checkout actions run in the visitor's own request, never in the worker: paying
  * is something the browser drives, and Gateway::createIntent() has to be able to redirect it.
@@ -76,6 +77,10 @@ class Ajax extends Lib\Base\Ajax
             $conversation = new Lib\Entities\AiConversation();
         }
         $conversation->setStatus( Lib\Entities\AiConversation::STATUS_PROCESSING )->save();
+
+        // Before the message, so they go out together with it - see buildCompletionPayload().
+        Checkout::noteCardState( $conversation );
+        Checkout::notePaymentChange( $conversation );
 
         $message = new Lib\Entities\AiMessage();
         $message
@@ -324,6 +329,10 @@ class Ajax extends Lib\Base\Ajax
         // creates the order (Payment\Ajax, Booking\Ajax, WooCommerce\Controller::addToCart(),
         // ModernBookingForm's Request::checkStep()) - without it createIntent() would put a
         // second appointment on top of the first.
+        //
+        // The press is noted first, whatever comes of it: the outcome reaches the transcript
+        // on its own, as the assistant message dropTakenBooking() or finishCheckout() writes.
+        Checkout::addEvent( $conversation, sprintf( 'the customer pressed "%s".', Checkout::gatewayTitle( $conversation, $gateway_name ) ) );
         if ( $userData->cart->getFailedKey() !== null ) {
             wp_send_json( array_merge(
                 array( 'success' => false, 'error' => 'ERROR_SLOT_NOT_AVAILABLE' ),
@@ -350,21 +359,12 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json( array( 'success' => true, 'target_url' => wc_get_cart_url() ) );
         }
 
-        // Atomic claim, like aiWorker()'s on the job: only the request that flips
-        // pending->processing goes on to create the order. The status read at the top is
-        // not enough on its own - two clicks on a gateway button that both got past it
-        // would each run createIntent() and book the slot twice.
-        $claimed = Lib\Entities\AiConversation::query()
-            ->update()
-            ->set( 'booking_status', Lib\Entities\AiConversation::BOOKING_PROCESSING )
-            ->set( 'updated_at', current_time( 'mysql' ) )
-            ->where( 'id', $conversation->getId() )
-            ->where( 'booking_status', Lib\Entities\AiConversation::BOOKING_PENDING )
-            ->execute();
-        if ( ! $claimed ) {
+        // Atomic claim, like aiWorker()'s on the job. The status read at the top is not
+        // enough on its own - two clicks on a gateway button that both got past it would
+        // each run createIntent() and book the slot twice.
+        if ( ! Checkout::claim( $conversation ) ) {
             wp_send_json( array( 'success' => false, 'error' => 'ERROR_NO_PENDING_BOOKING' ) );
         }
-        $conversation->setBookingStatus( Lib\Entities\AiConversation::BOOKING_PROCESSING );
 
         $request = PaymentRequest::getInstance();
         // setGatewayName() returns void, so these do not chain.
@@ -388,7 +388,7 @@ class Ajax extends Lib\Base\Ajax
         $order = $request->getGateway()->getOrder();
         $order_id = $order ? $order->getOrderId() : null;
 
-        self::setBookingState( $conversation, Lib\Entities\AiConversation::BOOKING_PROCESSING, $order_id );
+        Checkout::setState( $conversation, Lib\Entities\AiConversation::BOOKING_PROCESSING, $order_id );
 
         // createCheckout() hands bookly_order back on its own; createIntent() (the on-site
         // gateways - here that is only "pay locally") does not, and the widget needs it to
@@ -435,6 +435,28 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Reported by the widget when a press on the payment card went nowhere the server could
+     * see: the browser blocked the payment window, so aiCheckout() never ran. Noted for the
+     * model and the log like every other card event (Checkout::addEvent()).
+     *
+     * Expects (via json_data): token, gateway.
+     */
+    public static function aiPaymentEvent()
+    {
+        $conversation = self::authorizeConversation();
+        if ( ! $conversation || $conversation->getBookingStatus() !== Lib\Entities\AiConversation::BOOKING_PENDING ) {
+            wp_send_json( array( 'success' => false, 'error' => 'ERROR_NO_PENDING_BOOKING' ) );
+        }
+
+        Checkout::addEvent( $conversation, sprintf(
+            'the customer pressed "%s", but their browser blocked the payment window; nothing was charged and the card is still open.',
+            Checkout::gatewayTitle( $conversation, (string) self::parameter( 'gateway', '' ) )
+        ) );
+
+        wp_send_json( array( 'success' => true ) );
+    }
+
+    /**
      * Ask the payment system where the order stands, and record the answer on the
      * conversation. Shared by aiCheckoutResponse() (which has no conversation to hand, and
      * finds it from the order token) and aiOrderStatus().
@@ -460,7 +482,7 @@ class Ajax extends Lib\Base\Ajax
         if ( ! $userData ) {
             // The draft cannot be rebuilt any more (the service or the staff member is gone).
             // Nothing to retry, so this one really is terminal.
-            self::setBookingState( $conversation, Lib\Entities\AiConversation::BOOKING_FAILED, null );
+            Checkout::setState( $conversation, Lib\Entities\AiConversation::BOOKING_FAILED, null );
 
             return array( 'status' => Lib\Base\Gateway::STATUS_FAILED, 'data' => array() );
         }
@@ -512,7 +534,7 @@ class Ajax extends Lib\Base\Ajax
             // case - only its IPN carries payment data. The booking form draws the same
             // line (PaymentFlow::isSuccessStatus counts processing as success), so leaving
             // the customer looking at a spinner here would be both a lie and a divergence.
-            self::setBookingState(
+            Checkout::setState(
                 $conversation,
                 $status === Lib\Base\Gateway::STATUS_COMPLETED
                     ? Lib\Entities\AiConversation::BOOKING_PAID
@@ -523,13 +545,20 @@ class Ajax extends Lib\Base\Ajax
             // Gateway::fail() has already removed the order, the appointment and the payment,
             // but the draft is still perfectly good - put it back to "pending" so the
             // customer can pick another method instead of starting the conversation over.
-            self::setBookingState( $conversation, Lib\Entities\AiConversation::BOOKING_PENDING, null );
+            Checkout::setState( $conversation, Lib\Entities\AiConversation::BOOKING_PENDING, null );
         }
+
+        $booking = Checkout::describeBooking( $conversation );
+        Checkout::report( $conversation, $booking !== null
+            ? 'Booking confirmed: ' . $booking . '.'
+            : 'The payment did not go through: nothing was booked or charged. The payment card is open again for the same booking, to pay another way.'
+        );
 
         $message = new Lib\Entities\AiMessage();
         $message
             ->setConversationId( $conversation->getId() )
             ->setRole( Lib\Entities\AiMessage::ROLE_ASSISTANT )
+            ->setToolName( Lib\Entities\AiMessage::FROM_PLUGIN )
             ->setContent( $text )
             ->save();
 
@@ -552,7 +581,7 @@ class Ajax extends Lib\Base\Ajax
         } catch ( \Error $ignore ) {
         }
 
-        self::setBookingState( $conversation, Lib\Entities\AiConversation::BOOKING_PENDING, null );
+        Checkout::setState( $conversation, Lib\Entities\AiConversation::BOOKING_PENDING, null );
 
         Lib\Utils\Log::error( 'AI checkout failed: ' . $e->getMessage(), $e->getFile(), $e->getLine() );
     }
@@ -561,12 +590,12 @@ class Ajax extends Lib\Base\Ajax
      * Forget a draft whose slot went to someone else while the customer was choosing how to
      * pay, and say so in the chat.
      *
-     * Said as an assistant message, the way finishCheckout() reports a payment, so the model
-     * reads it in the transcript on the next turn and offers another time instead of
+     * Said in the chat for the customer and reported to the model (Checkout::report()), the
+     * way finishCheckout() does it for a payment, so the model offers another time instead of
      * insisting on a booking that no longer exists. The widget shows the same text at once
-     * and drops the card.
+     * and locks the card.
      *
-     * Same targeted update as setBookingState(): the AI worker may own `status` on this
+     * Same targeted update as Checkout::setState(): the AI worker may own `status` on this
      * row right now, and a full save() would overwrite it.
      *
      * @param Lib\Entities\AiConversation $conversation
@@ -585,39 +614,19 @@ class Ajax extends Lib\Base\Ajax
 
         $conversation->resetBooking();
 
+        Checkout::report( $conversation, 'Not booked: someone else took this time before the customer paid. Nothing was charged and the payment card is closed; offer other times.' );
+
         $text = Checkout::getText( 'paymentSlotTaken' );
 
         $message = new Lib\Entities\AiMessage();
         $message
             ->setConversationId( $conversation->getId() )
             ->setRole( Lib\Entities\AiMessage::ROLE_ASSISTANT )
+            ->setToolName( Lib\Entities\AiMessage::FROM_PLUGIN )
             ->setContent( $text )
             ->save();
 
         return array( 'message' => $text, 'message_id' => $message->getId() );
-    }
-
-    /**
-     * Write the checkout's outcome onto the conversation without touching anything else on
-     * the row - the mirror of setConversationStatus(). The payment system round trip inside
-     * aiCheckout() takes seconds, and the AI worker owns `status` on the same row for the
-     * whole turn; whichever finishes second must not undo the other.
-     *
-     * @param Lib\Entities\AiConversation $conversation
-     * @param string|null                 $booking_status
-     * @param int|null                    $order_id
-     */
-    private static function setBookingState( $conversation, $booking_status, $order_id )
-    {
-        Lib\Entities\AiConversation::query()
-            ->update()
-            ->set( 'booking_status', $booking_status )
-            ->set( 'order_id', $order_id )
-            ->set( 'updated_at', current_time( 'mysql' ) )
-            ->where( 'id', $conversation->getId() )
-            ->execute();
-
-        $conversation->setBookingStatus( $booking_status )->setOrderId( $order_id );
     }
 
     /**
@@ -802,13 +811,17 @@ class Ajax extends Lib\Base\Ajax
             return 'Error: no such tool "' . $name . '".';
         }
 
+        // What broke is for the log, not for the model: an exception message describes the
+        // code, and retold to the customer it is neither true to them nor useful.
         try {
             return (string) $tools[ $name ]->execute( $arguments );
         } catch ( \Error $e ) {
-            return 'Error: ' . $e->getMessage();
+            Lib\Utils\Log::error( 'AI tool ' . $name . ' failed: ' . $e->getMessage(), $e->getFile(), $e->getLine() );
         } catch ( \Exception $e ) {
-            return 'Error: ' . $e->getMessage();
+            Lib\Utils\Log::error( 'AI tool ' . $name . ' failed: ' . $e->getMessage(), $e->getFile(), $e->getLine() );
         }
+
+        return 'Error: the booking system failed while running ' . $name . ', nothing was changed. Apologise, and suggest trying again in a moment or contacting the business directly.';
     }
 
     /**
@@ -833,9 +846,36 @@ class Ajax extends Lib\Base\Ajax
             ->sortBy( 'id' )
             ->find();
 
+        // Card events since the previous customer message, sent along with the next one.
+        // Pinned to a message the same way the date is, they read the same on every later call.
+        $events = array();
+        // The checkout's outcomes (Checkout::report()), put in as tool calls right before the
+        // next customer message - never in the middle of a turn's tool loop, which the
+        // customer may pay through. Each takes the events before it along, in its result.
+        $reports = array();
+
         foreach ( $history as $message ) {
             switch ( $message->getRole() ) {
+                case Lib\Entities\AiMessage::ROLE_EVENT:
+                    $events[] = '(' . $message->getContent() . ')';
+                    break;
+
                 case Lib\Entities\AiMessage::ROLE_USER:
+                    foreach ( $reports as $report ) {
+                        $messages[] = array(
+                            'role'       => 'assistant',
+                            'content'    => null,
+                            'tool_calls' => array( array( 'id' => $report['id'], 'name' => Checkout::STATUS_TOOL, 'arguments' => new \stdClass() ) ),
+                        );
+                        $messages[] = array(
+                            'role'         => 'tool',
+                            'tool_call_id' => $report['id'],
+                            'name'         => Checkout::STATUS_TOOL,
+                            'content'      => $report['content'],
+                        );
+                    }
+                    $reports = array();
+
                     // The clock rides with every customer message, not in
                     // the system prompt and not only with the latest one:
                     // Cloud caches the prompt prefix, and a value that
@@ -844,13 +884,20 @@ class Ajax extends Lib\Base\Ajax
                     // reads the same on all 3-5 calls of one tool loop and
                     // on every later turn, so the cached prefix survives
                     // across turns as well. See SystemPrompt::dateLine().
+                    $events[] = SystemPrompt::dateLine( $message->getCreatedAt(), $time_zone );
                     $messages[] = array(
                         'role'    => 'user',
-                        'content' => $message->getContent() . "\n\n" . SystemPrompt::dateLine( $message->getCreatedAt(), $time_zone ),
+                        'content' => $message->getContent() . "\n\n" . implode( "\n", $events ),
                     );
+                    $events = array();
                     break;
 
                 case Lib\Entities\AiMessage::ROLE_ASSISTANT:
+                    // Written by the plugin for the customer, not by the model: what it says the
+                    // model reads as Checkout::report()'s result instead.
+                    if ( $message->getToolName() === Lib\Entities\AiMessage::FROM_PLUGIN ) {
+                        break;
+                    }
                     $entry = array( 'role' => 'assistant', 'content' => $message->getContent() );
                     if ( $message->getToolCalls() ) {
                         $tool_calls = json_decode( $message->getToolCalls(), true );
@@ -871,6 +918,12 @@ class Ajax extends Lib\Base\Ajax
                     break;
 
                 case Lib\Entities\AiMessage::ROLE_TOOL:
+                    if ( $message->getToolName() === Checkout::STATUS_TOOL ) {
+                        $events[] = $message->getContent();
+                        $reports[] = array( 'id' => 'plugin_' . $message->getId(), 'content' => implode( "\n", $events ) );
+                        $events = array();
+                        break;
+                    }
                     $messages[] = array(
                         'role'         => 'tool',
                         'tool_call_id' => $message->getToolCallId(),

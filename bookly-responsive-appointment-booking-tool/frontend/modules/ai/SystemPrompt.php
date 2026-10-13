@@ -8,7 +8,7 @@ class SystemPrompt
 {
     const DATES = 'Dates: each customer message ends with the date/time it was sent, in this business\'s local time zone — treat the one on the latest message as now, and resolve relative dates ("tomorrow", "next Friday") yourself into exact YYYY-MM-DD HH:MM:SS (YYYY-MM-DD for get_available_slots); never ask the customer what today\'s date is.';
 
-    const EXTRAS = 'Extras: if the chosen service has optional extras, proactively ask the customer which (if any) before proceeding — never invent extras outside the list get_services returned.';
+    const EXTRAS = 'Extras: if the chosen service has optional extras, proactively ask the customer which (if any) before proceeding — never invent extras outside the service\'s own list in the catalog or get_services.';
 
     /**
      * Everything here has to stay stable for the whole conversation: Bookly
@@ -36,6 +36,12 @@ class SystemPrompt
 
         if ( Lib\Config::serviceExtrasActive() ) {
             $parts[] = self::EXTRAS;
+        }
+
+        // Last: the longest part, and the one the rules above refer to.
+        $catalog = Catalog::build();
+        if ( $catalog !== '' ) {
+            $parts[] = $catalog;
         }
 
         return implode( "\n\n", $parts );

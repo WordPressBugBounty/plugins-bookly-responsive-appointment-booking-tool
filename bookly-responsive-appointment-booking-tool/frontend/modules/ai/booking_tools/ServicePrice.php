@@ -77,7 +77,7 @@ class ServicePrice
      *
      * @return array
      */
-    private static function caSeSt()
+    public static function caSeSt()
     {
         static $casest;
         if ( $casest === null ) {

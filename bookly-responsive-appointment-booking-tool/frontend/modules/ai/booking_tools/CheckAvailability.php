@@ -26,7 +26,7 @@ class CheckAvailability implements ToolInterface
 
         // Only when the Locations addon is active, same as get_locations in Tools::all().
         if ( Lib\Config::locationsActive() ) {
-            $properties['location_id'] = array( 'type' => 'integer', 'description' => 'Location id, from get_locations. Omit if this business has a single location.' );
+            $properties['location_id'] = array( 'type' => 'integer', 'description' => GetLocations::ARGUMENT );
         }
 
         $properties['extras'] = array(
@@ -44,7 +44,7 @@ class CheckAvailability implements ToolInterface
 
         return array(
             'name' => $this->getName(),
-            'description' => 'Check whether a specific service (with optional extras) can be booked with a specific staff member starting at a specific date/time, and what it costs. Do not tell the customer a slot is free unless this tool confirmed it.',
+            'description' => 'Check whether a specific service (with optional extras) can be booked with a specific staff member starting at a specific date/time the customer named themselves, and what it costs. Not needed for a time get_available_slots listed, nor before create_booking, which checks the time itself. Do not tell the customer a time of their own is free unless this tool confirmed it.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -77,6 +77,10 @@ class CheckAvailability implements ToolInterface
         if ( $location_id && ! Lib\Proxy\Locations::findById( $location_id ) ) {
             return 'Error: unknown location_id. Call get_locations to get a valid id.';
         }
+        $not_there = GetLocations::checkStaff( $staff, $location_id );
+        if ( $not_there !== null ) {
+            return $not_there;
+        }
 
         $link = new Lib\Entities\StaffService();
         $link->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id ) );
@@ -98,13 +102,13 @@ class CheckAvailability implements ToolInterface
         // SlotLookup rejects "too soon" slots as well, but can't tell the model why.
         $min_prior = (int) Lib\Proxy\Pro::getMinimumTimePriorBooking( $service_id );
         if ( $min_prior > 0 && Lib\Slots\DatePoint::now()->gte( Lib\Slots\DatePoint::fromStr( $start_date )->modify( -$min_prior ) ) ) {
-            return 'Not available: this slot is too soon — this service requires at least ' . round( $min_prior / 3600, 1 ) . ' hour(s) advance notice. Find a later time with get_available_slots.';
+            return 'Not available: this slot is too soon — this service requires at least ' . SlotLookup::describeNotice( $min_prior ) . ' advance notice. Find a later time with get_available_slots.';
         }
 
         $day_times = array();
         if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
             return 'Not available: ' . $staff->getFullName() . ' cannot take "' . $service->getTitle() . '" at ' . $start_date . '. '
-                . SlotLookup::describeAlternatives( $day_times, $start );
+                . SlotLookup::describeAlternatives( $day_times, $start, $service );
         }
 
         $extras_duration = ExtrasInput::totalDuration( $extras );

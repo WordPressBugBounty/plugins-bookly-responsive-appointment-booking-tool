@@ -8,7 +8,8 @@ class Tools
     /**
      * @param Lib\Entities\AiConversation|null $conversation The chat the tool call belongs to.
      *   create_booking needs it to park its priced draft somewhere the browser's own request
-     *   can pick it up; every other tool is read-only and ignores it. Omitted when this is
+     *   can pick it up, get_booking_status reads that booking back; every other tool ignores
+     *   it. Omitted when this is
      *   called just to collect the schemas for the /complete payload.
      * @return BookingTools\ToolInterface[] keyed by tool name
      */
@@ -20,6 +21,7 @@ class Tools
             new BookingTools\GetAvailableSlots(),
             new BookingTools\CheckAvailability(),
             new BookingTools\CreateBooking( $conversation ),
+            new BookingTools\GetBookingStatus( $conversation ),
             new BookingTools\OfferChoices(),
         );
 
