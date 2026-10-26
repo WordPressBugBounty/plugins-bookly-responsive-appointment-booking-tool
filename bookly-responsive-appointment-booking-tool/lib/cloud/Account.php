@@ -676,6 +676,20 @@ class Account extends Base
     }
 
     /**
+     * Card the auto-recharge is charged to, when the service tells it.
+     *
+     * @return array|null [ brand => string, last4 => string ]
+     */
+    public function getAutoRechargeCard()
+    {
+        $card = $this->autoRechargeEnabled() && isset ( $this->auto_recharge['card'] ) ? $this->auto_recharge['card'] : null;
+
+        return is_array( $card ) && ! empty ( $card['last4'] )
+            ? array( 'brand' => isset ( $card['brand'] ) ? (string) $card['brand'] : '', 'last4' => (string) $card['last4'] )
+            : null;
+    }
+
+    /**
      * Get cloud support end date.
      *
      * @return string
@@ -956,10 +970,42 @@ class Account extends Base
     {
         $titles = array(
             'stripe' => __( 'Card', 'bookly-responsive-appointment-booking-tool' ),
+            'paddle' => __( 'Card', 'bookly-responsive-appointment-booking-tool' ),
             'paypal' => 'PayPal',
         );
+        $gateway = (string) $this->getAutoRechargeGateway();
 
-        return array_key_exists( $this->getAutoRechargeGateway(), $titles ) ? $titles[ $this->getAutoRechargeGateway() ] : '';
+        // The card itself, when it is known: "Visa •••• 4242"
+        $card = $this->getAutoRechargeCard();
+        if ( $card ) {
+            return trim( $this->getCardBrandTitle( $card['brand'] ) . ' •••• ' . $card['last4'] );
+        }
+
+        // A gateway this version does not know by name is shown under its own name
+        return array_key_exists( $gateway, $titles ) ? $titles[ $gateway ] : ucfirst( $gateway );
+    }
+
+    /**
+     * @param string $brand Brand code as the payment provider names it
+     * @return string
+     */
+    protected function getCardBrandTitle( $brand )
+    {
+        // Proper names, the same in every language
+        $titles = array(
+            'visa' => 'Visa',
+            'mastercard' => 'Mastercard',
+            'amex' => 'American Express',
+            'american_express' => 'American Express',
+            'discover' => 'Discover',
+            'diners_club' => 'Diners Club',
+            'jcb' => 'JCB',
+            'unionpay' => 'UnionPay',
+            'maestro' => 'Maestro',
+        );
+        $brand = strtolower( (string) $brand );
+
+        return array_key_exists( $brand, $titles ) ? $titles[ $brand ] : ucfirst( $brand );
     }
 
     /**

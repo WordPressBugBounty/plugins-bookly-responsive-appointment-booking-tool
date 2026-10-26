@@ -22,6 +22,7 @@ use Bookly\Lib;
  * @method static string prepareIcsEventTemplate( string $template, Lib\Utils\Ics\Event $event ) Prepare template for ICS.
  * @method static array  prepareNotificationTitles( array $titles ) Prepare notification titles.
  * @method static array  prepareNotificationTypes( array $types, string $gateway ) Prepare notification type IDs.
+ * @method static array  prepareCodesCatalog( array $catalog ) Add titles of the add-on's code groups and samples of its codes to the code editor catalog.
  * @method static array  preparePaymentDetails( Lib\DataHolders\Details\Payment $details ) Add info about payment
  * @method static array  preparePaymentDetailsItem( array $details, Lib\DataHolders\Booking\Item $item ) Add info about payment item
  * @method static string preparePaymentImage( string $url, string $gateway ) Prepare payment image.

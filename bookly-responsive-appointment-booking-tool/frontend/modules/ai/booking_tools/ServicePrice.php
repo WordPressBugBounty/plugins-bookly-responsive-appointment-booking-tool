@@ -21,9 +21,10 @@ class ServicePrice
      * @param int|null             $location_id
      * @param string|null          $start_date YYYY-MM-DD HH:MM:SS; null when no time is picked yet
      * @param array                $extras [extra_id => quantity]
+     * @param int                  $nop Persons the booking is for: the price is for all of them
      * @return float
      */
-    public static function forBooking( Lib\Entities\Service $service, $staff_id, $location_id = null, $start_date = null, array $extras = array() )
+    public static function forBooking( Lib\Entities\Service $service, $staff_id, $location_id = null, $start_date = null, array $extras = array(), $nop = 1 )
     {
         $location_id = $location_id ? (int) $location_id : null;
 
@@ -33,7 +34,7 @@ class ServicePrice
             ->setServiceId( $service->getId() )
             ->setStaffIds( array( (int) $staff_id ) )
             ->setLocationId( $location_id )
-            ->setNumberOfPersons( 1 )
+            ->setNumberOfPersons( $nop )
             ->setUnits( 1 )
             ->setExtras( $extras );
         if ( $start_date ) {
@@ -41,7 +42,7 @@ class ServicePrice
             $cart_item->setSlots( array( array( $service->getId(), (int) $staff_id, $start_date, $location_id ) ) );
         }
 
-        return (float) $cart_item->getServicePrice();
+        return (float) $cart_item->getServicePrice( $nop );
     }
 
     /**
@@ -73,7 +74,7 @@ class ServicePrice
 
     /**
      * Lib\Config::getCaSeSt() reads the whole catalog and has no cache of its
-     * own, while get_services asks for every service in one call.
+     * own, while the catalog asks for every service in one call.
      *
      * @return array
      */

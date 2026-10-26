@@ -161,14 +161,4 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json( $result );
         }
     }
-
-    /**
-     * Dismiss confirm email modal.
-     */
-    public static function dismissConfirmEmail()
-    {
-        update_user_meta( get_current_user_id(), 'bookly_dismiss_cloud_confirm_email', 1 );
-
-        wp_send_json_success();
-    }
 }

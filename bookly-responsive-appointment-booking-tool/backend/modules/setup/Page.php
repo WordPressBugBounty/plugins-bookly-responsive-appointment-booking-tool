@@ -396,7 +396,7 @@ class Page extends Lib\Base\Component
                     'topup_btn' => __( 'Top up %amount%', 'bookly-responsive-appointment-booking-tool' ),
                     'consent' => __( 'I authorize Bookly to automatically charge my payment method %amount% when my balance drops below %threshold%.', 'bookly-responsive-appointment-booking-tool' ),
                     'bonus_tag' => __( '+%amount% bonus', 'bookly-responsive-appointment-booking-tool' ),
-                    'pay_error' => __( 'Card payment has failed, please try again later.', 'bookly-responsive-appointment-booking-tool' ),
+                    'pay_error' => __( 'Card payment has failed. Please try again later.', 'bookly-responsive-appointment-booking-tool' ),
                     'auto_enabled' => __( 'Auto-Recharge has been enabled', 'bookly-responsive-appointment-booking-tool' ),
                     'payment_cancelled' => __( 'Your payment has been cancelled', 'bookly-responsive-appointment-booking-tool' ),
                     'explore_title' => __( 'Explore everything Bookly Cloud offers to grow your business', 'bookly-responsive-appointment-booking-tool' ),

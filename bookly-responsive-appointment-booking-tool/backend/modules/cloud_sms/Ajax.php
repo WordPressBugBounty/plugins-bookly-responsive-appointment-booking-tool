@@ -100,12 +100,11 @@ class Ajax extends Lib\Base\Ajax
                     $has_errors = true;
                 }
             }
-            if ( !$has_errors ) {
-                $response['success'] = false;
-                $response['message'] = __( 'SMS has been sent successfully.', 'bookly-responsive-appointment-booking-tool' );
-
-            } else {
+            $response['success'] = !$has_errors;
+            if ( $has_errors ) {
                 $response['message'] = implode( '<br/>', $cloud->getErrors() );
+            } else {
+                $response['message'] = __( 'SMS has been sent successfully.', 'bookly-responsive-appointment-booking-tool' );
             }
 
             wp_send_json( $response );
@@ -262,160 +261,7 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
-     * Get mailing list
-     */
-    public static function getMailingList()
-    {
-        global $wpdb;
-
-        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_LISTS );
-        $order = self::parameter( 'order', array() );
-        $filter = self::parameter( 'filter' );
-        $length = self::parameter( 'length' );
-        $start = self::parameter( 'start' );
-
-        $query = Lib\Entities\MailingList::query( 'm' )
-            ->select( 'm.id, m.name, COUNT(r.id) AS number_of_recipients' )
-            ->leftJoin( 'MailingListRecipient', 'r', 'r.mailing_list_id = m.id' )
-            ->groupBy( 'm.id' );
-
-        foreach ( $order as $sort_by ) {
-            $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
-                ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
-        }
-
-        $total = $filtered = Lib\Entities\MailingList::query()->count();
-
-        if ( isset( $filter['search'] ) && $filter['search'] != '' ) {
-            $fields = array();
-            foreach ( $columns as $column ) {
-                switch ( $column['data'] ) {
-                    case 'name':
-                    case 'id':
-                        $fields[] = 'm.' . $column['data'];
-                        break;
-                }
-            }
-            $search_columns = array();
-            foreach ( $fields as $field ) {
-                $search_columns[] = $field . ' LIKE "%%%s%"';
-            }
-            if ( ! empty( $search_columns ) ) {
-                $query->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) );
-                $filtered = Lib\Entities\MailingList::query( 'm' )->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) )->count();
-            }
-        }
-
-        if ( $length !== null && $start !== null ) {
-            $query->limit( $length )->offset( $start );
-        }
-
-        $data = $query->fetchArray();
-
-        unset( $filter['search'] );
-
-        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::SMS_MAILING_LISTS, $columns, $order, $filter );
-
-        wp_send_json( array(
-            'draw' => ( int ) self::parameter( 'draw' ),
-            'data' => $data,
-            'recordsTotal' => $total,
-            'recordsFiltered' => $filtered,
-        ) );
-    }
-
-    /**
-     * Get mailing list
-     */
-    public static function getMailingRecipients()
-    {
-        global $wpdb;
-
-        $columns = Lib\Utils\Tables::filterColumns( self::parameter( 'columns' ), Lib\Utils\Tables::SMS_MAILING_RECIPIENTS_LIST );
-        $order = self::parameter( 'order', array() );
-        $filter = self::parameter( 'filter' );
-        $length = self::parameter( 'length' );
-        $start = self::parameter( 'start' );
-
-        $query = Lib\Entities\MailingListRecipient::query()
-            ->select( 'id, name, phone' )
-            ->where( 'mailing_list_id', self::parameter( 'mailing_list_id' ) );
-
-        foreach ( $order as $sort_by ) {
-            $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
-                ->order( $sort_by['dir'] == 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
-        }
-
-        $total = $filtered = $query->count();
-
-        if ( isset( $filter['search'] ) && $filter['search'] != '' ) {
-            $fields = array();
-            foreach ( $columns as $column ) {
-                switch ( $column['data'] ) {
-                    case 'name':
-                    case 'phone':
-                        $fields[] = $column['data'];
-                        break;
-                }
-            }
-            $search_columns = array();
-            foreach ( $fields as $field ) {
-                $search_columns[] = $field . ' LIKE "%%%s%"';
-            }
-            if ( ! empty( $search_columns ) ) {
-                $query->whereRaw( implode( ' OR ', $search_columns ), array_fill( 0, count( $search_columns ), $wpdb->esc_like( $filter['search'] ) ) );
-                $filtered = $query->count();
-            }
-        }
-
-        if ( $length !== null && $start !== null ) {
-            $query->limit( $length )->offset( $start );
-        }
-
-        $data = $query->fetchArray();
-
-        unset( $filter['search'] );
-
-        Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::SMS_MAILING_RECIPIENTS_LIST, $columns, $order, $filter );
-
-        wp_send_json( array(
-            'draw' => ( int ) self::parameter( 'draw' ),
-            'data' => $data,
-            'recordsTotal' => $total,
-            'recordsFiltered' => $filtered,
-        ) );
-    }
-
-    /**
-     * Delete mailing lists
-     */
-    public static function deleteMailingLists()
-    {
-        $ids = array_map( 'intval', self::parameter( 'ids', array() ) );
-        Lib\Entities\MailingList::query()->delete()->whereIn( 'id', $ids )->execute();
-
-        Lib\Entities\MailingQueue::query()
-            ->delete()
-            ->whereIn( 'campaign_id', $ids )
-            ->where( 'sent', '0' )
-            ->execute();
-
-        wp_send_json_success();
-    }
-
-    /**
-     * Delete recipients from mailing list
-     */
-    public static function deleteMailingRecipients()
-    {
-        $ids = array_map( 'intval', self::parameter( 'ids', array() ) );
-        Lib\Entities\MailingListRecipient::query()->delete()->whereIn( 'id', $ids )->execute();
-
-        wp_send_json_success();
-    }
-
-    /**
-     * Get mailing list
+     * Get campaigns with their audience and results
      */
     public static function getCampaignList()
     {
@@ -427,8 +273,12 @@ class Ajax extends Lib\Base\Ajax
         $length = self::parameter( 'length' );
         $start = self::parameter( 'start' );
 
-        $query = Lib\Entities\MailingCampaign::query()
-            ->select( 'id, name, state, send_at' );
+        $queue = Lib\Entities\MailingQueue::getTableName();
+        $query = Lib\Entities\MailingCampaign::query( 'mc' )
+            ->select( 'mc.id, mc.name, mc.state, mc.send_at, mc.created_at, mc.audience, mc.mailing_list_id,
+                (SELECT COUNT(*) FROM `' . $queue . '` q WHERE q.campaign_id = mc.id) AS queued,
+                (SELECT COUNT(*) FROM `' . $queue . '` q WHERE q.campaign_id = mc.id AND q.sent = ' . Lib\Entities\MailingQueue::SENT_YES . ') AS sent,
+                (SELECT COUNT(*) FROM `' . $queue . '` q WHERE q.campaign_id = mc.id AND q.sent = ' . Lib\Entities\MailingQueue::SENT_FAILED . ') AS failed' );
 
         foreach ( $order as $sort_by ) {
             $query->sortBy( str_replace( '.', '_', $columns[ $sort_by['column'] ]['data'] ) )
@@ -462,6 +312,20 @@ class Ajax extends Lib\Base\Ajax
         }
 
         $data = $query->fetchArray();
+        foreach ( $data as &$row ) {
+            // Once queued, the recipients are fixed; until then a preset is counted as of now.
+            $audience = Lib\Mailing\Audience::normalize( $row['audience'] );
+            $row['audience'] = $audience && $audience['type'] === Lib\Mailing\Audience::TYPE_PRESET ? $audience['key'] : Lib\Mailing\Audience::TYPE_CUSTOM;
+            if ( $row['queued'] > 0 ) {
+                $row['recipients'] = (int) $row['queued'];
+            } elseif ( $audience && $audience['type'] === Lib\Mailing\Audience::TYPE_PRESET ) {
+                $row['recipients'] = count( Lib\Mailing\Audience::recipients( $audience ) );
+            } else {
+                $row['recipients'] = $row['mailing_list_id'] ? Lib\Entities\MailingListRecipient::query()->where( 'mailing_list_id', $row['mailing_list_id'] )->count() : 0;
+            }
+            unset( $row['mailing_list_id'], $row['queued'] );
+        }
+        unset( $row );
 
         unset( $filter['search'] );
 
@@ -476,12 +340,22 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
-     * Delete mailing lists
+     * Delete campaigns
      */
     public static function deleteCampaigns()
     {
         $ids = array_map( 'intval', self::parameter( 'ids', array() ) );
+        $list_ids = Lib\Entities\MailingCampaign::query()->whereIn( 'id', $ids )->whereNot( 'mailing_list_id', null )->fetchCol( 'mailing_list_id' );
         Lib\Entities\MailingCampaign::query()->delete()->whereIn( 'id', $ids )->execute();
+        // What a deleted campaign has not sent yet is not sent.
+        Lib\Entities\MailingQueue::query()
+            ->delete()
+            ->whereIn( 'campaign_id', $ids )
+            ->where( 'sent', Lib\Entities\MailingQueue::SENT_NO )
+            ->execute();
+        foreach ( array_unique( $list_ids ) as $list_id ) {
+            Lib\Entities\MailingList::releaseUnused( $list_id );
+        }
 
         wp_send_json_success();
     }

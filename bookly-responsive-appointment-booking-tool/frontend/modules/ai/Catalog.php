@@ -7,29 +7,115 @@ use Bookly\Lib;
  * What the business offers, given to the model with the system prompt instead of being asked
  * for tool by tool: services with prices and extras, who provides each of them, locations.
  *
- * Without it a conversation spends its first two or three rounds on get_services/get_staff.
- * The volume is the same either way: get_services with an empty search puts the whole
- * catalog into the history anyway.
+ * Without it a conversation would spend its first two or three rounds asking for them tool
+ * by tool, and put the same volume into the history anyway.
  *
  * How a booking is paid is deliberately not here: it depends on the service, the staff
  * member and the customer's group together (Checkout::getGateways()), and is only known
- * once create_booking has found the customer - its description and result say so.
+ * once create_booking has found the customer - Concepts and create_booking's result say so.
  *
- * Safe for Cloud's prompt cache: it changes only when the owner edits the catalog, and the
- * system prompt of a site is unique to that site already.
+ * Built once per conversation and kept on it (forConversation()): the system prompt and the
+ * tool schemas stay the same for the whole conversation, which Cloud's prompt cache needs.
+ *
+ * Sent as data in the site's "catalog"; Cloud's concept texts say what its fields mean.
  */
 class Catalog
 {
     // About 5k tokens. Past it the model gets every service's id and title and the details
-    // of as many as fit, and the get_* tools for the rest - the case get_services's search
-    // is there for. A catalog that big is rare; most sites stay far below.
+    // of as many as fit, and get_services for the rest (Tools::all() registers it only then).
+    // A catalog that big is rare; most sites stay far below.
     const MAX_LENGTH = 20000;
 
+    /** @var array|null */
+    private static $data;
+
     /**
+     * The catalog as it goes to Bookly Cloud in the site's "catalog" (SystemPrompt::site()):
+     * services - in full while they fit MAX_LENGTH, past it the rest with id and title only
+     * (the "catalog.complete" fact of Concepts::facts() says so) - staff members and
+     * locations. How to read it is Cloud's concept text; this is data only.
+     *
+     * @return array empty when the business has no bookable service
+     */
+    public static function payload()
+    {
+        $data = self::data();
+        if ( ! $data['services'] ) {
+            return array();
+        }
+
+        $catalog = array();
+        list( $catalog['services'] ) = self::fit( $data['services'] );
+        $catalog['staff'] = $data['staff'];
+        if ( $data['locations'] ) {
+            $catalog['locations'] = $data['locations'];
+        }
+
+        return $catalog;
+    }
+
+    /**
+     * Take data() from the conversation, or build it on the conversation's first turn and
+     * keep it there: one conversation, one catalog. Building it prices every service with
+     * every staff member, and each customer message is a new worker request that would
+     * build it again. An edit the owner makes meanwhile reaches the next conversation; so
+     * does a plugin update (AiConversation::getSnapshotArray()).
+     *
+     * @param Lib\Entities\AiConversation $conversation
+     */
+    public static function forConversation( Lib\Entities\AiConversation $conversation )
+    {
+        $snapshot = $conversation->getSnapshotArray();
+        if ( isset( $snapshot['catalog'] ) ) {
+            self::$data = $snapshot['catalog'];
+
+            return;
+        }
+
+        $conversation->setSnapshotValue( 'catalog', self::data() );
+    }
+
+    /**
+     * JSON as the model reads it: names as they are, not \u-escaped - a Cyrillic letter
+     * would take six characters of the catalog's length and of the model's tokens.
+     *
+     * @param mixed $value
      * @return string
      */
-    public static function build()
+    public static function json( $value )
     {
+        return wp_json_encode( $value, 256 );
+    }
+
+    /**
+     * Whether the catalog lists some services with id and title only - get_services is
+     * there for their details (Tools::all()).
+     *
+     * @return bool
+     */
+    public static function truncated()
+    {
+        $data = self::data();
+        list( , $shown ) = self::fit( $data['services'] );
+
+        return $shown < count( $data['services'] );
+    }
+
+    /**
+     * The services, staff and locations the catalog lists - Concepts decides from the same
+     * data which concepts this business has. Read once per request, or from the
+     * conversation (forConversation()): the prompt and every tool schema ask for it.
+     *
+     * @return array [ 'services' => array[], 'staff' => array[], 'locations' => array[] ]
+     */
+    public static function data()
+    {
+        if ( self::$data !== null ) {
+            return self::$data;
+        }
+
+        self::$data = array( 'services' => array(), 'staff' => array(), 'locations' => array() );
+
         /** @var Lib\Entities\Service[] $services */
         $services = Lib\Entities\Service::query( 's' )
             ->where( 's.type', Lib\Entities\Service::TYPE_SIMPLE )
@@ -38,46 +124,21 @@ class Catalog
             ->find();
 
         if ( ! $services ) {
-            return '';
+            return self::$data;
         }
 
-        $entries = array();
         $staff = array();
         foreach ( $services as $service ) {
-            $entry = BookingTools\GetServices::describe( $service );
-            $by_staff = BookingTools\ServicePrice::byStaff( $service );
-            $entry['staff_ids'] = array_keys( $by_staff );
-            $entries[] = $entry;
-
-            foreach ( $by_staff as $staff_id => $data ) {
-                $staff[ $staff_id ] = $data['full_name'];
+            self::$data['services'][] = BookingTools\GetServices::describe( $service );
+            foreach ( BookingTools\ServicePrice::byStaff( $service ) as $staff_id => $item ) {
+                $staff[ $staff_id ] = $item['full_name'];
             }
         }
 
-        $catalog = array();
-        list( $catalog['services'], $shown ) = self::fit( $entries );
-        $locations = Lib\Config::locationsActive() ? BookingTools\GetLocations::entries() : array();
-        $catalog['staff'] = self::staff( $staff, (bool) $locations );
-        if ( $locations ) {
-            $catalog['locations'] = $locations;
-        }
+        self::$data['locations'] = Lib\Config::locationsActive() ? BookingTools\Locations::entries() : array();
+        self::$data['staff'] = self::staff( $staff, (bool) self::$data['locations'] );
 
-        $notes = array(
-            'Catalog of this business, current as of this conversation. Use its ids directly; call get_services, get_staff' . ( $locations ? ' or get_locations' : '' ) . ' only for what it does not detail.'
-                . ( Lib\Config::locationsActive() && ! $locations ? ' Bookings here are not tied to a location: never pass location_id.' : '' ),
-            'Services have the fields get_services describes, and "staff_ids": the staff members who provide it.'
-                . ( $locations ? ' A staff member\'s "location_ids" are the locations they work at.' : '' ),
-        );
-        if ( $shown < count( $entries ) ) {
-            $notes[] = sprintf( 'Details are given for %d of %d services; the rest are listed with id and title only - call get_services for them.', $shown, count( $entries ) );
-        }
-        if ( Lib\Config::paymentStepDisabled() ) {
-            $notes[] = 'No payment is taken in the chat: bookings are confirmed right away.';
-        } else {
-            $notes[] = 'Whether a booking is paid in the chat and which ways it can be paid depends on the service, the staff member and the customer together, and only create_booking finds that out. If the customer asks how they can pay before that, say the ways to pay are shown on a card once the booking details are collected; never name payment methods yourself.';
-        }
-
-        return implode( ' ', $notes ) . "\n" . wp_json_encode( $catalog );
+        return self::$data;
     }
 
     /**
@@ -89,7 +150,7 @@ class Catalog
      */
     private static function fit( array $entries )
     {
-        if ( strlen( wp_json_encode( $entries ) ) <= self::MAX_LENGTH ) {
+        if ( strlen( self::json( $entries ) ) <= self::MAX_LENGTH ) {
             return array( $entries, count( $entries ) );
         }
 
@@ -98,10 +159,10 @@ class Catalog
             $short[] = array( 'id' => $entry['id'], 'title' => $entry['title'] );
         }
 
-        $length = strlen( wp_json_encode( $short ) );
+        $length = strlen( self::json( $short ) );
         $shown = 0;
         foreach ( $entries as $i => $entry ) {
-            $length += strlen( wp_json_encode( $entry ) ) - strlen( wp_json_encode( $short[ $i ] ) );
+            $length += strlen( self::json( $entry ) ) - strlen( self::json( $short[ $i ] ) );
             if ( $length > self::MAX_LENGTH ) {
                 break;
             }
@@ -123,7 +184,7 @@ class Catalog
 
         $list = array();
         foreach ( $staff as $staff_id => $full_name ) {
-            $member = array( 'id' => $staff_id, 'full_name' => $full_name );
+            $member = array( 'id' => (int) $staff_id, 'full_name' => $full_name );
 
             // Null with the addon off. An empty list is a staff member tied to no location:
             // bookable without one, not at any listed location.

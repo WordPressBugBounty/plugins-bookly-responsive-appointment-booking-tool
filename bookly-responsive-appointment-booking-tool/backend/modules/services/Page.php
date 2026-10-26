@@ -59,6 +59,8 @@ class Page extends Lib\Base\Ajax
             'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
             'show_type' => count( Proxy\Shared::prepareServiceTypes( array() ) ) > 0,
             'new_service' => __( 'New service', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'empty_title' => __( 'No services yet', 'bookly-responsive-appointment-booking-tool' ),
+            'empty_text' => __( 'Create your first service to start taking online bookings.', 'bookly-responsive-appointment-booking-tool' ),
             'search' => __( 'Quick search by title, category', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'delete' => __( 'Delete', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'order' => _x( 'Order', 'drag to reorder', 'bookly-responsive-appointment-booking-tool' ) . '…',

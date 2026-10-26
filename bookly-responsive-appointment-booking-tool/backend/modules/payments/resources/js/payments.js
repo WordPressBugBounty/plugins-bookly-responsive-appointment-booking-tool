@@ -2,7 +2,6 @@ jQuery(function ($) {
     'use strict';
     const { today, getLocalTimeZone, parseDate } = window.BooklyDatatables.calendarDate;
 
-    const $paymentTotal = $('#bookly-payment-total');
     const table = 'payments';
     const urlParts = document.URL.split('#');
     const filterOpts = BooklyL10n.filterOptions;
@@ -329,12 +328,14 @@ jQuery(function ($) {
                     filter: getFilter(),
                 }, d);
             },
-            dataSrc: function (json) {
-                $paymentTotal.html(json.total);
-                return json.data;
-            }
         },
         columns: columns,
+        // Sum of the paid column for the current filter (formatted on the server).
+        footer: function (result) {
+            return result && result.data && result.data.length > 0 && BooklyL10n.datatables[table].settings.columns.paid
+                ? BooklyDatatables.escapeHtml(BooklyL10n.total) + ': <strong id="bookly-payment-total">' + result.total + '</strong>'
+                : null;
+        },
         tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
         edit: function (row) {
             BooklyPaymentDetailsDialog.showDialog({

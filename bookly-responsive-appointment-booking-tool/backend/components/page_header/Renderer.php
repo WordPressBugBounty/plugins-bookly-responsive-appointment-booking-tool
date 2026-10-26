@@ -2,6 +2,7 @@
 namespace Bookly\Backend\Components\PageHeader;
 
 use Bookly\Lib;
+use Bookly\Backend\Components\Cloud\Account as CloudAccount;
 use Bookly\Backend\Components\Support\Buttons as SupportButtons;
 use Bookly\Backend\Components\Support\Lib\Urls;
 
@@ -161,18 +162,24 @@ class Renderer extends Lib\Base\Component
                     continue;
                 }
                 // Attach the page's in-page sections as a submenu, navigable from anywhere. Two
-                // schemes: a ?tab= page (supply 'tab'), or a custom-URL page (supply 'url' + the
-                // bare query 'flag' used to detect the active one, e.g. appearance forms). Active is
+                // schemes: a ?tab= page (supply 'tab'), or a custom-URL page (supply 'url' + either
+                // the bare query 'flag' used to detect the active one, e.g. appearance forms, or a
+                // 'param' whose 'value' names the active one, e.g. cloud products). Active is
                 // highlighted only while on that page.
                 $item_submenu = array();
                 if ( ! empty( $submenus[ $slug ] ) ) {
                     $is_current = ( ! $duplicate && $slug === $current_page );
                     foreach ( $submenus[ $slug ] as $i => $tab ) {
                         if ( isset( $tab['url'] ) ) {
+                            if ( isset( $tab['param'] ) ) {
+                                $active = isset( $_GET[ $tab['param'] ] ) && $_GET[ $tab['param'] ] === $tab['value'];
+                            } else {
+                                $active = isset( $tab['flag'] ) && isset( $_GET[ $tab['flag'] ] );
+                            }
                             $item_submenu[] = array(
                                 'label'  => $tab['label'],
                                 'url'    => $tab['url'],
-                                'active' => $is_current && isset( $tab['flag'] ) && isset( $_GET[ $tab['flag'] ] ),
+                                'active' => $is_current && $active,
                                 'badge'  => isset( $tab['badge'] ) ? $tab['badge'] : '',
                             );
                         } else {
@@ -368,5 +375,9 @@ class Renderer extends Lib\Base\Component
         // (CSS gates it to fullscreen >= md). Avoids the bare body-coloured gap.
         echo '<div class="bookly-fs-sidebar-placeholder"></div>';
 
+        // Every page of the Bookly Cloud section opens with the account block.
+        if ( strncmp( $page_slug, 'bookly-cloud-', 13 ) === 0 ) {
+            CloudAccount\Panel::render();
+        }
     }
 }

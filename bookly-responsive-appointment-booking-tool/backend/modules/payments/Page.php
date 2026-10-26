@@ -58,6 +58,7 @@ class Page extends Lib\Base\Component
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly-responsive-appointment-booking-tool' ), 'appAtAnyTime' => __( 'Appointment at any time', 'bookly-responsive-appointment-booking-tool' ), 'anyTime' => __( 'Any time', 'bookly-responsive-appointment-booking-tool' ), ) ),
             'zeroRecords' => __( 'No payments for selected period and criteria.', 'bookly-responsive-appointment-booking-tool' ),
+            'total' => __( 'Total', 'bookly-responsive-appointment-booking-tool' ),
             'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
             'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
             'no_result_found' => __( 'No results found', 'bookly-responsive-appointment-booking-tool' ),

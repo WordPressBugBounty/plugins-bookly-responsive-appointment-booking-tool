@@ -167,6 +167,12 @@ jQuery(function ($) {
         },
         columns: columns,
         tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+        emptyState: {
+            icon: 'layers',
+            title: BooklyL10n.empty_title,
+            text: BooklyL10n.empty_text,
+            actions: ['bookly-new-service', 'bookly-services-categories-btn']
+        },
         rowClass: function (row) {
             return row.disabled ? 'bookly:text-gray-400' : '';
         },
@@ -250,6 +256,7 @@ jQuery(function ($) {
                 });
             }
             buttons.push({
+                id: 'bookly-services-categories-btn',
                 label: BooklyL10n.manage_categories,
                 icon: 'folder',
                 variant: 'outline',

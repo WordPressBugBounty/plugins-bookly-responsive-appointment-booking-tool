@@ -355,7 +355,9 @@ abstract class Backend
                     }
                     add_submenu_page( 'bookly-cloud-menu', $billing, $billing, $required_capability,
                         Modules\CloudBilling\Page::pageSlug(), function() { Modules\CloudBilling\Page::render(); } );
-                    add_submenu_page( 'bookly-cloud-menu', $settings, $settings, $required_capability,
+                    // The Cloud account: who is signed in, country, password, notifications, Auto-Recharge
+                    $account = __( 'Account', 'bookly-responsive-appointment-booking-tool' );
+                    add_submenu_page( 'bookly-cloud-menu', $account, $account, $required_capability,
                         Modules\CloudSettings\Page::pageSlug(), function() { Modules\CloudSettings\Page::render(); } );
                 }
             }

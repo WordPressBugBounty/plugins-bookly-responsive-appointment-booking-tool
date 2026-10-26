@@ -142,6 +142,17 @@ class Codes
 
         // Add codes from add-ons.
         $this->codes = Proxy\Shared::prepareNotificationCodes( $this->codes, $type );
+
+        // Each code remembers its group: the groups are merged into one list per notification.
+        foreach ( $this->codes as $group => &$codes ) {
+            foreach ( $codes as &$code ) {
+                if ( is_array( $code ) && ! isset( $code['group'] ) ) {
+                    $code['group'] = $group;
+                }
+            }
+            unset( $code );
+        }
+        unset( $codes );
     }
 
     /**

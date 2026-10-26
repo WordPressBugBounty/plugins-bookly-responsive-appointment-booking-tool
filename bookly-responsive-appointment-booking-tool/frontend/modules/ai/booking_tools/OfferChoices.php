@@ -1,19 +1,21 @@
 <?php
 namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
+use Bookly\Frontend\Modules\Ai;
 use Bookly\Lib;
 
 /**
  * Not a lookup: the model calls this to put the options it is offering the
  * customer under its reply as cards - services with duration and price, services and staff
  * with their photo, start times as a grid. A click sends the option's label as
- * an ordinary customer message, so the model reads the choice the same way as
- * if it had been typed - the ids behind it are already in the history from the
- * get_* call that produced them.
+ * an ordinary customer message, and notes the option's id along with it
+ * (notePick()): two staff members or services can share a name, and the label
+ * alone would leave the model to guess which one was meant.
  *
  * Options are built here from the ids, never taken from the model: a card
  * always shows a real service/staff member/location/time, and an id the model
- * got wrong is dropped instead of shown.
+ * got wrong is dropped instead of shown. Options sharing a label all show,
+ * told apart on the cards (present()).
  *
  * What the model gets back is just ids and labels. The details a card shows
  * are looked up when the browser asks for them (present(), via Ajax::aiPoll()):
@@ -45,14 +47,15 @@ class OfferChoices implements ToolInterface
      */
     public function getSchema()
     {
+        $locations = Ai\Concepts::forSite()->has( Ai\Concepts::LOCATION );
         $types = array( self::TYPE_SERVICE, self::TYPE_STAFF, self::TYPE_SLOT );
-        if ( Lib\Config::locationsActive() ) {
+        if ( $locations ) {
             $types[] = self::TYPE_LOCATION;
         }
 
         return array(
             'name'        => $this->getName(),
-            'description' => 'Show services, staff members, ' . ( Lib\Config::locationsActive() ? 'locations ' : '' ) . 'or start times as clickable cards under your reply. Call it in the same reply as your text whenever that text would name two or more of them — whether answering a question about them or asking the customer to pick one — with exactly the ones you mean. The cards already show each one with its details (duration and price of a service, a staff member\'s photo, the date of a time), so do not list them in your text — write just a lead-in or the question. A click sends the option\'s label back as the customer\'s next message.',
+            'description' => 'Show services, staff members, ' . ( $locations ? 'locations ' : '' ) . 'or start times as clickable choice cards under your reply. Call it in the same reply as your text whenever that text would name two or more of them — whether answering a question about them or asking the customer to pick one — with exactly the ones you mean. The cards already show each one with its details (duration and price of a service, a staff member\'s photo, the date of a time), so do not list them in your text — write just a lead-in or the question. A click sends the option\'s label back as the customer\'s next message, with a note of the id they picked. When the customer names one in their own words and you cannot tell for sure which one they mean - two share that name, or the words fit more than one - do not pick one yourself: show exactly the ones that fit and ask them to tap the one they mean.',
             'parameters'  => array(
                 'type'       => 'object',
                 'properties' => array(
@@ -64,11 +67,15 @@ class OfferChoices implements ToolInterface
                     'ids'  => array(
                         'type'        => 'array',
                         'items'       => array( 'type' => 'string' ),
-                        'description' => 'Ids exactly as get_services/get_staff' . ( Lib\Config::locationsActive() ? '/get_locations' : '' ) . ' returned them, or for "slot" start times from get_available_slots with their date (YYYY-MM-DD HH:MM:SS). In the order to show.',
+                        'description' => 'Ids from the catalog, written as strings ("62"), or for "slot" start times from get_available_slots with their date (YYYY-MM-DD HH:MM:SS). In the order to show.',
                     ),
                     'staff_id' => array(
-                        'type'        => 'string',
-                        'description' => 'For "service" only: the staff member these services are for, when the customer has chosen or asked about one - the cards then show that staff member\'s prices. Leave empty otherwise; the cards then show each service\'s price range.',
+                        'type'        => 'integer',
+                        'description' => 'For "service": the staff member these services are for, when the customer has chosen or asked about one - the cards then show that staff member\'s prices; omit otherwise, the cards then show each service\'s price range. For "slot": the staff member of these start times, required.',
+                    ),
+                    'service_id' => array(
+                        'type'        => 'integer',
+                        'description' => 'For "staff": the service the customer has chosen, if any - staff members sharing a name are then told apart by their price for it. For "slot": the service of these start times, required.',
                     ),
                 ),
                 'required'   => array( 'type', 'ids' ),
@@ -92,26 +99,34 @@ class OfferChoices implements ToolInterface
                 $options = self::staffOptions( $ids );
                 break;
             case self::TYPE_LOCATION:
-                $options = Lib\Config::locationsActive() ? self::locationOptions( $ids ) : array();
+                $options = Ai\Concepts::forSite()->has( Ai\Concepts::LOCATION ) ? self::locationOptions( $ids ) : array();
                 break;
             case self::TYPE_SLOT:
-                $options = self::slotOptions( $ids );
+                $service = isset( $arguments['service_id'] ) ? Lib\Entities\Service::find( (int) $arguments['service_id'] ) : null;
+                $staff_id = isset( $arguments['staff_id'] ) ? (int) $arguments['staff_id'] : 0;
+                if ( ! $service || ! $staff_id ) {
+                    return 'Error: for "slot" pass service_id and staff_id - the start times are checked against them. Nothing was shown.';
+                }
+                $options = self::slotOptions( $ids, $service, $staff_id );
                 break;
             default:
                 return 'Error: unknown type "' . $type . '".';
         }
 
-        // Two ids resolving to the same label would be two cards sending the
-        // same message - keep the first.
+        // The same id twice would be the same card twice - keep the first. Options
+        // that only share a label all stay: they are different services or people,
+        // present() tells them apart on the cards and a click names its own id.
         $unique = array();
         foreach ( $options as $option ) {
-            if ( ! isset( $unique[ $option['label'] ] ) ) {
-                $unique[ $option['label'] ] = $option;
+            if ( ! isset( $unique[ $option['id'] ] ) ) {
+                $unique[ $option['id'] ] = $option;
             }
         }
 
         if ( ! $unique ) {
-            return 'Error: none of the ids is valid for type "' . $type . '", nothing was shown.';
+            return $type === self::TYPE_SLOT
+                ? 'Error: none of these start times can be booked with this staff member, nothing was shown. Take start times from get_available_slots.'
+                : 'Error: none of the ids is valid for type "' . $type . '", nothing was shown.';
         }
 
         $result = array(
@@ -125,6 +140,11 @@ class OfferChoices implements ToolInterface
         $staff_id = isset( $arguments['staff_id'] ) ? (int) $arguments['staff_id'] : 0;
         if ( $type === self::TYPE_SERVICE && $staff_id && Lib\Entities\Staff::find( $staff_id ) ) {
             $result['staff_id'] = (string) $staff_id;
+        }
+        // Same for staff cards: what each of them charges for this service.
+        $service_id = isset( $arguments['service_id'] ) ? (int) $arguments['service_id'] : 0;
+        if ( $type === self::TYPE_STAFF && $service_id && Lib\Entities\Service::find( $service_id ) ) {
+            $result['service_id'] = (string) $service_id;
         }
 
         return wp_json_encode( $result );
@@ -155,7 +175,7 @@ class OfferChoices implements ToolInterface
      * customer should see.
      *
      * @param string|null $result The 'tool' message content execute() returned
-     * @return array|null {type, items: [{label, meta?, image?, group?, time?}]}, null when the call failed
+     * @return array|null {type, items: [{id, label, meta?, image?, group?, time?}]}, null when the call failed
      */
     public static function present( $result )
     {
@@ -165,11 +185,21 @@ class OfferChoices implements ToolInterface
         }
 
         $items = array();
+        $labels = array();
+        foreach ( $data['shown_as_buttons'] as $option ) {
+            if ( isset( $option['label'] ) ) {
+                $labels[] = (string) $option['label'];
+            }
+        }
+        $label_counts = array_count_values( $labels );
+
         foreach ( $data['shown_as_buttons'] as $option ) {
             if ( ! isset( $option['id'], $option['label'] ) ) {
                 continue;
             }
-            $item = array( 'label' => (string) $option['label'] );
+            $item = array( 'id' => (string) $option['id'], 'label' => (string) $option['label'] );
+            // Shares its label with another card: what tells them apart goes under it.
+            $namesake = $label_counts[ $item['label'] ] > 1;
 
             switch ( $data['type'] ) {
                 case self::TYPE_SERVICE:
@@ -178,12 +208,39 @@ class OfferChoices implements ToolInterface
                         $staff_id     = isset( $data['staff_id'] ) ? (int) $data['staff_id'] : null;
                         $item['meta'] = Lib\Utils\DateTime::secondsToInterval( $service->getDuration() ) . ' · ' . ServicePrice::formatted( $service, $staff_id );
                         $item['image'] = $service->getImageUrl( 'thumbnail' );
+                        $category = $namesake && $service->getCategoryId() ? Lib\Entities\Category::find( $service->getCategoryId() ) : null;
+                        if ( $category ) {
+                            $item['meta'] .= ' · ' . $category->getTranslatedName();
+                        }
                     }
                     break;
                 case self::TYPE_STAFF:
                     $staff = Lib\Entities\Staff::find( (int) $option['id'] );
                     if ( $staff ) {
                         $item['image'] = $staff->getImageUrl( 'thumbnail' );
+                        if ( $namesake ) {
+                            $details = array();
+                            $service = isset( $data['service_id'] ) ? Lib\Entities\Service::find( (int) $data['service_id'] ) : null;
+                            if ( $service ) {
+                                $details[] = ServicePrice::formatted( $service, $staff->getId() );
+                            }
+                            // null with the Locations add-on off
+                            foreach ( Lib\Proxy\Locations::findByStaffId( $staff->getId() ) ?: array() as $location ) {
+                                $details[] = Lib\Utils\Common::getTranslatedString( 'location_' . $location->getId(), $location->getName() );
+                            }
+                            if ( $details ) {
+                                $item['meta'] = implode( ' · ', $details );
+                            }
+                        }
+                    }
+                    break;
+                case self::TYPE_LOCATION:
+                    // Its address/info, as the catalog gives it to the model, in one line.
+                    if ( $namesake ) {
+                        $info = wp_strip_all_tags( self::locationInfo( $option['id'] ), true );
+                        if ( $info !== '' ) {
+                            $item['meta'] = $info;
+                        }
                     }
                     break;
                 case self::TYPE_SLOT:
@@ -199,7 +256,65 @@ class OfferChoices implements ToolInterface
             $items[] = $item;
         }
 
+        // Namesakes nothing else tells apart - the same photo, price, category,
+        // location - get their id: two identical cards would be a guess either way.
+        $looks = array();
+        foreach ( $items as $item ) {
+            $looks[] = $item['label'] . "\n" . ( isset( $item['meta'] ) ? $item['meta'] : '' ) . "\n" . ( isset( $item['image'] ) ? $item['image'] : '' );
+        }
+        $look_counts = array_count_values( $looks );
+        foreach ( $items as $i => &$item ) {
+            if ( $look_counts[ $looks[ $i ] ] > 1 ) {
+                $item['meta'] = ( isset( $item['meta'] ) ? $item['meta'] . ' · ' : '' ) . 'ID ' . $item['id'];
+            }
+        }
+        unset( $item );
+
         return $items ? array( 'type' => (string) $data['type'], 'items' => $items ) : null;
+    }
+
+    /**
+     * Note which card the customer clicked, for the model to read with the click's
+     * label (Ajax::buildCompletionPayload()). Only an option of the latest offer counts:
+     * that is the one the widget leaves open, every earlier one is closed. Anything
+     * else - a typed answer, an id not in the offer - notes nothing, and the model
+     * reads the message as it is.
+     *
+     * @param Lib\Entities\AiConversation $conversation
+     * @param string $id Option id as present() gave it to the widget
+     */
+    public static function notePick( Lib\Entities\AiConversation $conversation, $id )
+    {
+        if ( $id === '' || ! $conversation->getId() ) {
+            return;
+        }
+
+        /** @var Lib\Entities\AiMessage $offer */
+        $offer = Lib\Entities\AiMessage::query()
+            ->where( 'conversation_id', $conversation->getId() )
+            ->where( 'role', Lib\Entities\AiMessage::ROLE_TOOL )
+            ->where( 'tool_name', self::NAME )
+            ->sortBy( 'id' )
+            ->order( Lib\Query::ORDER_DESCENDING )
+            ->limit( 1 )
+            ->findOne();
+        $data = $offer ? json_decode( (string) $offer->getContent(), true ) : null;
+        if ( empty( $data['shown_as_buttons'] ) || ! is_array( $data['shown_as_buttons'] ) ) {
+            return;
+        }
+
+        foreach ( $data['shown_as_buttons'] as $option ) {
+            if ( isset( $option['id'], $option['label'] ) && (string) $option['id'] === $id ) {
+                $event = new Lib\Entities\AiMessage();
+                $event
+                    ->setConversationId( $conversation->getId() )
+                    ->setRole( Lib\Entities\AiMessage::ROLE_EVENT )
+                    ->setContent( sprintf( 'Clicked on the %s cards: id %s, "%s".', self::NAME, $option['id'], $option['label'] ) )
+                    ->save();
+
+                return;
+            }
+        }
     }
 
     /**
@@ -240,16 +355,17 @@ class OfferChoices implements ToolInterface
     }
 
     /**
-     * Named the way GetLocations names them.
+     * Named the way the catalog names them (Locations::entries()).
      *
      * @param array $ids
      * @return array[]
      */
     private static function locationOptions( array $ids )
     {
+        // The locations the catalog lists - not one no bookable staff member works at.
         $names = array();
-        foreach ( Lib\Proxy\Locations::getAll() ?: array() as $location ) {
-            $names[ (int) $location['id'] ] = Lib\Utils\Common::getTranslatedString( 'location_' . $location['id'], $location['name'] );
+        foreach ( Locations::entries() as $location ) {
+            $names[ (int) $location['id'] ] = $location['name'];
         }
 
         $options = array();
@@ -263,25 +379,55 @@ class OfferChoices implements ToolInterface
     }
 
     /**
+     * @param string $id
+     * @return string The location's info, translated; '' when it has none
+     */
+    private static function locationInfo( $id )
+    {
+        foreach ( Lib\Proxy\Locations::getAll() ?: array() as $location ) {
+            if ( $location['id'] == $id ) {
+                return Lib\Utils\Common::getTranslatedString( 'location_' . $location['id'] . '_info', $location['info'] );
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Times in the business's own format and time zone, the one
      * get_available_slots lists them in. When the options span more than one
      * day the label carries the date too (it is what a click sends), and the
      * card groups the times under their dates; otherwise the day is already in
      * the text and "10:00" alone is what the customer would type.
      *
-     * Availability is not re-checked here: create_booking checks the time
-     * that comes back before it books it.
+     * create_booking still checks the time that comes back before it books it,
+     * with the extras and location chosen.
      *
-     * @param array $ids
+     * @param array                $ids
+     * @param Lib\Entities\Service $service
+     * @param int                  $staff_id
      * @return array[]
      */
-    private static function slotOptions( array $ids )
+    private static function slotOptions( array $ids, Lib\Entities\Service $service, $staff_id )
     {
+        // Only start times the slot engine offers that day - checked without extras and
+        // location, which can only take times away: a card never shows a time made up.
+        $bookable = array();
         $points = array();
         foreach ( $ids as $id ) {
             $id = trim( (string) $id );
             $point = \DateTime::createFromFormat( 'Y-m-d H:i:s', $id ) ?: \DateTime::createFromFormat( 'Y-m-d H:i', $id );
-            if ( $point ) {
+            if ( ! $point ) {
+                continue;
+            }
+            $day = $point->format( 'Y-m-d' );
+            if ( ! isset( $bookable[ $day ] ) ) {
+                // Room for the fewest persons this staff member takes - a group service has no
+                // times for one; times with room for more are among these.
+                list( $min_persons ) = SlotLookup::personsRange( $service, array( $staff_id ) );
+                $bookable[ $day ] = SlotLookup::slotsForDay( $service, $staff_id, $day, null, array(), $min_persons );
+            }
+            if ( in_array( $point->format( 'Y-m-d H:i:s' ), $bookable[ $day ], true ) ) {
                 $points[] = $point->format( 'Y-m-d H:i:s' );
             }
         }

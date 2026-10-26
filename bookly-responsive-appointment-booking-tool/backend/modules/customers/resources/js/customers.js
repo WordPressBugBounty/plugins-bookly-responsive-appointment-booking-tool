@@ -159,6 +159,12 @@ jQuery(function ($) {
         },
         columns: columns,
         tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+        emptyState: {
+            icon: 'users',
+            title: BooklyL10n.empty_title,
+            text: BooklyL10n.empty_text,
+            actions: ['bookly-new-customer', 'bookly-import-customers']
+        },
         edit: function (row) {
             BooklyCustomerDialog.showDialog({
                 action: 'load',
@@ -219,6 +225,7 @@ jQuery(function ($) {
                     }
                 });
                 buttons.push({
+                    id: 'bookly-import-customers',
                     label: BooklyL10n.import,
                     icon: 'upload',
                     variant: 'outline',

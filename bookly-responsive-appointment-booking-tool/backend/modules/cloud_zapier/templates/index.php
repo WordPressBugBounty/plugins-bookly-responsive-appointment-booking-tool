@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Cloud;
 use Bookly\Backend\Components\Settings\Inputs;
 use Bookly\Backend\Components\Controls\Buttons;
 ?>
@@ -9,13 +8,6 @@ use Bookly\Backend\Components\Controls\Buttons;
     <?php PageHeaderRenderer::render( $self::pageSlug(), 'Zapier' ) ?>
     <div class="bookly:card mb-4">
         <div class="bookly:card-body">
-            <div class="row pb-3">
-                <div class="col">
-                </div>
-                <div class="col-auto">
-                    <?php Cloud\Account\Panel::render() ?>
-                </div>
-            </div>
             <div class="form-group">
                 <h4><?php esc_html_e( 'Instructions', 'bookly-responsive-appointment-booking-tool' ) ?></h4>
                 <p></p>

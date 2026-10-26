@@ -55,11 +55,13 @@ class Ajax extends Lib\Base\Ajax
      * to start polling aiPoll() with the returned token.
      *
      * Expects (via json_data): message, token (optional), form_slug (optional),
-     * time_zone (optional, IANA name of the visitor's browser time zone).
+     * time_zone (optional, IANA name of the visitor's browser time zone),
+     * choice (optional, id of the offer_choices option the message was a click on).
      */
     public static function aiSendMessage()
     {
         $text      = trim( (string) self::parameter( 'message', '' ) );
+        $choice    = (string) self::parameter( 'choice', '' );
         $token     = (string) self::parameter( 'token', '' );
         $form_slug = (string) self::parameter( 'form_slug', '' );
         $time_zone = (string) self::parameter( 'time_zone', '' );
@@ -81,6 +83,7 @@ class Ajax extends Lib\Base\Ajax
         // Before the message, so they go out together with it - see buildCompletionPayload().
         Checkout::noteCardState( $conversation );
         Checkout::notePaymentChange( $conversation );
+        BookingTools\OfferChoices::notePick( $conversation, $choice );
 
         $message = new Lib\Entities\AiMessage();
         $message
@@ -154,6 +157,8 @@ class Ajax extends Lib\Base\Ajax
         // limit cut the loop off before WORKER_TIME_BUDGET does.
         ignore_user_abort( true );
         @set_time_limit( 0 );
+
+        Catalog::forConversation( $conversation );
 
         $deadline = microtime( true ) + self::WORKER_TIME_BUDGET;
         $step     = $job->getStep();
@@ -548,9 +553,9 @@ class Ajax extends Lib\Base\Ajax
             Checkout::setState( $conversation, Lib\Entities\AiConversation::BOOKING_PENDING, null );
         }
 
-        $booking = Checkout::describeBooking( $conversation );
-        Checkout::report( $conversation, $booking !== null
-            ? 'Booking confirmed: ' . $booking . '.'
+        $booked = Checkout::bookedResult( $conversation );
+        Checkout::report( $conversation, $booked !== null
+            ? $booked
             : 'The payment did not go through: nothing was booked or charged. The payment card is open again for the same booking, to pay another way.'
         );
 
@@ -940,7 +945,8 @@ class Ajax extends Lib\Base\Ajax
             // Cloud's default keeps this widget's traffic identifiable in
             // Cloud's logs once other agents exist.
             'agent' => self::AGENT,
-            'system' => SystemPrompt::build( $form_slug ),
+            // Facts about the site; Cloud writes the prompt from them (SystemPrompt::site()).
+            'site' => SystemPrompt::site( $form_slug ),
             // Schemas are ours to define and Cloud passes them through as they
             // arrive: which tools exist here depends on this plugin's version
             // and on the active add-ons, so the set is only knowable on this

@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
+use Bookly\Frontend\Modules\Ai;
 use Bookly\Lib;
 
 /**
@@ -23,32 +24,38 @@ class GetAvailableSlots implements ToolInterface
     public function getSchema()
     {
         $properties = array(
-            'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from get_services.' ),
-            'staff_id' => array( 'type' => 'integer', 'description' => 'Staff id, from get_staff.' ),
+            'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from the catalog.' ),
+            'staff_id' => array( 'type' => 'integer', 'description' => 'Staff member id, from the catalog.' ),
             'date' => array( 'type' => 'string', 'description' => 'Date to search, format "YYYY-MM-DD".' ),
         );
 
-        // Only when the Locations addon is active, same as get_locations in Tools::all().
-        if ( Lib\Config::locationsActive() ) {
-            $properties['location_id'] = array( 'type' => 'integer', 'description' => GetLocations::ARGUMENT );
+        // Only where the business has locations (Concepts).
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::LOCATION ) ) {
+            $properties['location_id'] = array( 'type' => 'integer', 'description' => Locations::ARGUMENT );
         }
 
-        $properties['extras'] = array(
-            'type' => 'array',
-            'description' => 'Optional extras to include (from get_services\' "extras" list for this service) — affects the duration/spacing of the returned slots. Omit or pass an empty array if the customer didn\'t ask for any.',
-            'items' => array(
-                'type' => 'object',
-                'properties' => array(
-                    'extra_id' => array( 'type' => 'integer', 'description' => 'Extra id, from get_services.' ),
-                    'quantity' => array( 'type' => 'integer', 'description' => 'How many of this extra (within its min/max_quantity from get_services).' ),
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::EXTRA ) ) {
+            $properties['extras'] = array(
+                'type' => 'array',
+                'description' => 'The extras the customer chose. Omit or pass an empty array if none.',
+                'items' => array(
+                    'type' => 'object',
+                    'properties' => array(
+                        'extra_id' => array( 'type' => 'integer', 'description' => 'Extra id, from the service\'s extras list.' ),
+                        'quantity' => array( 'type' => 'integer', 'description' => 'How many of this extra.' ),
+                    ),
+                    'required' => array( 'extra_id', 'quantity' ),
                 ),
-                'required' => array( 'extra_id', 'quantity' ),
-            ),
-        );
+            );
+        }
+
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::GROUP ) ) {
+            $properties['persons'] = array( 'type' => 'integer', 'description' => SlotLookup::PERSONS_ARGUMENT );
+        }
 
         return array(
             'name' => $this->getName(),
-            'description' => 'List real bookable start times for a service with a specific staff member on a specific date, and the price; if that date has none, it returns the nearest later date that has, with its times. Call this before suggesting candidate times to the customer — never guess or invent times yourself.',
+            'description' => 'List the start times of a service with a staff member on a date, and the price; if that date has none, it returns the nearest date that has, with its start times. Call it before naming any start time to the customer.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -71,18 +78,18 @@ class GetAvailableSlots implements ToolInterface
         // Same validation as CheckAvailability.
         $service = Lib\Entities\Service::find( $service_id );
         if ( ! $service || $service->getType() !== Lib\Entities\Service::TYPE_SIMPLE || $service->getVisibility() !== Lib\Entities\Service::VISIBILITY_PUBLIC ) {
-            return 'Error: unknown service_id. Call get_services to get a valid id.';
+            return 'Error: unknown service_id. Use a service id from the catalog.';
         }
 
         $staff = Lib\Entities\Staff::find( $staff_id );
         if ( ! $staff || $staff->getVisibility() !== 'public' ) {
-            return 'Error: unknown staff_id. Call get_staff to get a valid id.';
+            return 'Error: unknown staff_id. Use a staff member id from the catalog.';
         }
 
         if ( $location_id && ! Lib\Proxy\Locations::findById( $location_id ) ) {
-            return 'Error: unknown location_id. Call get_locations to get a valid id.';
+            return 'Error: unknown location_id. Use a location id from the catalog.';
         }
-        $not_there = GetLocations::checkStaff( $staff, $location_id );
+        $not_there = Locations::checkStaff( $staff, $location_id );
         if ( $not_there !== null ) {
             return $not_there;
         }
@@ -90,7 +97,7 @@ class GetAvailableSlots implements ToolInterface
         $link = new Lib\Entities\StaffService();
         $link->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id ) );
         if ( ! $link->isLoaded() ) {
-            return 'Error: this staff member does not perform this service. Call get_staff with this service_id to see who does.';
+            return 'Error: this staff member does not provide this service. The catalog lists the ones who do in the service\'s staff_ids or price_by_staff.';
         }
 
         try {
@@ -99,23 +106,30 @@ class GetAvailableSlots implements ToolInterface
             return 'Error: ' . $e->getMessage();
         }
 
+        $nop = isset( $arguments['persons'] ) ? max( 1, (int) $arguments['persons'] ) : 1;
+        $wrong_persons = SlotLookup::checkPersons( $service, $staff_id, $location_id, $nop );
+        if ( $wrong_persons !== null ) {
+            return $wrong_persons;
+        }
+
         $day = \DateTime::createFromFormat( 'Y-m-d', $date );
         if ( ! $day || $day->format( 'Y-m-d' ) !== $date ) {
             return 'Error: date must be in the format YYYY-MM-DD.';
         }
 
-        $times = SlotLookup::slotsForDay( $service, $staff_id, $date, $location_id ?: null, $extras );
+        $times = SlotLookup::slotsForDay( $service, $staff_id, $date, $location_id ?: null, $extras, $nop );
 
-        $who_what = $staff->getFullName() . ' performing "' . $service->getTitle() . '"' . ( $extras ? ' with the requested extras' : '' );
+        $who_what = $staff->getFullName() . ' performing "' . $service->getTitle() . '"' . ( $extras ? ' with the requested extras' : '' )
+            . ( $nop > 1 ? ' for ' . $nop . ' people' : '' );
 
         $prefix = '';
         if ( ! $times ) {
             $why = SlotLookup::describeWindow( $service, $date );
-            $next_day = SlotLookup::nextDayWithSlots( $service, $staff_id, $date, $location_id ?: null, $extras );
+            $next_day = SlotLookup::nextDayWithSlots( $service, $staff_id, $date, $location_id ?: null, $extras, $nop );
             if ( ! $next_day ) {
-                $next_day = SlotLookup::previousDayWithSlots( $service, $staff_id, $date, $location_id ?: null, $extras );
+                $next_day = SlotLookup::previousDayWithSlots( $service, $staff_id, $date, $location_id ?: null, $extras, $nop );
             }
-            $times = $next_day ? SlotLookup::slotsForDay( $service, $staff_id, $next_day, $location_id ?: null, $extras ) : array();
+            $times = $next_day ? SlotLookup::slotsForDay( $service, $staff_id, $next_day, $location_id ?: null, $extras, $nop ) : array();
             if ( ! $times ) {
                 return $why
                     ? 'No available slots on ' . $date . ': ' . $why . '.'
@@ -127,7 +141,7 @@ class GetAvailableSlots implements ToolInterface
         }
 
         return $prefix . 'All available start times for ' . $who_what . ' on ' . $date . ': ' . SlotLookup::listTimes( $times ) . '.'
-            . ' ' . self::describePrice( $service, $staff_id, $location_id, $extras, $times )
+            . ' ' . self::describePrice( $service, $staff_id, $location_id, $extras, $times, $nop )
             . ' As an id for ' . OfferChoices::NAME . ' or create_booking a time goes with its date: "' . $times[0] . '".'
             . OfferChoices::hint( OfferChoices::TYPE_SLOT, count( $times ) );
     }
@@ -142,19 +156,20 @@ class GetAvailableSlots implements ToolInterface
      * @param int                  $location_id
      * @param array                $extras
      * @param string[]             $times
+     * @param int                  $nop
      * @return string
      */
-    private static function describePrice( Lib\Entities\Service $service, $staff_id, $location_id, array $extras, array $times )
+    private static function describePrice( Lib\Entities\Service $service, $staff_id, $location_id, array $extras, array $times, $nop )
     {
-        $label = $extras ? 'Total price with the requested extras' : 'Total price';
+        $label = ( $extras ? 'Total price with the requested extras' : 'Total price' ) . ( $nop > 1 ? ' for ' . $nop . ' people' : '' );
 
         if ( ! Lib\Config::specialHoursActive() ) {
-            return $label . ': ' . Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff_id, $location_id, $times[0], $extras ) ) . '.';
+            return $label . ': ' . Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff_id, $location_id, $times[0], $extras, $nop ) ) . '.';
         }
 
         $by_price = array();
         foreach ( $times as $time ) {
-            $by_price[ Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff_id, $location_id, $time, $extras ) ) ][] = $time;
+            $by_price[ Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff_id, $location_id, $time, $extras, $nop ) ) ][] = $time;
         }
         if ( count( $by_price ) === 1 ) {
             return $label . ': ' . key( $by_price ) . '.';

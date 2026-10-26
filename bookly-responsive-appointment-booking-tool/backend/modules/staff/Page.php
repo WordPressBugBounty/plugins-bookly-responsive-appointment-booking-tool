@@ -65,6 +65,8 @@ class Page extends Lib\Base\Component
             'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
             'errors' => $errors,
             'new_staff' => __( 'New staff member', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'empty_title' => __( 'No staff members yet', 'bookly-responsive-appointment-booking-tool' ),
+            'empty_text' => __( 'Add the people who provide your services so customers can book them.', 'bookly-responsive-appointment-booking-tool' ),
             'manage_categories' => __( 'Categories', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'duplicate' => __( 'Duplicate', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'search' => __( 'Quick search by name, email, phone', 'bookly-responsive-appointment-booking-tool' ) . '…',

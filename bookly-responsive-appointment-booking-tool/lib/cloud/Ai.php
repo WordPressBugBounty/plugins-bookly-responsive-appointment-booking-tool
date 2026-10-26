@@ -12,7 +12,7 @@ class Ai extends Product
     // One route for every agent; which one runs is the 'agent' field of the
     // request body (see Frontend\Modules\Ai\Ajax::buildCompletionPayload()).
     // Cloud resolves it to a prompt, provider, model and token cap server-side.
-    const COMPLETE                = '/1.0/users/%token%/products/ai/complete';                // POST
+    const COMPLETE                = '/1.1/users/%token%/products/ai/complete';                // POST
 
     public function completeRaw( array $payload )
     {

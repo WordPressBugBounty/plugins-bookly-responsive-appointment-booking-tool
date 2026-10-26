@@ -41,4 +41,20 @@ class MailingList extends Lib\Base\Entity
 
         return $this;
     }
+
+    /**************************************************************************
+     * Public Methods                                                         *
+     **************************************************************************/
+
+    /**
+     * Delete a list unless some campaign still goes to it.
+     *
+     * @param int $list_id
+     */
+    public static function releaseUnused( $list_id )
+    {
+        if ( $list_id && ! MailingCampaign::query()->where( 'mailing_list_id', $list_id )->count() ) {
+            self::query()->delete()->where( 'id', $list_id )->execute();
+        }
+    }
 }

@@ -91,6 +91,22 @@ jQuery(function ($) {
         return (row.type === 'PayPal' || row.type === 'Card' || row.type === 'Paddle') && row.status === 'Paid';
     }
 
+    /**
+     * Who the invoices are made out to. Opened from the table toolbar, and from an
+     * invoice download that cannot go ahead without the details.
+     */
+    function showInvoiceDetails() {
+        BooklyCloudSettings.showInvoiceDialog({
+            invoice: BooklyL10n.invoice.details,
+            email: BooklyL10n.invoice.email,
+            l10n: BooklyL10n.invoice.l10n,
+            onsaved: function (details) {
+                BooklyL10n.invoice.details = details;
+                BooklyL10n.invoice.valid = details.company_name.trim() !== '' && details.company_address.trim() !== '';
+            }
+        });
+    }
+
     if (columns.length) {
         let purchasesBt = BooklyDatatables.showForm('bookly-' + purchasesTable + '-datatables', {
             datePicker: BooklyL10n.datePicker,
@@ -125,6 +141,12 @@ jQuery(function ($) {
                 onChange: function (v) { dateValue = v; },
             }],
             searchFilter: { placeholder: BooklyL10n.search || 'Quick search', name: 'filter[search]' },
+            topToolbar: [{
+                label: BooklyL10n.invoice.details_button,
+                icon: 'pencil',
+                variant: 'outline',
+                click: showInvoiceDetails,
+            }],
             rowActions: function (row) {
                 if (!rowHasInvoice(row)) return [];
                 return [{
@@ -136,6 +158,7 @@ jQuery(function ($) {
                             window.location = BooklyL10n.invoice.link + '/' + r.id;
                         } else {
                             booklyAlert({ error: [BooklyL10n.invoice.alert] });
+                            showInvoiceDetails();
                         }
                     }
                 }];

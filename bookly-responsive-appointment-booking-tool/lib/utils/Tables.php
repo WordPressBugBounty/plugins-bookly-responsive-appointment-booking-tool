@@ -25,9 +25,7 @@ abstract class Tables
     const SERVICES                      = 'services';
     const SMS_DETAILS                   = 'sms_details';
     const SMS_MAILING_CAMPAIGNS         = 'sms_mailing_campaigns';
-    const SMS_MAILING_LISTS             = 'sms_mailing_lists';
-    const SMS_MAILING_RECIPIENTS_LIST   = 'sms_mailing_recipients_list';
-    const SMS_NOTIFICATIONS             = 'sms_notifications';
+    const SMS_NOTIFICATIONS            = 'sms_notifications';
     const SMS_PRICES                    = 'sms_prices';
     const SMS_SENDER                    = 'sms_sender';
     const STAFF_MEMBERS                 = 'staff_members';
@@ -156,22 +154,13 @@ abstract class Tables
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
                     'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
+                    'audience' => esc_html__( 'Audience', 'bookly-responsive-appointment-booking-tool' ),
+                    'recipients' => esc_html__( 'Recipients', 'bookly-responsive-appointment-booking-tool' ),
+                    'sent' => esc_html__( 'Sent', 'bookly-responsive-appointment-booking-tool' ),
+                    'failed' => esc_html__( 'Failed', 'bookly-responsive-appointment-booking-tool' ),
                     'send_at' => esc_html__( 'Start at', 'bookly-responsive-appointment-booking-tool' ),
+                    'created_at' => esc_html__( 'Created', 'bookly-responsive-appointment-booking-tool' ),
                     'state' => esc_html__( 'State', 'bookly-responsive-appointment-booking-tool' ),
-                );
-                break;
-            case self::SMS_MAILING_LISTS:
-                $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
-                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
-                    'number_of_recipients' => esc_html__( 'Number of recipients', 'bookly-responsive-appointment-booking-tool' ),
-                );
-                break;
-            case self::SMS_MAILING_RECIPIENTS_LIST:
-                $columns = array(
-                    'id' => esc_html__( 'ID', 'bookly-responsive-appointment-booking-tool' ),
-                    'name' => esc_html__( 'Name', 'bookly-responsive-appointment-booking-tool' ),
-                    'phone' => esc_html__( 'Phone', 'bookly-responsive-appointment-booking-tool' ),
                 );
                 break;
             case self::SMS_DETAILS:
@@ -522,8 +511,6 @@ abstract class Tables
             case self::SERVICES:
             case self::SMS_DETAILS:
             case self::SMS_MAILING_CAMPAIGNS:
-            case self::SMS_MAILING_LISTS:
-            case self::SMS_MAILING_RECIPIENTS_LIST:
             case self::SMS_NOTIFICATIONS:
             case self::STAFF_MEMBERS:
             case self::CLOUD_MOBILE_STAFF_CABINET:

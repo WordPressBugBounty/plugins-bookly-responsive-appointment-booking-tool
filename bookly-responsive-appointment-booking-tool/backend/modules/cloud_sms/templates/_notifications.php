@@ -3,7 +3,6 @@ use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Lib\Utils\Common;
 use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Notices;
 
 /** @var array $datatables */
 ?>
@@ -33,5 +32,4 @@ use Bookly\Backend\Components\Notices;
     </div>
 
     <div id="bookly-sms_notifications-datatables"></div>
-<?php Notices\Cron\Notice::render() ?>
 <?php Dialogs\Sms\Dialog::render() ?>

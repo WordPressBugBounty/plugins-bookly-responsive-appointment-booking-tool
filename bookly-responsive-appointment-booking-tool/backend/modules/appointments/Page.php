@@ -57,6 +57,8 @@ class Page extends Lib\Base\Component
             'edit' => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'no_result_found' => __( 'No results found', 'bookly-responsive-appointment-booking-tool' ),
             'new_appointment' => __( 'New appointment', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'empty_title' => __( 'No appointments yet', 'bookly-responsive-appointment-booking-tool' ),
+            'empty_text' => __( 'Appointments booked online or created here will appear in this list.', 'bookly-responsive-appointment-booking-tool' ),
             'searching' => __( 'Searching', 'bookly-responsive-appointment-booking-tool' ),
             'attachments' => __( 'Attachments', 'bookly-responsive-appointment-booking-tool' ),
             'tasks' => array(

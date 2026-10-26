@@ -6,11 +6,26 @@ use Bookly\Lib;
 
 class SystemPrompt
 {
-    const DATES = 'Dates: each customer message ends with the date/time it was sent, in this business\'s local time zone — treat the one on the latest message as now, and resolve relative dates ("tomorrow", "next Friday") yourself into exact YYYY-MM-DD HH:MM:SS (YYYY-MM-DD for get_available_slots); never ask the customer what today\'s date is.';
-
-    const EXTRAS = 'Extras: if the chosen service has optional extras, proactively ask the customer which (if any) before proceeding — never invent extras outside the service\'s own list in the catalog or get_services.';
-
     /**
+     * What Bookly Cloud puts into the prompt as the business's own section. Cloud's prompt
+     * is one text for every site - the agent's rules and the concepts of booking, each saying
+     * when it applies - so a change to it reaches every site without a plugin release. The
+     * plugin sends only what is particular to this business:
+     *
+     *  - about, assistant, customer_info: what the owner wrote on this widget's appearance -
+     *    about the business; how the assistant should present itself; what customers
+     *    should know. Separate fields, so each goes into the prompt with its own weight:
+     *    facts, wishes about tone, information to pass on;
+     *  - company: name and contacts from Settings > Company, so the assistant can give
+     *    them whenever it suggests contacting the business;
+     *  - facts: how the business is set up, as values grouped by what the customer sees -
+     *    Cloud picks the parts of its prompt by them (Concepts::facts());
+     *  - catalog: services, staff members, locations (Catalog::payload()).
+     *
+     * The owner's texts stay per-form (a site can publish several assistants, e.g. one per
+     * location) and the token travels with the request instead of being stored on the
+     * conversation - see Ajax::aiSendMessage()/spawnWorker().
+     *
      * Everything here has to stay stable for the whole conversation: Bookly
      * Cloud marks the end of the system prompt as a prompt-cache breakpoint,
      * so any value that changes between two calls (a clock, above all) would
@@ -21,55 +36,54 @@ class SystemPrompt
      *
      * @param string|null $form_slug Token of the AI assistant appearance the widget was
      *                                rendered with; null falls back to the first one.
-     * @return string
+     * @return array
      */
-    public static function build( $form_slug = null )
+    public static function site( $form_slug = null )
     {
-        $parts = array();
+        $appearance = ModernAppearance::getAppearance( Lib\Entities\Form::TYPE_AI_ASSISTANT, $form_slug ?: null );
+        $text = function ( $key ) use ( $appearance ) {
+            return isset( $appearance[ $key ] ) ? trim( (string) $appearance[ $key ] ) : '';
+        };
 
-        $business = self::businessDescription( $form_slug );
-        if ( $business !== '' ) {
-            $parts[] = $business;
-        }
-
-        $parts[] = self::DATES;
-
-        if ( Lib\Config::serviceExtrasActive() ) {
-            $parts[] = self::EXTRAS;
-        }
-
-        // Last: the longest part, and the one the rules above refer to.
-        $catalog = Catalog::build();
-        if ( $catalog !== '' ) {
-            $parts[] = $catalog;
-        }
-
-        return implode( "\n\n", $parts );
+        return array(
+            'about'         => $text( 'business_description' ),
+            'assistant'     => $text( 'assistant_persona' ),
+            'customer_info' => $text( 'customer_info' ),
+            'company'       => self::company(),
+            'facts'         => Concepts::forSite()->facts(),
+            'catalog'       => Catalog::payload(),
+        );
     }
 
     /**
-     * The business description the owner saved on this widget's appearance.
+     * Name and contacts from Settings > Company - the same values notifications use for
+     * {company_name}, {company_phone} etc. Empty ones are left out.
      *
-     * Stays per-form (a site can publish several assistants, e.g. one per
-     * location, each with its own description) and the token travels with the
-     * request instead of being stored on the conversation - see
-     * Ajax::aiSendMessage()/spawnWorker(). Without a token this resolves to the
-     * first AI assistant form, which is what ModernAppearance::getAppearance()
-     * does for the shortcode too.
-     *
-     * Safe for Cloud's prompt cache: the text only changes when the owner edits
-     * and saves the appearance.
-     *
-     * @param string|null $form_slug
-     * @return string
+     * @return array
      */
-    private static function businessDescription( $form_slug )
+    public static function company()
     {
-        $appearance = ModernAppearance::getAppearance( Lib\Entities\Form::TYPE_AI_ASSISTANT, $form_slug ?: null );
+        $company = array(
+            'name'    => get_option( 'bookly_co_name' ),
+            'address' => get_option( 'bookly_co_address' ),
+            'phone'   => get_option( 'bookly_co_phone' ),
+            'email'   => get_option( 'bookly_co_email' ),
+            'website' => get_option( 'bookly_co_website' ),
+        );
 
-        return isset( $appearance['business_description'] )
-            ? trim( (string) $appearance['business_description'] )
-            : '';
+        return array_filter( array_map( function ( $value ) {
+            return trim( (string) $value );
+        }, $company ), 'strlen' );
+    }
+
+    /**
+     * Whether customers can be told how to reach the business: the name alone is not a way.
+     *
+     * @return bool
+     */
+    public static function hasContacts()
+    {
+        return (bool) array_diff_key( self::company(), array( 'name' => true ) );
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Bookly\Backend\Components\Cloud\LoginRequired;
 
 use Bookly\Lib;
+use Bookly\Backend\Components\Cloud\Account;
 
 class Page extends Lib\Base\Component
 {
@@ -20,6 +21,8 @@ class Page extends Lib\Base\Component
         self::enqueueScripts( array(
             'alias' => array( 'bookly-backend-globals', ),
         ) );
+
+        Account\Panel::requireLogin();
 
         self::renderTemplate( 'index', compact( 'title', 'slug' ) );
     }

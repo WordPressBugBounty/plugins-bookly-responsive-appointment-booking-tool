@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Notices;
 ?>
     <input type="hidden" name="form-notifications">
     <div class="form-group">
@@ -34,6 +33,5 @@ use Bookly\Backend\Components\Notices;
         <?php Buttons::renderDefault( 'bookly-js-test-voice-notifications', null, __( 'Test voice notifications', 'bookly-responsive-appointment-booking-tool' ), array(), true ) ?>
     </div>
 
-<?php Notices\Cron\Notice::render() ?>
 <?php Dialogs\Voice\Dialog::render() ?>
 <?php Dialogs\VoiceTest\Dialog::render() ?>

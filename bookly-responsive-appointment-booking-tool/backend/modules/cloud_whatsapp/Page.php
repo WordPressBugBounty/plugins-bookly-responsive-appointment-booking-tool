@@ -39,6 +39,7 @@ class Page extends Lib\Base\Component
                 array(
                     'moment_format_date_time' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ) . ' ' . Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
                     'areYouSure'   => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+                    'cron_notice'  => \Bookly\Backend\Components\Notices\Cron\Notice::getText(),
                     'country'      => $cloud->account->getCountry(),
                     'intlTelInput' => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),

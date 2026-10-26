@@ -21,13 +21,10 @@ jQuery(function ($) {
     $notice.find('.bookly-js-apply-action').on('click', function () {
         switch (type) {
             case 'registration':
-                $(document.body).trigger('bookly.cloud.auth.form', ['register']);
-                $('#bookly-cloud-auth-modal').booklyModal('show');
+                BooklyCloudAccount.showAuth('register');
                 break;
             default:
-                let $modal = $('#bookly-js-recharge-modal');
-                $modal.booklyModal();
-                $('.bookly-js-back', $modal).trigger('click');
+                BooklyCloudAccount.showRecharge();
                 break;
         }
         close();

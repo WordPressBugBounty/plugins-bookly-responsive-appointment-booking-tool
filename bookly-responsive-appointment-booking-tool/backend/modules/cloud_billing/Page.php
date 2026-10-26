@@ -3,6 +3,7 @@ namespace Bookly\Backend\Modules\CloudBilling;
 
 use Bookly\Lib;
 use Bookly\Backend\Components;
+use Bookly\Backend\Modules;
 
 class Page extends Lib\Base\Component
 {
@@ -20,7 +21,9 @@ class Page extends Lib\Base\Component
             ) );
 
             self::enqueueScripts( array(
-                'module'  => array( 'js/cloud-billing.js' => array( 'bookly-backend-globals' ), ),
+                // The invoice details dialog lives in the account page's bundle
+                'bookly' => array( 'backend/modules/cloud_settings/resources/js/cloud-settings.js' => array( 'bookly-backend-globals' ) ),
+                'module' => array( 'js/cloud-billing.js' => array( 'bookly-cloud-settings.js' ), ),
             ) );
 
             $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CLOUD_PURCHASES );
@@ -37,9 +40,14 @@ class Page extends Lib\Base\Component
                 ),
                 'invoice'     => array(
                     'button' => __( 'Invoice', 'bookly-responsive-appointment-booking-tool' ),
-                    'alert'  => __( 'To generate an invoice you should fill in company information in Bookly Cloud settings -> Invoice', 'bookly-responsive-appointment-booking-tool' ),
+                    'alert'  => __( 'To generate an invoice, please enter your company details first.', 'bookly-responsive-appointment-booking-tool' ),
                     'link'   => $cloud->account->getInvoiceLink(),
                     'valid'  => isset ( $invoice_data['company_name'], $invoice_data['company_address'] ) && $invoice_data['company_name'] != '' && $invoice_data['company_address'] != '',
+                    // Who the invoices are made out to — a dialog from the table toolbar
+                    'details_button' => __( 'Invoice details', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                    'details' => $invoice_data,
+                    'email' => $cloud->account->getUserName(),
+                    'l10n' => Modules\CloudSettings\Page::getInvoiceL10n(),
                 ),
                 'datatables'  => $datatables,
             ) );

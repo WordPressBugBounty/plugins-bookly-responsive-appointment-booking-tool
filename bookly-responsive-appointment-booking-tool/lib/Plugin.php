@@ -53,9 +53,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dialogs\BookingWizard\Ajax::init();
         Backend\Components\Dialogs\Customer\Delete\Ajax::init();
         Backend\Components\Dialogs\Customer\Edit\Ajax::init();
-        Backend\Components\Dialogs\Mailing\AddRecipients\Ajax::init();
         Backend\Components\Dialogs\Mailing\Campaign\Ajax::init();
-        Backend\Components\Dialogs\Mailing\CreateList\Ajax::init();
         Backend\Components\Dialogs\MobileStaffCabinet\AccessEdit\Ajax::init();
         Backend\Components\Dialogs\Payment\Ajax::init();
         Backend\Components\Dialogs\Service\Edit\Ajax::init();

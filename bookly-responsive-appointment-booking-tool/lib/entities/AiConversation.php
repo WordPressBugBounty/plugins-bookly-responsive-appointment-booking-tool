@@ -44,6 +44,8 @@ class AiConversation extends Lib\Base\Entity
     /** @var int */
     protected $order_id;
     /** @var string */
+    protected $snapshot;
+    /** @var string */
     protected $created_at;
     /** @var string */
     protected $updated_at;
@@ -58,6 +60,7 @@ class AiConversation extends Lib\Base\Entity
         'booking_data' => array( 'format' => '%s' ),
         'booking_status' => array( 'format' => '%s' ),
         'order_id' => array( 'format' => '%d' ),
+        'snapshot' => array( 'format' => '%s' ),
         'created_at' => array( 'format' => '%s' ),
         'updated_at' => array( 'format' => '%s' ),
     );
@@ -81,6 +84,47 @@ class AiConversation extends Lib\Base\Entity
     public function setBookingDataArray( array $data )
     {
         return $this->setBookingData( wp_json_encode( $data ) );
+    }
+
+    /**
+     * What the conversation's agent took once and keeps for the whole conversation, by key
+     * (e.g. Catalog::forConversation()). Empty when another plugin version took it: the
+     * shape of what it keeps may have changed since.
+     *
+     * @return array
+     */
+    public function getSnapshotArray()
+    {
+        $data = $this->snapshot ? json_decode( $this->snapshot, true ) : null;
+
+        return isset( $data['version'] ) && $data['version'] === Lib\Plugin::getVersion() ? $data : array();
+    }
+
+    /**
+     * Keep a value in the snapshot, next to the other keys.
+     *
+     * Writes only this column: the visitor's own request may be writing the rest of the row
+     * at the same time (see Frontend\Modules\Ai\Ajax::setConversationStatus()).
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @return $this
+     */
+    public function setSnapshotValue( $key, $value )
+    {
+        $data = $this->getSnapshotArray();
+        $data['version'] = Lib\Plugin::getVersion();
+        $data[ $key ] = $value;
+        // Not \u-escaped: a Cyrillic letter would take six bytes instead of two.
+        $this->snapshot = wp_json_encode( $data, 256 );
+
+        self::query()
+            ->update()
+            ->set( 'snapshot', $this->snapshot )
+            ->where( 'id', $this->getId() )
+            ->execute();
+
+        return $this;
     }
 
     /**
@@ -288,6 +332,29 @@ class AiConversation extends Lib\Base\Entity
     public function setOrderId( $order_id )
     {
         $this->order_id = $order_id;
+
+        return $this;
+    }
+
+    /**
+     * Get snapshot
+     *
+     * @return string
+     */
+    public function getSnapshot()
+    {
+        return $this->snapshot;
+    }
+
+    /**
+     * Set snapshot
+     *
+     * @param string $snapshot
+     * @return $this
+     */
+    public function setSnapshot( $snapshot )
+    {
+        $this->snapshot = $snapshot;
 
         return $this;
     }

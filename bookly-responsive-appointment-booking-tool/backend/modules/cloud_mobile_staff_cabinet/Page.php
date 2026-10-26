@@ -28,6 +28,8 @@ class Page extends Lib\Base\Component
             wp_localize_script( 'bookly-staff-cabinet.js', 'BooklyL10n', array(
                 'areYouSure'           => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
                 'new_token'            => __( 'New access token', 'bookly-responsive-appointment-booking-tool' ) . '…',
+                'empty_title'          => __( 'No access tokens yet', 'bookly-responsive-appointment-booking-tool' ),
+                'empty_text'           => __( 'Create an access token to let a staff member sign in to the mobile app.', 'bookly-responsive-appointment-booking-tool' ),
                 'edit'                 => __( 'Edit', 'bookly-responsive-appointment-booking-tool' ) . '…',
                 'copy_token'           => __( 'Copy token', 'bookly-responsive-appointment-booking-tool' ),
                 'copy_link'            => __( 'Copy link', 'bookly-responsive-appointment-booking-tool' ),

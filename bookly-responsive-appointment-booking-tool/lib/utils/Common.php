@@ -972,6 +972,33 @@ abstract class Common extends Lib\Base\Cache
      *
      * @return array
      */
+    /**
+     * Cloud products in the order they are shown: the flagship ones lead, the rest keep
+     * the catalogue order. One rule for the Products page and the sidebar submenu.
+     *
+     * @param array $products Catalogue products
+     * @return array
+     */
+    public static function sortCloudProducts( array $products )
+    {
+        $weights = array(
+            Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS => 10,
+            Lib\Cloud\Account::PRODUCT_AI => 20,
+            Lib\Cloud\Account::PRODUCT_CRON => 30,
+        );
+        $ordered = array();
+        foreach ( array_values( $products ) as $position => $product ) {
+            $id = isset( $product['id'] ) ? $product['id'] : '';
+            $ordered[] = array(
+                'pos' => isset( $weights[ $id ] ) ? $weights[ $id ] : 100 + $position,
+                'product' => $product,
+            );
+        }
+        usort( $ordered, function ( $a, $b ) { return $a['pos'] - $b['pos']; } );
+
+        return array_map( function ( $item ) { return $item['product']; }, $ordered );
+    }
+
     public static function getSubmenus()
     {
         if ( ! self::hasInCache( __FUNCTION__ ) ) {
@@ -991,7 +1018,6 @@ abstract class Common extends Lib\Base\Cache
                 'bookly-cloud-sms' => array(
                     array( 'label' => __( 'Notifications', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'notifications', 'badge' => '' ),
                     array( 'label' => __( 'Campaigns', 'bookly-responsive-appointment-booking-tool' ),     'tab' => 'campaigns',     'badge' => '' ),
-                    array( 'label' => __( 'Mailing lists', 'bookly-responsive-appointment-booking-tool' ), 'tab' => 'mailing',       'badge' => '' ),
                     array( 'label' => __( 'SMS Details', 'bookly-responsive-appointment-booking-tool' ),   'tab' => 'sms_details',   'badge' => $undelivered ? (string) $undelivered : '' ),
                     array( 'label' => __( 'Price list', 'bookly-responsive-appointment-booking-tool' ),    'tab' => 'price_list',    'badge' => '' ),
                     array( 'label' => __( 'Sender ID', 'bookly-responsive-appointment-booking-tool' ),     'tab' => 'sender_id',     'badge' => '' ),
@@ -1012,6 +1038,27 @@ abstract class Common extends Lib\Base\Cache
                 // Free build: the modern booking form promo card has its own screen —
                 // keep the submenu in sync with the catalog.
                 $submenus['bookly-appearance'][] = array( 'label' => __( 'Modern booking form', 'bookly-responsive-appointment-booking-tool' ), 'url' => admin_url( 'admin.php?page=bookly-appearance&modern-form-promo' ), 'flag' => 'modern-form-promo', 'badge' => '', 'pos' => 95 );
+            }
+
+            // Cloud products: each has a page of its own on the Products page
+            // (?page=bookly-cloud-products&product=<id>). Titles come from the catalogue,
+            // already in the site's language. `param`/`value` rather than a bare `flag`:
+            // the active one is told by the value, and the search index generator, which
+            // turns flagged items into form entries, leaves these alone.
+            $products = array();
+            foreach ( self::sortCloudProducts( (array) Lib\Cloud\API::getInstance()->general->getProducts() ) as $product ) {
+                if ( ! empty( $product['id'] ) && ! empty( $product['texts']['title'] ) ) {
+                    $products[] = array(
+                        'label' => $product['texts']['title'],
+                        'url' => admin_url( 'admin.php?page=bookly-cloud-products&product=' . urlencode( $product['id'] ) ),
+                        'param' => 'product',
+                        'value' => $product['id'],
+                        'badge' => '',
+                    );
+                }
+            }
+            if ( $products ) {
+                $submenus['bookly-cloud-products'] = $products;
             }
 
             // Add-ons extend the map (own pages / extra Settings tabs). No-op when none implement it.

@@ -92,6 +92,8 @@ jQuery(function ($) {
             },
             columns: columns,
             tableSettings: Object.assign({}, BooklyL10n.datatables[table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+            notice: BooklyL10n.cron_notice,
+            noticePosition: 'bottom',
             edit: function (row) {
                 const event = new CustomEvent('bookly:edit-notification', { detail: { id: row.id } });
                 window.dispatchEvent(event);

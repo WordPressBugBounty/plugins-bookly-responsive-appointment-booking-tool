@@ -1,7 +1,6 @@
 <?php
 namespace Bookly\Lib;
 
-use Bookly\Lib\Base\Schema;
 use Bookly\Lib\Cloud\Account;
 use Bookly\Lib\Entities\AiConversation;
 use Bookly\Lib\Entities\AiJob;
@@ -303,34 +302,60 @@ abstract class Routines
                 ->whereLte( 'send_at', current_time( 'mysql' ) )
                 ->findOne() ) {
                 $mc->setState( MailingCampaign::STATE_IN_PROGRESS )->save();
-                $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at)
-                          SELECT mlr.phone, mlr.name, %s, 0, %d, %s
-                            FROM `' . MailingListRecipient::getTableName() . '` AS mlr
-                           WHERE mlr.mailing_list_id = %s';
-                $wpdb->query( $wpdb->prepare( $query, $mc->getText(), $mc->getId(), current_time( 'mysql' ), $mc->getMailingListId() ) );
-                if ( Schema::getAffectedRows() == 0 ) {
-                    $mc->setState( MailingCampaign::STATE_COMPLETED )->save();
+                $audience = Mailing\Audience::normalize( $mc->getAudience() );
+                if ( $audience && $audience['type'] === Mailing\Audience::TYPE_PRESET ) {
+                    // A preset audience is resolved at the moment of sending.
+                    $now = current_time( 'mysql' );
+                    foreach ( array_chunk( Mailing\Audience::recipients( $audience ), 500 ) as $chunk ) {
+                        $values = array();
+                        foreach ( $chunk as $recipient ) {
+                            $values[] = $wpdb->prepare( '(%s, %s, %s, %d, %d, %s)', $recipient['phone'], $recipient['name'], $mc->getText(), MailingQueue::SENT_NO, $mc->getId(), $now );
+                        }
+                        $wpdb->query( 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at) VALUES ' . implode( ',', $values ) );
+                    }
+                } else {
+                    $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at)
+                              SELECT mlr.phone, mlr.name, %s, 0, %d, %s
+                                FROM `' . MailingListRecipient::getTableName() . '` AS mlr
+                               WHERE mlr.mailing_list_id = %s';
+                    $wpdb->query( $wpdb->prepare( $query, $mc->getText(), $mc->getId(), current_time( 'mysql' ), $mc->getMailingListId() ) );
                 }
             }
 
-            /** @var MailingQueue[] $sms_items */
-            $query = MailingQueue::query()->where( 'sent', '0' )->sortBy( 'campaign_id' )->limit( 2 );
             $sms_sender = $cloud->getProduct( Account::PRODUCT_SMS_NOTIFICATIONS );
-            while ( $sms_items = $query->find() ) {
-                $sms = $sms_items[0];
-                $sms->setSent( 1 )->save();
+            if ( get_transient( 'bookly_mailing_out_of_credits' ) ) {
+                // Paused for lack of credits: a send attempt would only leave one more
+                // undelivered SMS behind, so the balance is asked first.
+                $cloud->account->loadProfile();
+                if ( $cloud->account->getBalance() <= 0 && ! $cloud->account->autoRechargeEnabled() ) {
+                    return;
+                }
+                delete_transient( 'bookly_mailing_out_of_credits' );
+            }
+            /** @var MailingQueue $sms */
+            while ( $sms = MailingQueue::query()->where( 'sent', MailingQueue::SENT_NO )->sortBy( 'id' )->findOne() ) {
+                // Taken before sending, so that a parallel run does not send it twice.
+                $sms->setSent( MailingQueue::SENT_YES )->save();
 
                 $codes = new Notifications\Assets\Mailing\Codes( $sms );
                 $message = $codes->replaceForSms( $sms->getText() );
-                $sms_sender->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], 60 );
-                if ( count( $sms_items ) === 1 || $sms_items[0]->getCampaignId() != $sms_items[1]->getCampaignId() ) {
-                    MailingCampaign::query()
-                        ->update()
-                        ->set( 'state', MailingCampaign::STATE_COMPLETED )
-                        ->where( 'id', $sms_items[0]->getCampaignId() )
-                        ->execute();
+                if ( ! $sms_sender->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], 60 ) ) {
+                    if ( $sms_sender->outOfCredits() ) {
+                        // Pause: the rest waits for the balance to be topped up and goes out on a later run.
+                        $sms->setSent( MailingQueue::SENT_NO )->save();
+                        set_transient( 'bookly_mailing_out_of_credits', 1, WEEK_IN_SECONDS );
+                        break;
+                    }
+                    $sms->setSent( MailingQueue::SENT_FAILED )->save();
                 }
             }
+
+            // A campaign is completed once nothing of it is left to send.
+            $wpdb->query( $wpdb->prepare(
+                'UPDATE `' . MailingCampaign::getTableName() . '` mc SET mc.state = %s
+                  WHERE mc.state = %s AND NOT EXISTS (SELECT 1 FROM `' . MailingQueue::getTableName() . '` q WHERE q.campaign_id = mc.id AND q.sent = %d)',
+                MailingCampaign::STATE_COMPLETED, MailingCampaign::STATE_IN_PROGRESS, MailingQueue::SENT_NO
+            ) );
         }
     }
 

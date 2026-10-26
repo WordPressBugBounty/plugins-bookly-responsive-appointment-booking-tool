@@ -36,6 +36,8 @@ class Page extends Lib\Base\Component
             'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),
             'edit_customer' => __( 'Edit customer', 'bookly-responsive-appointment-booking-tool' ),
             'new_customer' => __( 'New customer', 'bookly-responsive-appointment-booking-tool' ) . '…',
+            'empty_title' => __( 'No customers yet', 'bookly-responsive-appointment-booking-tool' ),
+            'empty_text' => __( 'Customers who book online will appear here automatically. You can also add them manually.', 'bookly-responsive-appointment-booking-tool' ),
             'create_customer' => __( 'Create customer', 'bookly-responsive-appointment-booking-tool' ),
             'save' => __( 'Save', 'bookly-responsive-appointment-booking-tool' ),
             'search' => __( 'Quick search by name, email, phone', 'bookly-responsive-appointment-booking-tool' ) . '…',

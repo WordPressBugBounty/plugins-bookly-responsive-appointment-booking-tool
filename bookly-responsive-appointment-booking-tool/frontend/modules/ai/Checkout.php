@@ -124,6 +124,58 @@ class Checkout
      */
     public static function getGateways( Lib\UserBookingData $userData )
     {
+        $gateways = self::enabledGateways();
+
+        foreach ( array_keys( $gateways ) as $type ) {
+            if ( BookingProxy\CustomerGroups::allowedGateway( $type, $userData ) === false ) {
+                unset( $gateways[ $type ] );
+            }
+        }
+
+        $gateways = BookingProxy\Pro::filterGateways( $gateways, $userData );
+        $l10n = ModernAppearance::getAppearance( Entities\Form::TYPE_AI_ASSISTANT, null );
+        $l10n = isset( $l10n['l10n'] ) ? $l10n['l10n'] : array();
+
+        $list = array();
+        foreach ( self::orderGateways( array_keys( $gateways ) ) as $type ) {
+            $alias = isset( $l10n[ 'payment_system_' . $type ] ) ? $l10n[ 'payment_system_' . $type ] : '';
+            $label = $gateways[ $type ]['label_option_name']
+                ? Lib\Utils\Common::getTranslatedOption( $gateways[ $type ]['label_option_name'] )
+                : '';
+            $logo_url = $gateways[ $type ]['logo_url'];
+            if ( $type === Entities\Payment::TYPE_WOOCOMMERCE ) {
+                $image = Entities\Payment::typeToImage( $type );
+                $logo_url = $image['src'];
+            } elseif ( $logo_url === 'default' ) {
+                $logo_url = plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() );
+            }
+
+            $list[] = array(
+                'name' => $type,
+                'title' => $alias !== '' ? $alias : ( $label !== '' ? $label : $gateways[ $type ]['title'] ),
+                'logo_url' => $logo_url,
+            );
+        }
+
+        return $list;
+    }
+
+    /**
+     * Gateways switched on in Settings -> Payments that the chat can take, before anything
+     * about a particular booking narrows them - what Concepts tells the model about paying.
+     *
+     * @return string[] Payment types, Entities\Payment::TYPE_*
+     */
+    public static function enabledGatewayTypes()
+    {
+        return array_keys( self::enabledGateways() );
+    }
+
+    /**
+     * @return array[] [ type => [ title, label_option_name, logo_url ] ]
+     */
+    private static function enabledGateways()
+    {
         $gateways = array();
 
         if ( Lib\Config::payLocallyEnabled() ) {
@@ -156,39 +208,12 @@ class Checkout
         }
 
         foreach ( array_keys( $gateways ) as $type ) {
-            if ( ! in_array( $type, self::$supported )
-                || BookingProxy\CustomerGroups::allowedGateway( $type, $userData ) === false
-            ) {
+            if ( ! in_array( $type, self::$supported ) ) {
                 unset( $gateways[ $type ] );
             }
         }
 
-        $gateways = BookingProxy\Pro::filterGateways( $gateways, $userData );
-        $l10n = ModernAppearance::getAppearance( Entities\Form::TYPE_AI_ASSISTANT, null );
-        $l10n = isset( $l10n['l10n'] ) ? $l10n['l10n'] : array();
-
-        $list = array();
-        foreach ( self::orderGateways( array_keys( $gateways ) ) as $type ) {
-            $alias = isset( $l10n[ 'payment_system_' . $type ] ) ? $l10n[ 'payment_system_' . $type ] : '';
-            $label = $gateways[ $type ]['label_option_name']
-                ? Lib\Utils\Common::getTranslatedOption( $gateways[ $type ]['label_option_name'] )
-                : '';
-            $logo_url = $gateways[ $type ]['logo_url'];
-            if ( $type === Entities\Payment::TYPE_WOOCOMMERCE ) {
-                $image = Entities\Payment::typeToImage( $type );
-                $logo_url = $image['src'];
-            } elseif ( $logo_url === 'default' ) {
-                $logo_url = plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() );
-            }
-
-            $list[] = array(
-                'name' => $type,
-                'title' => $alias !== '' ? $alias : ( $label !== '' ? $label : $gateways[ $type ]['title'] ),
-                'logo_url' => $logo_url,
-            );
-        }
-
-        return $list;
+        return $gateways;
     }
 
     /**
@@ -462,10 +487,11 @@ class Checkout
      *
      * @param Entities\AiConversation $conversation
      * @param string                  $text
+     * @param string                  $about What the note is about, said before it
      */
-    public static function addEvent( Entities\AiConversation $conversation, $text )
+    public static function addEvent( Entities\AiConversation $conversation, $text, $about = 'Payment card' )
     {
-        $content = 'Payment card: ' . $text;
+        $content = $about . ': ' . $text;
 
         /** @var Entities\AiMessage $last */
         $last = Entities\AiMessage::query()
@@ -519,12 +545,6 @@ class Checkout
         if ( ! $conversation->getOrderId() || ! $ca->loadBy( array( 'order_id' => $conversation->getOrderId() ) ) ) {
             return null;
         }
-        $appointment = Entities\Appointment::find( $ca->getAppointmentId() );
-        $service = $appointment ? Entities\Service::find( $appointment->getServiceId() ) : null;
-        $staff = $appointment ? Entities\Staff::find( $appointment->getStaffId() ) : null;
-        if ( ! $service || ! $staff ) {
-            return null;
-        }
 
         $payment = new Entities\Payment();
         if ( ! $payment->loadBy( array( 'order_id' => $conversation->getOrderId() ) ) ) {
@@ -541,10 +561,88 @@ class Checkout
             $paid = sprintf( '%s paid', Lib\Utils\Price::format( $payment->getPaid() ) );
         }
 
+        return self::bookingLine( $ca, $paid );
+    }
+
+    /**
+     * The booking the conversation's checkout made, as create_booking and the checkout's
+     * report put it: bookedHeadline() and the booking.
+     *
+     * @param Entities\AiConversation $conversation
+     * @return string|null null when the conversation has no booking made
+     */
+    public static function bookedResult( Entities\AiConversation $conversation )
+    {
+        $booking = self::describeBooking( $conversation );
+        $ca = new Entities\CustomerAppointment();
+        if ( $booking === null || ! $ca->loadBy( array( 'order_id' => $conversation->getOrderId() ) ) ) {
+            return null;
+        }
+
+        return self::bookedHeadline( $ca ) . ': ' . $booking . '.';
+    }
+
+    /**
+     * One booking as the model reads it - the same words in create_booking's result, the
+     * checkout's report and the booking updates, so one booking never reads as two:
+     * "appointment #N — <service> with <staff>, <start> (ends <end>), <money>[, <status>]".
+     * notePaymentChange() finds what the model last read by the part before " — ".
+     *
+     * @param Entities\CustomerAppointment $ca
+     * @param string                       $money What is paid or to pay, in words
+     * @return string|null null when the appointment is gone
+     */
+    public static function bookingLine( Entities\CustomerAppointment $ca, $money )
+    {
+        $appointment = Entities\Appointment::find( $ca->getAppointmentId() );
+        $service = $appointment ? Entities\Service::find( $appointment->getServiceId() ) : null;
+        $staff = $appointment ? Entities\Staff::find( $appointment->getStaffId() ) : null;
+        if ( ! $service || ! $staff ) {
+            return null;
+        }
+
+        $extras = json_decode( (string) $ca->getExtras(), true );
+        $end = date( 'Y-m-d H:i:s', strtotime( $appointment->getEndDate() ) + (int) $appointment->getExtrasDuration() );
+        $status = self::statusWords( $ca->getStatus() );
+
+        $nop = (int) $ca->getNumberOfPersons();
+
         return sprintf(
-            'appointment #%d — %s with %s at %s, %s',
-            $appointment->getId(), $service->getTitle(), $staff->getFullName(), $appointment->getStartDate(), $paid
+            'appointment #%d — %s%s%s with %s, %s (ends %s), %s%s',
+            $appointment->getId(), $service->getTitle(), $extras ? ' (with extras)' : '', $nop > 1 ? ' for ' . $nop . ' people' : '', $staff->getFullName(),
+            $appointment->getStartDate(), $end, $money, $status === null ? '' : ', ' . $status
         );
+    }
+
+    /**
+     * What create_booking and the checkout say a booking is: "confirmed" only when it is
+     * approved - a business can have new bookings wait for its approval (Settings ->
+     * Appointments -> Default appointment status), or give them a custom status.
+     *
+     * @param Entities\CustomerAppointment $ca
+     * @return string
+     */
+    public static function bookedHeadline( Entities\CustomerAppointment $ca )
+    {
+        return $ca->getStatus() === Entities\CustomerAppointment::STATUS_APPROVED
+            ? 'Booking confirmed'
+            : 'Booked, not confirmed yet';
+    }
+
+    /**
+     * @param string $status Entities\CustomerAppointment::STATUS_* or a custom status
+     * @return string|null null for approved, which needs no words
+     */
+    private static function statusWords( $status )
+    {
+        if ( $status === Entities\CustomerAppointment::STATUS_APPROVED ) {
+            return null;
+        }
+        if ( $status === Entities\CustomerAppointment::STATUS_PENDING ) {
+            return 'waiting for the business to approve it';
+        }
+
+        return 'status "' . Entities\CustomerAppointment::statusToString( $status ) . '"';
     }
 
     /**
@@ -583,7 +681,7 @@ class Checkout
             return;
         }
 
-        self::addEvent( $conversation, 'update on the booking made - ' . $booking . '.' );
+        self::addEvent( $conversation, $booking . '.', 'Booking update' );
     }
 
     /**

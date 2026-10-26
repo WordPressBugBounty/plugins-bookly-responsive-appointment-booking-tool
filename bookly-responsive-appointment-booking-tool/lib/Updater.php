@@ -3,6 +3,21 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_28_7()
+    {
+        $this->alterTables( array(
+            'bookly_mailing_campaigns' => array(
+                'ALTER TABLE `%s` ADD COLUMN `audience` TEXT DEFAULT NULL AFTER `mailing_list_id`',
+            ),
+            'bookly_mailing_queue' => array(
+                'ALTER TABLE `%s` ADD INDEX `campaign_id_sent` (`campaign_id`, `sent`)',
+            ),
+            'bookly_ai_conversations' => array(
+                'ALTER TABLE `%s` ADD `snapshot` MEDIUMTEXT DEFAULT NULL AFTER `order_id`',
+            ),
+        ) );
+    }
+
     function update_28_6()
     {
         $this->alterTables( array(

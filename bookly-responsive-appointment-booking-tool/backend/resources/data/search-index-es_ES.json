@@ -302,11 +302,11 @@
         "type": "page",
         "page": "bookly-cloud-settings",
         "tab": null,
-        "title": "Configuración",
+        "title": "Cuenta",
         "anchor": null,
         "addon": "cloud",
         "weight": 100,
-        "alt": "Settings"
+        "alt": "Account"
     },
     {
         "type": "product",
@@ -315,6 +315,7 @@
         "title": "Stripe Payments",
         "anchor": null,
         "addon": "cloud:stripe",
+        "product": "stripe",
         "weight": 70
     },
     {
@@ -324,8 +325,19 @@
         "title": "Cron en la nube",
         "anchor": null,
         "addon": "cloud:cron",
+        "product": "cron",
         "weight": 70,
         "alt": "Cloud Cron"
+    },
+    {
+        "type": "product",
+        "page": "bookly-cloud-products",
+        "tab": null,
+        "title": "AI Assistant",
+        "anchor": null,
+        "addon": "cloud:ai",
+        "product": "ai",
+        "weight": 70
     },
     {
         "type": "form",
@@ -2998,16 +3010,6 @@
         "addon": "cloud:sms",
         "weight": 60,
         "alt": "Campaigns"
-    },
-    {
-        "type": "tab",
-        "page": "bookly-cloud-sms",
-        "tab": "mailing",
-        "title": "Listas de correo",
-        "anchor": null,
-        "addon": "cloud:sms",
-        "weight": 60,
-        "alt": "Mailing lists"
     },
     {
         "type": "tab",

@@ -40,6 +40,24 @@
             $popover.css('opacity', 1);
         }
 
+        function popoverRemove() {
+            $popover.remove();
+            $popover.length = 0;
+            popoverEventEl = null;
+            showPopover = 0;
+        }
+
+        // An event redrawn under the pointer is replaced without a mouseleave, so the
+        // count never drops and the popover would stay for good: drop it once its event
+        // is gone. Checked a frame later, when the calendar has redrawn its events.
+        function popoverDropOrphan() {
+            animate(function () {
+                if (popoverEventEl && !popoverEventEl.isConnected) {
+                    popoverRemove();
+                }
+            });
+        }
+
         function popoverClose() {
             if (showPopover) {
                 --showPopover;
@@ -61,9 +79,7 @@
                         animate(fade);
                     } else {
                         start = null;
-                        $popover.remove();
-                        $popover.length = 0;
-                        popoverEventEl = null;
+                        popoverRemove();
                     }
                 }
 
@@ -217,10 +233,8 @@
                 let $event = $(arg.el);
                 if (arg.event.display === 'auto' && arg.view.type !== 'listWeek') {
                     if (popoverEventEl !== arg.el) {
-                        $popover.remove();
-                        $popover.length = 0;
+                        popoverRemove();
                         popoverEventEl = arg.el;
-                        showPopover = 0;
                     }
                     if (!$popover.length) {
                         $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
@@ -353,11 +367,13 @@
                     calendar.setOption('allDaySlot', allDay);
                     $('.bookly-ec-loading').hide();
                     obj.options.refresh();
+                    popoverDropOrphan();
                 }
             },
             viewDidMount: function (info) {
                 calendar.setOption('highlightedDates', []);
                 obj.options.viewChanged(info.view);
+                popoverDropOrphan();
             },
             theme: function (theme) {
                 theme.button = 'btn btn-default';

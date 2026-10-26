@@ -59,6 +59,12 @@ jQuery(function($) {
                 csrf_token: BooklyL10nGlobal.csrf_token
             }, settings));
         },
+        emptyState: {
+            icon: 'key-round',
+            title: BooklyL10n.empty_title,
+            text: BooklyL10n.empty_text,
+            actions: ['bookly-js-new-key']
+        },
         topToolbar: [{
             id: 'bookly-js-new-key',
             label: BooklyL10n.new_token,

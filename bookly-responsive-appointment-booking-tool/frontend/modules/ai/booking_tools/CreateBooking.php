@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
+use Bookly\Frontend\Modules\Ai;
 use Bookly\Frontend\Modules\Ai\Checkout;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib;
@@ -32,14 +33,14 @@ class CreateBooking implements ToolInterface
     public function getSchema()
     {
         $properties = array(
-            'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from get_services.' ),
-            'staff_id' => array( 'type' => 'integer', 'description' => 'Staff id, from get_staff.' ),
+            'service_id' => array( 'type' => 'integer', 'description' => 'Service id, from the catalog.' ),
+            'staff_id' => array( 'type' => 'integer', 'description' => 'Staff member id, from the catalog.' ),
             'start_date' => array( 'type' => 'string', 'description' => 'Appointment start date/time, format "YYYY-MM-DD HH:MM:SS" (24-hour).' ),
         );
 
-        // Only when the Locations addon is active, same as get_locations in Tools::all().
-        if ( Lib\Config::locationsActive() ) {
-            $properties['location_id'] = array( 'type' => 'integer', 'description' => GetLocations::ARGUMENT );
+        // Only where the business has locations (Concepts).
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::LOCATION ) ) {
+            $properties['location_id'] = array( 'type' => 'integer', 'description' => Locations::ARGUMENT );
         }
 
         $properties['full_name'] = array( 'type' => 'string', 'description' => "Customer's full name." );
@@ -47,31 +48,40 @@ class CreateBooking implements ToolInterface
         $properties['phone'] = array( 'type' => 'string', 'description' => "Customer's phone number. Provide this or email (or both)." );
         $properties['notes'] = array( 'type' => 'string', 'description' => 'Optional free-text note from the customer about this booking.' );
         // For a customer who says how they pay instead of pressing a button on the payment
-        // card ("cash", "through Square"). Which ways a booking can be paid depends on its
-        // service, staff member and customer, so the names come from create_booking's own
-        // result for this booking, not from anything known in advance.
-        if ( ! Lib\Config::paymentStepDisabled() ) {
+        // card ("cash", "through Square") - also before any card was shown. Which online ways
+        // a booking can be paid depends on its service, staff member and customer, so their
+        // names come from create_booking's own result for this booking; paying at the
+        // appointment is named here, as a customer often says it up front. Without online
+        // gateways there is no card and nothing to choose (Concepts::PAYMENT_*).
+        if ( Ai\Concepts::forSite()->payment() === Ai\Concepts::PAYMENT_ONLINE ) {
             $properties['pay_with'] = array(
                 'type' => 'string',
-                'description' => 'Only when the customer has said how they want to pay, in their own words: the payment method from the previous create_booking result whose button matches what they said - "' . Lib\Entities\Payment::TYPE_LOCAL . '" for paying at the appointment, or the name of an online method. Omit otherwise.',
+                'description' => 'Only when the customer has said in their own words how they will pay, before or after the payment card is shown: '
+                    . ( Ai\Concepts::forSite()->has( Ai\Concepts::PAY_LOCALLY ) ? '"' . Lib\Entities\Payment::TYPE_LOCAL . '" for paying at the appointment; for another way, ' : '' )
+                    . 'the code of the matching payment card button from a previous create_booking result. Omit otherwise.',
             );
         }
-        $properties['extras'] = array(
-            'type' => 'array',
-            'description' => 'Optional extras to include (from get_services\' "extras" list). Omit or pass an empty array if none.',
-            'items' => array(
-                'type' => 'object',
-                'properties' => array(
-                    'extra_id' => array( 'type' => 'integer', 'description' => 'Extra id, from get_services.' ),
-                    'quantity' => array( 'type' => 'integer', 'description' => 'How many of this extra.' ),
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::EXTRA ) ) {
+            $properties['extras'] = array(
+                'type' => 'array',
+                'description' => 'The extras the customer chose. Omit or pass an empty array if none.',
+                'items' => array(
+                    'type' => 'object',
+                    'properties' => array(
+                        'extra_id' => array( 'type' => 'integer', 'description' => 'Extra id, from the service\'s extras list.' ),
+                        'quantity' => array( 'type' => 'integer', 'description' => 'How many of this extra.' ),
+                    ),
+                    'required' => array( 'extra_id', 'quantity' ),
                 ),
-                'required' => array( 'extra_id', 'quantity' ),
-            ),
-        );
+            );
+        }
+        if ( Ai\Concepts::forSite()->has( Ai\Concepts::GROUP ) ) {
+            $properties['persons'] = array( 'type' => 'integer', 'description' => SlotLookup::PERSONS_ARGUMENT );
+        }
 
         return array(
             'name' => $this->getName(),
-            'description' => 'Book an appointment, optionally with extras. Call this once the customer has picked a time and you have collected their full name and at least one contact method (email or phone) from the conversation — never invent these. Do not ask how they want to pay: whether payment is needed, how much and which ways it can be paid depends on the service, the staff member and the customer, and this tool says so; paying online is done on a payment card the chat shows, never in the conversation. This tool checks the time itself and, if it is taken, returns the nearest free times. Read the result carefully and tell the customer what it actually says.',
+            'description' => 'Make a booking, once the customer has picked a start time and given their full name and an email or a phone number. It checks the start time itself and, if it is taken, returns the nearest free ones. Its result says whether the booking is confirmed or what is still needed - read it carefully and tell the customer what it actually says.',
             'parameters' => array(
                 'type' => 'object',
                 'properties' => $properties,
@@ -105,18 +115,18 @@ class CreateBooking implements ToolInterface
 
         $service = Lib\Entities\Service::find( $service_id );
         if ( ! $service || $service->getType() !== Lib\Entities\Service::TYPE_SIMPLE || $service->getVisibility() !== Lib\Entities\Service::VISIBILITY_PUBLIC ) {
-            return 'Error: unknown service_id. Call get_services to get a valid id.';
+            return 'Error: unknown service_id. Use a service id from the catalog.';
         }
 
         $staff = Lib\Entities\Staff::find( $staff_id );
         if ( ! $staff || $staff->getVisibility() !== 'public' ) {
-            return 'Error: unknown staff_id. Call get_staff to get a valid id.';
+            return 'Error: unknown staff_id. Use a staff member id from the catalog.';
         }
 
         if ( $location_id && ! Lib\Proxy\Locations::findById( $location_id ) ) {
-            return 'Error: unknown location_id. Call get_locations to get a valid id.';
+            return 'Error: unknown location_id. Use a location id from the catalog.';
         }
-        $not_there = GetLocations::checkStaff( $staff, $location_id );
+        $not_there = Locations::checkStaff( $staff, $location_id );
         if ( $not_there !== null ) {
             return $not_there;
         }
@@ -124,13 +134,19 @@ class CreateBooking implements ToolInterface
         $link = new Lib\Entities\StaffService();
         $link->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id ) );
         if ( ! $link->isLoaded() ) {
-            return 'Error: this staff member does not perform this service. Call get_staff with this service_id to see who does.';
+            return 'Error: this staff member does not provide this service. The catalog lists the ones who do in the service\'s staff_ids or price_by_staff.';
         }
 
         try {
             $extras = ExtrasInput::parse( $service_id, $extras_arg );
         } catch ( \Exception $e ) {
             return 'Error: ' . $e->getMessage();
+        }
+
+        $nop = isset( $arguments['persons'] ) ? max( 1, (int) $arguments['persons'] ) : 1;
+        $wrong_persons = SlotLookup::checkPersons( $service, $staff_id, $location_id, $nop );
+        if ( $wrong_persons !== null ) {
+            return $wrong_persons;
         }
 
         $start = \DateTime::createFromFormat( 'Y-m-d H:i:s', $start_date );
@@ -157,7 +173,7 @@ class CreateBooking implements ToolInterface
         // first, and time passes between calls. Done before the customer lookup so a refusal
         // leaves no customer record behind.
         $day_times = array();
-        if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times ) ) {
+        if ( ! SlotLookup::isBookable( $service, $staff_id, $start, $location_id ?: null, $extras, $day_times, $nop ) ) {
             return 'Error: this time is not available (anymore), nothing was booked. ' . SlotLookup::describeAlternatives( $day_times, $start, $service ) . ' Once the customer picks one, call create_booking again with it.';
         }
 
@@ -192,7 +208,7 @@ class CreateBooking implements ToolInterface
             'start_date' => $start_date,
             'extras' => $extras,
             'notes' => $notes,
-            'number_of_persons' => 1,
+            'number_of_persons' => $nop,
         );
 
         // No conversation to attach a draft to - book outright.
@@ -228,20 +244,18 @@ class CreateBooking implements ToolInterface
         if ( $options['pay_now_raw'] <= 0 ) {
             $this->conversation->resetBooking()->save();
 
-            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] );
+            return self::book( $customer, $service, $staff, $draft, $end_date, 'nothing to pay' );
         }
 
         // "Pay locally" as the only gateway needs no choice - same auto-select as the modern
-        // booking form (ModernBookingForm\Lib\Request::checkStep()). Coupons/gift cards share
-        // that step, so it still has to show while either is active.
+        // booking form (ModernBookingForm\Lib\Request::checkStep()). The form keeps its step
+        // for coupons and gift cards; the chat's payment card has neither.
         if ( count( $options['gateways'] ) === 1
             && $options['gateways'][0]['name'] === Lib\Entities\Payment::TYPE_LOCAL
-            && ! Lib\Config::couponsActive()
-            && ! Lib\Config::giftCardsActive()
         ) {
             $this->conversation->resetBooking()->save();
 
-            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] );
+            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] . ' to be paid at the appointment' );
         }
 
         $names = wp_list_pluck( $options['gateways'], 'name' );
@@ -249,16 +263,13 @@ class CreateBooking implements ToolInterface
 
         // Paying at the appointment was said in words - book it the way the card's button does.
         if ( $pay_with === Lib\Entities\Payment::TYPE_LOCAL && $at_appointment ) {
-            $order = Checkout::payLocally( $this->conversation );
-            if ( ! $order ) {
-                return 'Error: the booking system could not save this booking, nothing was booked. Apologise and suggest trying again in a moment or contacting the business directly.';
-            }
-            $item = current( $order->getItems() );
+            $booked = Checkout::payLocally( $this->conversation )
+                ? Checkout::bookedResult( $this->conversation )
+                : null;
 
-            return sprintf(
-                'Booking confirmed: appointment #%d — %s%s with %s, %s, total price %s, to be paid at the appointment.',
-                $item->getAppointment()->getId(), $service->getTitle(), ( $extras ? ' (with extras)' : '' ), $staff->getFullName(), $start_date, $options['total']
-            );
+            return $booked !== null
+                ? $booked
+                : 'Error: the booking system could not save this booking, nothing was booked. Apologise and suggest trying again in a moment or contacting the business directly.';
         }
 
         // Quote deposit and full price separately, or a deposit reads as a discount.
@@ -326,11 +337,11 @@ class CreateBooking implements ToolInterface
             return null;
         }
 
-        $booking = Checkout::describeBooking( $this->conversation );
+        $booked = Checkout::bookedResult( $this->conversation );
 
-        return $booking === null
+        return $booked === null
             ? null
-            : 'Already booked in this conversation: ' . $booking . '. Nothing new was booked; tell the customer this booking is confirmed.';
+            : 'Already booked in this conversation, nothing new was booked. ' . $booked;
     }
 
     /**
@@ -373,15 +384,15 @@ class CreateBooking implements ToolInterface
      * @param Lib\Entities\Staff    $staff
      * @param array                 $draft
      * @param string                $end_date Service-only end; save() adds extras duration itself.
-     * @param string|null           $total_price Formatted CartInfo total, when the caller already priced the cart
+     * @param string|null           $money What is paid or to pay, in words; null - the booking's total price
      * @return string
      */
-    private static function book( $customer, $service, $staff, array $draft, $end_date, $total_price = null )
+    private static function book( $customer, $service, $staff, array $draft, $end_date, $money = null )
     {
         $customers = array( array(
             'id'                => $customer->getId(),
             'status'            => Lib\Config::getDefaultAppointmentStatus(),
-            'number_of_persons' => 1,
+            'number_of_persons' => $draft['number_of_persons'],
             'extras'            => $draft['extras'],
             'custom_fields'     => array(),
             'notes'             => $draft['notes'],
@@ -423,19 +434,15 @@ class CreateBooking implements ToolInterface
             Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( array_keys( $result['queue']['all'] ), 'all', $result['queue']['token'] );
         }
 
-        $appointment = $result['appointments'][0];
-        $extras = $draft['extras'];
-        $extras_duration = ExtrasInput::totalDuration( $extras );
-        $display_end = $extras_duration > 0
-            ? date( 'Y-m-d H:i:s', strtotime( $end_date ) + $extras_duration )
-            : $end_date;
-        if ( $total_price === null ) {
-            $total_price = Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff->getId(), $draft['location_id'], $draft['start_date'], $extras ) );
+        $ca = new Lib\Entities\CustomerAppointment();
+        $ca->loadBy( array( 'appointment_id' => $result['appointments'][0]['id'], 'customer_id' => $customer->getId() ) );
+        if ( $money === null ) {
+            $money = 'total price ' . Lib\Utils\Price::format( ServicePrice::forBooking( $service, $staff->getId(), $draft['location_id'], $draft['start_date'], $draft['extras'], $draft['number_of_persons'] ) );
         }
+        $booking = $ca->isLoaded() ? Checkout::bookingLine( $ca, $money ) : null;
 
-        return sprintf(
-            'Booking confirmed: appointment #%d — %s%s with %s, %s (ends %s), total price %s.',
-            $appointment['id'], $service->getTitle(), ( $extras ? ' (with extras)' : '' ), $staff->getFullName(), $draft['start_date'], $display_end, $total_price
-        );
+        return $booking === null
+            ? 'Booking confirmed: appointment #' . $result['appointments'][0]['id'] . '.'
+            : Checkout::bookedHeadline( $ca ) . ': ' . $booking . '.';
     }
 }

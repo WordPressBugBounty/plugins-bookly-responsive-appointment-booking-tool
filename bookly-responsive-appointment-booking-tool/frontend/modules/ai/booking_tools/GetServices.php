@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
+use Bookly\Frontend\Modules\Ai;
 use Bookly\Lib;
 
 class GetServices implements ToolInterface
@@ -16,39 +17,34 @@ class GetServices implements ToolInterface
     /**
      * @inheritDoc
      *
-     * "search" is required (not optional) even though an empty string means
-     * "no filter" — verified live against Cloud that a tool called with a
-     * genuinely empty arguments object ("{}") gets echoed back into the next
-     * /complete call's history as "arguments":[] (PHP's own empty-array/
-     * empty-object ambiguity survives Cloud's own JSON round-trip, no matter
-     * how this plugin encodes its own outgoing payload — reproduced with
-     * "{}", with the key omitted entirely, all three fail identically), and
-     * Anthropic then rejects that echoed call with "tool_use.input: Input
-     * should be an object". Forcing a required (possibly-empty-string)
-     * argument means the model always sends a non-empty arguments object,
-     * sidestepping the bug entirely. The bug itself is Cloud-side, not
-     * fixable from here — flagged separately for bookly-cloud.
+     * Registered only when the catalog is cut short (Catalog::truncated()): then some
+     * services are listed with id and title only, and the model, which matches the
+     * customer's words against those titles itself, asks for the details of the ones it
+     * picked. A search by title would only make it guess a substring of a title it has
+     * already read.
+     *
+     * Every get_* tool takes a required argument for a Cloud-side bug: a tool called with
+     * a genuinely empty arguments object ("{}") gets echoed back into the next /complete
+     * call's history as "arguments":[] (PHP's own empty-array/empty-object ambiguity
+     * survives Cloud's own JSON round-trip, however this plugin encodes its payload), and
+     * Anthropic then rejects that call with "tool_use.input: Input should be an object".
+     * Here the ids are needed anyway. Flagged separately for bookly-cloud.
      */
     public function getSchema()
     {
-        $description = 'List the services this business offers online booking for: id, title, duration (minutes), and price.'
-            . ' A staff member can charge their own price for a service: then price is the range and price_by_staff gives each one\'s price - quote the price of the staff member the customer is booking with, never the range as if it were theirs.'
-            . ( Lib\Config::serviceExtrasActive()
-                ? ' Also includes any optional extras (add-ons) available for a service, when it has any.'
-                : '' );
-
         return array(
             'name'        => $this->getName(),
-            'description' => $description,
+            'description' => 'Details of the services the catalog lists with id and title only - the same fields as the other services have there.',
             'parameters'  => array(
                 'type'       => 'object',
                 'properties' => array(
-                    'search' => array(
-                        'type'        => 'string',
-                        'description' => 'Substring to filter services by title (e.g. what the customer asked about). Pass an empty string to list all services.',
+                    'ids' => array(
+                        'type'        => 'array',
+                        'items'       => array( 'type' => 'integer' ),
+                        'description' => 'Ids of those services, from the catalog.',
                     ),
                 ),
-                'required'   => array( 'search' ),
+                'required'   => array( 'ids' ),
             ),
         );
     }
@@ -58,21 +54,21 @@ class GetServices implements ToolInterface
      */
     public function execute( array $arguments )
     {
-        $search = isset( $arguments['search'] ) ? trim( (string) $arguments['search'] ) : '';
-
-        $query = Lib\Entities\Service::query( 's' )
-            ->where( 's.type', Lib\Entities\Service::TYPE_SIMPLE )
-            ->where( 's.visibility', Lib\Entities\Service::VISIBILITY_PUBLIC );
-
-        if ( $search !== '' ) {
-            $query->whereLike( 's.title', '%' . Lib\Query::escape( $search ) . '%' );
+        $ids = isset( $arguments['ids'] ) && is_array( $arguments['ids'] ) ? array_filter( array_map( 'intval', $arguments['ids'] ) ) : array();
+        if ( ! $ids ) {
+            return 'Error: pass the ids of the services, from the catalog.';
         }
 
         /** @var Lib\Entities\Service[] $services */
-        $services = $query->sortBy( 's.title' )->find();
+        $services = Lib\Entities\Service::query( 's' )
+            ->where( 's.type', Lib\Entities\Service::TYPE_SIMPLE )
+            ->where( 's.visibility', Lib\Entities\Service::VISIBILITY_PUBLIC )
+            ->whereIn( 's.id', $ids )
+            ->sortBy( 's.title' )
+            ->find();
 
         if ( ! $services ) {
-            return '[]';
+            return 'Error: none of these ids is a service in the catalog.';
         }
 
         $list = array();
@@ -80,7 +76,7 @@ class GetServices implements ToolInterface
             $list[] = self::describe( $service );
         }
 
-        return wp_json_encode( $list ) . OfferChoices::hint( OfferChoices::TYPE_SERVICE, count( $list ) );
+        return Ai\Catalog::json( $list ) . OfferChoices::hint( OfferChoices::TYPE_SERVICE, count( $list ) );
     }
 
     /**
@@ -95,21 +91,28 @@ class GetServices implements ToolInterface
         $prices   = wp_list_pluck( $by_staff, 'price' );
 
         $entry = array(
-            'id'               => $service->getId(),
+            'id'               => (int) $service->getId(),
             'title'            => $service->getTitle(),
-            'duration_minutes' => round( $service->getDuration() / 60 ),
+            'duration_minutes' => (int) round( $service->getDuration() / 60 ),
             'price'            => ServicePrice::formatRange( $prices, $service->getPrice() ),
         );
 
-        // Only when it matters: one price for everyone is already in 'price'.
+        // Only when it matters: one price for everyone is already in 'price'. Staff id =>
+        // price, the names are in the catalog's staff list - with sixty staff members on a
+        // service, repeating them was most of the catalog.
         if ( $prices && min( $prices ) != max( $prices ) ) {
-            $entry['price_by_staff'] = array();
+            $price_by_staff = array();
             foreach ( $by_staff as $staff_id => $staff ) {
-                $entry['price_by_staff'][] = array(
-                    'staff_id'  => (string) $staff_id,
-                    'full_name' => $staff['full_name'],
-                    'price'     => Lib\Utils\Price::format( $staff['price'] ),
-                );
+                $price_by_staff[ (string) $staff_id ] = Lib\Utils\Price::format( $staff['price'] );
+            }
+            $entry['price_by_staff'] = (object) $price_by_staff;
+        }
+
+        // Persons one booking may be for, when more than one (SlotLookup::personsRange()).
+        if ( Lib\Config::groupBookingActive() ) {
+            $persons = SlotLookup::personsRange( $service, array_keys( $by_staff ) );
+            if ( $persons[1] > 1 ) {
+                $entry['persons'] = array( (int) $persons[0], (int) $persons[1] );
             }
         }
 
@@ -124,17 +127,22 @@ class GetServices implements ToolInterface
                     continue;
                 }
                 $extras[] = array(
-                    'id'               => $extra->getId(),
+                    'id'               => (int) $extra->getId(),
                     'title'            => $extra->getTranslatedTitle(),
                     'price'            => Lib\Utils\Price::format( $extra->getPrice() ),
-                    'duration_minutes' => round( $extra->getDuration() / 60 ),
-                    'min_quantity'     => max( 0, $extra->getMinQuantity() ),
-                    'max_quantity'     => $extra->getMaxQuantity(),
+                    'duration_minutes' => (int) round( $extra->getDuration() / 60 ),
+                    'min_quantity'     => (int) max( 0, $extra->getMinQuantity() ),
+                    'max_quantity'     => (int) $extra->getMaxQuantity(),
                 );
             }
             if ( $extras ) {
                 $entry['extras'] = $extras;
             }
+        }
+
+        // The staff members who provide it - price_by_staff lists them already, when there.
+        if ( ! isset( $entry['price_by_staff'] ) ) {
+            $entry['staff_ids'] = array_map( 'intval', array_keys( $by_staff ) );
         }
 
         return $entry;

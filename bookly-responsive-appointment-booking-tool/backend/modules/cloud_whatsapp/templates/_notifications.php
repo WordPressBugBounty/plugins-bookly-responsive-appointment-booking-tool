@@ -1,6 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Notices;
 ?>
     <input type="hidden" name="form-notifications">
     <div class="form-group">
@@ -22,5 +21,4 @@ use Bookly\Backend\Components\Notices;
 
     <div id="bookly-whatsapp_notifications-datatables"></div>
 
-<?php Notices\Cron\Notice::render() ?>
 <?php Dialogs\Whatsapp\Dialog::render() ?>

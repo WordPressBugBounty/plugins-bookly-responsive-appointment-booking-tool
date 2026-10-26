@@ -3,55 +3,17 @@ namespace Bookly\Frontend\Modules\Ai\BookingTools;
 
 use Bookly\Lib;
 
-class GetLocations implements ToolInterface
+/**
+ * Not a tool itself - the locations of a booking as the chat knows them: which ones the
+ * catalog lists, the description of the location_id argument, and the error for a staff
+ * member asked for at a location they do not work at.
+ */
+class Locations
 {
-    // A location is never required, the way the modern booking form books without one.
-    // bookly_app_required_location is an appearance setting of the step-by-step form alone.
-    const ARGUMENT = 'Location id, from the catalog or get_locations - only when the customer chose a location. Omit otherwise: staff are booked without one.';
-
-    /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return 'get_locations';
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * "search" required-but-may-be-empty for the same Cloud-side reason as
-     * GetServices::getSchema()'s "search" — see that class's doc block.
-     */
-    public function getSchema()
-    {
-        return array(
-            'name'        => $this->getName(),
-            'description' => 'List this business\'s locations: id, name, and address/info.',
-            'parameters'  => array(
-                'type'       => 'object',
-                'properties' => array(
-                    'search' => array(
-                        'type'        => 'string',
-                        'description' => 'Substring to filter locations by name (e.g. what the customer asked about). Pass an empty string to list all locations.',
-                    ),
-                ),
-                'required'   => array( 'search' ),
-            ),
-        );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function execute( array $arguments )
-    {
-        $search = isset( $arguments['search'] ) ? trim( (string) $arguments['search'] ) : '';
-        $list = self::entries( $search );
-
-        return wp_json_encode( $list ) . OfferChoices::hint( OfferChoices::TYPE_LOCATION, count( $list ) );
-    }
-
+    // Which location to book is said by Concepts (Location): the model asks when the staff
+    // member works at more than one. bookly_app_required_location is an appearance setting
+    // of the step-by-step form alone.
+    const ARGUMENT = 'Location id, from the catalog: the location of the booking. Omit for a staff member with no locations.';
 
     /**
      * A staff member asked for at a location they do not work at has no times there at all,
@@ -83,7 +45,7 @@ class GetLocations implements ToolInterface
     }
 
     /**
-     * Locations as get_locations lists them - and the catalog (Ai\Catalog) too.
+     * Locations as the catalog (Ai\Catalog) lists them, and the location choice cards.
      *
      * Only the ones the booking form offers (Lib\Config::getCaSeSt()): a location no
      * bookable staff member works at has no slots for anyone, and a model that sees it as

@@ -154,6 +154,12 @@ jQuery(function ($) {
                 )
             );
         },
+        emptyState: {
+            icon: 'user-round',
+            title: BooklyL10n.empty_title,
+            text: BooklyL10n.empty_text,
+            actions: ['bookly-new-staff', 'bookly-staff-categories-btn']
+        },
         topToolbar: (function () {
             const buttons = [];
             if (BooklyL10n.isAdmin) {
@@ -165,6 +171,7 @@ jQuery(function ($) {
                 });
                 if (BooklyL10n.proEnabled) {
                     buttons.push({
+                        id: 'bookly-staff-categories-btn',
                         label: BooklyL10n.manage_categories,
                         icon: 'folder',
                         variant: 'outline',

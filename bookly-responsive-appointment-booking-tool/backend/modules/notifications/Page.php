@@ -29,6 +29,7 @@ class Page extends Lib\Base\Component
             'sentSuccessfully' => __( 'Sent successfully.', 'bookly-responsive-appointment-booking-tool' ),
             'settingsSaved' => __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' ),
             'areYouSure' => __( 'Are you sure?', 'bookly-responsive-appointment-booking-tool' ),
+            'cron_notice' => Lib\Config::proActive() ? \Bookly\Backend\Components\Notices\Cron\Notice::getText() : null,
             'noResults' => __( 'No records.', 'bookly-responsive-appointment-booking-tool' ),
             'processing' => __( 'Processing', 'bookly-responsive-appointment-booking-tool' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly-responsive-appointment-booking-tool' ),

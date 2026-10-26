@@ -5,6 +5,8 @@ use Bookly\Lib;
 
 class SlotLookup
 {
+    const PERSONS_ARGUMENT = 'How many people the booking is for, within the service\'s "persons" range in the catalog. Omit for one.';
+
     /**
      * Bookable start times for one staff/service/day ("Y-m-d H:i:s", WP time zone).
      *
@@ -17,9 +19,10 @@ class SlotLookup
      * @param string $date "Y-m-d"
      * @param int|null $location_id
      * @param array $extras [extra_id => quantity], from ExtrasInput::parse()
+     * @param int $nop Persons the booking is for: times with room for all of them
      * @return string[]
      */
-    public static function slotsForDay( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array() )
+    public static function slotsForDay( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array(), $nop = 1 )
     {
         // Scheduler lets one day past the booking form's window through.
         if ( $date > self::lastBookableDate() ) {
@@ -33,7 +36,7 @@ class SlotLookup
             0,
             $location_id ?: null,
             array( $extras ), // per-customer list, getDaySchedule() keeps the longest one
-            1
+            $nop
         );
 
         $times = array();
@@ -54,16 +57,17 @@ class SlotLookup
      * @param string $date "Y-m-d"
      * @param int|null $location_id
      * @param array $extras [extra_id => quantity], from ExtrasInput::parse()
+     * @param int $nop
      * @return string|null "Y-m-d"
      */
-    public static function nextDayWithSlots( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array() )
+    public static function nextDayWithSlots( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array(), $nop = 1 )
     {
         $chain_item = new Lib\ChainItem();
         $chain_item
             ->setStaffIds( array( (int) $staff_id ) )
             ->setServiceId( $service->getId() )
             ->setLocationId( $location_id ?: null )
-            ->setNumberOfPersons( 1 )
+            ->setNumberOfPersons( $nop )
             ->setQuantity( 1 )
             ->setUnits( 1 )
             ->setExtras( $extras );
@@ -91,22 +95,85 @@ class SlotLookup
      * @param string $date "Y-m-d"
      * @param int|null $location_id
      * @param array $extras [extra_id => quantity], from ExtrasInput::parse()
+     * @param int $nop
      * @return string|null "Y-m-d"
      */
-    public static function previousDayWithSlots( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array() )
+    public static function previousDayWithSlots( Lib\Entities\Service $service, $staff_id, $date, $location_id = null, array $extras = array(), $nop = 1 )
     {
         $today = Lib\Slots\DatePoint::now()->format( 'Y-m-d' );
         $day = min( date( 'Y-m-d', strtotime( $date . ' -1 day' ) ), self::lastBookableDate() );
         for ( $i = 0; $i < 7 && $day >= $today; $i++ ) {
-            if ( self::slotsForDay( $service, $staff_id, $day, $location_id, $extras ) ) {
+            if ( self::slotsForDay( $service, $staff_id, $day, $location_id, $extras, $nop ) ) {
                 return $day;
             }
             $day = date( 'Y-m-d', strtotime( $day . ' -1 day' ) );
         }
 
         return $day >= $today
-            ? self::nextDayWithSlots( $service, $staff_id, date( 'Y-m-d', strtotime( $today . ' -1 day' ) ), $location_id, $extras )
+            ? self::nextDayWithSlots( $service, $staff_id, date( 'Y-m-d', strtotime( $today . ' -1 day' ) ), $location_id, $extras, $nop )
             : null;
+    }
+
+    /**
+     * Persons one booking may be for: from the smallest minimum to the largest maximum of the
+     * staff members' own rows (per location, else the general row), as the booking form
+     * offers it for "Any" (Config::getCaSeSt()); [1, 1] without Group Booking.
+     *
+     * Not Service::getPersonsRange(): that widens the range by the service's own template,
+     * which only fills new staff rows - slots hold what the staff member's row says, so a
+     * service whose staff take groups of 2 or more has no times for one person.
+     *
+     * @param Lib\Entities\Service $service
+     * @param int[] $staff_ids
+     * @param int $location_id
+     * @return int[] [ min, max ]
+     */
+    public static function personsRange( Lib\Entities\Service $service, array $staff_ids, $location_id = 0 )
+    {
+        if ( ! Lib\Config::groupBookingActive() ) {
+            return array( 1, 1 );
+        }
+
+        $min = null;
+        $max = 1;
+        foreach ( $staff_ids as $staff_id ) {
+            $row = new Lib\Entities\StaffService();
+            $staff_location_id = $location_id ? ( Lib\Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null ) : null;
+            if ( $staff_location_id ) {
+                $row->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service->getId(), 'location_id' => $staff_location_id ) );
+            }
+            if ( ! $row->isLoaded() ) {
+                $row->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service->getId(), 'location_id' => null ) );
+            }
+            if ( $row->isLoaded() ) {
+                $row_min = max( 1, (int) $row->getCapacityMin() );
+                $min = $min === null ? $row_min : min( $min, $row_min );
+                $max = max( $max, $row_min, (int) $row->getCapacityMax() );
+            }
+        }
+
+        return array( $min === null ? 1 : $min, $max );
+    }
+
+    /**
+     * Persons a booking may be for with this staff member (personsRange()), 1 without Group Booking.
+     *
+     * @param Lib\Entities\Service $service
+     * @param int $staff_id
+     * @param int $location_id
+     * @param int $nop
+     * @return string|null Error for the model, null when fine
+     */
+    public static function checkPersons( Lib\Entities\Service $service, $staff_id, $location_id, $nop )
+    {
+        list( $min, $max ) = self::personsRange( $service, array( $staff_id ), $location_id );
+        if ( $nop >= $min && $nop <= $max ) {
+            return null;
+        }
+
+        return $max > 1
+            ? sprintf( 'Error: with this staff member one booking of this service is for %d to %d people, not %d. Ask the customer how many people will come if they have not said it.', $min, $max, $nop )
+            : 'Error: this service is booked for one person at a time - each person needs a booking of their own.';
     }
 
     /**
@@ -180,11 +247,12 @@ class SlotLookup
      * @param int|null $location_id
      * @param array $extras
      * @param string[] $day_times Out: all bookable starts that day, for suggesting alternatives
+     * @param int $nop
      * @return bool
      */
-    public static function isBookable( Lib\Entities\Service $service, $staff_id, \DateTime $start, $location_id, array $extras, &$day_times = array() )
+    public static function isBookable( Lib\Entities\Service $service, $staff_id, \DateTime $start, $location_id, array $extras, &$day_times = array(), $nop = 1 )
     {
-        $day_times = self::slotsForDay( $service, $staff_id, $start->format( 'Y-m-d' ), $location_id, $extras );
+        $day_times = self::slotsForDay( $service, $staff_id, $start->format( 'Y-m-d' ), $location_id, $extras, $nop );
 
         return in_array( $start->format( 'Y-m-d H:i:s' ), $day_times, true );
     }

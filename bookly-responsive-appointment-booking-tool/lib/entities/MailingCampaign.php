@@ -13,6 +13,8 @@ class MailingCampaign extends Lib\Base\Entity
     /** @var int */
     protected $mailing_list_id;
     /** @var string */
+    protected $audience;
+    /** @var string */
     protected $name;
     /** @var string */
     protected $text;
@@ -28,6 +30,7 @@ class MailingCampaign extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'mailing_list_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'MailingList' ) ),
+        'audience' => array( 'format' => '%s' ),
         'name' => array( 'format' => '%s' ),
         'text' => array( 'format' => '%s' ),
         'state' => array( 'format' => '%s' ),
@@ -81,6 +84,29 @@ class MailingCampaign extends Lib\Base\Entity
     public function setMailingListId( $mailing_list_id )
     {
         $this->mailing_list_id = $mailing_list_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets audience
+     *
+     * @return string
+     */
+    public function getAudience()
+    {
+        return $this->audience;
+    }
+
+    /**
+     * Sets audience
+     *
+     * @param string $audience
+     * @return $this
+     */
+    public function setAudience( $audience )
+    {
+        $this->audience = $audience;
 
         return $this;
     }

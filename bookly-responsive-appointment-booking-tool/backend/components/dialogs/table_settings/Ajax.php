@@ -27,8 +27,6 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::SERVICES,
         Lib\Utils\Tables::SMS_DETAILS,
         Lib\Utils\Tables::SMS_MAILING_CAMPAIGNS,
-        Lib\Utils\Tables::SMS_MAILING_LISTS,
-        Lib\Utils\Tables::SMS_MAILING_RECIPIENTS_LIST,
         Lib\Utils\Tables::SMS_NOTIFICATIONS,
         Lib\Utils\Tables::SMS_PRICES,
         Lib\Utils\Tables::SMS_SENDER,

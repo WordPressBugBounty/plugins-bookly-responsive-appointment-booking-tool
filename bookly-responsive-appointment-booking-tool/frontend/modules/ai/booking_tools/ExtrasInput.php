@@ -45,7 +45,7 @@ class ExtrasInput
             $quantity = isset( $item['quantity'] ) ? (int) $item['quantity'] : 0;
 
             if ( ! isset( $allowed[ $extra_id ] ) ) {
-                throw new \Exception( 'extra_id ' . $extra_id . ' is not available for this service. Call get_services to see valid extras.' );
+                throw new \Exception( 'extra_id ' . $extra_id . ' is not one of this service\'s extras. Use its extras list in the catalog.' );
             }
 
             $extra = $allowed[ $extra_id ];

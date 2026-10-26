@@ -117,19 +117,11 @@ class Schema
                 }
 
                 $type = $data['DATA_TYPE'];
-                // MariaDB 10.0.38
-                if ( $type === 'mediumtext' ) {
-                    $type = 'text';
-                }
                 break;
             case 'MySql':
             default:
                 $default = $data['COLUMN_DEFAULT'];
                 $type = $data['DATA_TYPE'];
-                // 5.6.32-1+deb.sury.org~precise+0.1
-                if ( $type === 'mediumtext' ) {
-                    $type = 'text';
-                }
         }
 
         return array(

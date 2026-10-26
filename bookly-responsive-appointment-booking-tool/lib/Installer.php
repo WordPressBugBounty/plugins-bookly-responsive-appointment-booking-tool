@@ -1062,6 +1062,7 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\MailingCampaign::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `mailing_list_id` INT UNSIGNED NULL,
+                `audience` TEXT DEFAULT NULL,
                 `name` VARCHAR(255) DEFAULT NULL,
                 `text` TEXT DEFAULT NULL,
                 `state` ENUM("pending","in-progress","completed","canceled") NOT NULL DEFAULT "pending",
@@ -1084,7 +1085,8 @@ class Installer extends Base\Installer
                 `text` TEXT DEFAULT NULL,
                 `sent` TINYINT(1) DEFAULT 0,
                 `campaign_id` INT NOT NULL DEFAULT 0,
-                `created_at` DATETIME NOT NULL
+                `created_at` DATETIME NOT NULL,
+                INDEX `campaign_id_sent` (`campaign_id`, `sent`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );
@@ -1176,6 +1178,7 @@ class Installer extends Base\Installer
                 `booking_data` TEXT DEFAULT NULL,
                 `booking_status` ENUM("pending","processing","awaiting","paid","failed") DEFAULT NULL,
                 `order_id` INT UNSIGNED DEFAULT NULL,
+                `snapshot` MEDIUMTEXT DEFAULT NULL,
                 `created_at` DATETIME NOT NULL,
                 `updated_at` DATETIME NOT NULL,
                 UNIQUE KEY `token` (`token`)

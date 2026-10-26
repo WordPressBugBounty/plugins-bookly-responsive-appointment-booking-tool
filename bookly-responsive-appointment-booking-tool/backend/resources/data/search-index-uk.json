@@ -302,11 +302,11 @@
         "type": "page",
         "page": "bookly-cloud-settings",
         "tab": null,
-        "title": "Налаштування",
+        "title": "Обліковий запис",
         "anchor": null,
         "addon": "cloud",
         "weight": 100,
-        "alt": "Settings"
+        "alt": "Account"
     },
     {
         "type": "product",
@@ -315,6 +315,7 @@
         "title": "Stripe Payments",
         "anchor": null,
         "addon": "cloud:stripe",
+        "product": "stripe",
         "weight": 70
     },
     {
@@ -324,6 +325,17 @@
         "title": "Cloud Cron",
         "anchor": null,
         "addon": "cloud:cron",
+        "product": "cron",
+        "weight": 70
+    },
+    {
+        "type": "product",
+        "page": "bookly-cloud-products",
+        "tab": null,
+        "title": "AI Assistant",
+        "anchor": null,
+        "addon": "cloud:ai",
+        "product": "ai",
         "weight": 70
     },
     {
@@ -3003,16 +3015,6 @@
         "addon": "cloud:sms",
         "weight": 60,
         "alt": "Campaigns"
-    },
-    {
-        "type": "tab",
-        "page": "bookly-cloud-sms",
-        "tab": "mailing",
-        "title": "Списки розсилки",
-        "anchor": null,
-        "addon": "cloud:sms",
-        "weight": 60,
-        "alt": "Mailing lists"
     },
     {
         "type": "tab",

@@ -59,7 +59,7 @@ class Dialog extends Lib\Base\Component
                 'na' => __( 'N/A', 'bookly-responsive-appointment-booking-tool' ),
                 'paid' => __( 'Paid', 'bookly-responsive-appointment-booking-tool' ),
                 'payment' => __( 'Payment', 'bookly-responsive-appointment-booking-tool' ),
-                'payment_is_not_found' => __( 'Payment is not found.', 'bookly-responsive-appointment-booking-tool' ),
+                'payment_is_not_found' => __( 'Payment not found.', 'bookly-responsive-appointment-booking-tool' ),
                 'price' => __( 'Price', 'bookly-responsive-appointment-booking-tool' ),
                 'price_correction' => __( 'Price correction', 'bookly-responsive-appointment-booking-tool' ),
                 'provider' => __( 'Provider', 'bookly-responsive-appointment-booking-tool' ),

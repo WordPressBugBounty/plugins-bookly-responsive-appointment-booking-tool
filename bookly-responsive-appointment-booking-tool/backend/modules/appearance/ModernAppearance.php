@@ -125,8 +125,18 @@ class ModernAppearance extends Lib\Base\Component
             ),
             'fields' => array(
                 'ai_answer_bubble_color' => __( 'Answer bubble', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_business_description' => __( 'What the assistant should know', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_business_description_hint' => __( 'In your own words, share anything you\'d like the AI assistant to use when talking to customers, applying it whenever possible.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_persona' => __( 'The assistant', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_persona_hint' => __( 'How the assistant introduces itself and talks to customers: its name, how formal it is, what to emphasise.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_business_description' => __( 'About the business', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_company_contacts_alert' => \Bookly\Frontend\Modules\Ai\SystemPrompt::hasContacts()
+                    ? ''
+                    : sprintf(
+                        __( 'Company contacts are not filled in, so the assistant cannot give them to customers. Add them in the <a href="%s">company settings</a>.', 'bookly-responsive-appointment-booking-tool' ),
+                        esc_url( add_query_arg( array( 'page' => \Bookly\Backend\Modules\Settings\Page::pageSlug(), 'tab' => 'company' ), admin_url( 'admin.php' ) ) )
+                    ),
+                'ai_business_description_hint' => __( 'What your business does, who it serves and what sets it apart. The name, address, phone, email and website the assistant gives customers are taken from the company settings.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_customer_info' => __( 'What customers should know', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_customer_info_hint' => __( 'What the assistant tells customers when they ask: parking, what to bring, cancellation rules, frequent questions. It does not change prices, discounts or how booking works.', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_card_image' => Lib\Entities\Payment::typeToImage( Lib\Entities\Payment::TYPE_CLOUD_STRIPE ),
                 'ai_error_label' => __( 'Message send failed', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_error_messages_hint' => __( 'Shown inside the conversation when something goes wrong.', 'bookly-responsive-appointment-booking-tool' ),
@@ -278,6 +288,8 @@ class ModernAppearance extends Lib\Base\Component
         return array(
             'main_color' => get_option( 'bookly_app_color', '#F4662F' ),
             'business_description' => '',
+            'assistant_persona' => '',
+            'customer_info' => '',
             'question_bubble_color' => null,
             'answer_bubble_color' => '#F1F5F9',
             'display_mode' => 'floating',

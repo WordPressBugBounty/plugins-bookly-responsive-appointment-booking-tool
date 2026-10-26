@@ -5,6 +5,10 @@ use Bookly\Lib;
 
 class MailingQueue extends Lib\Base\Entity
 {
+    const SENT_NO = 0;
+    const SENT_YES = 1;
+    const SENT_FAILED = 2;
+
     /** @var string */
     protected $phone;
     /** @var string */

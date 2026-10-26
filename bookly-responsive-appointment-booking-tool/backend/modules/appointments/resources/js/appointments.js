@@ -571,6 +571,12 @@ jQuery(function ($) {
             );
         },
         filters: filters,
+        emptyState: {
+            icon: 'calendar',
+            title: BooklyL10n.empty_title,
+            text: BooklyL10n.empty_text,
+            actions: ['bookly-new-appointment']
+        },
         topToolbar: (function () {
             const buttons = [];
             if (BooklyL10n.proEnabled) {

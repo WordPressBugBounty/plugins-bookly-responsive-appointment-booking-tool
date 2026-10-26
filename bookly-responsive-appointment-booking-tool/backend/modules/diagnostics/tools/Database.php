@@ -64,7 +64,8 @@ class Database extends Tool
                             $expect = QueryBuilder::getColumnData( $table_name, $column );
                             $actual = $table_structure[ $column ];
                             unset( $expect['key'], $actual['key'], $actual['character_set'], $actual['collation'] );
-                            if ( $expect && array_diff_assoc( $actual, $expect ) ) {
+                            $diff = $this->diff( $actual, $expect );
+                            if ( $expect && $diff ) {
                                 $sql = QueryBuilder::getChangeColumn( $table_name, $column );
                                 if ( $table_structure[ $column ]['key'] == 'PRI' ) {
                                     $sql = str_replace( ' primary key', '', $sql );
@@ -74,7 +75,7 @@ class Database extends Tool
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t change column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
                                 } else {
-                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), 128 ), 'change column ' . $table_name . '.' . $column );
+                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( $diff, 128 ), 'change column ' . $table_name . '.' . $column );
                                 }
                             }
                         } else {
@@ -357,6 +358,15 @@ class Database extends Tool
         $diff = array_diff_assoc( $actual, $expect );
         if ( isset( $diff['type'] ) && stripos( $diff['type'], 'tinyint' ) === 0 ) {
             unset( $diff['type'] );
+        }
+        // A wider text type in the DB is fine (e.g. MySQL 5.6 and MariaDB 10.0 turn text into mediumtext)
+        $text_types = array( 'tinytext', 'text', 'mediumtext', 'longtext' );
+        if ( isset( $diff['type'], $expect['type'] ) ) {
+            $actual_size = array_search( $diff['type'], $text_types, true );
+            $expect_size = array_search( $expect['type'], $text_types, true );
+            if ( $actual_size !== false && $expect_size !== false && $actual_size >= $expect_size ) {
+                unset( $diff['type'] );
+            }
         }
         if ( isset( $diff['collation'] ) && ! isset( $diff['character_set'] ) ) {
             // don't show collation without character_set

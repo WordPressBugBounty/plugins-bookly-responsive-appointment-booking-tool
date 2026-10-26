@@ -68,22 +68,39 @@ jQuery(function ($) {
     $('#campaigns').one('bookly:tab-show', function () {
         const campaignsTable = 'sms_mailing_campaigns';
         const campaignStateBadgeClass = {
-            'pending':     'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
-            'waiting':     'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
-            'in-progress': 'bookly:bg-amber-100 bookly:text-amber-800 bookly:border-amber-200',
-            'completed':   'bookly:bg-green-100 bookly:text-green-800 bookly:border-green-200',
-            'canceled':    'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200',
+            'ready':     'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
+            'scheduled': 'bookly:bg-blue-100 bookly:text-blue-800 bookly:border-blue-200',
+            'sending':   'bookly:bg-amber-100 bookly:text-amber-800 bookly:border-amber-200',
+            'completed': 'bookly:bg-green-100 bookly:text-green-800 bookly:border-green-200',
+            'stopped':   'bookly:bg-gray-100 bookly:text-gray-700 bookly:border-gray-200',
         };
-        const campaignStateLabel = function (row) {
+        // The same states, in the same words, as the campaign preview.
+        const campaignState = function (row) {
             switch (row.state) {
-                case 'pending':     return row.send_at === null ? BooklyL10n.campaign.waiting : BooklyL10n.campaign.pending;
-                case 'in-progress': return BooklyL10n.campaign.in_progress;
-                case 'completed':   return BooklyL10n.campaign.completed;
-                case 'canceled':    return BooklyL10n.campaign.canceled;
-                default:            return row.state;
+                case 'pending':     return row.send_at === null ? 'ready' : 'scheduled';
+                case 'in-progress': return 'sending';
+                case 'completed':   return 'completed';
+                default:            return 'stopped';
             }
         };
+        const campaignStateLabel = function (row) {
+            return BooklyL10nSmsCampaigns.l10n.states[campaignState(row)];
+        };
         let dt_campaigns;
+
+        // Newest first until the user sorts the table otherwise: the campaign just made is on top.
+        function campaignTableSettings() {
+            const tableSettings = Object.assign({}, BooklyL10n.datatables[campaignsTable], {
+                l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords })
+            });
+            if (!tableSettings.settings.order || !tableSettings.settings.order.length) {
+                tableSettings.settings = Object.assign({}, tableSettings.settings, {
+                    order: [{ column: 'created_at', order: 'desc' }]
+                });
+            }
+
+            return tableSettings;
+        }
 
         // Server (Ajax::getCampaignList) searches only by name and id.
         const campaignSearchableColumns = ['name', 'id'];
@@ -95,8 +112,7 @@ jQuery(function ($) {
                         data: column,
                         render: function (data, type, row) { return BooklyDatatables.escapeHtml(campaignStateLabel(row)); },
                         badge: function (row) {
-                            const key = row.state === 'pending' && row.send_at === null ? 'waiting' : row.state;
-                            return campaignStateBadgeClass[key] || campaignStateBadgeClass['canceled'];
+                            return campaignStateBadgeClass[campaignState(row)];
                         },
                     });
                     break;
@@ -104,9 +120,31 @@ jQuery(function ($) {
                     columns.push({
                         data: column,
                         render: function (data) {
-                            return data === null ? BooklyL10n.manual : moment(data).format(BooklyL10n.moment_format_date_time);
+                            return data === null ? BooklyL10n.manual : BooklySmsCampaigns.formatDateTime(data);
                         }
                     });
+                    break;
+                case 'created_at':
+                    columns.push({
+                        data: column,
+                        render: function (data) {
+                            return BooklySmsCampaigns.formatDateTime(data);
+                        }
+                    });
+                    break;
+                case 'audience':
+                    columns.push({
+                        data: column,
+                        orderable: false,
+                        render: function (data) {
+                            const preset = BooklyL10nSmsCampaigns.l10n.presets[data];
+                            return BooklyDatatables.escapeHtml(preset ? preset.title : data);
+                        }
+                    });
+                    break;
+                case 'recipients':
+                    // Until it is queued, a preset audience is counted as of now.
+                    columns.push({ data: column, orderable: false, render: function (data) { return BooklyDatatables.escapeHtml(data); } });
                     break;
                 default:
                     columns.push({
@@ -133,20 +171,69 @@ jQuery(function ($) {
                 }
             },
             columns: columns,
-            tableSettings: Object.assign({}, BooklyL10n.datatables[campaignsTable], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
+            tableSettings: campaignTableSettings(),
             edit: function (row) {
-                BooklyCampaignDialog.showDialog(row.id, function () { dt_campaigns.reload(); });
+                BooklySmsCampaigns.preview({ id: row.id, onchanged: refreshCampaigns });
+            },
+            rowActions: function (row) {
+                const actions = [];
+                // Only a campaign that has not started is edited; the rest is viewed in its preview.
+                if (row.state === 'pending') {
+                    actions.push({
+                        label: BooklyL10nSmsCampaigns.l10n.edit,
+                        icon: 'pencil',
+                        variant: 'outline',
+                        click: function (r) {
+                            BooklySmsCampaigns.show({ mode: 'edit', id: r.id, onsaved: refreshCampaigns });
+                        }
+                    });
+                }
+                actions.push({
+                    label: BooklyL10n.duplicate,
+                    icon: 'copy-plus',
+                    variant: 'outline',
+                    click: function (r) {
+                        BooklySmsCampaigns.show({ mode: 'duplicate', id: r.id, onsaved: refreshCampaigns });
+                    }
+                });
+                if (row.state === 'pending' && row.send_at === null) {
+                    actions.push({
+                        label: BooklyL10n.run,
+                        icon: 'play',
+                        variant: 'outline',
+                        click: function (r) {
+                            if (confirm(BooklyL10n.areYouSure)) {
+                                campaignRequest({ action: 'bookly_start_campaign', ids: [r.id] });
+                            }
+                        }
+                    });
+                }
+                if (row.state === 'in-progress' || (row.state === 'pending' && row.send_at !== null)) {
+                    actions.push({
+                        label: BooklyL10n.stop,
+                        icon: 'ban',
+                        variant: 'outline',
+                        click: function (r) {
+                            if (confirm(BooklyL10n.areYouSure)) {
+                                campaignRequest({ action: 'bookly_cancel_campaign', id: r.id });
+                            }
+                        }
+                    });
+                }
+                return actions;
             },
             checked: function (rows) {
                 const actions = [];
                 const runnable = rows.filter(function (row) { return row.send_at === null && row.state === 'pending'; });
-                if (runnable.length > 0) {
+                if (runnable.length > 1) {
                     actions.push({
                         label: BooklyL10n.run + ' (' + runnable.length + ')',
                         icon: 'play',
                         variant: 'outline',
                         click: function () {
-                            BooklyCampaignDialog.runCampaign(runnable.map(function (row) { return row.id; }), function () { dt_campaigns.reload(); });
+                            if (confirm(BooklyL10n.areYouSure)) {
+                                campaignRequest({ action: 'bookly_start_campaign', ids: runnable.map(function (row) { return row.id; }) });
+                            }
                         }
                     });
                 }
@@ -187,211 +274,44 @@ jQuery(function ($) {
                     csrf_token: BooklyL10nGlobal.csrf_token
                 }, settings));
             },
+            // Scheduled sending runs on cron, as notifications do.
+            notice: BooklyL10n.cron_notice,
+            noticePosition: 'bottom',
+            emptyState: {
+                icon: 'send',
+                title: BooklyL10n.empty_campaigns_title,
+                text: BooklyL10n.empty_campaigns_text,
+                actions: ['bookly-new-campaign']
+            },
             topToolbar: [{
+                id: 'bookly-new-campaign',
                 label: BooklyL10n.new_campaign,
                 icon: 'plus',
                 variant: 'default',
                 click: function () {
-                    BooklyCampaignDialog.showDialog(null, function () { dt_campaigns.reload(); });
+                    BooklySmsCampaigns.show({ mode: 'new', onsaved: refreshCampaigns });
                 }
             }],
             searchFilter: { placeholder: BooklyL10n.quick_search, name: 'filter[search]' }
         });
-    });
 
-    /**
-     * Mailing list Tab.
-     */
-    $('#mailing').one('bookly:tab-show', function () {
-        const $ml_container = $('#mailing_lists');
-        const $mr_container = $('#mailing_recipients');
-        const ml = { columns: [], dt: null, list_id: null };
-        const mr = { columns: [], $list_name: $('#bookly-js-mailing-list-name', $mr_container), dt: null };
+        // After a save or a run the campaign is shown whatever was searched: a query typed
+        // earlier would hide the campaign just created and look like the save failed.
+        function refreshCampaigns() {
+            if (!dt_campaigns.clearSearch()) {
+                dt_campaigns.reload();
+            }
+        }
 
-        $(document.body).on('bookly.mailing-recipients.show', function (event, mailing_list) {
-            ml.list_id = mailing_list.id;
-            mr.$list_name.html(mailing_list.name);
-            switchView('mailing_recipients');
-        });
-
-        const ml_table = 'sms_mailing_lists';
-        // Server (Ajax::getMailingList) searches only by name and id.
-        const ml_searchableColumns = ['name', 'id'];
-        $.each(BooklyL10n.datatables[ml_table].settings.columns, function (column, show) {
-            ml.columns.push({
-                data: column,
-                render: function (data) { return BooklyDatatables.escapeHtml(data); }
-            });
-            ml.columns[ml.columns.length - 1].title = BooklyL10n.datatables[ml_table].titles[column] || column;
-            ml.columns[ml.columns.length - 1].name = column;
-            ml.columns[ml.columns.length - 1].show = show;
-            ml.columns[ml.columns.length - 1].searchable = ml_searchableColumns.indexOf(column) !== -1;
-        });
-
-        ml.dt = BooklyDatatables.showForm('bookly-' + ml_table + '-datatables', {
-            ajax: {
+        function campaignRequest(data) {
+            dt_campaigns.setLoading(true);
+            $.ajax({
                 url: ajaxurl,
                 method: 'POST',
-                data: function (d) {
-                    return $.extend({
-                        action: 'bookly_get_mailing_list',
-                        csrf_token: BooklyL10nGlobal.csrf_token,
-                    }, d);
-                }
-            },
-            columns: ml.columns,
-            tableSettings: Object.assign({}, BooklyL10n.datatables[ml_table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
-            edit: function (row) {
-                $(document.body).trigger('bookly.mailing-recipients.show', [row]);
-            },
-            checked: function () {
-                return [{
-                    label: BooklyL10n.delete,
-                    icon: 'trash',
-                    variant: 'destructive',
-                    click: function (selected) {
-                        if (!confirm(BooklyL10n.areYouSure)) return;
-                        ml.dt.setLoading(true);
-                        $.ajax({
-                            url: ajaxurl,
-                            method: 'POST',
-                            data: {
-                                action: 'bookly_delete_mailing_lists',
-                                csrf_token: BooklyL10nGlobal.csrf_token,
-                                ids: selected.map(function (row) { return row.id; })
-                            },
-                            dataType: 'json',
-                            success: function (response) {
-                                if (response.success) {
-                                    ml.dt.reload();
-                                } else {
-                                    ml.dt.setLoading(false);
-                                    alert(response.data.message);
-                                }
-                            },
-                            error: function () { ml.dt.setLoading(false); }
-                        });
-                    }
-                }];
-            },
-            saveSettings: function (settings) {
-                $.post(ajaxurl, Object.assign({
-                    action: 'bookly_update_table_settings',
-                    table: ml_table,
-                    csrf_token: BooklyL10nGlobal.csrf_token
-                }, settings));
-            },
-            topToolbar: [{
-                label: BooklyL10n.new_mailing_list,
-                icon: 'plus',
-                variant: 'default',
-                click: function () {
-                    const event = new CustomEvent('bookly:create-mailing-list');
-                    window.dispatchEvent(event);
-                }
-            }],
-            searchFilter: { placeholder: BooklyL10n.quick_search, name: 'filter[search]' }
-        });
-
-        /**
-         * Mailing recipients.
-         */
-        const mr_table = 'sms_mailing_recipients_list';
-        // Server (Ajax::getMailingRecipients) searches only by name and phone.
-        const mr_searchableColumns = ['name', 'phone'];
-        $.each(BooklyL10n.datatables[mr_table].settings.columns, function (column, show) {
-            mr.columns.push({
-                data: column,
-                render: function (data) { return BooklyDatatables.escapeHtml(data); }
+                data: Object.assign({ csrf_token: BooklyL10nGlobal.csrf_token }, data),
+                dataType: 'json',
+                complete: refreshCampaigns
             });
-            mr.columns[mr.columns.length - 1].title = BooklyL10n.datatables[mr_table].titles[column] || column;
-            mr.columns[mr.columns.length - 1].name = column;
-            mr.columns[mr.columns.length - 1].show = show;
-            mr.columns[mr.columns.length - 1].searchable = mr_searchableColumns.indexOf(column) !== -1;
-        });
-
-        function switchView(view) {
-            if (view === 'mailing_lists') {
-                $mr_container.hide();
-                $ml_container.show();
-                ml.dt.reload();
-            } else {
-                $ml_container.hide();
-                if (mr.dt === null) {
-                    mr.dt = BooklyDatatables.showForm('bookly-' + mr_table + '-datatables', {
-                        ajax: {
-                            url: ajaxurl,
-                            method: 'POST',
-                            data: function (d) {
-                                return $.extend({
-                                    action: 'bookly_get_mailing_recipients',
-                                    csrf_token: BooklyL10nGlobal.csrf_token,
-                                    mailing_list_id: ml.list_id,
-                                }, d);
-                            }
-                        },
-                        columns: mr.columns,
-                        tableSettings: Object.assign({}, BooklyL10n.datatables[mr_table], { l10n: Object.assign({}, BooklyL10n.datatables.l10n, { zeroRecords: BooklyL10n.zeroRecords }) }),
-                        checked: function () {
-                            return [{
-                                label: BooklyL10n.delete,
-                                icon: 'trash',
-                                variant: 'destructive',
-                                click: function (selected) {
-                                    if (!confirm(BooklyL10n.areYouSure)) return;
-                                    mr.dt.setLoading(true);
-                                    $.ajax({
-                                        url: ajaxurl,
-                                        method: 'POST',
-                                        data: {
-                                            action: 'bookly_delete_mailing_recipients',
-                                            csrf_token: BooklyL10nGlobal.csrf_token,
-                                            ids: selected.map(function (row) { return row.id; })
-                                        },
-                                        dataType: 'json',
-                                        success: function (response) {
-                                            if (response.success) {
-                                                mr.dt.reload();
-                                            } else {
-                                                mr.dt.setLoading(false);
-                                                alert(response.data.message);
-                                            }
-                                        },
-                                        error: function () { mr.dt.setLoading(false); }
-                                    });
-                                }
-                            }];
-                        },
-                        saveSettings: function (settings) {
-                            $.post(ajaxurl, Object.assign({
-                                action: 'bookly_update_table_settings',
-                                table: mr_table,
-                                csrf_token: BooklyL10nGlobal.csrf_token
-                            }, settings));
-                        },
-                        topToolbar: [
-                            {
-                                label: BooklyL10n.back_to_lists,
-                                icon: 'arrow-left',
-                                variant: 'outline',
-                                click: function () { switchView('mailing_lists'); }
-                            },
-                            {
-                                label: BooklyL10n.new_recipients,
-                                icon: 'plus',
-                                variant: 'default',
-                                click: function () {
-                                    BooklyAddRecipientsDialog.showDialog(ml.list_id, function () { mr.dt.reload(); });
-                                }
-                            }
-                        ],
-                        searchFilter: { placeholder: BooklyL10n.quick_search, name: 'filter[search]' }
-                    });
-                } else {
-                    mr.dt.reload(null);
-                }
-                $mr_container.show();
-            }
         }
     });
 
@@ -815,6 +735,12 @@ jQuery(function ($) {
                     ],
                     onChange: function (v) { statusValue = v; },
                 }],
+                emptyState: {
+                    icon: 'send',
+                    title: BooklyL10n.sender_id.empty_title,
+                    text: BooklyL10n.sender_id.empty_text,
+                    actions: ['bookly-request-sender_id']
+                },
                 topToolbar: [{
                     id: 'bookly-request-sender_id',
                     label: BooklyL10n.sender_id.request,

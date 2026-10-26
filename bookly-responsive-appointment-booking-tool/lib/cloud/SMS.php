@@ -20,6 +20,8 @@ class SMS extends Base
 
     /** @var array */
     protected $sender_id;
+    /** @var bool Whether the last sendSms() was refused for lack of credits */
+    protected $out_of_credits = false;
 
     /**
      * Send SMS.
@@ -32,6 +34,7 @@ class SMS extends Base
      */
     public function sendSms( $phone_number, $message, $impersonal_message, $type_id = null )
     {
+        $this->out_of_credits = false;
         if ( $this->api->getToken() ) {
             $data = array(
                 'message' => $message,
@@ -60,6 +63,7 @@ class SMS extends Base
 
                             return true;
                         } elseif ( $response['gateway_status'] == 3 ) {
+                            $this->out_of_credits = true;
                             $this->api->addError( __( 'You don\'t have enough Bookly Cloud credits to send this message. Please add funds to your balance and try again.', 'bookly-responsive-appointment-booking-tool' ) );
                         } else {
                             $this->api->addError( __( 'Failed to send SMS.', 'bookly-responsive-appointment-booking-tool' ) );
@@ -72,6 +76,16 @@ class SMS extends Base
         }
 
         return false;
+    }
+
+    /**
+     * Whether the last sendSms() was refused because the balance ran out.
+     *
+     * @return bool
+     */
+    public function outOfCredits()
+    {
+        return $this->out_of_credits;
     }
 
     /**

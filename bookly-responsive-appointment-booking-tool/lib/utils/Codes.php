@@ -8,11 +8,47 @@ abstract class Codes
 {
     protected static $tokens = array(
         'T_CODE' => '{(\w+(?:\.\w+)*(?:\#\w+)*)}',
-        'T_IF' => '{#if\s+(\w+(?:\.\w+)*(?:\#\w+)*)\s*(?:(==|!=|>=|>|<=|<|=|!empty|empty)\s*(.+?))?}\n?',
+        'T_IF' => '{#if\s+(\w+(?:\.\w+)*(?:\#\w+)*)\s*(?:(==|!=|>=|>|<=|<|=|!empty|empty)\s*(.*?))?}\n?',
+        'T_ELSE' => '{:else}\n?',
         'T_END_IF' => '{\/if}\n?',
         'T_EACH' => '{#each\s+(\w+(?:\.\w+)*)\s+as\s+(\w+)(?:\s+delimited\s+by\s+"(.+?)")?\s*}\n?',
         'T_END_EACH' => '{\/each}\n?',
     );
+
+    /**
+     * Texts of the code editor (CodeEditor.svelte)
+     *
+     * @return array
+     */
+    public static function editorL10n()
+    {
+        return array(
+            'search' => __( 'Search codes', 'bookly-responsive-appointment-booking-tool' ),
+            'empty' => __( 'No codes found', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: the "{" key */
+            'hint' => __( 'Type %s to insert a code', 'bookly-responsive-appointment-booking-tool' ),
+            'documentation' => __( 'Documentation', 'bookly-responsive-appointment-booking-tool' ),
+            'codes' => __( 'Codes', 'bookly-responsive-appointment-booking-tool' ),
+            'conditions' => __( 'Conditions', 'bookly-responsive-appointment-booking-tool' ),
+            'loops' => __( 'Loops', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: code description */
+            'if_filled' => __( 'Show only if set: %s', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: code description */
+            'if_empty' => __( 'Show only if not set: %s', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: code */
+            'else_if' => __( 'Otherwise (when the condition on %s is not met)', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: code of a list */
+            'else_each' => __( 'Otherwise (when %s is empty)', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: code */
+            'unknown' => __( 'Unknown code %s: it will be removed from the text.', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: opening tag */
+            'unclosed' => __( '%s is not closed: the text after it may be lost.', 'bookly-responsive-appointment-booking-tool' ),
+            /* translators: %s: closing tag */
+            'unopened' => __( '%s has no opening tag.', 'bookly-responsive-appointment-booking-tool' ),
+            'preview' => __( 'Preview', 'bookly-responsive-appointment-booking-tool' ),
+            'preview_note' => __( 'With sample values', 'bookly-responsive-appointment-booking-tool' ),
+        );
+    }
 
     /**
      * Replace codes in text
@@ -110,6 +146,8 @@ abstract class Codes
                     }
                     if ( $if ) {
                         $output .= self::stringify( $nested_tokens, $codes, $bold, $exclude, $escape );
+                    } elseif ( $token[4] ) {
+                        $output .= self::stringify( $token[4], $codes, $bold, $exclude, $escape );
                     }
                     break;
                 case 'T_EACH':
@@ -117,12 +155,15 @@ abstract class Codes
                     $context_code = $token[2];
                     $delimiter = $token[3];
                     $nested_tokens = $token[4];
-                    if ( is_array( $data ) ) {
+                    if ( is_array( $data ) && $data ) {
                         $parts = array();
                         foreach ( $data as $context_codes ) {
                             $parts[] = self::stringify( $nested_tokens, array( $context_code => $context_codes ) + $codes, $bold, $exclude, $escape );
                         }
                         $output .= implode( $delimiter, $parts );
+                    } elseif ( $token[5] ) {
+                        // An empty list prints the {:else} part of the loop.
+                        $output .= self::stringify( $token[5], $codes, $bold, $exclude, $escape );
                     }
                     break;
                 default:
@@ -138,13 +179,15 @@ abstract class Codes
      *
      * @param string $text
      * @param int $offset
-     * @param string $stop_token
+     * @param string|array $stop_token
+     * @param string $stopped The stop token that ended the text, null at the end of the text
      * @return array
      */
-    public static function tokenize( $text, &$offset = 0, $stop_token = null )
+    public static function tokenize( $text, &$offset = 0, $stop_token = null, &$stopped = null )
     {
         $tokens = array();
         $text_start = null;
+        $stopped = null;
 
         while ( isset ( $text[ $offset ] ) ) {
             if ( $type = self::match( $text, $matches, $offset ) ) {
@@ -156,7 +199,8 @@ abstract class Codes
 
                 $offset += strlen( $matches[0] );
 
-                if ( $type == $stop_token ) {
+                if ( in_array( $type, (array) $stop_token, true ) ) {
+                    $stopped = $type;
                     break;
                 }
 
@@ -170,12 +214,14 @@ abstract class Codes
                         'operator' => isset( $matches[2] ) ? $matches[2] : null,
                         'operand' => isset( $matches[3] ) ? $matches[3] : null,
                     );
-                    $token[] = self::tokenize( $text, $offset, 'T_END_IF' );
+                    $token[] = self::tokenize( $text, $offset, array( 'T_ELSE', 'T_END_IF' ), $end );
+                    $token[] = $end === 'T_ELSE' ? self::tokenize( $text, $offset, 'T_END_IF' ) : array();
                 } elseif ( $type == 'T_EACH' ) {
                     $token[] = $matches[1]; // code
                     $token[] = $matches[2]; // context code
                     $token[] = isset ( $matches[3] ) ? $matches[3] : ''; // delimiter
-                    $token[] = self::tokenize( $text, $offset, 'T_END_EACH' );
+                    $token[] = self::tokenize( $text, $offset, array( 'T_ELSE', 'T_END_EACH' ), $end );
+                    $token[] = $end === 'T_ELSE' ? self::tokenize( $text, $offset, 'T_END_EACH' ) : array();
                 }
 
                 $tokens[] = $token;

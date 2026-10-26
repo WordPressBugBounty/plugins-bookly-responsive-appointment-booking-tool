@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Cloud;
 use Bookly\Backend\Components\Dialogs\TableSettings;
 use Bookly\Backend\Components\Controls\Buttons;
 /**
@@ -12,12 +11,6 @@ use Bookly\Backend\Components\Controls\Buttons;
     <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'WhatsApp Notifications', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     <div class="bookly:card">
         <div class="bookly:card-body">
-            <div class="row bookly:pb-4 bookly:mb-2 bookly:border-b bookly:border-slate-200">
-                <div class="col"></div>
-                <div class="col-auto">
-                    <?php Cloud\Account\Panel::render() ?>
-                </div>
-            </div>
             <ul class="bookly:nav bookly:nav-tabs bookly:mb-3" id="whatsapp_tabs">
                 <li class="bookly:nav-item"><a class="bookly:nav-link bookly:active" href="#notifications"><?php esc_html_e( 'Notifications', 'bookly-responsive-appointment-booking-tool' ) ?></a></li>
                 <li class="bookly:nav-item"><a class="bookly:nav-link" href="#details"><?php esc_html_e( 'Details', 'bookly-responsive-appointment-booking-tool' ) ?></a></li>
