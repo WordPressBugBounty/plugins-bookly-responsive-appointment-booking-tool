@@ -238,7 +238,6 @@ class Panel extends Lib\Base\Component
             'code_sent_after' => isset ( $code_sent[1] ) ? $code_sent[1] : '',
             'code_sent_before' => $code_sent[0],
             'country' => __( 'Country', 'bookly-responsive-appointment-booking-tool' ),
-            'country_help' => __( 'Your country determines which payment methods are available for Bookly SMS services.', 'bookly-responsive-appointment-booking-tool' ),
             'email' => __( 'Email', 'bookly-responsive-appointment-booking-tool' ),
             'enter_code' => __( 'Enter code from email', 'bookly-responsive-appointment-booking-tool' ),
             'forgot_password' => __( 'Forgot password', 'bookly-responsive-appointment-booking-tool' ),

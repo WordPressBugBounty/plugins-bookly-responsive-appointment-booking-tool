@@ -390,6 +390,8 @@ class QueryBuilder
         return array(
             'bookly_ai_conversations.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_ai_conversations.token' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "UNI" ),
+            'bookly_ai_conversations.agent' => array( 'type' => "varchar(32)", 'is_nullabe' => 0, 'extra' => "", 'default' => "booking", 'key' => "" ),
+            'bookly_ai_conversations.wp_user_id' => array( 'type' => "bigint unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_conversations.status' => array( 'type' => "enum('active','processing','done','error')", 'is_nullabe' => 0, 'extra' => "", 'default' => "active", 'key' => "" ),
             'bookly_ai_conversations.error_code' => array( 'type' => "varchar(64)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_ai_conversations.booking_data' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -730,7 +732,7 @@ class QueryBuilder
             'bookly_payments.parent_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_payments.coupon_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_payments.gift_card_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
-            'bookly_payments.type' => array( 'type' => "enum('local','free','paypal','authorize_net','stripe','2checkout','payu_biz','payu_latam','payson','mollie','woocommerce','cloud_stripe','cloud_square','worldpay')", 'is_nullabe' => 0, 'extra' => "", 'default' => "local", 'key' => "" ),
+            'bookly_payments.type' => array( 'type' => "enum('local','free','paypal','authorize_net','stripe','2checkout','payu_biz','payu_latam','payson','mollie','woocommerce','cloud_stripe','cloud_square')", 'is_nullabe' => 0, 'extra' => "", 'default' => "local", 'key' => "" ),
             'bookly_payments.total' => array( 'type' => "decimal(10,2)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.00", 'key' => "" ),
             'bookly_payments.tax' => array( 'type' => "decimal(10,2)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.00", 'key' => "" ),
             'bookly_payments.paid' => array( 'type' => "decimal(10,2)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.00", 'key' => "" ),
@@ -958,6 +960,11 @@ class QueryBuilder
             'bookly_taxes.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_taxes.title' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => "", 'key' => "" ),
             'bookly_taxes.rate' => array( 'type' => "decimal(10,3)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.000", 'key' => "" ),
+            'bookly_usage_stats.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_usage_stats.name' => array( 'type' => "varchar(64)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
+            'bookly_usage_stats.props' => array( 'type' => "text", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_usage_stats.props_hash' => array( 'type' => "char(32)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_usage_stats.count' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
         );
     }
 }

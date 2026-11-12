@@ -68,6 +68,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Lite\Ajax::init();
         Backend\Components\Notices\Nps\Ajax::init();
         Backend\Components\Notices\PoweredBy\Ajax::init();
+        Backend\Components\Notices\PromoBanner\Ajax::init();
         Backend\Components\Notices\Promotion\Ajax::init();
         Backend\Components\Notices\Rate\Ajax::init();
         Backend\Components\Notices\RenewAutoRecharge\Ajax::init();
@@ -76,6 +77,8 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Wpml\Ajax::init();
         Backend\Components\PageHeader\Ajax::init();
         Backend\Components\Support\ButtonsAjax::init();
+        Backend\Components\UsageStats\Ajax::init();
+        Backend\Modules\AiAdmin\Ajax::init();
         Backend\Modules\Appearance\Ajax::init();
         Backend\Modules\Appointments\Ajax::init();
         Backend\Modules\Calendar\Ajax::init();

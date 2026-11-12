@@ -38,149 +38,7 @@ class Page extends Lib\Base\Ajax
 
         // Save the settings.
         if ( ! empty ( $_POST ) && self::csrfTokenValid() ) {
-            // Log options before saving.
-            try {
-                foreach ( self::parameters() as $key => $value ) {
-                    if ( $key === 'purchase_code' ) {
-                        foreach ( $value as $_key => $_value ) {
-                            if ( strpos( $_key, 'bookly_' ) === 0 && ( $old_value = get_option( $_key, 'non-exists' ) ) !== $_value ) {
-                                Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $_key, null, htmlspecialchars( $old_value ) . ' -> ' . htmlspecialchars( $_value ), null, 'Update settings' );
-                            }
-                        }
-                    } else if ( strpos( $key, 'bookly_' ) === 0 && ( $old_value = get_option( $key, 'non-exists' ) ) !== $value ) {
-                        Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $key, null, htmlspecialchars( is_array( $old_value ) ? json_encode( $old_value ) : $old_value ) . ' -> ' . htmlspecialchars( is_array( $value ) ? json_encode( $value ) : $value ), null, 'Update settings' );
-                    }
-                }
-            } catch ( \Exception $e ) {
-            }
-            switch ( self::parameter( 'tab' ) ) {
-                case 'calendar':  // Calendar form.
-                    update_option( 'bookly_cal_show_only_business_days', self::parameter( 'bookly_cal_show_only_business_days' ) );
-                    update_option( 'bookly_cal_show_only_business_hours', self::parameter( 'bookly_cal_show_only_business_hours' ) );
-                    update_option( 'bookly_cal_show_only_staff_with_appointments', self::parameter( 'bookly_cal_show_only_staff_with_appointments' ) );
-                    update_option( 'bookly_cal_one_participant', self::parameter( 'bookly_cal_one_participant' ) );
-                    update_option( 'bookly_cal_many_participants', self::parameter( 'bookly_cal_many_participants' ) );
-                    update_option( 'bookly_cal_month_view_style', self::parameter( 'bookly_cal_month_view_style' ) );
-                    update_option( 'bookly_cal_coloring_mode', self::parameter( 'bookly_cal_coloring_mode' ) );
-                    update_option( 'bookly_cal_show_new_appointments_badge', self::parameter( 'bookly_cal_show_new_appointments_badge' ) );
-                    update_option( 'bookly_cal_last_seen_appointment', self::parameter( 'bookly_cal_last_seen_appointment' ) );
-                    update_option( 'bookly_cal_scrollable_calendar', self::parameter( 'bookly_cal_scrollable_calendar' ) );
-                    update_option( 'bookly_legacy_calendar', self::parameter( 'bookly_legacy_calendar' ) );
-                    foreach ( self::parameter( 'status' ) as $status => $color ) {
-                        if ( in_array( $status, array( CustomerAppointment::STATUS_PENDING, CustomerAppointment::STATUS_APPROVED, CustomerAppointment::STATUS_CANCELLED, CustomerAppointment::STATUS_REJECTED, 'mixed' ) ) ) {
-                            update_option( sprintf( 'bookly_appointment_status_%s_color', $status ), $color );
-                        }
-                    }
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'payments':  // Payments form.
-                    update_option( 'bookly_pmt_order', self::parameter( 'bookly_pmt_order' ) );
-                    update_option( 'bookly_pmt_currency', self::parameter( 'bookly_pmt_currency' ) );
-                    update_option( 'bookly_pmt_price_format', self::parameter( 'bookly_pmt_price_format' ) );
-                    update_option( 'bookly_pmt_local', self::parameter( 'bookly_pmt_local' ) );
-                    if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
-                        update_option( 'bookly_cloud_stripe_enabled', self::parameter( 'bookly_cloud_stripe_enabled' ) );
-                        update_option( 'bookly_cloud_stripe_timeout', self::parameter( 'bookly_cloud_stripe_timeout' ) );
-                        update_option( 'bookly_cloud_stripe_increase', self::parameter( 'bookly_cloud_stripe_increase' ) );
-                        update_option( 'bookly_cloud_stripe_addition', self::parameter( 'bookly_cloud_stripe_addition' ) );
-                        update_option( 'bookly_cloud_stripe_custom_metadata', self::parameter( 'bookly_cloud_stripe_custom_metadata' ) );
-                        if ( self::parameter( 'bookly_cloud_stripe_custom_metadata' ) ) {
-                            $metadata = array();
-                            $names = self::parameter( 'bookly_cloud_stripe_meta_name', array() );
-                            $values = self::parameter( 'bookly_cloud_stripe_meta_value', array() );
-                            foreach ( $names as $index => $name ) {
-                                if ( $name != '' ) {
-                                    $metadata[] = array(
-                                        'name' => $name,
-                                        'value' => $values[ $index ],
-                                    );
-                                }
-                            }
-                            update_option( 'bookly_cloud_stripe_metadata', $metadata );
-                        }
-                    }
-                    $currencies = Lib\Utils\Price::getCurrencies();
-                    do_action( 'wpml_register_single_string', 'bookly', 'currency_' . self::parameter( 'bookly_pmt_currency' ), $currencies[ self::parameter( 'bookly_pmt_currency' ) ]['symbol'] );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'business_hours':  // Business hours form.
-                    foreach ( array( 'bookly_bh_monday_start', 'bookly_bh_monday_end', 'bookly_bh_tuesday_start', 'bookly_bh_tuesday_end', 'bookly_bh_wednesday_start', 'bookly_bh_wednesday_end', 'bookly_bh_thursday_start', 'bookly_bh_thursday_end', 'bookly_bh_friday_start', 'bookly_bh_friday_end', 'bookly_bh_saturday_start', 'bookly_bh_saturday_end', 'bookly_bh_sunday_start', 'bookly_bh_sunday_end', ) as $option_name ) {
-                        update_option( $option_name, self::parameter( $option_name ) );
-                    }
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'general':  // General form.
-                    $bookly_gen_time_slot_length = self::parameter( 'bookly_gen_time_slot_length' );
-                    if ( in_array( $bookly_gen_time_slot_length, Lib\Config::getTimeSlotLengthOptions() ) ) {
-                        update_option( 'bookly_gen_time_slot_length', $bookly_gen_time_slot_length );
-                    }
-                    update_option( 'bookly_gen_delete_data_on_uninstall', self::parameter( 'bookly_gen_delete_data_on_uninstall' ) );
-                    update_option( 'bookly_gen_service_duration_as_slot_length', (int) self::parameter( 'bookly_gen_service_duration_as_slot_length' ) );
-                    update_option( 'bookly_gen_allow_staff_edit_profile', (int) self::parameter( 'bookly_gen_allow_staff_edit_profile' ) );
-                    update_option( 'bookly_gen_link_assets_method', self::parameter( 'bookly_gen_link_assets_method' ) );
-                    update_option( 'bookly_gen_max_days_for_booking', (int) self::parameter( 'bookly_gen_max_days_for_booking' ) );
-                    update_option( 'bookly_gen_use_client_time_zone', (int) self::parameter( 'bookly_gen_use_client_time_zone' ) );
-                    update_option( 'bookly_gen_collect_stats', self::parameter( 'bookly_gen_collect_stats' ) );
-                    update_option( 'bookly_gen_show_powered_by', self::parameter( 'bookly_gen_show_powered_by' ) );
-                    update_option( 'bookly_gen_prevent_caching', (int) self::parameter( 'bookly_gen_prevent_caching' ) );
-                    update_option( 'bookly_gen_badge_consider_news', (int) self::parameter( 'bookly_gen_badge_consider_news' ) );
-                    update_option( 'bookly_email_gateway', self::parameter( 'bookly_email_gateway' ) );
-                    update_option( 'bookly_smtp_host', self::parameter( 'bookly_smtp_host' ) );
-                    update_option( 'bookly_smtp_port', self::parameter( 'bookly_smtp_port' ) );
-                    update_option( 'bookly_smtp_user', self::parameter( 'bookly_smtp_user' ) );
-                    update_option( 'bookly_smtp_password', self::parameter( 'bookly_smtp_password' ) );
-                    update_option( 'bookly_smtp_secure', self::parameter( 'bookly_smtp_secure' ) );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'url': // URL settings form.
-                    update_option( 'bookly_url_approve_page_url', self::parameter( 'bookly_url_approve_page_url' ) );
-                    update_option( 'bookly_url_approve_denied_page_url', self::parameter( 'bookly_url_approve_denied_page_url' ) );
-                    update_option( 'bookly_url_cancel_page_url', self::parameter( 'bookly_url_cancel_page_url' ) );
-                    update_option( 'bookly_url_cancel_denied_page_url', self::parameter( 'bookly_url_cancel_denied_page_url' ) );
-                    update_option( 'bookly_url_reject_denied_page_url', self::parameter( 'bookly_url_reject_denied_page_url' ) );
-                    update_option( 'bookly_url_reject_page_url', self::parameter( 'bookly_url_reject_page_url' ) );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'customers':  // Customers form.
-                    update_option( 'bookly_cst_allow_duplicates', self::parameter( 'bookly_cst_allow_duplicates' ) );
-                    update_option( 'bookly_cst_default_country_code', self::parameter( 'bookly_cst_default_country_code' ) );
-                    update_option( 'bookly_cst_phone_default_country', self::parameter( 'bookly_cst_phone_default_country' ) );
-                    update_option( 'bookly_cst_remember_in_cookie', self::parameter( 'bookly_cst_remember_in_cookie' ) );
-                    update_option( 'bookly_cst_show_update_details_dialog', self::parameter( 'bookly_cst_show_update_details_dialog' ) );
-                    update_option( 'bookly_cst_verify_customer_details', self::parameter( 'bookly_cst_verify_customer_details' ) );
-                    // Update email required option if creating WordPress account for customers
-                    $bookly_cst_required_details = get_option( 'bookly_cst_required_details', array() );
-                    if ( self::parameter( 'bookly_cst_create_account' ) && ! in_array( 'email', $bookly_cst_required_details ) ) {
-                        $bookly_cst_required_details[] = 'email';
-                        update_option( 'bookly_cst_required_details', $bookly_cst_required_details );
-                    }
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'appointments':
-                    update_option( 'bookly_l10n_ics_customer_template', self::parameter( 'bookly_l10n_ics_customer_template' ) );
-                    do_action( 'wpml_register_single_string', 'bookly', 'bookly_l10n_ics_customer_template', self::parameter( 'bookly_l10n_ics_customer_template' ) );
-                    update_option( 'bookly_ics_staff_template', self::parameter( 'bookly_ics_staff_template' ) );
-                    update_option( 'bookly_appointment_default_status', self::parameter( 'bookly_appointment_default_status' ) );
-                    update_option( 'bookly_successful_payment_appointment_status', self::parameter( 'bookly_successful_payment_appointment_status' ) );
-                    update_option( 'bookly_appointment_end_date_method', self::parameter( 'bookly_appointment_end_date_method' ) );
-                    update_option( 'bookly_appointments_create_with_wizard', self::parameter( 'bookly_appointments_create_with_wizard' ) );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-                case 'company':  // Company form.
-                    update_option( 'bookly_co_address', self::parameter( 'bookly_co_address' ) );
-                    update_option( 'bookly_co_logo_attachment_id', self::parameter( 'bookly_co_logo_attachment_id' ) );
-                    update_option( 'bookly_co_name', self::parameter( 'bookly_co_name' ) );
-                    update_option( 'bookly_co_phone', self::parameter( 'bookly_co_phone' ) );
-                    update_option( 'bookly_co_website', self::parameter( 'bookly_co_website' ) );
-                    update_option( 'bookly_co_industry', self::parameter( 'bookly_co_industry' ) );
-                    update_option( 'bookly_co_size', self::parameter( 'bookly_co_size' ) );
-                    update_option( 'bookly_co_email', self::parameter( 'bookly_co_email' ) );
-                    $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
-                    break;
-            }
-
-            // Let Add-ons save their settings.
-            $alert = Proxy\Shared::saveSettings( $alert, self::parameter( 'tab' ), self::parameters() );
+            $alert = self::saveTab( self::parameter( 'tab' ), self::parameters() );
         }
 
         Proxy\Shared::enqueueAssets();
@@ -235,6 +93,164 @@ class Page extends Lib\Base\Ajax
         $business_hours = self::_getBusinessHours();
 
         self::renderTemplate( 'index', compact( 'values', 'payments', 'business_hours' ) );
+    }
+
+    /**
+     * Save one tab of the settings form: the options of the tab, then add-ons (Proxy\Shared::saveSettings).
+     * Every field of the tab is written from $params, a field missing there is saved empty,
+     * so $params must hold the whole tab as the form posts it.
+     *
+     * @param string $tab
+     * @param array $params
+     * @return array alert: array( 'success' => string[], 'error' => string[] )
+     */
+    public static function saveTab( $tab, array $params )
+    {
+        $alert = array( 'success' => array(), 'error' => array() );
+        $request = new Lib\Utils\Collection( $params );
+        // Log options before saving.
+        try {
+            foreach ( $params as $key => $value ) {
+                if ( $key === 'purchase_code' ) {
+                    foreach ( $value as $_key => $_value ) {
+                        if ( strpos( $_key, 'bookly_' ) === 0 && ( $old_value = get_option( $_key, 'non-exists' ) ) !== $_value ) {
+                            Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $_key, null, htmlspecialchars( $old_value ) . ' -> ' . htmlspecialchars( $_value ), null, 'Update settings' );
+                        }
+                    }
+                } else if ( strpos( $key, 'bookly_' ) === 0 && ( $old_value = get_option( $key, 'non-exists' ) ) !== $value ) {
+                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $key, null, htmlspecialchars( is_array( $old_value ) ? json_encode( $old_value ) : $old_value ) . ' -> ' . htmlspecialchars( is_array( $value ) ? json_encode( $value ) : $value ), null, 'Update settings' );
+                }
+            }
+        } catch ( \Exception $e ) {
+        }
+        switch ( $tab ) {
+            case 'calendar':  // Calendar form.
+                update_option( 'bookly_cal_show_only_business_days', $request->get( 'bookly_cal_show_only_business_days' ) );
+                update_option( 'bookly_cal_show_only_business_hours', $request->get( 'bookly_cal_show_only_business_hours' ) );
+                update_option( 'bookly_cal_show_only_staff_with_appointments', $request->get( 'bookly_cal_show_only_staff_with_appointments' ) );
+                update_option( 'bookly_cal_one_participant', $request->get( 'bookly_cal_one_participant' ) );
+                update_option( 'bookly_cal_many_participants', $request->get( 'bookly_cal_many_participants' ) );
+                update_option( 'bookly_cal_month_view_style', $request->get( 'bookly_cal_month_view_style' ) );
+                update_option( 'bookly_cal_coloring_mode', $request->get( 'bookly_cal_coloring_mode' ) );
+                update_option( 'bookly_cal_show_new_appointments_badge', $request->get( 'bookly_cal_show_new_appointments_badge' ) );
+                update_option( 'bookly_cal_last_seen_appointment', $request->get( 'bookly_cal_last_seen_appointment' ) );
+                update_option( 'bookly_cal_scrollable_calendar', $request->get( 'bookly_cal_scrollable_calendar' ) );
+                update_option( 'bookly_legacy_calendar', $request->get( 'bookly_legacy_calendar' ) );
+                foreach ( $request->get( 'status' ) as $status => $color ) {
+                    if ( in_array( $status, array( CustomerAppointment::STATUS_PENDING, CustomerAppointment::STATUS_APPROVED, CustomerAppointment::STATUS_CANCELLED, CustomerAppointment::STATUS_REJECTED, 'mixed' ) ) ) {
+                        update_option( sprintf( 'bookly_appointment_status_%s_color', $status ), $color );
+                    }
+                }
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'payments':  // Payments form.
+                update_option( 'bookly_pmt_order', $request->get( 'bookly_pmt_order' ) );
+                update_option( 'bookly_pmt_currency', $request->get( 'bookly_pmt_currency' ) );
+                update_option( 'bookly_pmt_price_format', $request->get( 'bookly_pmt_price_format' ) );
+                update_option( 'bookly_pmt_local', $request->get( 'bookly_pmt_local' ) );
+                if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) ) {
+                    update_option( 'bookly_cloud_stripe_enabled', $request->get( 'bookly_cloud_stripe_enabled' ) );
+                    update_option( 'bookly_cloud_stripe_timeout', $request->get( 'bookly_cloud_stripe_timeout' ) );
+                    update_option( 'bookly_cloud_stripe_increase', $request->get( 'bookly_cloud_stripe_increase' ) );
+                    update_option( 'bookly_cloud_stripe_addition', $request->get( 'bookly_cloud_stripe_addition' ) );
+                    update_option( 'bookly_cloud_stripe_custom_metadata', $request->get( 'bookly_cloud_stripe_custom_metadata' ) );
+                    if ( $request->get( 'bookly_cloud_stripe_custom_metadata' ) ) {
+                        $metadata = array();
+                        $names = $request->get( 'bookly_cloud_stripe_meta_name', array() );
+                        $values = $request->get( 'bookly_cloud_stripe_meta_value', array() );
+                        foreach ( $names as $index => $name ) {
+                            if ( $name != '' ) {
+                                $metadata[] = array(
+                                    'name' => $name,
+                                    'value' => $values[ $index ],
+                                );
+                            }
+                        }
+                        update_option( 'bookly_cloud_stripe_metadata', $metadata );
+                    }
+                }
+                $currencies = Lib\Utils\Price::getCurrencies();
+                do_action( 'wpml_register_single_string', 'bookly', 'currency_' . $request->get( 'bookly_pmt_currency' ), $currencies[ $request->get( 'bookly_pmt_currency' ) ]['symbol'] );
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'business_hours':  // Business hours form.
+                foreach ( array( 'bookly_bh_monday_start', 'bookly_bh_monday_end', 'bookly_bh_tuesday_start', 'bookly_bh_tuesday_end', 'bookly_bh_wednesday_start', 'bookly_bh_wednesday_end', 'bookly_bh_thursday_start', 'bookly_bh_thursday_end', 'bookly_bh_friday_start', 'bookly_bh_friday_end', 'bookly_bh_saturday_start', 'bookly_bh_saturday_end', 'bookly_bh_sunday_start', 'bookly_bh_sunday_end', ) as $option_name ) {
+                    update_option( $option_name, $request->get( $option_name ) );
+                }
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'general':  // General form.
+                $bookly_gen_time_slot_length = $request->get( 'bookly_gen_time_slot_length' );
+                if ( in_array( $bookly_gen_time_slot_length, Lib\Config::getTimeSlotLengthOptions() ) ) {
+                    update_option( 'bookly_gen_time_slot_length', $bookly_gen_time_slot_length );
+                }
+                update_option( 'bookly_gen_delete_data_on_uninstall', $request->get( 'bookly_gen_delete_data_on_uninstall' ) );
+                update_option( 'bookly_gen_service_duration_as_slot_length', (int) $request->get( 'bookly_gen_service_duration_as_slot_length' ) );
+                update_option( 'bookly_gen_allow_staff_edit_profile', (int) $request->get( 'bookly_gen_allow_staff_edit_profile' ) );
+                update_option( 'bookly_gen_link_assets_method', $request->get( 'bookly_gen_link_assets_method' ) );
+                update_option( 'bookly_gen_max_days_for_booking', (int) $request->get( 'bookly_gen_max_days_for_booking' ) );
+                update_option( 'bookly_gen_use_client_time_zone', (int) $request->get( 'bookly_gen_use_client_time_zone' ) );
+                update_option( 'bookly_gen_collect_stats', $request->get( 'bookly_gen_collect_stats' ) );
+                update_option( 'bookly_gen_show_powered_by', $request->get( 'bookly_gen_show_powered_by' ) );
+                update_option( 'bookly_gen_prevent_caching', (int) $request->get( 'bookly_gen_prevent_caching' ) );
+                update_option( 'bookly_gen_badge_consider_news', (int) $request->get( 'bookly_gen_badge_consider_news' ) );
+                update_option( 'bookly_email_gateway', $request->get( 'bookly_email_gateway' ) );
+                update_option( 'bookly_smtp_host', $request->get( 'bookly_smtp_host' ) );
+                update_option( 'bookly_smtp_port', $request->get( 'bookly_smtp_port' ) );
+                update_option( 'bookly_smtp_user', $request->get( 'bookly_smtp_user' ) );
+                update_option( 'bookly_smtp_password', $request->get( 'bookly_smtp_password' ) );
+                update_option( 'bookly_smtp_secure', $request->get( 'bookly_smtp_secure' ) );
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'url': // URL settings form.
+                update_option( 'bookly_url_approve_page_url', $request->get( 'bookly_url_approve_page_url' ) );
+                update_option( 'bookly_url_approve_denied_page_url', $request->get( 'bookly_url_approve_denied_page_url' ) );
+                update_option( 'bookly_url_cancel_page_url', $request->get( 'bookly_url_cancel_page_url' ) );
+                update_option( 'bookly_url_cancel_denied_page_url', $request->get( 'bookly_url_cancel_denied_page_url' ) );
+                update_option( 'bookly_url_reject_denied_page_url', $request->get( 'bookly_url_reject_denied_page_url' ) );
+                update_option( 'bookly_url_reject_page_url', $request->get( 'bookly_url_reject_page_url' ) );
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'customers':  // Customers form.
+                update_option( 'bookly_cst_allow_duplicates', $request->get( 'bookly_cst_allow_duplicates' ) );
+                update_option( 'bookly_cst_default_country_code', $request->get( 'bookly_cst_default_country_code' ) );
+                update_option( 'bookly_cst_phone_default_country', $request->get( 'bookly_cst_phone_default_country' ) );
+                update_option( 'bookly_cst_remember_in_cookie', $request->get( 'bookly_cst_remember_in_cookie' ) );
+                update_option( 'bookly_cst_show_update_details_dialog', $request->get( 'bookly_cst_show_update_details_dialog' ) );
+                update_option( 'bookly_cst_verify_customer_details', $request->get( 'bookly_cst_verify_customer_details' ) );
+                // Update email required option if creating WordPress account for customers
+                $bookly_cst_required_details = get_option( 'bookly_cst_required_details', array() );
+                if ( $request->get( 'bookly_cst_create_account' ) && ! in_array( 'email', $bookly_cst_required_details ) ) {
+                    $bookly_cst_required_details[] = 'email';
+                    update_option( 'bookly_cst_required_details', $bookly_cst_required_details );
+                }
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'appointments':
+                update_option( 'bookly_l10n_ics_customer_template', $request->get( 'bookly_l10n_ics_customer_template' ) );
+                do_action( 'wpml_register_single_string', 'bookly', 'bookly_l10n_ics_customer_template', $request->get( 'bookly_l10n_ics_customer_template' ) );
+                update_option( 'bookly_ics_staff_template', $request->get( 'bookly_ics_staff_template' ) );
+                update_option( 'bookly_appointment_default_status', $request->get( 'bookly_appointment_default_status' ) );
+                update_option( 'bookly_successful_payment_appointment_status', $request->get( 'bookly_successful_payment_appointment_status' ) );
+                update_option( 'bookly_appointment_end_date_method', $request->get( 'bookly_appointment_end_date_method' ) );
+                update_option( 'bookly_appointments_create_with_wizard', $request->get( 'bookly_appointments_create_with_wizard' ) );
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+            case 'company':  // Company form.
+                update_option( 'bookly_co_address', $request->get( 'bookly_co_address' ) );
+                update_option( 'bookly_co_logo_attachment_id', $request->get( 'bookly_co_logo_attachment_id' ) );
+                update_option( 'bookly_co_name', $request->get( 'bookly_co_name' ) );
+                update_option( 'bookly_co_phone', $request->get( 'bookly_co_phone' ) );
+                update_option( 'bookly_co_website', $request->get( 'bookly_co_website' ) );
+                update_option( 'bookly_co_industry', $request->get( 'bookly_co_industry' ) );
+                update_option( 'bookly_co_size', $request->get( 'bookly_co_size' ) );
+                update_option( 'bookly_co_email', $request->get( 'bookly_co_email' ) );
+                $alert['success'][] = __( 'Settings saved.', 'bookly-responsive-appointment-booking-tool' );
+                break;
+        }
+
+        // Let Add-ons save their settings.
+        return Proxy\Shared::saveSettings( $alert, $tab, $params );
     }
 
     /**

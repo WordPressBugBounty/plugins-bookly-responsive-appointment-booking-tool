@@ -247,22 +247,14 @@ class CreateBooking implements ToolInterface
             return self::book( $customer, $service, $staff, $draft, $end_date, 'nothing to pay' );
         }
 
-        // "Pay locally" as the only gateway needs no choice - same auto-select as the modern
-        // booking form (ModernBookingForm\Lib\Request::checkStep()). The form keeps its step
-        // for coupons and gift cards; the chat's payment card has neither.
-        if ( count( $options['gateways'] ) === 1
-            && $options['gateways'][0]['name'] === Lib\Entities\Payment::TYPE_LOCAL
-        ) {
-            $this->conversation->resetBooking()->save();
-
-            return self::book( $customer, $service, $staff, $draft, $end_date, $options['total'] . ' to be paid at the appointment' );
-        }
-
         $names = wp_list_pluck( $options['gateways'], 'name' );
         $at_appointment = in_array( Lib\Entities\Payment::TYPE_LOCAL, $names, true );
 
-        // Paying at the appointment was said in words - book it the way the card's button does.
-        if ( $pay_with === Lib\Entities\Payment::TYPE_LOCAL && $at_appointment ) {
+        // Paying at the appointment - said in words, or the only gateway, which needs no choice:
+        // the same auto-select as the modern booking form (ModernBookingForm\Lib\Request::checkStep()),
+        // which keeps its step for coupons and gift cards; the chat's payment card has neither.
+        // Booked the way the card's button does, with a "local" payment as the form makes it.
+        if ( $at_appointment && ( $pay_with === Lib\Entities\Payment::TYPE_LOCAL || count( $names ) === 1 ) ) {
             $booked = Checkout::payLocally( $this->conversation )
                 ? Checkout::bookedResult( $this->conversation )
                 : null;

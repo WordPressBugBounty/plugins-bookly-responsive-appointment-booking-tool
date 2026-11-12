@@ -32,6 +32,8 @@ class Page extends Lib\Base\Component
         wp_localize_script( 'bookly-cloud-products-page.js', 'BooklyL10nCloudProducts', array(
             'loggedIn' => (bool) $cloud->account->loadProfile(),
             'products' => self::getProductsData( $cloud ),
+            // Whether the setup assistant's button is shown on Bookly pages
+            'assistantButton' => (bool) get_option( 'bookly_ai_admin_button' ),
             'l10n' => self::getL10n(),
         ) );
 
@@ -173,23 +175,21 @@ class Page extends Lib\Base\Component
      * @param array $usage
      * @return string
      */
-    protected static function usageText( $id, array $usage )
+    public static function usageText( $id, array $usage )
     {
         switch ( $id ) {
             case Account::PRODUCT_WHATSAPP:
                 $prefix = __( 'Messages', 'bookly-responsive-appointment-booking-tool' );
                 break;
             case Account::PRODUCT_AI:
-                $prefix = __( 'Tokens', 'bookly-responsive-appointment-booking-tool' );
+            case Account::PRODUCT_AI_ADMIN:
+                $prefix = __( 'AI answers', 'bookly-responsive-appointment-booking-tool' );
                 break;
             default:
                 $prefix = __( 'Tasks', 'bookly-responsive-appointment-booking-tool' );
         }
         if ( $usage['limit'] === null ) {
             return sprintf( '%s: %s', $prefix, __( 'unlimited in trial', 'bookly-responsive-appointment-booking-tool' ) );
-        }
-        if ( $id === Account::PRODUCT_AI ) {
-            return sprintf( '%s: %d / %d %s', $prefix, $usage['used'], $usage['limit'], __( 'per day', 'bookly-responsive-appointment-booking-tool' ) );
         }
 
         return sprintf( '%s: %d / %d', $prefix, $usage['used'], $usage['limit'] );
@@ -203,6 +203,8 @@ class Page extends Lib\Base\Component
         return array(
             'active' => __( 'Active', 'bookly-responsive-appointment-booking-tool' ),
             'all_products' => __( 'All products', 'bookly-responsive-appointment-booking-tool' ),
+            'assistant_button' => __( 'Show the assistant button', 'bookly-responsive-appointment-booking-tool' ),
+            'assistant_button_help' => __( 'In the bottom-right corner of every Bookly page, for administrators.', 'bookly-responsive-appointment-booking-tool' ),
             'best_offer' => __( 'best offer', 'bookly-responsive-appointment-booking-tool' ),
             'cancel' => __( 'Cancel', 'bookly-responsive-appointment-booking-tool' ),
             'cancel_immediately' => __( 'Cancel immediately', 'bookly-responsive-appointment-booking-tool' ),

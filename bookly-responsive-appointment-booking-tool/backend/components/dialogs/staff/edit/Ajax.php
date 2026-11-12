@@ -233,7 +233,10 @@ class Ajax extends Lib\Base\Ajax
 
         $schedule_item_break = new Lib\Entities\ScheduleItemBreak();
         if ( $break_id ) {
-            $schedule_item_break->load( $break_id );
+            // A break is changed only within the day it belongs to.
+            if ( ! $schedule_item_break->load( $break_id ) || $schedule_item_break->getStaffScheduleItemId() != $schedule_item->getId() ) {
+                wp_send_json_error( array( 'message' => __( 'The requested interval is not available', 'bookly-responsive-appointment-booking-tool' ), ) );
+            }
         } else {
             $schedule_item_break->setStaffScheduleItemId( $schedule_item->getId() );
         }
@@ -392,6 +395,9 @@ class Ajax extends Lib\Base\Ajax
 
                         return self::$staff->getId() == $res_schedule->getStaffId();
                     case 'updateStaffSchedule':
+                        if ( self::hasParameter( 'staff_id' ) && self::$staff->getId() != self::parameter( 'staff_id' ) ) {
+                            return false;
+                        }
                         if ( self::hasParameter( 'ssi' ) ) {
                             foreach ( self::parameter( 'ssi' ) as $id => $day_index ) {
                                 $res_schedule = new Lib\Entities\StaffScheduleItem();

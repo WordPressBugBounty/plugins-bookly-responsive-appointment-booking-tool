@@ -6,6 +6,7 @@ use Bookly\Lib;
 class StripeCloudGateway extends Lib\Base\Gateway
 {
     protected $type = Lib\Entities\Payment::TYPE_CLOUD_STRIPE;
+    protected $retrievable = true;
 
     /**
      * @inerhitDoc

@@ -13,6 +13,7 @@ class Page extends Lib\Base\Component
     public static function render()
     {
         $variant = self::resolveVariant();
+        Lib\UsageStats::track( 'setup.opened', array( 'variant' => $variant ) );
 
         $durations = array();
         for ( $j = 15; $j <= 60; $j += 15 ) {

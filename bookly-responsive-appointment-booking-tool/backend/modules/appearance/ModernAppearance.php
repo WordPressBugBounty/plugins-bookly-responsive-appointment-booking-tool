@@ -125,18 +125,17 @@ class ModernAppearance extends Lib\Base\Component
             ),
             'fields' => array(
                 'ai_answer_bubble_color' => __( 'Answer bubble', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_assistant_persona' => __( 'The assistant', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_assistant_persona_hint' => __( 'How the assistant introduces itself and talks to customers: its name, how formal it is, what to emphasise.', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_business_description' => __( 'About the business', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_instructions' => __( 'Assistant instructions', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_instructions_hint' => __( 'How the assistant introduces itself and works with customers: its name and tone, what to recommend for which need, what to tell customers before or after booking, what to offer first or not at all, which other details to ask for. It cannot change prices, available times or payment.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_knowledge' => __( 'Assistant knowledge', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_company_contacts_alert' => \Bookly\Frontend\Modules\Ai\SystemPrompt::hasContacts()
                     ? ''
                     : sprintf(
                         __( 'Company contacts are not filled in, so the assistant cannot give them to customers. Add them in the <a href="%s">company settings</a>.', 'bookly-responsive-appointment-booking-tool' ),
                         esc_url( add_query_arg( array( 'page' => \Bookly\Backend\Modules\Settings\Page::pageSlug(), 'tab' => 'company' ), admin_url( 'admin.php' ) ) )
                     ),
-                'ai_business_description_hint' => __( 'What your business does, who it serves and what sets it apart. The name, address, phone, email and website the assistant gives customers are taken from the company settings.', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_customer_info' => __( 'What customers should know', 'bookly-responsive-appointment-booking-tool' ),
-                'ai_customer_info_hint' => __( 'What the assistant tells customers when they ask: parking, what to bring, cancellation rules, frequent questions. It does not change prices, discounts or how booking works.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_assistant_knowledge_hint' => __( 'Extra details about your business that help the assistant answer customers: how to get there and park, how to prepare for a visit, health restrictions, visit and cancellation rules, what happens after booking, answers to frequent questions.', 'bookly-responsive-appointment-booking-tool' )
+                    . "\n" . __( 'The assistant also knows from Bookly settings: your business name, address, phone, email and website (Company), business hours (Business Hours) and days off (Holidays).', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_card_image' => Lib\Entities\Payment::typeToImage( Lib\Entities\Payment::TYPE_CLOUD_STRIPE ),
                 'ai_error_label' => __( 'Message send failed', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_error_messages_hint' => __( 'Shown inside the conversation when something goes wrong.', 'bookly-responsive-appointment-booking-tool' ),
@@ -160,6 +159,10 @@ class ModernAppearance extends Lib\Base\Component
                 'ai_preview_question' => __( 'Do you have any openings tomorrow morning?', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_question_bubble_color' => __( 'Question bubble', 'bookly-responsive-appointment-booking-tool' ),
                 'ai_show_avatars' => __( 'Show avatars in choices', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_voice_denied_label' => __( 'No access to the microphone', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_voice_error_label' => __( 'Speech not recognized', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_voice_messages_hint' => __( 'Shown above the message field when the microphone is not available or speech is not recognized.', 'bookly-responsive-appointment-booking-tool' ),
+                'ai_voice_time_left_label' => __( 'After the remaining time in the last 10 seconds of recording', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode' => __( 'Display mode', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode_embedded' => __( 'Embedded', 'bookly-responsive-appointment-booking-tool' ),
                 'display_mode_floating' => __( 'Floating bubble', 'bookly-responsive-appointment-booking-tool' ),
@@ -287,9 +290,8 @@ class ModernAppearance extends Lib\Base\Component
     {
         return array(
             'main_color' => get_option( 'bookly_app_color', '#F4662F' ),
-            'business_description' => '',
-            'assistant_persona' => '',
-            'customer_info' => '',
+            'assistant_knowledge' => '',
+            'assistant_instructions' => '',
             'question_bubble_color' => null,
             'answer_bubble_color' => '#F1F5F9',
             'display_mode' => 'floating',
@@ -304,6 +306,12 @@ class ModernAppearance extends Lib\Base\Component
                 'closeChat'    => __( 'Close chat', 'bookly-responsive-appointment-booking-tool' ),
                 'resetChat'    => __( 'Reset chat', 'bookly-responsive-appointment-booking-tool' ),
                 'send'         => __( 'Send', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceStart'   => __( 'Voice input', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceStop'    => __( 'Stop recording', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceCancel'  => __( 'Cancel recording', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceTimeLeft' => _x( 'left', 'time', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceDenied'  => __( 'Allow access to the microphone to dictate a message.', 'bookly-responsive-appointment-booking-tool' ),
+                'voiceError'   => __( 'Could not recognize the speech. Please try again or type your message.', 'bookly-responsive-appointment-booking-tool' ),
                 'error'        => __( 'Something went wrong. Please try again.', 'bookly-responsive-appointment-booking-tool' ),
                 'errorQuotaExceeded' => __( 'Our chat assistant is temporarily unavailable. Please try again later, or contact us directly to book your appointment.', 'bookly-responsive-appointment-booking-tool' ),
                 'paymentTitle'     => __( 'Complete your booking', 'bookly-responsive-appointment-booking-tool' ),
@@ -350,6 +358,24 @@ class ModernAppearance extends Lib\Base\Component
         $luminance = 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
 
         return $luminance > 0.45 ? $dark : $light;
+    }
+
+    /**
+     * Register the texts of a form (settings.l10n, groups included) in WPML under
+     * appearance_string_<md5 of the text>, the key translateL10n() reads them by.
+     *
+     * @param array $strings
+     * @return void
+     */
+    public static function registerWpmlStrings( $strings )
+    {
+        foreach ( $strings as $text ) {
+            if ( is_array( $text ) ) {
+                self::registerWpmlStrings( $text );
+            } else {
+                do_action( 'wpml_register_single_string', 'bookly', 'appearance_string_' . md5( $text ), $text );
+            }
+        }
     }
 
     /**

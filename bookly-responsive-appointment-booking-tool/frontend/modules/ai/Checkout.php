@@ -2,7 +2,6 @@
 namespace Bookly\Frontend\Modules\Ai;
 
 use Bookly\Backend\Modules\Appearance\ModernAppearance;
-use Bookly\Backend\Modules\Appearance\Proxy as AppearanceProxy;
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Frontend\Modules\Payment\Request as PaymentRequest;
 use Bookly\Lib;
@@ -34,7 +33,6 @@ class Checkout
         Entities\Payment::TYPE_PAYULATAM,
         Entities\Payment::TYPE_PAYSON,
         Entities\Payment::TYPE_SQUARE,
-        Entities\Payment::TYPE_WORLDPAY,
         Entities\Payment::TYPE_WOOCOMMERCE,
     );
 
@@ -176,44 +174,7 @@ class Checkout
      */
     private static function enabledGateways()
     {
-        $gateways = array();
-
-        if ( Lib\Config::payLocallyEnabled() ) {
-            $gateways[ Entities\Payment::TYPE_LOCAL ] = array(
-                'label_option_name' => 'bookly_l10n_label_pay_locally',
-                'title' => Entities\Payment::typeToString( Entities\Payment::TYPE_LOCAL ),
-                'logo_url' => null,
-            );
-        }
-
-        if ( Lib\Config::stripeCloudEnabled() ) {
-            $gateways[ Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
-                'label_option_name' => 'bookly_l10n_label_pay_cloud_stripe',
-                'title' => Entities\Payment::typeToString( Entities\Payment::TYPE_CLOUD_STRIPE ),
-                'logo_url' => plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() ),
-            );
-        }
-
-        // Every payment add-on registers itself here with a title and a logo - the same
-        // source the appearance editor and Utils\Common::getGateways() read. WooCommerce is
-        // the one entry here whose "is it on" flag is not bookly_woocommerce_enabled - it is
-        // Config::wooCommerceEnabled() (bookly_wc_enabled + a product configured).
-        foreach ( AppearanceProxy\Shared::paymentGateways( array() ) as $type => $gateway ) {
-            $enabled = $type === Entities\Payment::TYPE_WOOCOMMERCE
-                ? Lib\Config::wooCommerceEnabled()
-                : get_option( 'bookly_' . $type . '_enabled' );
-            if ( ! isset( $gateways[ $type ] ) && $enabled ) {
-                $gateways[ $type ] = $gateway + array( 'label_option_name' => null, 'logo_url' => null );
-            }
-        }
-
-        foreach ( array_keys( $gateways ) as $type ) {
-            if ( ! in_array( $type, self::$supported ) ) {
-                unset( $gateways[ $type ] );
-            }
-        }
-
-        return $gateways;
+        return array_intersect_key( Lib\Utils\Common::getEnabledGateways(), array_flip( self::$supported ) );
     }
 
     /**

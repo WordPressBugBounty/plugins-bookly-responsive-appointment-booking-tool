@@ -3,12 +3,16 @@ use Bookly\Backend\Modules\Notifications;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Components\Controls\Buttons;
-
+use Bookly\Backend\Components\Notices\PromoBanner\Banner as PromoBanner;
+/**
+ * @var string $tab
+ */
 ?>
 <div id="bookly-tbs" class="wrap bookly-css-root bookly-main-page-wrap">
     <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'Email notifications', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     <div class="bookly:card">
         <div class="bookly:card-body">
+            <?php PromoBanner::render( array( PromoBanner::EMAIL_SMS_REMINDERS, PromoBanner::SMS_CAMPAIGNS ) ) ?>
             <ul class="bookly:nav bookly:nav-tabs bookly:mb-3 bookly-js-notifications-tabs" role="tablist">
                 <li class="bookly:nav-item">
                     <a class="bookly:nav-link<?php if ( $tab === 'notifications' ) : ?> bookly:active<?php endif ?>" href="<?php echo add_query_arg( array( 'page' => Notifications\Page::pageSlug() ), admin_url( 'admin.php' ) ) ?>" data-toggle="bookly-tab" data-tab="notifications"><?php esc_html_e( 'Notifications', 'bookly-responsive-appointment-booking-tool' ) ?></a>

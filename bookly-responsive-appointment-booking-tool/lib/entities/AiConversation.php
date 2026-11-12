@@ -31,8 +31,16 @@ class AiConversation extends Lib\Base\Entity
     const BOOKING_PAID       = 'paid';
     const BOOKING_FAILED     = 'failed';
 
+    /** Cloud agent the conversation belongs to: the booking chat or the admin assistant in wp-admin. */
+    const AGENT_BOOKING = 'booking';
+    const AGENT_ADMIN   = 'admin';
+
     /** @var string */
     protected $token;
+    /** @var string */
+    protected $agent = self::AGENT_BOOKING;
+    /** @var int */
+    protected $wp_user_id;
     /** @var string */
     protected $status;
     /** @var string */
@@ -55,6 +63,8 @@ class AiConversation extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'token' => array( 'format' => '%s' ),
+        'agent' => array( 'format' => '%s' ),
+        'wp_user_id' => array( 'format' => '%d' ),
         'status' => array( 'format' => '%s' ),
         'error_code' => array( 'format' => '%s' ),
         'booking_data' => array( 'format' => '%s' ),
@@ -263,6 +273,52 @@ class AiConversation extends Lib\Base\Entity
     public function setToken( $token )
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return string
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param string $agent
+     * @return $this
+     */
+    public function setAgent( $agent )
+    {
+        $this->agent = $agent;
+
+        return $this;
+    }
+
+    /**
+     * Get wp_user_id
+     *
+     * @return int
+     */
+    public function getWpUserId()
+    {
+        return $this->wp_user_id;
+    }
+
+    /**
+     * Set wp_user_id
+     *
+     * @param int $wp_user_id
+     * @return $this
+     */
+    public function setWpUserId( $wp_user_id )
+    {
+        $this->wp_user_id = $wp_user_id;
 
         return $this;
     }

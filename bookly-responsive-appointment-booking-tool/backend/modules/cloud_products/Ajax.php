@@ -37,6 +37,16 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Show or hide the setup assistant's button on Bookly pages.
+     */
+    public static function cloudSetAiAdminButton()
+    {
+        update_option( 'bookly_ai_admin_button', self::parameter( 'enabled' ) ? '1' : '0' );
+
+        wp_send_json_success();
+    }
+
+    /**
      * Check if trial available for product.
      */
     public static function cloudIsTrial()

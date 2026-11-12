@@ -346,7 +346,7 @@ class Request extends Lib\Base\Component
                     $this->gateway = $this->getGatewayByName( $gateway );
                     $ci = $this->getCartInfo();
                     if ( $ci->getPayNow() > 0 ) {
-                        if ( $this->gateway->getType() === Entities\Payment::TYPE_FREE ) {
+                        if ( $this->gateway->getType() === Entities\Payment::TYPE_FREE || ! $this->gatewayAllowed( $this->gateway->getType() ) ) {
                             throw new \Exception( __( 'Incorrect payment data', 'bookly-responsive-appointment-booking-tool' ) );
                         }
                     } elseif ( ( $ci->getSubtotal() + $ci->getDiscount() ) > 0 ) {
@@ -360,6 +360,22 @@ class Request extends Lib\Base\Component
         }
 
         return $this->gateway;
+    }
+
+    /**
+     * Whether the cart may be paid with the gateway: it is switched on, allowed for the customer's group
+     * and for every service and staff member in the cart, as when the booking forms list gateways.
+     *
+     * @param string $type
+     * @return bool
+     */
+    protected function gatewayAllowed( $type )
+    {
+        $userData = $this->getUserData();
+
+        return array_key_exists( $type, Lib\Utils\Common::getEnabledGateways() )
+            && BookingProxy\CustomerGroups::allowedGateway( $type, $userData ) !== false
+            && array_key_exists( $type, BookingProxy\Pro::filterGateways( array( $type => true ), $userData ) );
     }
 
     /**

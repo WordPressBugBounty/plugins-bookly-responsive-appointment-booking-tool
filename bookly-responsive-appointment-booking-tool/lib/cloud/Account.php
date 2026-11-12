@@ -42,6 +42,7 @@ class Account extends Base
     const PRODUCT_WHATSAPP = 'whatsapp';
     const PRODUCT_MOBILE_STAFF_CABINET = 'mobile-staff-cabinet';
     const PRODUCT_AI = 'ai';
+    const PRODUCT_AI_ADMIN = 'ai-admin';
 
     const PRODUCT_PAYU_LATAM = 'payu-latam';
     const PRODUCT_PAYSON = 'payson';
@@ -889,6 +890,10 @@ class Account extends Base
                 $account->notify_summary = $response['account']['notify_summary'];
 
                 update_option( 'bookly_cloud_account_products', $account->products );
+                // Products activated after the cached list was read start listening before the profile is dispatched
+                foreach ( $account->products as $product ) {
+                    $account->api->getProduct( $product );
+                }
 
                 if ( $account->autoRechargeEnabled() ) {
                     $end_at = get_option( 'bookly_cloud_auto_recharge_end_at' );

@@ -48,6 +48,7 @@ class Handler1_0 extends Handler
             'me' => $me,
             'settings' => array(
                 'start_of_week' => (int) get_option( 'start_of_week' ),
+                'format_price' => Lib\Utils\Price::formatOptions(),
                 'notices' => array(
                     'date_interval_not_available' => __( 'The selected period is occupied by another appointment', 'bookly-responsive-appointment-booking-tool' ),
                     'date_interval_warning' => __( 'Selected period doesn\'t match service duration', 'bookly-responsive-appointment-booking-tool' ),
@@ -133,6 +134,7 @@ class Handler1_0 extends Handler
                     p.type    AS payment_type,
                     p.details AS payment_details,
                     p.status  AS payment_status,
+                    p.paid    AS payment_paid,
                     c.full_name,
                     c.email,
                     c.phone,
@@ -171,10 +173,13 @@ class Handler1_0 extends Handler
                     'extras' => (array) json_decode( $customer['extras'], true ),
                     'number_of_persons' => (int) $customer['number_of_persons'],
                     'notes' => $customer['notes'],
-                    'payment_id' => $customer['payment_id'],
+                    'payment_id' => (int) $customer['payment_id'],
                     'payment_type' => $customer['payment_id']
                         ? ( $customer['payment'] != $customer['payment_total'] ? 'partial' : 'full' )
                         : null,
+                    'payment_status' => $customer['payment_status'],
+                    'payment_total' => $customer['payment_total'],
+                    'payment_paid' => $customer['payment_paid'],
                     'status' => $customer['status'],
                     'timezone' => Lib\Proxy\Pro::getCustomerTimezone( $customer['time_zone'], $customer['time_zone_offset'] ),
                 );
@@ -403,6 +408,7 @@ class Handler1_0 extends Handler
                     'customer_id' => $customer_id,
                     'full_name' => $appointment['client_name'],
                     'status' => $appointment['status'],
+                    'number_of_persons' => (int) $appointment['number_of_persons'],
                 );
             }
         }
@@ -410,6 +416,7 @@ class Handler1_0 extends Handler
         foreach ( $appointments as $appointment ) {
             $list[] = array(
                 'id' => (int) $appointment['id'],
+                'location_id' => (int) $appointment['location_id'],
                 'staff_id' => (int) $appointment['staff_id'],
                 'start_date' => $appointment['start_date'],
                 'end_date' => $appointment['end_date'],
@@ -628,6 +635,7 @@ class Handler1_0 extends Handler
                                         'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
                                     ),
                                 ),
+                                'color' => $service->getColor(),
                                 'extras' => array(),
                             );
                             foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service->getId() ) ?: array() as $extras ) {

@@ -313,6 +313,18 @@ jQuery(function ($) {
                 complete: refreshCampaigns
             });
         }
+
+        // A new campaign for a chosen audience, from the promo banner.
+        $(this).on('bookly:new-campaign', function (e, preset) {
+            BooklySmsCampaigns.show({
+                mode: 'new',
+                preset: preset,
+                onsaved: function () {
+                    refreshCampaigns();
+                    $('#bookly-promo-banner[data-id=sms_campaigns]').slideUp(150, function () { $(this).remove(); });
+                }
+            });
+        });
     });
 
     /**
@@ -804,6 +816,7 @@ jQuery(function ($) {
                             success: function (response) {
                                 if (response.success) {
                                     booklyAlert({ success: [BooklyL10n.sender_id.sent] });
+                                    $('#bookly-promo-banner[data-id=sms_sender_id]').slideUp(150, function () { $(this).remove(); });
                                     dt_sender_id.reload();
                                     resolve(response);
                                 } else {
@@ -819,6 +832,8 @@ jQuery(function ($) {
 
         // Eager load so the footnote appears without opening the modal.
         ensureCountries(function () {});
+
+        $(this).on('bookly:request-sender-id', function () { ensureCountries(openRequestModal); });
     });
 
     /**
@@ -836,4 +851,24 @@ jQuery(function ($) {
     });
 
     $sms_tabs.find('[href="#' + BooklyL10n.current_tab + '"]').closest('li').click();
+    // Came from a promo banner on another page: open the new campaign for its audience.
+    if (BooklyL10n.current_tab === 'campaigns' && BooklyL10n.campaign_preset) {
+        $('#campaigns').trigger('bookly:new-campaign', BooklyL10n.campaign_preset);
+    }
+
+    /**
+     * Promo banner actions that stay on this page.
+     */
+    const $promo_banner = $('#bookly-promo-banner');
+    $promo_banner.on('click', '.bookly-js-request-sender-id', function () {
+        $sms_tabs.find('[href="#sender_id"]').closest('li').click();
+        $('#sender_id').trigger('bookly:request-sender-id');
+    });
+    $promo_banner.on('click', '.bookly-js-new-campaign', function (e) {
+        if (this.href.indexOf('page=bookly-cloud-sms') !== -1) {
+            e.preventDefault();
+            $sms_tabs.find('[href="#campaigns"]').closest('li').click();
+            $('#campaigns').trigger('bookly:new-campaign', $(this).data('preset'));
+        }
+    });
 });

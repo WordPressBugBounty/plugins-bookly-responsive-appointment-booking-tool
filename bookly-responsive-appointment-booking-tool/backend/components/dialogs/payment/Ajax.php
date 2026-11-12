@@ -39,7 +39,7 @@ class Ajax extends Lib\Base\Ajax
         $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ) ) );
 
         $payment = $payment->getId() ? $payment : false;
-        if ( $payment && ! Lib\Utils\Common::isCurrentUserSupervisor() && ! Lib\Utils\Common::isCurrentUserStaff() ) {
+        if ( $payment && ! Lib\Utils\Common::currentUserCanManagePayment( $payment->getId() ) ) {
             // Check if customer trying to get his own payment.
             $customer = Lib\Entities\Customer::query( 'c' )
                 ->select( 'c.wp_user_id' )
@@ -134,17 +134,7 @@ class Ajax extends Lib\Base\Ajax
     {
         self::denyForeignPayment( self::parameter( 'payment_id' ) );
         $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
-        $details = $payment->getDetailsData();
-        $details->setData(
-            array( 'tax_paid' => $payment->getTax() )
-        );
-
-        Lib\Payment\Proxy\Events::redeemReservedAttendees( $payment );
-
-        $payment
-            ->setPaid( $payment->getTotal() )
-            ->setStatus( Lib\Entities\Payment::STATUS_COMPLETED )
-            ->save();
+        Lib\Payment\ManualCompletion::complete( $payment );
 
         $payment_title = Lib\Utils\Price::format( $payment->getPaid() );
         if ( $payment->getPaid() != $payment->getTotal() ) {
@@ -156,28 +146,6 @@ class Ajax extends Lib\Base\Ajax
             $payment->getStatus() == Lib\Entities\Payment::STATUS_PENDING ? ' class="text-danger"' : '',
             Lib\Entities\Payment::statusToString( $payment->getStatus() )
         );
-
-        $success_ca_status = get_option( 'bookly_successful_payment_appointment_status' );
-        if ( Lib\Config::eventsActive() || ( $success_ca_status && $success_ca_status !== 'disabled' ) ) {
-            $order = Lib\DataHolders\Booking\Order::createFromOrderId( $payment->getOrderId() );
-            if ( $order ) {
-                $order->completePayment();
-                Lib\Notifications\Cart\Sender::send( $order );
-            }
-        }
-
-        list( $sync ) = Lib\Config::syncCalendars();
-        if ( $sync ) {
-            $appointments = Lib\Entities\Appointment::query( 'a' )
-                ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
-                ->whereNot( 'a.start_date', null )
-                ->where( 'ca.payment_id', $payment->getId() )
-                ->find();
-            foreach ( $appointments as $appointment ) {
-                Lib\Utils\Common::syncWithCalendars( $appointment );
-            }
-        }
-
 
         wp_send_json_success( array( 'payment_title' => $payment_title, 'status' => $payment->getStatus() ) );
     }

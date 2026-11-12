@@ -155,6 +155,7 @@ class Ajax extends Lib\Base\Ajax
         }
         if ( $step < 4 ) {
             update_option( 'bookly_setup_step', ++$step );
+            Lib\UsageStats::track( 'setup.step', array( 'variant' => 'legacy', 'step' => $step ) );
         }
 
         wp_send_json_success();
@@ -175,6 +176,11 @@ class Ajax extends Lib\Base\Ajax
     public static function finishSetupForm()
     {
         delete_option( 'bookly_setup_step' );
+        Lib\UsageStats::track( 'setup.finished', array(
+            'variant' => 'legacy',
+            'services' => Lib\Entities\Service::query()->count(),
+            'staff' => Lib\Entities\Staff::query()->count(),
+        ) );
 
         wp_send_json_success();
     }
@@ -205,6 +211,7 @@ class Ajax extends Lib\Base\Ajax
         $services_left = $pro_active || get_option( 'bookly_updated_from_legacy_version' ) == 'lite'
             ? PHP_INT_MAX
             : max( 0, 5 - Lib\Entities\Service::query()->count() );
+        $services_created = 0;
         foreach ( (array) self::parameter( 'services', array() ) as $service_data ) {
             $title = isset( $service_data['title'] ) ? trim( $service_data['title'] ) : '';
             if ( $title === '' || $services_left <= 0 ) {
@@ -217,10 +224,12 @@ class Ajax extends Lib\Base\Ajax
                 ->save();
             Proxy\Shared::serviceCreated( $service );
             $services_left --;
+            $services_created ++;
         }
 
         // Staff. Free plan: max 1 in total (same UI-level rule as the old wizard, enforced here).
         $staff_left = $pro_active ? PHP_INT_MAX : max( 0, 1 - Lib\Entities\Staff::query()->count() );
+        $staff_created = 0;
         foreach ( (array) self::parameter( 'staff', array() ) as $staff_data ) {
             $name = isset( $staff_data['name'] ) ? trim( $staff_data['name'] ) : '';
             if ( $name === '' || $staff_left <= 0 ) {
@@ -233,9 +242,16 @@ class Ajax extends Lib\Base\Ajax
                 ->setPhone( isset( $staff_data['phone'] ) ? trim( $staff_data['phone'] ) : '' )
                 ->save();
             $staff_left --;
+            $staff_created ++;
         }
 
         $sample_created = self::createSampleData();
+        Lib\UsageStats::track( 'setup.finished', array(
+            'variant' => 'v2',
+            'services' => $services_created,
+            'staff' => $staff_created,
+            'sample' => $sample_created,
+        ) );
 
         // Link every staff member to every service (same full matrix as the old wizard).
         foreach ( Lib\Entities\Staff::query()->find() as $staff ) {

@@ -51,7 +51,6 @@ use Bookly\Lib\Utils\Price;
  * @method static bool staffCabinetActive()            Check whether Staff Cabinet add-on is active or not.
  * @method static bool stripeActive()                  Check whether Stripe add-on is active or not.
  * @method static bool squareActive()                  Check whether Square add-on is active or not.
- * @method static bool worldpayActive()                Check whether Worldpay add-on is active or not.
  * @method static bool giftCardsActive()               Check whether Gift Cards add-on is active or not.
  * @method static bool tasksActive()                   Check whether Tasks add-on is active or not.
  * @method static bool taxesActive()                   Check whether Taxes add-on is active or not.

@@ -29,6 +29,8 @@ abstract class Gateway
     protected $order;
     /** @var bool */
     protected $on_site = false;
+    /** @var bool Payment status can be retrieved from the payment system by ref_id */
+    protected $retrievable = false;
 
     public function __construct( Request $request )
     {
@@ -177,6 +179,23 @@ abstract class Gateway
         }
 
         return $status;
+    }
+
+    /**
+     * Retrieve status of outdated pending payment before it is rejected
+     *
+     * @return void
+     */
+    public function retrieveOutdated()
+    {
+        try {
+            if ( $this->retrievable && $this->retrieveStatus() === self::STATUS_COMPLETED ) {
+                $this->complete();
+            }
+        } catch ( \Exception $e ) {
+            $path = explode( '\\', get_class( $this ) );
+            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_ERROR, array_pop( $path ), null, $e->getFile() . ':' . $e->getLine(), $this->payment->getRefId(), $e->getMessage() );
+        }
     }
 
     /**

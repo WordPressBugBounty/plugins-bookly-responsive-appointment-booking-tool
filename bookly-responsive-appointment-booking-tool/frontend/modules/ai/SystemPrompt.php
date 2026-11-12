@@ -12,10 +12,10 @@ class SystemPrompt
      * when it applies - so a change to it reaches every site without a plugin release. The
      * plugin sends only what is particular to this business:
      *
-     *  - about, assistant, customer_info: what the owner wrote on this widget's appearance -
-     *    about the business; how the assistant should present itself; what customers
-     *    should know. Separate fields, so each goes into the prompt with its own weight:
-     *    facts, wishes about tone, information to pass on;
+     *  - assistant_knowledge, assistant_instructions: what the owner wrote on this widget's
+     *    appearance, under the same names - information about the business, and the owner's
+     *    instructions for the assistant. Cloud (protocol 1.2) takes instructions only from
+     *    the second, within its limits (they cannot change prices, available times or payment);
      *  - company: name and contacts from Settings > Company, so the assistant can give
      *    them whenever it suggests contacting the business;
      *  - facts: how the business is set up, as values grouped by what the customer sees -
@@ -46,9 +46,8 @@ class SystemPrompt
         };
 
         return array(
-            'about'         => $text( 'business_description' ),
-            'assistant'     => $text( 'assistant_persona' ),
-            'customer_info' => $text( 'customer_info' ),
+            'assistant_knowledge'    => $text( 'assistant_knowledge' ),
+            'assistant_instructions' => $text( 'assistant_instructions' ),
             'company'       => self::company(),
             'facts'         => Concepts::forSite()->facts(),
             'catalog'       => Catalog::payload(),

@@ -163,7 +163,7 @@ abstract class Routine
             self::getQueryIfNotificationWasSent( $notification )
         );
         if ( $settings->getStatus() != 'any' ) {
-            $query .= sprintf( ' AND `ca`.`status` = "%s"', $settings->getStatus() );
+            $query .= $wpdb->prepare( ' AND `ca`.`status` = %s', $settings->getStatus() );
         }
 
         $query .= self::getAndWhereServiceType( $settings );

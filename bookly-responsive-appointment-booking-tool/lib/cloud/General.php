@@ -7,6 +7,7 @@ class General extends Base
 {
     const GET_INFO = '/1.0/info';                                 //GET
     const GET_PRODUCT_INFO = '/1.0/products/%product%/info';      //GET
+    const POST_USAGE_STATS = '/1.0/usage-stats';                  //POST
 
     /** @var array */
     protected $products;
@@ -93,6 +94,29 @@ class General extends Base
         }
 
         return false;
+    }
+
+    /**
+     * Send usage statistics. Works without a Cloud account, the site is known by its URL.
+     *
+     * @param array $context
+     * @param array $events
+     * @return bool
+     */
+    public function sendUsageStats( array $context, array $events )
+    {
+        $data = array(
+            'stats' => json_encode( array(
+                'schema' => 1,
+                'context' => $context,
+                'events' => $events,
+            ) ),
+        );
+        if ( $this->api->getToken() ) {
+            $data['token'] = $this->api->getToken();
+        }
+
+        return $this->api->sendPostRequest( self::POST_USAGE_STATS, $data ) !== false;
     }
 
     /**

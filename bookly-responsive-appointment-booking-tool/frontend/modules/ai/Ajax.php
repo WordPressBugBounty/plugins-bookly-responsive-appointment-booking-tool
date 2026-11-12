@@ -18,6 +18,7 @@ use Bookly\Lib;
  *   - wp_ajax_bookly_ai_send_message      (method aiSendMessage)
  *   - wp_ajax_bookly_ai_worker            (method aiWorker)
  *   - wp_ajax_bookly_ai_poll              (method aiPoll)
+ *   - wp_ajax_bookly_ai_transcribe        (method aiTranscribe)
  *   - wp_ajax_bookly_ai_checkout          (method aiCheckout)
  *   - wp_ajax_bookly_ai_order_status      (method aiOrderStatus)
  *   - wp_ajax_bookly_ai_checkout_response (method aiCheckoutResponse)
@@ -38,6 +39,8 @@ class Ajax extends Lib\Base\Ajax
     // per whole conversation), independent of the time budget — guards
     // against a model stuck calling tools forever.
     const MAX_STEPS = 12;
+
+    const MAX_MESSAGE_LENGTH = 2000;
 
     // Which Cloud agent definition serves this widget — see
     // AIBundle/Resources/config/agents.yml in bookly-cloud.
@@ -69,6 +72,9 @@ class Ajax extends Lib\Base\Ajax
         if ( $text === '' ) {
             wp_send_json( array( 'success' => false, 'error' => 'ERROR_EMPTY_MESSAGE' ) );
         }
+        if ( mb_strlen( $text, 'UTF-8' ) > self::MAX_MESSAGE_LENGTH ) {
+            wp_send_json( array( 'success' => false, 'error' => 'ERROR_MESSAGE_TOO_LONG' ) );
+        }
 
         if ( $token !== '' ) {
             $conversation = self::authorizeConversation();
@@ -83,7 +89,7 @@ class Ajax extends Lib\Base\Ajax
         // Before the message, so they go out together with it - see buildCompletionPayload().
         Checkout::noteCardState( $conversation );
         Checkout::notePaymentChange( $conversation );
-        BookingTools\OfferChoices::notePick( $conversation, $choice );
+        BookingTools\ChoicePicks::notePick( $conversation, $choice );
 
         $message = new Lib\Entities\AiMessage();
         $message
@@ -127,6 +133,16 @@ class Ajax extends Lib\Base\Ajax
         $form_slug = (string) self::parameter( 'form_slug', '' );
         $time_zone = (string) self::parameter( 'time_zone', '' );
 
+        // A job of the setup assistant is run by its own worker - never claim it here.
+        $agent = Lib\Entities\AiJob::query( 'j' )
+            ->select( 'c.agent' )
+            ->leftJoin( 'AiConversation', 'c', 'c.id = j.conversation_id' )
+            ->where( 'j.id', $job_id )
+            ->fetchVar( 'agent' );
+        if ( $agent !== Lib\Entities\AiConversation::AGENT_BOOKING ) {
+            wp_die();
+        }
+
         // Atomic claim: only the request that flips queued->running "wins" —
         // a duplicate/replayed loopback just no-ops here instead of running
         // the loop twice.
@@ -148,7 +164,7 @@ class Ajax extends Lib\Base\Ajax
         $job          = Lib\Entities\AiJob::find( $job_id );
         $conversation = $job ? Lib\Entities\AiConversation::find( $job->getConversationId() ) : false;
 
-        if ( ! $job || ! $conversation ) {
+        if ( ! $job || ! $conversation || $conversation->getAgent() !== Lib\Entities\AiConversation::AGENT_BOOKING ) {
             wp_die();
         }
 
@@ -219,7 +235,7 @@ class Ajax extends Lib\Base\Ajax
                     ->save();
 
                 $shown_choices = $tool_call['name'] === BookingTools\OfferChoices::NAME
-                    && BookingTools\OfferChoices::present( $tool_result );
+                    && BookingTools\ChoiceCards::present( $tool_result );
                 $choices_only  = $choices_only && $shown_choices;
             }
 
@@ -247,8 +263,8 @@ class Ajax extends Lib\Base\Ajax
 
     /**
      * Read-only status/transcript poll for the browser. Only surfaces
-     * 'assistant' messages — 'tool' turns are an implementation detail of
-     * the loop.
+     * 'assistant' messages (and 'user' ones when restoring, after_id = 0) —
+     * 'tool' turns are an implementation detail of the loop.
      */
     public static function aiPoll()
     {
@@ -259,11 +275,16 @@ class Ajax extends Lib\Base\Ajax
             wp_send_json( array( 'success' => false, 'error' => 'ERROR_UNKNOWN_CONVERSATION' ) );
         }
 
+        // after_id = 0 is the widget restoring the conversation after a page reload: then
+        // the customer's own messages are needed too.
+        $roles = $after_id === 0
+            ? array( Lib\Entities\AiMessage::ROLE_ASSISTANT, Lib\Entities\AiMessage::ROLE_USER )
+            : array( Lib\Entities\AiMessage::ROLE_ASSISTANT );
         /** @var Lib\Entities\AiMessage[] $messages */
         $messages = Lib\Entities\AiMessage::query()
             ->where( 'conversation_id', $conversation->getId() )
             ->whereGt( 'id', $after_id )
-            ->where( 'role', Lib\Entities\AiMessage::ROLE_ASSISTANT )
+            ->whereIn( 'role', $roles )
             ->sortBy( 'id' )
             ->find();
 
@@ -282,9 +303,21 @@ class Ajax extends Lib\Base\Ajax
             ->order( Lib\Query::ORDER_DESCENDING )
             ->limit( 1 )
             ->findOne();
-        if ( $choices_message ) {
-            $choices = BookingTools\OfferChoices::present( $choices_message->getContent() );
+        // Restoring, only cards nobody has answered yet: the customer's message after them
+        // has closed them.
+        if ( $choices_message && $after_id === 0 ) {
+            foreach ( $messages as $message ) {
+                if ( $message->getRole() === Lib\Entities\AiMessage::ROLE_USER && $message->getId() > $choices_message->getId() ) {
+                    $choices_message = null;
+                    break;
+                }
+            }
         }
+        if ( $choices_message ) {
+            $choices = BookingTools\ChoiceCards::present( $choices_message->getContent() );
+        }
+        // And the answered ones, which the widget had kept in the log, closed, until the reload.
+        $answered_choices = $after_id === 0 ? BookingTools\ChoicePicks::answered( $conversation ) : array();
 
         $payment = null;
         if ( $conversation->getBookingStatus() === Lib\Entities\AiConversation::BOOKING_PENDING ) {
@@ -297,13 +330,36 @@ class Ajax extends Lib\Base\Ajax
             'error_code' => $conversation->getStatus() === Lib\Entities\AiConversation::STATUS_ERROR ? $conversation->getErrorCode() : null,
             'payment'    => $payment,
             'choices'    => $choices,
+            'answered_choices' => $answered_choices,
             'messages'   => array_map( function ( Lib\Entities\AiMessage $message ) {
                 return array(
                     'id'      => $message->getId(),
+                    'role'    => $message->getRole(),
                     'content' => $message->getContent(),
+                    'time'    => strtotime( get_gmt_from_date( $message->getCreatedAt() ) . ' UTC' ) * 1000,
                 );
             }, $messages ),
         ) );
+    }
+
+    /**
+     * Speech to text for the microphone button. The recording goes to Cloud as the browser
+     * made it, nothing here decodes it, and nothing is stored: the text goes back into the
+     * widget's input field, and the customer sends it as an ordinary message.
+     *
+     * Expects (via json_data): audio (base64), format (webm|mp4|ogg - checked by Cloud).
+     */
+    public static function aiTranscribe()
+    {
+        $client = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_AI );
+        $raw    = $client->transcribeRaw( (string) self::parameter( 'audio', '' ), (string) self::parameter( 'format', '' ) );
+        $body   = json_decode( $raw['body'], true );
+
+        if ( $raw['status'] !== 200 || empty( $body['success'] ) ) {
+            wp_send_json( array( 'success' => false, 'error' => isset( $body['error'] ) ? $body['error'] : 'ERROR_PROXY_CONNECTION' ) );
+        }
+
+        wp_send_json( array( 'success' => true, 'text' => (string) $body['text'] ) );
     }
 
     /**
@@ -681,7 +737,9 @@ class Ajax extends Lib\Base\Ajax
 
         $conversation = new Lib\Entities\AiConversation();
 
-        return $conversation->loadBy( array( 'token' => $token ) )
+        // These endpoints are anonymous: a token of a setup-assistant conversation (wp-admin)
+        // must not open it here.
+        return $conversation->loadBy( array( 'token' => $token, 'agent' => Lib\Entities\AiConversation::AGENT_BOOKING ) )
             ? $conversation
             : null;
     }

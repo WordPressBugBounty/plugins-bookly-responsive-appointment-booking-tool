@@ -44,6 +44,10 @@ class Page extends Lib\Base\Component
             ) );
 
             $current_tab = self::hasParameter( 'tab' ) ? self::parameter( 'tab' ) : 'notifications';
+            $campaign_preset = self::parameter( 'preset' );
+            if ( ! is_string( $campaign_preset ) || ! array_key_exists( $campaign_preset, Lib\Mailing\Audience::presets() ) ) {
+                $campaign_preset = null;
+            }
 
             // Number of undelivered sms.
             $undelivered_count = Lib\Cloud\SMS::getUndeliveredSmsCount();
@@ -55,6 +59,7 @@ class Page extends Lib\Base\Component
                     'acceptable_characters' => __( 'Acceptable characters are', 'bookly-responsive-appointment-booking-tool' ) . ': a-z A-Z 0-9 . & @ - + _ ! % # [space] *',
                     'country' => $cloud->account->getCountry(),
                     'current_tab' => $current_tab,
+                    'campaign_preset' => $campaign_preset,
                     'intlTelInput' => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),
                         'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',

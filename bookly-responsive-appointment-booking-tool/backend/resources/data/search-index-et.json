@@ -326,6 +326,16 @@
         "weight": 70
     },
     {
+        "type": "product",
+        "page": "bookly-cloud-products",
+        "tab": null,
+        "title": "AI Admin Assistant",
+        "anchor": null,
+        "addon": "cloud:ai-admin",
+        "product": "ai-admin",
+        "weight": 70
+    },
+    {
         "type": "form",
         "page": "bookly-appearance",
         "tab": null,
@@ -2513,6 +2523,16 @@
         "group": "PayU Latam",
         "weight": 30,
         "alt": "API Key"
+    },
+    {
+        "type": "label",
+        "page": "bookly-settings",
+        "tab": "payments",
+        "title": "API Login",
+        "anchor": "bookly_payu_latam_api_login",
+        "addon": "bookly-addon-payu-latam",
+        "group": "PayU Latam",
+        "weight": 30
     },
     {
         "type": "label",

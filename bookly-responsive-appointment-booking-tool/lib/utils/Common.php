@@ -659,6 +659,46 @@ abstract class Common extends Lib\Base\Cache
     }
 
     /**
+     * Payment systems switched on in Settings -> Payments.
+     *
+     * @return array[] [ type => [ title, label_option_name, logo_url ] ]
+     */
+    public static function getEnabledGateways()
+    {
+        $gateways = array();
+
+        if ( Lib\Config::payLocallyEnabled() ) {
+            $gateways[ Lib\Entities\Payment::TYPE_LOCAL ] = array(
+                'label_option_name' => 'bookly_l10n_label_pay_locally',
+                'title' => Lib\Entities\Payment::typeToString( Lib\Entities\Payment::TYPE_LOCAL ),
+                'logo_url' => null,
+            );
+        }
+
+        if ( Lib\Config::stripeCloudEnabled() ) {
+            $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
+                'label_option_name' => 'bookly_l10n_label_pay_cloud_stripe',
+                'title' => Lib\Entities\Payment::typeToString( Lib\Entities\Payment::TYPE_CLOUD_STRIPE ),
+                'logo_url' => plugins_url( 'frontend/resources/images/payments.svg', Lib\Plugin::getMainFile() ),
+            );
+        }
+
+        // Every payment add-on registers itself here with a title and a logo, the same
+        // source the appearance editor and getGateways() read. WooCommerce is the one entry
+        // whose "is it on" flag is not bookly_woocommerce_enabled but Config::wooCommerceEnabled().
+        foreach ( \Bookly\Backend\Modules\Appearance\Proxy\Shared::paymentGateways( array() ) as $type => $gateway ) {
+            $enabled = $type === Lib\Entities\Payment::TYPE_WOOCOMMERCE
+                ? Lib\Config::wooCommerceEnabled()
+                : get_option( 'bookly_' . $type . '_enabled' );
+            if ( ! isset( $gateways[ $type ] ) && $enabled ) {
+                $gateways[ $type ] = $gateway + array( 'label_option_name' => null, 'logo_url' => null );
+            }
+        }
+
+        return $gateways;
+    }
+
+    /**
      * Get common settings for Bookly calendar
      *
      * @return array
@@ -984,6 +1024,7 @@ abstract class Common extends Lib\Base\Cache
         $weights = array(
             Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS => 10,
             Lib\Cloud\Account::PRODUCT_AI => 20,
+            Lib\Cloud\Account::PRODUCT_AI_ADMIN => 25,
             Lib\Cloud\Account::PRODUCT_CRON => 30,
         );
         $ordered = array();

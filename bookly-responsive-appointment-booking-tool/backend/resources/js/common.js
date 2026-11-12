@@ -188,6 +188,29 @@ function requiredBooklyPro() {
     });
 }
 
+/**
+ * Record a usage event, see Bookly\Lib\UsageStats.
+ * Sent as a beacon, so it survives a click that leaves the page.
+ *
+ * @param {string} name
+ * @param {Object} [props]
+ */
+function booklyTrackUsage(name, props) {
+    const data = new FormData();
+    data.append('action', 'bookly_track_usage');
+    data.append('csrf_token', BooklyL10nGlobal.csrf_token);
+    data.append('name', name);
+    for (const key in props || {}) {
+        if (props[key] !== null && props[key] !== undefined) {
+            data.append('props[' + key + ']', props[key]);
+        }
+    }
+    const url = BooklyL10nGlobal.ajax_url_backend;
+    if (!(navigator.sendBeacon && navigator.sendBeacon(url, data))) {
+        fetch(url, {method: 'POST', body: data, keepalive: true, credentials: 'same-origin'}).catch(function () {});
+    }
+}
+
 (function ($) {
 
     window.booklySerialize = {

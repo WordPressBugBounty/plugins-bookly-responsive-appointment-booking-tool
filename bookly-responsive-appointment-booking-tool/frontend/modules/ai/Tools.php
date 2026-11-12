@@ -19,6 +19,7 @@ class Tools
             new BookingTools\CheckAvailability(),
             new BookingTools\CreateBooking( $conversation ),
             new BookingTools\OfferChoices(),
+            new BookingTools\GetBusinessHours(),
         );
 
         // Only while the catalog lists some services without details.

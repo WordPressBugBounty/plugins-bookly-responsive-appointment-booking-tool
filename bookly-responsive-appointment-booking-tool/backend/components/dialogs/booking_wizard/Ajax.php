@@ -637,25 +637,61 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getBookingWizardSlots()
     {
-        // Display time zone. A staff member may have a personal time zone (staff
-        // Advanced settings) and the rest of the backend shows it to them (calendar,
-        // classic dialog). Slot VALUES stay in WP time zone — the product-wide
-        // contract (the frontend keeps values in WP tz even with a visitor tz);
-        // the engine's client-tz mode only drives labels, day grouping and window
-        // parsing. For admins/supervisors this is the WP time zone — a no-op.
-        DatePoint::$client_timezone = Lib\Utils\Common::getCurrentUserTimeZone();
+        $result = self::findSlots( array(
+            // Display time zone. A staff member may have a personal time zone (staff
+            // Advanced settings) and the rest of the backend shows it to them (calendar,
+            // classic dialog). For admins/supervisors this is the WP time zone.
+            'client_time_zone'    => Lib\Utils\Common::getCurrentUserTimeZone(),
+            'service_id'          => (int) self::parameter( 'service_id' ),
+            'staff_ids'           => array_map( 'intval', (array) self::parameter( 'staff_ids', array() ) ),
+            'location_id'         => (int) self::parameter( 'location_id', 0 ) ?: null,
+            'nop'                 => max( 1, (int) self::parameter( 'nop', 1 ) ),
+            'days'                => min( 7, max( 1, (int) self::parameter( 'days', 3 ) ) ),
+            'start_date'          => self::parameter( 'start_date' ) ?: current_time( 'Y-m-d' ),
+            'custom_duration'     => (int) self::parameter( 'custom_duration', 0 ),
+            'ignore_appointments' => array_map( 'intval', (array) self::parameter( 'ignore_appointments', array() ) ),
+            'units'               => (int) self::parameter( 'units', 1 ),
+            'extras'              => (array) json_decode( self::parameter( 'extras', '' ), true ),
+            'order'               => json_decode( self::parameter( 'order', '[]' ), true ),
+            'allowed_staff'       => self::allowedStaffIds(),
+        ) );
+        if ( $result === null ) {
+            wp_send_json_error();
+        }
 
-        $service_id = (int) self::parameter( 'service_id' );
-        $staff_ids = array_map( 'intval', (array) self::parameter( 'staff_ids', array() ) );
-        $location_id = (int) self::parameter( 'location_id', 0 ) ?: null;
-        $nop = max( 1, (int) self::parameter( 'nop', 1 ) );
-        $days = min( 7, max( 1, (int) self::parameter( 'days', 3 ) ) );
-        $start_date = self::parameter( 'start_date' ) ?: current_time( 'Y-m-d' );
+        wp_send_json_success( $result );
+    }
+
+    /**
+     * Slot search of the wizard, without reading the request: what getBookingWizardSlots()
+     * answers, or null when the service is not found.
+     *
+     * $params: client_time_zone, service_id, staff_ids, location_id, nop, days, start_date
+     * (Y-m-d), custom_duration (seconds, 0 — a service), ignore_appointments, units, extras
+     * ({extra_id: quantity}), order (items already picked into the order), allowed_staff (int[]
+     * or null for no restriction).
+     *
+     * @param array $params
+     * @return array|null array( 'days', 'next_start', 'timed_out' )
+     */
+    protected static function findSlots( array $params )
+    {
+        // Slot VALUES stay in WP time zone — the product-wide contract (the frontend keeps
+        // values in WP tz even with a visitor tz); the engine's client-tz mode only drives
+        // labels, day grouping and window parsing.
+        DatePoint::$client_timezone = $params['client_time_zone'];
+
+        $service_id = $params['service_id'];
+        $staff_ids = $params['staff_ids'];
+        $location_id = $params['location_id'];
+        $nop = $params['nop'];
+        $days = $params['days'];
+        $start_date = $params['start_date'];
         // Custom service: only the duration matters for the search; name and price are
         // client-side input (the engine returns price 0, the client shows the entered one).
-        $custom_duration = (int) self::parameter( 'custom_duration', 0 );
+        $custom_duration = $params['custom_duration'];
         // Reschedule mode: the appointment being moved must not block its own slots.
-        $ignore_appointments = array_map( 'intval', (array) self::parameter( 'ignore_appointments', array() ) );
+        $ignore_appointments = $params['ignore_appointments'];
         self::$require_unjoined = (bool) $ignore_appointments;
 
         $units = 1;
@@ -675,7 +711,7 @@ class Ajax extends Lib\Base\Ajax
                 $staff_ids = array_map( 'intval', Lib\Entities\Staff::query()->whereNot( 'visibility', 'archive' )->fetchCol( 'id' ) );
             }
             if ( ! $staff_ids ) {
-                wp_send_json_success( array( 'days' => array(), 'next_start' => null ) );
+                return array( 'days' => array(), 'next_start' => null );
             }
             $synthetic = new Service();
             $synthetic
@@ -688,18 +724,18 @@ class Ajax extends Lib\Base\Ajax
         } else {
             $service = Service::find( $service_id );
             if ( ! $service ) {
-                wp_send_json_error();
+                return null;
             }
 
             // Variable duration (units) applies to simple services only; the value is
             // clamped to the service bounds. Slot length and price scale by units.
             if ( $service->getType() === Service::TYPE_SIMPLE ) {
-                $units = min( max( (int) self::parameter( 'units', 1 ), $service->getUnitsMin() ), $service->getUnitsMax() );
+                $units = min( max( (int) $params['units'], $service->getUnitsMin() ), $service->getUnitsMax() );
             }
 
-            // Service extras: JSON map {extra_id: quantity}. The engine takes care of the
+            // Service extras: map {extra_id: quantity}. The engine takes care of the
             // duration (when the consider-duration option is on); the price is added below.
-            foreach ( (array) json_decode( self::parameter( 'extras', '' ), true ) as $extra_id => $qty ) {
+            foreach ( $params['extras'] as $extra_id => $qty ) {
                 if ( (int) $qty > 0 ) {
                     $extras[ (int) $extra_id ] = (int) $qty;
                 }
@@ -739,7 +775,7 @@ class Ajax extends Lib\Base\Ajax
                 $staff_ids = array_values( array_unique( $staff_ids ) );
             }
             if ( ! $staff_ids ) {
-                wp_send_json_success( array( 'days' => array(), 'next_start' => null ) );
+                return array( 'days' => array(), 'next_start' => null );
             }
 
             $chain_item = new Lib\ChainItem();
@@ -747,11 +783,11 @@ class Ajax extends Lib\Base\Ajax
 
         // Permission scope: confine the search to the staff the current user may act
         // on (covers both the explicit staff_ids and the "any staff" fallbacks above).
-        $allowed_staff = self::allowedStaffIds();
+        $allowed_staff = $params['allowed_staff'];
         if ( $allowed_staff !== null ) {
             $staff_ids = array_values( array_intersect( $staff_ids, $allowed_staff ) );
             if ( ! $staff_ids ) {
-                wp_send_json_success( array( 'days' => array(), 'next_start' => null ) );
+                return array( 'days' => array(), 'next_start' => null );
             }
         }
 
@@ -774,7 +810,7 @@ class Ajax extends Lib\Base\Ajax
 
         // Items already picked into the order occupy their slots in this search —
         // the operator composes the next position around the ones chosen so far.
-        $order_items = json_decode( self::parameter( 'order', '[]' ), true );
+        $order_items = $params['order'];
         $custom_bookings = is_array( $order_items ) && $order_items
             ? self::applyOrderItems( $userData, $order_items )
             : array();
@@ -956,7 +992,7 @@ class Ajax extends Lib\Base\Ajax
             $result['next_start'] = null;
         }
 
-        wp_send_json_success( $result );
+        return $result;
     }
 
     /**
@@ -1519,7 +1555,9 @@ class Ajax extends Lib\Base\Ajax
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
             ->where( 'ca.appointment_id', $appointment->getId() )
             ->fetchArray();
-        if ( ! $ca_list ) {
+        // Moving needs somebody to move. Adding a customer does not: an appointment with
+        // nobody in it is exactly where the first customer is added.
+        if ( ! $ca_list && ! self::parameter( 'join' ) ) {
             wp_send_json_error( array( 'error' => 'no_customers' ) );
         }
         foreach ( $ca_list as $ca_row ) {
@@ -1628,6 +1666,9 @@ class Ajax extends Lib\Base\Ajax
             // one person, while an appointment whose bookings are all cancelled, rejected or
             // waitlisted holds no seat at all and has room for the next customer.
             'taken' => $nop,
+            // Where a customer goes once the seats run out: null — nowhere, the
+            // appointment is simply full.
+            'waiting_list' => self::joinWaitingList( $appointment, $ca_list ),
             'service_id' => $appointment->getServiceId() ? (int) $appointment->getServiceId() : null,
             'custom' => $appointment->getServiceId() ? null : array(
                 'name' => $appointment->getCustomServiceName(),
@@ -1709,10 +1750,19 @@ class Ajax extends Lib\Base\Ajax
 
         // Capacity is a hard limit, as in the classic form: seats are taken by the
         // bookings that hold them, and there is no "book anyway" for a group service.
+        // A full appointment still takes the customer onto its waiting list, when it has
+        // one with room — the same answer the slot search gives a new appointment.
+        $to_waiting_list = false;
         if ( $service ) {
             $capacity = self::staffServiceCapacity( (int) $appointment->getStaffId(), $service->getId(), $location_id );
-            if ( $taken + $nop > $capacity ) {
-                wp_send_json_error( array( 'error' => 'capacity', 'capacity' => $capacity, 'taken' => $taken ) );
+            $waiting_list = self::joinWaitingList( $appointment, $ca_list );
+            $occupied = $taken + ( $waiting_list && $waiting_list['despite_capacity'] ? $waiting_list['waitlisted'] : 0 );
+            if ( $occupied + $nop > $capacity ) {
+                if ( $waiting_list && ( $waiting_list['capacity'] === null || $waiting_list['waitlisted'] + $nop <= $waiting_list['capacity'] ) ) {
+                    $to_waiting_list = true;
+                } else {
+                    wp_send_json_error( array( 'error' => 'capacity', 'capacity' => $capacity, 'taken' => $taken ) );
+                }
             }
         }
 
@@ -1740,7 +1790,12 @@ class Ajax extends Lib\Base\Ajax
         $payment = new Lib\Entities\Payment();
         if ( $service ) {
             // The cart is built and asked for the total, then dropped: `getInfo` reads,
-            // `save` is what writes, and only the first one is called.
+            // `save` is what writes, and only the first one is called. A place in the
+            // queue is not paid for: the 'w' slot marker moves its price out of the total.
+            $slot = array( $service->getId(), (int) $appointment->getStaffId(), $appointment->getStartDate(), $location_id );
+            if ( $to_waiting_list ) {
+                $slot[4] = 'w';
+            }
             $user_data = new Lib\UserBookingData( null );
             $cart_item = new Lib\CartItem();
             $cart_item
@@ -1752,7 +1807,7 @@ class Ajax extends Lib\Base\Ajax
                 ->setUnits( $units )
                 ->setExtras( $extras )
                 ->setCustomFields( array() )
-                ->setSlots( array( array( $service->getId(), (int) $appointment->getStaffId(), $appointment->getStartDate(), $location_id ) ) );
+                ->setSlots( array( $slot ) );
             $user_data->cart->add( $cart_item );
             $user_data->setCustomer( $customer );
             $cart_info = $user_data->cart->getInfo( Lib\Entities\Payment::TYPE_LOCAL );
@@ -1785,7 +1840,10 @@ class Ajax extends Lib\Base\Ajax
             ->setNotes( $notes )
             ->setExtras( json_encode( $extras ) )
             ->setCustomFields( json_encode( $custom_fields ) )
-            ->setStatus( $status !== null ? $status : Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), $customer->getGroupId() ) )
+            // A queue entry keeps its own status: it is a place in the queue, not a booking.
+            ->setStatus( $to_waiting_list
+                ? Lib\Entities\CustomerAppointment::STATUS_WAITLISTED
+                : ( $status !== null ? $status : Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), $customer->getGroupId() ) ) )
             ->setCreatedFrom( 'backend' )
             ->setCreatedAt( current_time( 'mysql' ) );
         if ( $time_zone !== null ) {
@@ -1841,10 +1899,12 @@ class Ajax extends Lib\Base\Ajax
         $created = array(
             'appointment_id' => $appointment->getId(),
             'ca_id' => $ca->getId(),
+            'waiting_list' => $to_waiting_list,
             'notifications' => $notifications,
             'notified' => $notify,
         );
-        self::addPaymentCheckout( $created, $payment );
+        // Nothing to pay for a place in the queue yet — no payment link either.
+        self::addPaymentCheckout( $created, $to_waiting_list ? null : $payment );
 
         wp_send_json_success( $created );
     }
@@ -1901,6 +1961,45 @@ class Ajax extends Lib\Base\Ajax
      * @param int|null $location_id
      * @return int
      */
+    /**
+     * The waiting list of an appointment as the slot search sees it, or null when a
+     * customer cannot be queued for it: the add-on or the option is off, the form shows
+     * a single time slot, or the appointment has no service of the catalog (custom
+     * service, task) to keep a queue for.
+     *
+     * Whether the customer actually lands in it is decided by the caller with the
+     * number of persons: the queue opens once the seats run out and holds up to
+     * `capacity` persons (null — no limit). With `despite_capacity` the persons already
+     * waiting are counted as seated, so a seat freed meanwhile goes to them first.
+     *
+     * @param Lib\Entities\Appointment $appointment
+     * @param array $ca_list rows with `status` and `number_of_persons`
+     * @return array|null
+     */
+    private static function joinWaitingList( Lib\Entities\Appointment $appointment, array $ca_list )
+    {
+        if ( ! Lib\Config::waitingListActive() || ! get_option( 'bookly_waiting_list_enabled' ) || Lib\Config::showSingleTimeSlot() ) {
+            return null;
+        }
+        $service = $appointment->getServiceId() && $appointment->getStartDate() ? Service::find( $appointment->getServiceId() ) : null;
+        if ( ! $service ) {
+            return null;
+        }
+        $waitlisted = 0;
+        foreach ( $ca_list as $ca_row ) {
+            if ( $ca_row['status'] === Lib\Entities\CustomerAppointment::STATUS_WAITLISTED ) {
+                $waitlisted += max( 1, (int) $ca_row['number_of_persons'] );
+            }
+        }
+        $capacity = $service->getWaitingListCapacity();
+
+        return array(
+            'waitlisted' => $waitlisted,
+            'capacity' => $capacity === null ? null : (int) $capacity,
+            'despite_capacity' => (bool) get_option( 'bookly_waiting_list_despite_capacity' ),
+        );
+    }
+
     protected static function staffServiceCapacity( $staff_id, $service_id, $location_id )
     {
         $query = StaffService::query( 'ss' )

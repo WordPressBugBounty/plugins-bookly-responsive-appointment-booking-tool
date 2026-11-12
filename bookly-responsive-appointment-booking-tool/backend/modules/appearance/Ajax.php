@@ -242,12 +242,6 @@ class Ajax extends Lib\Base\Ajax
      */
     protected static function registerModernAppearanceWpmlStrings( $strings )
     {
-        foreach ( $strings as $text ) {
-            if ( is_array( $text ) ) {
-                self::registerModernAppearanceWpmlStrings( $text );
-            } else {
-                do_action( 'wpml_register_single_string', 'bookly', 'appearance_string_' . md5( $text ), $text );
-            }
-        }
+        ModernAppearance::registerWpmlStrings( $strings );
     }
 }

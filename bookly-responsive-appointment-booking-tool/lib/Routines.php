@@ -14,6 +14,7 @@ use Bookly\Lib\Entities\NotificationQueue;
 use Bookly\Lib\Entities\Payment;
 use Bookly\Lib\Entities\SmsLog;
 use Bookly\Frontend\Modules\Ai;
+use Bookly\Frontend\Modules\Payment\Request as PaymentRequest;
 
 abstract class Routines
 {
@@ -79,6 +80,7 @@ abstract class Routines
             self::loadCloudInfo();
             // Statistics routine.
             self::sendDailyStatistics();
+            UsageStats::send();
             // Calculate goal by number of customer appointments achieved
             self::calculateGoalOfCA();
             self::clearNotificationQueue();
@@ -107,6 +109,16 @@ abstract class Routines
 
         // Mark unpaid appointments as rejected.
         $payment_ids = \Bookly\Lib\Payment\Proxy\Shared::prepareOutdatedUnpaidPayments( $payment_ids );
+        if ( $payment_ids ) {
+            // Complete payments paid in the payment system but not confirmed yet
+            foreach ( Payment::query()->whereIn( 'id', $payment_ids )->find() as $payment ) {
+                $gateway = PaymentRequest::getInstance()->getGatewayByName( $payment->getType() );
+                if ( $gateway instanceof Base\Gateway ) {
+                    $gateway->setPayment( $payment )->retrieveOutdated();
+                }
+            }
+            $payment_ids = Payment::query()->whereIn( 'id', $payment_ids )->where( 'status', Payment::STATUS_PENDING )->fetchCol( 'id' );
+        }
         if ( ! empty( $payment_ids ) ) {
             Proxy\Shared::unpaidPayments( $payment_ids );
             Payment::query()
@@ -177,7 +189,12 @@ abstract class Routines
             }
 
             $job->setStatus( AiJob::STATUS_QUEUED )->save();
-            Ai\Ajax::spawnWorker( $job );
+            $conversation = AiConversation::find( $job->getConversationId() );
+            if ( $conversation && $conversation->getAgent() === AiConversation::AGENT_ADMIN ) {
+                \Bookly\Backend\Modules\AiAdmin\Ajax::spawnWorker( $job );
+            } else {
+                Ai\Ajax::spawnWorker( $job );
+            }
         }
     }
 

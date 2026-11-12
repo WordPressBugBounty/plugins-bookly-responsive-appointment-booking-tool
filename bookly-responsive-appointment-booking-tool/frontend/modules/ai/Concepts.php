@@ -25,6 +25,7 @@ class Concepts
     const EXTRA    = 'extra';
     const LOCATION = 'location';
     const GROUP    = 'group';
+    const CATEGORY = 'category';
 
     // How it may be set up, see has().
     const TIME_PRICE  = 'time_price';
@@ -102,6 +103,7 @@ class Concepts
             ),
             'location' => array( 'present' => $this->has( self::LOCATION ) ),
             'group'    => array( 'present' => $this->has( self::GROUP ) ),
+            'category' => array( 'present' => $this->has( self::CATEGORY ) ),
             'service'  => array(
                 'price_by_time'  => $this->has( self::TIME_PRICE ),
                 'price_by_staff' => $this->has( self::STAFF_PRICE ),
@@ -128,6 +130,10 @@ class Concepts
             }
             if ( isset( $entry['persons'] ) ) {
                 $this->on[ self::GROUP ] = true;
+            }
+            // Catalog lists categories only when there are two or more.
+            if ( isset( $entry['category_id'] ) ) {
+                $this->on[ self::CATEGORY ] = true;
             }
         }
         $staff_ids = array_unique( $staff_ids );

@@ -976,9 +976,12 @@ class UserBookingData
                     $this->fillData( array( $field => '' ) );
                 }
             }
+            // A found record keeps its details: save() decides which of the entered ones may replace them.
             foreach ( $customer_fields as $field ) {
                 $this->fillData( array( $field => $customer_data[ $field ] ?: '' ) );
-                $this->customer->setFields( array( $field => $customer_data[ $field ] ?: '' ) );
+                if ( ! $this->customer->isLoaded() ) {
+                    $this->customer->setFields( array( $field => $customer_data[ $field ] ?: '' ) );
+                }
             }
             if ( isset( $customer_data['customer_information'] ) && Config::customerInformationActive() ) {
                 $customer_information = array();

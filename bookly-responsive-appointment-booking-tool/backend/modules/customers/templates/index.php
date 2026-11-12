@@ -1,6 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Dialogs;
+use Bookly\Backend\Components\Notices\PromoBanner\Banner as PromoBanner;
 use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Modules\Customers\Proxy;
 use Bookly\Lib\Utils\Common;
@@ -10,6 +11,7 @@ use Bookly\Lib\Utils\Common;
     <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'Customers', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     <div class="bookly:card">
         <div class="bookly:card-body">
+            <?php PromoBanner::render( array( PromoBanner::SMS_CAMPAIGNS ) ) ?>
             <div id="bookly-customers-datatables"></div>
         </div>
     </div>

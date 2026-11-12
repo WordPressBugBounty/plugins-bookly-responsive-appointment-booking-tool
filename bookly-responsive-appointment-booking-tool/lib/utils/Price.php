@@ -138,14 +138,20 @@ abstract class Price
     /**
      * Format price.
      *
-     * @param float $price
+     * @param float       $price
+     * @param string|null $currency currency code instead of the site's one
+     * @param string|null $format   price format instead of the site's one
      * @return string
      */
-    public static function format( $price )
+    public static function format( $price, $currency = null, $format = null )
     {
         $price = (float) $price;
-        $currency = Config::getCurrency();
-        $format = get_option( 'bookly_pmt_price_format' );
+        if ( $currency === null || ! isset( self::$currencies[ $currency ] ) ) {
+            $currency = Config::getCurrency();
+        }
+        if ( $format === null ) {
+            $format = get_option( 'bookly_pmt_price_format' );
+        }
         $symbol = self::$currencies[ $currency ]['symbol'];
 
         if ( preg_match( '/{price\|(\d)}/', $format, $match ) ) {

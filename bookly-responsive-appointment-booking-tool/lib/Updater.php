@@ -3,6 +3,62 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_28_8()
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $disposable_options = array();
+
+        $this->alterTables( array(
+            'bookly_ai_conversations' => array(
+                'ALTER TABLE `%s` ADD `agent` VARCHAR(32) NOT NULL DEFAULT "booking" AFTER `token`',
+                'ALTER TABLE `%s` ADD `wp_user_id` BIGINT UNSIGNED DEFAULT NULL AFTER `agent`',
+            ),
+            'bookly_payments' => array(
+                'ALTER TABLE `%s` CHANGE `type` `type` ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square") NOT NULL DEFAULT "local"',
+            ),
+        ) );
+
+        $this->createTables( array(
+            'bookly_usage_stats' =>
+                'CREATE TABLE IF NOT EXISTS `%s` (
+                    `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `name`       VARCHAR(64) NOT NULL,
+                    `props`      TEXT NOT NULL,
+                    `props_hash` CHAR(32) NOT NULL,
+                    `count`      INT UNSIGNED NOT NULL DEFAULT 0,
+                    UNIQUE KEY `name_props` (`name`, `props_hash`)
+                ) ENGINE = INNODB',
+        ) );
+
+        add_option( 'bookly_ai_admin_button', '1' );
+
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-ai-owner-texts', function( $self ) use ( $wpdb ) {
+            $forms = $self->getTableName( 'bookly_forms' );
+            foreach ( $wpdb->get_results( 'SELECT `id`, `settings` FROM `' . $forms . '` WHERE `type` = "ai-assistant-form"', ARRAY_A ) as $form ) {
+                $settings = json_decode( (string) $form['settings'], true );
+                if ( ! is_array( $settings ) ) {
+                    continue;
+                }
+                $about = array();
+                foreach ( array( 'business_description', 'customer_info' ) as $key ) {
+                    if ( isset( $settings[ $key ] ) && trim( (string) $settings[ $key ] ) !== '' ) {
+                        $about[] = trim( (string) $settings[ $key ] );
+                    }
+                }
+                $settings['assistant_knowledge'] = implode( "\n\n", $about );
+                $settings['assistant_instructions'] = isset( $settings['assistant_persona'] ) ? (string) $settings['assistant_persona'] : '';
+                unset( $settings['business_description'], $settings['customer_info'], $settings['assistant_persona'] );
+                $wpdb->update( $forms, array( 'settings' => json_encode( $settings ) ), array( 'id' => $form['id'] ) );
+            }
+        } );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
     function update_28_7()
     {
         $this->alterTables( array(

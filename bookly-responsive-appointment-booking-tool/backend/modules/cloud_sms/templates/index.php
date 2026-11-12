@@ -1,6 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\PageHeader\Renderer as PageHeaderRenderer;
 use Bookly\Backend\Components\Dialogs\TableSettings;
+use Bookly\Backend\Components\Notices\PromoBanner\Banner as PromoBanner;
 use Bookly\Lib\Utils\DateTime;
 /**
  * @var Bookly\Lib\Cloud\SMS $sms
@@ -11,6 +12,7 @@ use Bookly\Lib\Utils\DateTime;
     <?php PageHeaderRenderer::render( $self::pageSlug(), __( 'SMS Notifications', 'bookly-responsive-appointment-booking-tool' ) ) ?>
     <div class="bookly:card">
         <div class="bookly:card-body">
+            <?php PromoBanner::render( array( PromoBanner::SMS_SENDER_ID, PromoBanner::SMS_CAMPAIGNS ) ) ?>
             <ul class="bookly:nav bookly:nav-tabs bookly:mb-3" id="sms_tabs">
                 <li class="bookly:nav-item"><a class="bookly:nav-link" href="#notifications"><?php esc_html_e( 'Notifications', 'bookly-responsive-appointment-booking-tool' ) ?></a></li>
                 <li class="bookly:nav-item"><a class="bookly:nav-link" href="#campaigns"><?php esc_html_e( 'Campaigns', 'bookly-responsive-appointment-booking-tool' ) ?></a></li>

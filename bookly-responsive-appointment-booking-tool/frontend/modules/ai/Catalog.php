@@ -31,7 +31,7 @@ class Catalog
 
     /**
      * The catalog as it goes to Bookly Cloud in the site's "catalog" (SystemPrompt::site()):
-     * services - in full while they fit MAX_LENGTH, past it the rest with id and title only
+     * services - in full while they fit MAX_LENGTH, past it the rest with id, title and category_id only
      * (the "catalog.complete" fact of Concepts::facts() says so) - staff members and
      * locations. How to read it is Cloud's concept text; this is data only.
      *
@@ -46,6 +46,9 @@ class Catalog
 
         $catalog = array();
         list( $catalog['services'] ) = self::fit( $data['services'] );
+        if ( ! empty( $data['categories'] ) ) {
+            $catalog['categories'] = $data['categories'];
+        }
         $catalog['staff'] = $data['staff'];
         if ( $data['locations'] ) {
             $catalog['locations'] = $data['locations'];
@@ -106,7 +109,7 @@ class Catalog
      * data which concepts this business has. Read once per request, or from the
      * conversation (forConversation()): the prompt and every tool schema ask for it.
      *
-     * @return array [ 'services' => array[], 'staff' => array[], 'locations' => array[] ]
+     * @return array [ 'services' => array[], 'categories' => array[], 'staff' => array[], 'locations' => array[] ]
      */
     public static function data()
     {
@@ -114,7 +117,7 @@ class Catalog
             return self::$data;
         }
 
-        self::$data = array( 'services' => array(), 'staff' => array(), 'locations' => array() );
+        self::$data = array( 'services' => array(), 'categories' => array(), 'staff' => array(), 'locations' => array() );
 
         /** @var Lib\Entities\Service[] $services */
         $services = Lib\Entities\Service::query( 's' )
@@ -123,14 +126,47 @@ class Catalog
             ->sortBy( 's.title' )
             ->find();
 
+        // Only what can be booked: a service with no staff member to provide it is not offered,
+        // as the booking form does not offer it either (both go by caSeSt()).
+        $by_staff = array();
+        foreach ( $services as $i => $service ) {
+            $by_staff[ $i ] = BookingTools\ServicePrice::byStaff( $service );
+            if ( ! $by_staff[ $i ] ) {
+                unset( $services[ $i ] );
+            }
+        }
+
         if ( ! $services ) {
             return self::$data;
         }
 
-        $staff = array();
+        // A category tells apart services of one name - a car size, a men's and a women's
+        // haircut. One category for all of them tells nothing: then none is listed.
+        $category_ids = array();
         foreach ( $services as $service ) {
-            self::$data['services'][] = BookingTools\GetServices::describe( $service );
-            foreach ( BookingTools\ServicePrice::byStaff( $service ) as $staff_id => $item ) {
+            if ( $service->getCategoryId() ) {
+                $category_ids[ $service->getCategoryId() ] = true;
+            }
+        }
+        // By id, with the names listed once, like staff and locations.
+        $categories = array();
+        if ( count( $category_ids ) > 1 ) {
+            /** @var Lib\Entities\Category $category */
+            foreach ( Lib\Entities\Category::query()->whereIn( 'id', array_keys( $category_ids ) )->sortBy( 'position, id' )->find() as $category ) {
+                $categories[ $category->getId() ] = true;
+                self::$data['categories'][] = array( 'id' => (int) $category->getId(), 'name' => $category->getTranslatedName() );
+            }
+        }
+
+        $staff = array();
+        foreach ( $services as $i => $service ) {
+            $entry = BookingTools\GetServices::describe( $service );
+            if ( $service->getCategoryId() && isset( $categories[ $service->getCategoryId() ] ) ) {
+                // Right after the title: it tells apart services of one title.
+                $entry = array_slice( $entry, 0, 2, true ) + array( 'category_id' => (int) $service->getCategoryId() ) + $entry;
+            }
+            self::$data['services'][] = $entry;
+            foreach ( $by_staff[ $i ] as $staff_id => $item ) {
                 $staff[ $staff_id ] = $item['full_name'];
             }
         }
@@ -143,7 +179,7 @@ class Catalog
 
     /**
      * All services in full while the catalog fits MAX_LENGTH; past it, as many in full as fit
-     * and the rest with id and title only.
+     * and the rest with id, title and category_id only.
      *
      * @param array[] $entries
      * @return array [ entries to show, how many of them are in full ]
@@ -156,7 +192,12 @@ class Catalog
 
         $short = array();
         foreach ( $entries as $entry ) {
-            $short[] = array( 'id' => $entry['id'], 'title' => $entry['title'] );
+            $item = array( 'id' => $entry['id'], 'title' => $entry['title'] );
+            // Without it services of one name would be the same line.
+            if ( isset( $entry['category_id'] ) ) {
+                $item['category_id'] = $entry['category_id'];
+            }
+            $short[] = $item;
         }
 
         $length = strlen( self::json( $short ) );

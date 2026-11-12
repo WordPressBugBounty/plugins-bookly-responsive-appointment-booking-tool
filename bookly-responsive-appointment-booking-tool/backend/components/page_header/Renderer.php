@@ -5,6 +5,7 @@ use Bookly\Lib;
 use Bookly\Backend\Components\Cloud\Account as CloudAccount;
 use Bookly\Backend\Components\Support\Buttons as SupportButtons;
 use Bookly\Backend\Components\Support\Lib\Urls;
+use Bookly\Backend\Modules\AiAdmin\Launcher as AiAdminLauncher;
 
 class Renderer extends Lib\Base\Component
 {
@@ -44,6 +45,9 @@ class Renderer extends Lib\Base\Component
                 $actions[] = array( 'icon' => 'demo', 'label' => $label, 'dialog' => 'demo', 'variant' => 'outline' );
             }
         }
+
+        // Setup assistant: its floating button and chat panel, on every Bookly page.
+        AiAdminLauncher::enqueue();
 
         // Warn users without the `unfiltered_html` capability that their HTML
         // will be sanitized on save (the role can't store raw markup). Goes

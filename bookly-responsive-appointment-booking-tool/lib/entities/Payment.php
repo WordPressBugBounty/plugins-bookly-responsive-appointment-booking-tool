@@ -20,7 +20,6 @@ class Payment extends Lib\Base\Entity
     /** @deprecated Bookly 27.5 use TYPE_SQUARE */
     const TYPE_CLOUD_SQUARE = 'cloud_square';
     const TYPE_SQUARE = 'cloud_square';
-    const TYPE_WORLDPAY = 'worldpay';
     const TYPE_WOOCOMMERCE = 'woocommerce';
 
     const STATUS_COMPLETED = 'completed';
@@ -141,8 +140,6 @@ class Payment extends Lib\Base\Entity
                 return __( 'Free', 'bookly-responsive-appointment-booking-tool' );
             case self::TYPE_WOOCOMMERCE:
                 return 'WooCommerce';
-            case self::TYPE_WORLDPAY:
-                return 'Worldpay';
             default:
                 return '';
         }

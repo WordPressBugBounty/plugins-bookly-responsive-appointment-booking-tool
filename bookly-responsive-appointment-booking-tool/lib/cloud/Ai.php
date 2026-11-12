@@ -3,20 +3,41 @@ namespace Bookly\Lib\Cloud;
 
 use Bookly\Lib\Plugin;
 
+/**
+ * The booking chat on the site (product AI Assistant). The assistants in wp-admin are a product
+ * of their own on the same transport, see AiAdmin.
+ */
 class Ai extends Product
 {
-    const ACTIVATE                = '/1.0/users/%token%/products/ai/activate';               // POST
+    const ACTIVATE                = '/1.0/users/%token%/products/ai/activate';                // POST
     const DEACTIVATE_NOW          = '/1.0/users/%token%/products/ai/deactivate/now';          // POST
     const DEACTIVATE_NEXT_RENEWAL = '/1.0/users/%token%/products/ai/deactivate/next-renewal'; // POST
     const REVERT_CANCEL           = '/1.0/users/%token%/products/ai/revert-cancel';           // POST
-    // One route for every agent; which one runs is the 'agent' field of the
-    // request body (see Frontend\Modules\Ai\Ajax::buildCompletionPayload()).
-    // Cloud resolves it to a prompt, provider, model and token cap server-side.
-    const COMPLETE                = '/1.1/users/%token%/products/ai/complete';                // POST
+    const TRANSCRIBE              = '/1.0/users/%token%/products/ai/transcribe';              // POST
+    const COMPLETE                = '/1.2/users/%token%/products/ai/complete';                // POST
 
+    /**
+     * @param array $payload
+     * @return array
+     */
     public function completeRaw( array $payload )
     {
-        $url = $this->api->buildUrl( self::COMPLETE );
+        return $this->postRaw( static::COMPLETE, $payload );
+    }
+
+    /**
+     * @param string $audio  base64 of the recording, as the browser made it
+     * @param string $format webm|mp4|ogg
+     * @return array
+     */
+    public function transcribeRaw( $audio, $format )
+    {
+        return $this->postRaw( static::TRANSCRIBE, array( 'audio' => $audio, 'format' => $format ) );
+    }
+
+    protected function postRaw( $path, array $payload )
+    {
+        $url = $this->api->buildUrl( $path );
 
         $response = wp_remote_post( $url, array(
             'method'    => 'POST',

@@ -421,6 +421,7 @@ class Installer extends Base\Installer
             'bookly_cloud_stripe_timeout' => '0',
             'bookly_cloud_token' => '',
             'bookly_cloud_zapier_api_key' => '',
+            'bookly_ai_admin_button' => '1',
             'bookly_advertisement' => array(),
             // Business hours.
             'bookly_bh_monday_start' => '08:00:00',
@@ -852,7 +853,7 @@ class Installer extends Base\Installer
                 `parent_id`    INT UNSIGNED DEFAULT NULL,
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
-                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square","worldpay") NOT NULL DEFAULT "local",
+                `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square") NOT NULL DEFAULT "local",
                 `total`        DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `tax`          DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `paid`         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
@@ -969,6 +970,18 @@ class Installer extends Base\Installer
                 `name`     VARCHAR(255) NOT NULL,
                 `value`    TEXT DEFAULT NULL,
                 `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\UsageStat::getTableName() . '` (
+                `id`         INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name`       VARCHAR(64) NOT NULL,
+                `props`      TEXT NOT NULL,
+                `props_hash` CHAR(32) NOT NULL,
+                `count`      INT UNSIGNED NOT NULL DEFAULT 0,
+                UNIQUE KEY `name_props` (`name`, `props_hash`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );
@@ -1173,6 +1186,8 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\AiConversation::getTableName() . '` (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `token` VARCHAR(255) NOT NULL,
+                `agent` VARCHAR(32) NOT NULL DEFAULT "booking",
+                `wp_user_id` BIGINT UNSIGNED DEFAULT NULL,
                 `status` ENUM("active","processing","done","error") NOT NULL DEFAULT "active",
                 `error_code` VARCHAR(64) DEFAULT NULL,
                 `booking_data` TEXT DEFAULT NULL,
